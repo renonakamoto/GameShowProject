@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Engine\Graphics\DirectGraphics.cpp" />
+    <ClCompile Include="Src\Engine\Window\Window.cpp" />
     <ClCompile Include="Src\Main.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\Character.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.cpp" />
@@ -33,6 +35,8 @@
     <ClCompile Include="Src\ObjectBase\ObjectBase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Engine\Graphics\DirectGraphics.h" />
+    <ClInclude Include="Src\Engine\Window\Window.h" />
     <ClInclude Include="Src\ObjectBase\Character\Character.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyBase.h" />
@@ -44,6 +48,7 @@
     <ClInclude Include="Src\ObjectBase\EffectBase\EffectBase.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\MapObject.h" />
     <ClInclude Include="Src\ObjectBase\ObjectBase.h" />
+    <ClInclude Include="Src\Utility\SingletonTemplate.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -96,16 +101,22 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(FBXSDK_DIR)2019.0\include;$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>K_PLUGIN;K_FBXSDK;K_NODLL;K_DLLINFO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>libfbxsdk-md.lib;d3d9.lib;d3dx9.lib;dinput8.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(FBXSDK_DIR)2019.0\lib\vs2015\x86\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
