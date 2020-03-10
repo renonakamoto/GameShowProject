@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Src">
+      <UniqueIdentifier>{4d262618-d9c5-4c01-a03a-ed2c52cf822f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Engine">
+      <UniqueIdentifier>{a5547039-f978-43de-b445-c9cad6f12541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Engine\Input">
+      <UniqueIdentifier>{03590708-60d7-4db1-b901-317386eab0f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Engine\Graphics">
+      <UniqueIdentifier>{eedebfbb-4cb9-4a8e-a82f-058ef8b96d16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Engine\Sound">
+      <UniqueIdentifier>{12b61ee1-6dac-4ee0-8856-618502a3f75e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Utility">
+      <UniqueIdentifier>{0140dd0e-7fd7-4363-91ec-2a0b308bbccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Scene">
+      <UniqueIdentifier>{0eeb2bb0-626d-45ee-9ec4-7912188c61c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Scene\SettingsScene">
+      <UniqueIdentifier>{03d2b1ce-313f-4c88-818f-a071c2355e6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Scene\TitleScene">
+      <UniqueIdentifier>{8b18af4d-54df-4435-be10-4406a5fd6065}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Scene\GameClearScene">
+      <UniqueIdentifier>{cf27330f-3440-42ce-8be4-a62284c6cef4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Scene\GameMainScene">
+      <UniqueIdentifier>{dcc5f121-6419-44b1-8d9b-3ae08f22e860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Scene\GameOverScene">
+      <UniqueIdentifier>{dee12d89-432a-4bc8-aef2-c03f440779da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Scene\PauseScene">
+      <UniqueIdentifier>{095b6b50-0221-47a8-92a5-6de837b4ff6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase">
+      <UniqueIdentifier>{24fc7048-6d0b-422a-8147-55ee7a22c875}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\EffectBase">
+      <UniqueIdentifier>{2180d3f0-f224-4c56-ac37-272e0f586b4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\Character">
+      <UniqueIdentifier>{9c27c8ae-81eb-4864-a026-ad6fdbd2add7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\MapObject">
+      <UniqueIdentifier>{fd2bf3fd-45dc-4910-bab4-ca9e33605844}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\Character\Player">
+      <UniqueIdentifier>{6c14ca4b-9380-455a-9645-8afa2b02e3bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\Character\EnemyBase">
+      <UniqueIdentifier>{3779675e-82b5-4d85-9717-ecc78c1201e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\Character\EnemyBase\Ebiten">
+      <UniqueIdentifier>{95c13ed7-d806-4fc0-971e-0777d1db1393}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\Character\EnemyBase\Ikaten">
+      <UniqueIdentifier>{1a4a34bb-ccc5-4473-9213-b1137b7c233e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\Character\EnemyBase\Kabochaten">
+      <UniqueIdentifier>{e5df57e2-2e02-49f9-8924-19e0f4f7f516}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\Character\EnemyBase\Sitaketen">
+      <UniqueIdentifier>{242a25ff-9bd7-4db9-811a-8e6bee0b27af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\Character\EnemyBase\Tikuwaten">
+      <UniqueIdentifier>{2a857577-e55a-4765-9933-0d0f32413191}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Src\Main.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\ObjectBase.cpp">
+      <Filter>Src\ObjectBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\EffectBase\EffectBase.cpp">
+      <Filter>Src\ObjectBase\EffectBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\MapObject\MapObject.cpp">
+      <Filter>Src\ObjectBase\MapObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\Character\Character.cpp">
+      <Filter>Src\ObjectBase\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\Character\Player\Player.cpp">
+      <Filter>Src\ObjectBase\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyBase.cpp">
+      <Filter>Src\ObjectBase\Character\EnemyBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.cpp">
+      <Filter>Src\ObjectBase\Character\EnemyBase\Ebiten</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Kabochaten\Kabochaten.cpp">
+      <Filter>Src\ObjectBase\Character\EnemyBase\Kabochaten</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Ikaten\Ikaten.cpp">
+      <Filter>Src\ObjectBase\Character\EnemyBase\Ikaten</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Tikuwaten\Tikuwaten.cpp">
+      <Filter>Src\ObjectBase\Character\EnemyBase\Tikuwaten</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Sitaketen\Sitaketen.cpp">
+      <Filter>Src\ObjectBase\Character\EnemyBase\Sitaketen</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Src\ObjectBase\ObjectBase.h">
+      <Filter>Src\ObjectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\EffectBase\EffectBase.h">
+      <Filter>Src\ObjectBase\EffectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\MapObject\MapObject.h">
+      <Filter>Src\ObjectBase\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\Character\Character.h">
+      <Filter>Src\ObjectBase\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\Character\Player\Player.h">
+      <Filter>Src\ObjectBase\Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyBase.h">
+      <Filter>Src\ObjectBase\Character\EnemyBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.h">
+      <Filter>Src\ObjectBase\Character\EnemyBase\Ebiten</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Kabochaten\Kabochaten.h">
+      <Filter>Src\ObjectBase\Character\EnemyBase\Kabochaten</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Ikaten\Ikaten.h">
+      <Filter>Src\ObjectBase\Character\EnemyBase\Ikaten</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Tikuwaten\Tikuwaten.h">
+      <Filter>Src\ObjectBase\Character\EnemyBase\Tikuwaten</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Sitaketen\Sitaketen.h">
+      <Filter>Src\ObjectBase\Character\EnemyBase\Sitaketen</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
