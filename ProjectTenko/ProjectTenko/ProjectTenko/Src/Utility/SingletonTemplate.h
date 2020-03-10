@@ -64,6 +64,9 @@ namespace MySingletonTemplate
 
 		virtual ~SingletonTemplate() {}
 	};
+
+	template<class T>
+	typename SingletonTemplate<T>::InstanceType* SingletonTemplate<T>::m_Instance = nullptr;
 }
 
 #endif

@@ -26,7 +26,7 @@ namespace MyDirectGraphics
 		* @details true->成功 | false->失敗
 		* @details ゲームループ前に一度だけ実行する
 		*/
-		bool Init(HWND windowHandle_, bool isFullScreen_);
+		bool Init(HWND windowHandle_, int width_, int height_, bool isFullScreen_);
 
 		/**
 		* @brief 描画開始関数
@@ -81,7 +81,7 @@ namespace MyDirectGraphics
 		* @return bool 成功したかどうか
 		* @details true->成功 | false->失敗
 		*/
-		bool CreateGraphicsDevice(HWND windowHandle_, bool isFullScreen_);
+		bool CreateGraphicsDevice(HWND windowHandle_, int width_, int height_, bool isFullScreen_);
 
 		/**
 		* @brief ビューポートの設定

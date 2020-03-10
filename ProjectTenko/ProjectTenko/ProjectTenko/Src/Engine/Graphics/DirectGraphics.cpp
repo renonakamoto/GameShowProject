@@ -1,9 +1,9 @@
 #include "DirectGraphics.h"
 
-bool MyDirectGraphics::DirectGraphics::Init(HWND windowHandle_, bool isFullScreen_)
+bool MyDirectGraphics::DirectGraphics::Init(HWND windowHandle_, int width_, int height_, bool isFullScreen_)
 {
 	if (CreateGraphicsInterface() == false) { return false; }
-	if (CreateGraphicsDevice(windowHandle_, isFullScreen_) == false) { return false; }
+	if (CreateGraphicsDevice(windowHandle_, width_, height_, isFullScreen_) == false) { return false; }
 	if (SetViewPort() == false) { return false; }
 
 	return true;
@@ -40,7 +40,7 @@ bool MyDirectGraphics::DirectGraphics::CreateGraphicsInterface()
 	return true;
 }
 
-bool MyDirectGraphics::DirectGraphics::CreateGraphicsDevice(HWND windowHandle_, bool isFullScreen_)
+bool MyDirectGraphics::DirectGraphics::CreateGraphicsDevice(HWND windowHandle_, int width_, int height_, bool isFullScreen_)
 {
 	m_pD3DPresentParam = new D3DPRESENT_PARAMETERS;
 	if (m_pD3DPresentParam == nullptr)
@@ -51,13 +51,14 @@ bool MyDirectGraphics::DirectGraphics::CreateGraphicsDevice(HWND windowHandle_, 
 
 	m_pD3DPresentParam->Windowed = !isFullScreen_;
 	m_pD3DPresentParam->hDeviceWindow = windowHandle_;
-	m_pD3DPresentParam->BackBufferWidth = 1920;
-	m_pD3DPresentParam->BackBufferHeight = 1080;
+	m_pD3DPresentParam->BackBufferWidth = width_;
+	m_pD3DPresentParam->BackBufferHeight = height_;
 	m_pD3DPresentParam->BackBufferFormat = D3DFMT_UNKNOWN;
 	m_pD3DPresentParam->SwapEffect = D3DSWAPEFFECT_DISCARD;
 	m_pD3DPresentParam->MultiSampleType = D3DMULTISAMPLE_NONE;
 	m_pD3DPresentParam->MultiSampleQuality = 0;
 	m_pD3DPresentParam->Flags = 0;
+	m_pD3DPresentParam->AutoDepthStencilFormat = D3DFMT_D24S8;
 	m_pD3DPresentParam->EnableAutoDepthStencil = true;
 	m_pD3DPresentParam->FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
 
