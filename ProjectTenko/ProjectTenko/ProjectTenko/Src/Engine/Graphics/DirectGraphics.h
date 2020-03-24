@@ -5,6 +5,13 @@
 #include <d3dx9.h>
 #include <Windows.h>
 
+// 解放
+#define	SAFE_DESTROY(x)	{ if(x) { (x)->Destroy(); (x) = NULL; } }
+
+// 解放処理用のマクロを定義
+#define SAFE_RELEASE(x) { if(x) { (x)->Release(); (x) = NULL; } }
+
+
 /**
 * @namespace MyDirectGraphics
 * @brief DirectGraphics類をまとめた名前空間
