@@ -3,9 +3,15 @@
 
 #include "../EnemyBase.h"
 
-class Sitaketen : Enemybase
+class Sitaketen : public Enemybase
 {
 public:
+	Sitaketen(D3DXVECTOR3 pos_, std::string key_);
+
+	~Sitaketen() {}
+
+	virtual void Update() override;
+	virtual void Draw() override;
 
 protected:
 

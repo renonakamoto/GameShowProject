@@ -92,6 +92,36 @@
     <Filter Include="Src\Engine\Texture">
       <UniqueIdentifier>{431a97a9-df38-4bec-ab90-920b2d181288}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Manager">
+      <UniqueIdentifier>{f17d3747-66ac-4f3f-afdc-8bb01790ba04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\MapObject\Barrel">
+      <UniqueIdentifier>{74f6494e-2b73-4de8-a9ff-f752fe3de445}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\MapObject\Floor">
+      <UniqueIdentifier>{319bbc95-e12f-437c-aaa0-4ef3306de3d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\MapObject\Gate">
+      <UniqueIdentifier>{979a5ca0-503e-423f-88bc-7cf94e545661}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\MapObject\Mountain">
+      <UniqueIdentifier>{0aac8b85-347c-405a-bf56-2f81c0134c10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\MapObject\Skydome">
+      <UniqueIdentifier>{35d20b8e-9822-4549-b921-ea29a0513094}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\MapObject\Tent">
+      <UniqueIdentifier>{e86443ef-12de-453a-af76-11ba7d43f436}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\MapObject\Vending_Machine">
+      <UniqueIdentifier>{1ee831ae-08aa-4352-aad8-48cd47e1c3ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\MapObject\Wall">
+      <UniqueIdentifier>{4101f90a-1ed1-4984-b253-671475f9ddde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectBase\MapObject\Merrygoland">
+      <UniqueIdentifier>{498e461d-42d0-4a2b-ad89-46033e130f7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -156,6 +186,39 @@
     </ClCompile>
     <ClCompile Include="Src\Utility\3DHelper.cpp">
       <Filter>Src\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Manager\ObjectManager.cpp">
+      <Filter>Src\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\MapObject\Barrel\Barrel.cpp">
+      <Filter>Src\ObjectBase\MapObject\Barrel</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\MapObject\Floor\Floor.cpp">
+      <Filter>Src\ObjectBase\MapObject\Floor</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\MapObject\Gate\Gate.cpp">
+      <Filter>Src\ObjectBase\MapObject\Gate</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\MapObject\Merrygoland\Merrygoland.cpp">
+      <Filter>Src\ObjectBase\MapObject\Merrygoland</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\MapObject\Mountain\Mountain.cpp">
+      <Filter>Src\ObjectBase\MapObject\Mountain</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\MapObject\Wall\Wall.cpp">
+      <Filter>Src\ObjectBase\MapObject\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine_Blue.cpp">
+      <Filter>Src\ObjectBase\MapObject\Vending_Machine</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine_Red.cpp">
+      <Filter>Src\ObjectBase\MapObject\Vending_Machine</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\MapObject\Tent\Tent.cpp">
+      <Filter>Src\ObjectBase\MapObject\Tent</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectBase\MapObject\Skydome\Skydome.cpp">
+      <Filter>Src\ObjectBase\MapObject\Skydome</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +287,39 @@
     </ClInclude>
     <ClInclude Include="Src\Utility\3DHelper.h">
       <Filter>Src\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Manager\ObjectManager.h">
+      <Filter>Src\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\MapObject\Barrel\Barrel.h">
+      <Filter>Src\ObjectBase\MapObject\Barrel</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\MapObject\Floor\Floor.h">
+      <Filter>Src\ObjectBase\MapObject\Floor</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\MapObject\Gate\Gate.h">
+      <Filter>Src\ObjectBase\MapObject\Gate</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\MapObject\Merrygoland\Merrygoland.h">
+      <Filter>Src\ObjectBase\MapObject\Merrygoland</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\MapObject\Mountain\Mountain.h">
+      <Filter>Src\ObjectBase\MapObject\Mountain</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\MapObject\Wall\Wall.h">
+      <Filter>Src\ObjectBase\MapObject\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine_Blue.h">
+      <Filter>Src\ObjectBase\MapObject\Vending_Machine</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine_Red.h">
+      <Filter>Src\ObjectBase\MapObject\Vending_Machine</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\MapObject\Tent\Tent.h">
+      <Filter>Src\ObjectBase\MapObject\Tent</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectBase\MapObject\Skydome\Skydome.h">
+      <Filter>Src\ObjectBase\MapObject\Skydome</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

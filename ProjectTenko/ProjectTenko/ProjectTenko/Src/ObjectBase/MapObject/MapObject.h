@@ -3,9 +3,13 @@
 
 #include "../ObjectBase.h"
 
-class Mapobject : public ObjectBase
+class MapObject : public ObjectBase
 {
 public:
+	MapObject(D3DXVECTOR3 pos_, std::string key_) :
+		ObjectBase(pos_, key_)
+	{}
+	virtual ~MapObject() {}
 
 protected:
 

@@ -1,6 +1,7 @@
 #ifndef FBXMANAGER_H_
 #define FBXMANAGER_H_
 
+#include "../../Utility/SingletonTemplate.h"
 #include "FbxLoader.h"
 #include "FbxDrawer.h"
 #include <string>
@@ -14,6 +15,8 @@ namespace MyFbx
 	*/
 	class FbxManager
 	{
+
+		friend MySingletonTemplate::SingletonTemplate<FbxManager>;
 	public:
 		/**
 		* @brief 簡単な説明（～する関数）
@@ -39,7 +42,7 @@ namespace MyFbx
 		* @brief 描画する関数
 		* @param[in] key_ オブジェクトに設定しているキー
 		*/
-		void Draw(std::string key_);
+		void Draw(std::string key_, const D3DXMATRIX& world_);
 
 		/**
 		* @brief アニメーション関数
@@ -57,6 +60,34 @@ namespace MyFbx
 		void ResetAnimation(std::string key_);
 
 	private:
+
+		FbxManager() 
+		{
+			if (m_FbxDrawe == nullptr)
+			{
+				m_FbxDrawe = new FbxDrawer();
+			}
+
+			if (m_FbxLoader == nullptr)
+			{
+				m_FbxLoader = new FbxLoader();
+			}
+		}
+		
+		~FbxManager()
+		{
+			if (m_FbxDrawe != nullptr)
+			{
+				delete m_FbxDrawe;
+				m_FbxDrawe = nullptr;
+			}
+
+			if (m_FbxLoader != nullptr)
+			{
+				delete m_FbxLoader;
+				m_FbxLoader = nullptr;
+			}
+		}
 
 		/**
 		* @brief m_ObjectMeshDataが引数のキーを持っているか調べる関数

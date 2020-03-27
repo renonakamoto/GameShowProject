@@ -21,9 +21,11 @@ void MyFbx::FbxManager::AllReleaseFbxMesh()
 	m_ObjectMeshData.clear();
 }
 
-void MyFbx::FbxManager::Draw(std::string key_)
+void MyFbx::FbxManager::Draw(std::string key_, const D3DXMATRIX& world_)
 {
 	if (HasKey(key_) == false) { return; }
+
+	m_ObjectMeshData[key_].Model.world = world_;
 
 	m_FbxDrawe->RenderFbxMesh(&m_ObjectMeshData[key_]);
 }

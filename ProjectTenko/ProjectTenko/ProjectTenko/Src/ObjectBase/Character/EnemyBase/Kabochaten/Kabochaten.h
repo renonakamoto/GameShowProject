@@ -6,6 +6,12 @@
 class Kabochaten : public Enemybase
 {
 public:
+	Kabochaten(D3DXVECTOR3 pos_, std::string key_);
+
+	~Kabochaten() {}
+
+	virtual void Update() override;
+	virtual void Draw() override;
 
 protected:
 
