@@ -11,7 +11,6 @@
 // 解放処理用のマクロを定義
 #define SAFE_RELEASE(x) { if(x) { (x)->Release(); (x) = NULL; } }
 
-
 /**
 * @namespace MyDirectGraphics
 * @brief DirectGraphics類をまとめた名前空間

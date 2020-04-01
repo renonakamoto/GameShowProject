@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Camera\Camera.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxDrawer.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxLoader.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxManager.cpp" />
@@ -53,6 +54,7 @@
     <ClCompile Include="Src\Utility\3DHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Camera\Camera.h" />
     <ClInclude Include="Src\Engine\Fbx\FbxDrawer.h" />
     <ClInclude Include="Src\Engine\Fbx\FbxLoader.h" />
     <ClInclude Include="Src\Engine\Fbx\FbxManager.h" />

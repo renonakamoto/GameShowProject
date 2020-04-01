@@ -3,7 +3,12 @@
 #include "../Graphics/DirectGraphics.h"
 
 typedef MySingletonTemplate::SingletonTemplate<MyDirectGraphics::DirectGraphics> DirectGraphics;
+
+#ifndef THE_GRAPHICS DirectGraphics::GetInstance()
+
 #define THE_GRAPHICS DirectGraphics::GetInstance()
+
+#endif
 
 #define	TEXTURE_MAX	1000
 
