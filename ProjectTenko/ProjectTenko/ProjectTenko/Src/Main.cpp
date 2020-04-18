@@ -4,9 +4,6 @@
 #include "Engine/Fbx/FbxManager.h"
 #include "Manager/ObjectManager.h"
 
-typedef MySingletonTemplate::SingletonTemplate<MyWindow::Window> Window;
-#define THE_WINDOW Window::GetInstance()
-
 typedef MySingletonTemplate::SingletonTemplate<MyDirectGraphics::DirectGraphics> DirectGraphics;
 #define THE_GRAPHICS DirectGraphics::GetInstance()
 

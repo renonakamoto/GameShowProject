@@ -49,4 +49,7 @@ namespace MyWindow
 	};
 }
 
+typedef MySingletonTemplate::SingletonTemplate<MyWindow::Window> Window;
+#define THE_WINDOW Window::GetInstance()
+
 #endif

@@ -18,6 +18,8 @@ public:
 	void Move();
 	void Rotate();
 
+	void SetCamera(const D3DXVECTOR3& pos_, float distance_);
+
 	void SetViewMatrix();
 	void SetProjectionMatrix();
 	
@@ -37,9 +39,17 @@ private:
 	//! カメラの上向きベクトル
 	D3DXVECTOR3 m_UpVec;
 
+	//! X軸回転
 	float m_Yaw;
 
+	//! Y軸回転
 	float m_Pitch;
+
+	//! カメラ感度
+	float m_Sensitivity;
+
+	//! 距離
+	float m_Distance;
 
 };
 

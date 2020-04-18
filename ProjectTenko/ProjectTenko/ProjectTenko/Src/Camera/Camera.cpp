@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "../Engine/Graphics/DirectGraphics.h"
+#include <math.h>
 
 
 typedef MySingletonTemplate::SingletonTemplate<MyDirectGraphics::DirectGraphics> DirectGraphics;
@@ -8,10 +9,11 @@ typedef MySingletonTemplate::SingletonTemplate<MyDirectGraphics::DirectGraphics>
 
 Camera::Camera()
 {
-	m_Pos	 = D3DXVECTOR3(0.0f, 0.0f, -10.0f);
+	m_Pos	 = D3DXVECTOR3(0.0f, 100.0f, -10.0f);
 	m_LookAt = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_UpVec  = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 
+	m_Distance = 0.0f;
 }
 
 Camera::~Camera()
@@ -20,6 +22,7 @@ Camera::~Camera()
 
 void Camera::Update()
 {
+	
 }
 
 void Camera::Move()
@@ -28,6 +31,28 @@ void Camera::Move()
 
 void Camera::Rotate()
 {
+	SetCursorPos(960, 540);
+
+	m_Yaw;
+	m_Pitch;
+	if (m_Pitch >  90.0f) { m_Pitch =  180.0f - m_Pitch; }
+	if (m_Pitch < -90.0f) { m_Pitch = -180.0f - m_Pitch; }
+
+	m_Pos.x = m_LookAt.x + m_Distance * sinf(D3DXToRadian(m_Yaw));
+	m_Pos.z = m_LookAt.z + m_Distance * -cosf(D3DXToRadian(m_Yaw));
+}
+
+void Camera::SetCamera(const D3DXVECTOR3& pos_, float distance_)
+{
+	m_Distance = distance_;
+
+	//! À•W‚ðÝ’è
+	m_Pos.x = pos_.x + m_Distance * sinf(m_Yaw);
+	m_Pos.z = pos_.z + m_Distance * cosf(m_Yaw);
+
+	//! ’Ž‹“_‚ðÝ’è
+	m_LookAt.x = pos_.x;
+	m_LookAt.z = pos_.z;
 }
 
 void Camera::SetViewMatrix()
