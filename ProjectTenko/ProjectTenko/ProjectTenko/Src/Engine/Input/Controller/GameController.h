@@ -1,6 +1,7 @@
 #ifndef GAMECONTROLLER_H_
 #define GAMECONTROLLER_H_
 
+#include <map>
 #include "GameButton.h"
 
 class GameController
@@ -45,7 +46,7 @@ public:
 	bool GetKeyUp(Button key_);
 
 private:
-	std::vector<GameButton> m_Buttons;
+	GameButton* m_Buttons[static_cast<int>(Button::MaxButtons)];
 };
 
 #endif GAMECONTROLLER_H_
