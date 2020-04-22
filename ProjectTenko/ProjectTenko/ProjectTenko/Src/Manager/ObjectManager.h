@@ -22,4 +22,7 @@ private:
 
 };
 
+typedef MySingletonTemplate::SingletonTemplate<Objectmanager> ObjectManager;
+#define THE_OBJECTMANAGER ObjectManager::GetInstance()
+
 #endif

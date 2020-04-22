@@ -4,15 +4,6 @@
 #include "Engine/Fbx/FbxManager.h"
 #include "Manager/ObjectManager.h"
 
-typedef MySingletonTemplate::SingletonTemplate<MyDirectGraphics::DirectGraphics> DirectGraphics;
-#define THE_GRAPHICS DirectGraphics::GetInstance()
-
-typedef MySingletonTemplate::SingletonTemplate<MyFbx::FbxManager> FbxMeshManager;
-#define THE_FBXMANAGER FbxMeshManager::GetInstance()
-
-typedef MySingletonTemplate::SingletonTemplate<Objectmanager> ObjectManager;
-#define THE_OBJECTMANAGER ObjectManager::GetInstance()
-
 int APIENTRY WinMain(HINSTANCE hInstance_,
 	HINSTANCE hPrevInstance_,
 	LPSTR     lpCmpLine_,

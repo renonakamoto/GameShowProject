@@ -106,5 +106,7 @@ namespace MyFbx
 	};
 }
 
+typedef MySingletonTemplate::SingletonTemplate<MyFbx::FbxManager> FbxMeshManager;
+#define THE_FBXMANAGER FbxMeshManager::GetInstance()
 
 #endif

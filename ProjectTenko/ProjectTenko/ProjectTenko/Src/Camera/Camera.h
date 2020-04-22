@@ -30,26 +30,15 @@ public:
 	
 private:
 
-	//! カメラの座標
-	D3DXVECTOR3 m_Pos;
+	D3DXVECTOR3 m_Pos;		//! カメラの座標
+	D3DXVECTOR3 m_LookAt;	//! 注視点
+	D3DXVECTOR3 m_UpVec;	//! カメラの上向きベクトル
+	float m_Distance;		//! 距離
 
-	//! 注視点
-	D3DXVECTOR3 m_LookAt;
+	float m_Yaw;			//! X軸回転
+	float m_Pitch;			//! Y軸回転
 
-	//! カメラの上向きベクトル
-	D3DXVECTOR3 m_UpVec;
-
-	//! X軸回転
-	float m_Yaw;
-
-	//! Y軸回転
-	float m_Pitch;
-
-	//! カメラ感度
-	float m_Sensitivity;
-
-	//! 距離
-	float m_Distance;
+	float m_Sensitivity;	//! カメラ感度
 
 };
 

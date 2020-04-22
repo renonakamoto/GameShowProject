@@ -105,4 +105,7 @@ namespace MyDirectGraphics
 	};
 }
 
+typedef MySingletonTemplate::SingletonTemplate<MyDirectGraphics::DirectGraphics> DirectGraphics;
+#define THE_GRAPHICS DirectGraphics::GetInstance()
+
 #endif

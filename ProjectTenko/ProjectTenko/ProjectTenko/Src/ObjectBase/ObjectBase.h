@@ -5,9 +5,6 @@
 #include <d3dx9.h>
 #include <string>
 
-typedef MySingletonTemplate::SingletonTemplate<MyFbx::FbxManager> FbxMeshManager;
-#define THE_FBXMANAGER FbxMeshManager::GetInstance()
-
 class ObjectBase
 {
 public:

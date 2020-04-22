@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "../Engine/Graphics/DirectGraphics.h"
+#include "../Engine/Window/Window.h"
 #include <math.h>
 
 
