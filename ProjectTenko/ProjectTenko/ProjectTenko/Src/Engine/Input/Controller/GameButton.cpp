@@ -1,4 +1,5 @@
 #include "GameButton.h"
+#include "..//InputManager.h"
 
 GameButton::GameButton(InputInfo id_)
 {
@@ -26,7 +27,7 @@ void GameButton::Update()
 	short val = 0;
 	for (auto id : m_ButtonID)
 	{
-		short tmp = InputManager::GetInputState(id);
+		short tmp = THE_INPUTMANAGER->GetInputState(id);
 		if (tmp > val)
 		{
 			val = tmp;

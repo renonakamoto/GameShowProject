@@ -1,4 +1,6 @@
 #include "GameController.h"
+#include "..//InputManager.h"
+#include <math.h>
 
 bool GameController::Init()
 {
@@ -13,12 +15,28 @@ bool GameController::Init()
 	return true;
 }
 
+GameController::~GameController()
+{
+	delete[] m_Buttons;
+}
+
 bool GameController::Update()
 {
 	for (int i = 0; i < static_cast<int>(Button::MaxButtons); i++)
 	{
 		m_Buttons[i]->Update();
 	}
+
+	// 左スティック処理
+	int lx = THE_INPUTMANAGER->GetInputState(InputInfo::Pad_lX);
+	int ly = THE_INPUTMANAGER->GetInputState(InputInfo::Pad_lY);
+	m_StickRad[0] = ((atan(-ly / lx) / 3.14) * 180);
+
+	// 右スティック処理
+	int rx = THE_INPUTMANAGER->GetInputState(InputInfo::Pad_rX);
+	int ry = THE_INPUTMANAGER->GetInputState(InputInfo::Pad_rY);
+	m_StickRad[1] = ((atan(-ry / rx) / 3.14)* 180);
+
 	return true;
 }
 
@@ -47,4 +65,9 @@ bool GameController::GetKeyUp(Button key_)
 		return true;
 	}
 	return false;
+}
+
+int GameController::GetSthickRad(int stick_)
+{
+	return m_StickRad[stick_];
 }

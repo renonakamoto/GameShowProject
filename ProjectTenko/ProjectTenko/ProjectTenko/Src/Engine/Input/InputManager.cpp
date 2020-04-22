@@ -2,10 +2,10 @@
 #include "..//Window/Window.h"
 #include <d3dx9math.h>
 
+LPDIRECTINPUT8 InputManager::m_Interface = nullptr;
 
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
-LPDIRECTINPUT8 InputManager::m_Interface = nullptr;
 
 struct GamePadEnumParam
 {
@@ -13,6 +13,29 @@ struct GamePadEnumParam
 	int FindCount;
 	HWND windowhandle;
 };
+
+InputManager::InputManager() : m_KeyDevice(nullptr), m_MouseDevice(nullptr), m_GamePadDevice(nullptr)
+{
+	for (int i = 0; i < static_cast<int>(KeyInfo::Max_Key_Info); i++)
+	{
+		m_KeyState[i] = InputState::Not_Push;
+	}
+
+	for (int i = 0; i < static_cast<int>(MouseButton::Max_Mouse_Btn); i++)
+	{
+		m_MouseState[i] = InputState::Not_Push;
+	}
+
+	for (int i = 0; i < static_cast<int>(GamePadButton::MAX_INFO); i++)
+	{
+		m_GamePadState[i] = InputState::Not_Push;
+	}
+
+	for (int i = 0; i < static_cast<int>(InputInfo::Max_ID); i++)
+	{
+		m_InputState[i] = 0;
+	}
+}
 
 bool InputManager::Init(HINSTANCE hInstance_, HWND hWindow_)
 {
@@ -111,12 +134,6 @@ bool InputManager::CreateMouseDevice(HWND hWindow_)
 BOOL CALLBACK InputManager::EnumJoysticksCallback(LPCDIDEVICEINSTANCE pDevIns, LPVOID pContext)
 {
 	GamePadEnumParam* param = reinterpret_cast<GamePadEnumParam*>(pContext);
-
-	// カウント数が2以上になった場合列挙終了
-	if (param->FindCount >= m_MaxGamePadNum)
-	{
-		return DIENUM_STOP;
-	}
 
 	// デバイスの作成
 	HRESULT hr = m_Interface->CreateDevice(
@@ -223,7 +240,7 @@ bool InputManager::CreateGamePadDevice(HWND hWindow_)
 {
 	GamePadEnumParam param;
 	param.FindCount = 0;		// ゲームパッドの列挙数の初期化
-	param.GamePadDevList = m_GamePadDevices;
+	param.GamePadDevList = &m_GamePadDevice;
 	param.windowhandle = hWindow_;
 
 
@@ -240,23 +257,23 @@ bool InputManager::CreateGamePadDevice(HWND hWindow_)
 	// ゲームパッドの起動
 	for (int i = 0; i < param.FindCount; i++)
 	{
-		if (FAILED(m_GamePadDevices[i]->Acquire()))
+		if (FAILED(m_GamePadDevice->Acquire()))
 		{
 			return false;
 		}
-		m_GamePadDevices[i]->Poll();
+		m_GamePadDevice->Poll();
 	}
 	
 	return true;
 }
 
-bool InputManager::RestartGamePad(LPDIRECTINPUTDEVICE8 device, int num)
+bool InputManager::RestartGamePad(LPDIRECTINPUTDEVICE8 device)
 {
 	if (FAILED(device->Acquire()))
 	{
 		for (int i = 0; i < static_cast<int>(GamePadButton::MAX_INFO); i++)
 		{
-			m_GamePadState[num][i] = InputState::Not_Push;
+			m_GamePadState[i] = InputState::Not_Push;
 		}
 
 		return false;
@@ -267,15 +284,14 @@ bool InputManager::RestartGamePad(LPDIRECTINPUTDEVICE8 device, int num)
 
 void InputManager::Release()
 {
-	for (int i = 0; i < m_MaxGamePadNum; i++)
+
+	if (m_GamePadDevice != nullptr)
 	{
-		if (m_GamePadDevices[i] != nullptr)
-		{
-			m_GamePadDevices[i]->Unacquire();
-			m_GamePadDevices[i]->Release();
-			m_GamePadDevices[i] = nullptr;
-		}
+		m_GamePadDevice->Unacquire();
+		m_GamePadDevice->Release();
+		m_GamePadDevice = nullptr;
 	}
+
 
 	if (m_KeyDevice != nullptr)
 	{
@@ -392,132 +408,128 @@ void InputManager::UpdateGamePadState()
 	DIJOYSTATE joy;
 	bool isPush[static_cast<int>(GamePadButton::MAX_INFO)] = {  };
 
-	for (int i = 0; i < m_MaxGamePadNum; i++)
+	if (m_GamePadDevice == nullptr)
 	{
-		if (m_GamePadDevices[i] == nullptr)
-		{
 			return;
-		}
+	}
+	
+	HRESULT hr = m_GamePadDevice->GetDeviceState(sizeof(DIJOYSTATE), &joy);
+	if (FAILED(hr))
+	{
+		RestartGamePad(m_GamePadDevice);
+	}
+	
+	// 左スティックの入力確認
+	if (joy.lX < -m_Unresponsive_Range)
+	{
+		isPush[static_cast<int>(GamePadButton::Stc_lLeft)] = true;
+	}
+	else if (joy.lX > m_Unresponsive_Range)
+	{
+		isPush[static_cast<int>(GamePadButton::Stc_lRight)] = true;
+	}
+	if (joy.lY > m_Unresponsive_Range)
+	{
+		isPush[static_cast<int>(GamePadButton::Stc_lDown)] = true;
+	}
+	else if (joy.lY < -m_Unresponsive_Range)
+	{
+		isPush[static_cast<int>(GamePadButton::Stc_lUp)] = false;
+	}
 
-		HRESULT hr = m_GamePadDevices[i]->GetDeviceState(sizeof(DIJOYSTATE), &joy);
-		if (FAILED(hr))
-		{
-			RestartGamePad(m_GamePadDevices[i], i);
-		}
-
-		// 左スティックの入力確認
-		if (joy.lX < -m_Unresponsive_Range)
-		{
-			isPush[static_cast<int>(GamePadButton::Stc_lLeft)] = true;
-		}
-		else if (joy.lX > m_Unresponsive_Range)
-		{
-			isPush[static_cast<int>(GamePadButton::Stc_lRight)] = true;
-		}
-		if (joy.lY > m_Unresponsive_Range)
-		{
-			isPush[static_cast<int>(GamePadButton::Stc_lDown)] = true;
-		}
-		else if (joy.lY < -m_Unresponsive_Range)
-		{
-			isPush[static_cast<int>(GamePadButton::Stc_lUp)] = false;
-		}
-
-		m_InputState[static_cast<int>(InputInfo::Pad_lX)] = joy.lX;
-		m_InputState[static_cast<int>(InputInfo::Pad_lY)] = joy.lY;
-
-
-		// 右スティックの入力確認
-		if (joy.lRx < -m_Unresponsive_Range)
-		{
-			isPush[static_cast<int>(GamePadButton::Stc_rLeft)] = true;
-		}
-		else if (joy.lRx > m_Unresponsive_Range)
-		{
-			isPush[static_cast<int>(GamePadButton::Stc_rRight)] = true;
-		}
-		if (joy.lRy > m_Unresponsive_Range)
-		{
-			isPush[static_cast<int>(GamePadButton::Stc_rDown)] = true;
-		}
-		else if (joy.lRy < -m_Unresponsive_Range)
-		{
-			isPush[static_cast<int>(GamePadButton::Stc_rUp)] = true;
-		}
-
-		m_InputState[static_cast<int>(InputInfo::Pad_rX)] = joy.lRx;
-		m_InputState[static_cast<int>(InputInfo::Pad_rY)] = joy.lRy;
+	m_InputState[static_cast<int>(InputInfo::Pad_lX)] = joy.lX;
+	m_InputState[static_cast<int>(InputInfo::Pad_lY)] = joy.lY;
 
 
-		// 十字キーの入力確認
-		if (joy.rgdwPOV[0] != 0xFFFFFFFF)
-		{
-			float rad = D3DXToRadian((joy.rgdwPOV[0] / 100.0f));
-			float x = sinf(rad);
-			float y = cosf(rad);
+	// 右スティックの入力確認
+	if (joy.lRx < -m_Unresponsive_Range)
+	{
+		isPush[static_cast<int>(GamePadButton::Stc_rLeft)] = true;
+	}
+	else if (joy.lRx > m_Unresponsive_Range)
+	{
+		isPush[static_cast<int>(GamePadButton::Stc_rRight)] = true;
+	}
+	if (joy.lRy > m_Unresponsive_Range)
+	{
+		isPush[static_cast<int>(GamePadButton::Stc_rDown)] = true;
+	}
+	else if (joy.lRy < -m_Unresponsive_Range)
+	{
+		isPush[static_cast<int>(GamePadButton::Stc_rUp)] = true;
+	}
 
-			if (x < -0.01f)
+	m_InputState[static_cast<int>(InputInfo::Pad_rX)] = joy.lRx;
+	m_InputState[static_cast<int>(InputInfo::Pad_rY)] = joy.lRy;
+
+
+	// 十字キーの入力確認
+	if (joy.rgdwPOV[0] != 0xFFFFFFFF)
+	{
+		float rad = D3DXToRadian((joy.rgdwPOV[0] / 100.0f));
+		float x = sinf(rad);
+		float y = cosf(rad);
+		if (x < -0.01f)
+		{
+			isPush[static_cast<int>(GamePadButton::Arw_Left)] = true;
+		}
+		else if (x > 0.01f)
+		{
+			isPush[static_cast<int>(GamePadButton::Arw_Right)] = true;
+		}
+
+		if (y < -0.01f)
+		{
+			isPush[static_cast<int>(GamePadButton::Arw_Down)] = true;
+		}
+		else if (y > 0.01f)
+		{
+			isPush[static_cast<int>(GamePadButton::Arw_Up)] = true;
+		}
+	}
+
+	m_InputState[static_cast<int>(InputInfo::Pad_POV)] = static_cast<int>(joy.rgdwPOV[0]);
+
+
+	// ボタンの入力確認
+	for (int j = 0; j < 10; j++)
+	{
+		if (joy.rgbButtons[j] == 0x80)
+		{
+			isPush[j] = true;
+		}
+	}
+	
+	for (int j = 0; j < static_cast<int>(GamePadButton::MAX_INFO); j++)
+	{
+		if (isPush[j] == true)
+		{
+			if (m_GamePadState[j] == InputState::Not_Push || m_GamePadState[j] == InputState::Release)
 			{
-				isPush[static_cast<int>(GamePadButton::Arw_Left)] = true;
+				m_GamePadState[j] = InputState::PushDown;
 			}
-			else if (x > 0.01f)
-			{
-				isPush[static_cast<int>(GamePadButton::Arw_Right)] = true;
-			}
-
-			if (y < -0.01f)
-			{
-				isPush[static_cast<int>(GamePadButton::Arw_Down)] = true;
-			}
-			else if (y > 0.01f)
-			{
-				isPush[static_cast<int>(GamePadButton::Arw_Up)] = true;
-			}
-		}
-
-		m_InputState[static_cast<int>(InputInfo::Pad_POV)] = static_cast<int>(joy.rgdwPOV[0]);
-
-
-		// ボタンの入力確認
-		for (int j = 0; j < 10; j++)
-		{
-			if (joy.rgbButtons[j] == 0x80)
-			{
-				isPush[j] = true;
-			}
-		}
-
-		for (int j = 0; j < static_cast<int>(GamePadButton::MAX_INFO); j++)
-		{
-			if (isPush[j] == true)
-			{
-				if (m_GamePadState[i][j] == InputState::Not_Push || m_GamePadState[i][j] == InputState::Release)
-				{
-					m_GamePadState[i][j] = InputState::PushDown;
-				}
 				else
 				{
-					m_GamePadState[i][j] = InputState::Push;
+					m_GamePadState[j] = InputState::Push;
 				}
 			}
 			else
 			{
-				if (m_GamePadState[i][j] == InputState::Push || m_GamePadState[i][j] == InputState::PushDown)
+				if (m_GamePadState[j] == InputState::Push || m_GamePadState[j] == InputState::PushDown)
 				{
-					m_GamePadState[i][j] = InputState::Release;
+					m_GamePadState[j] = InputState::Release;
 				}
 				else
 				{
-					m_GamePadState[i][j] = InputState::Not_Push;
+					m_GamePadState[j] = InputState::Not_Push;
 				}
 
 			}
 		}
-	}
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < static_cast<int>(GamePadButton::MAX_INFO); i++)
 	{
-		m_InputState[i + static_cast<int>(KeyInfo::Max_Key_Info) + static_cast<int>(MouseButton::Max_Mouse_Btn)] = static_cast<int>(m_GamePadState[0][i]);
+		m_InputState[i + static_cast<int>(KeyInfo::Max_Key_Info) + static_cast<int>(MouseButton::Max_Mouse_Btn)] = static_cast<int>(m_GamePadState[i]);
 	}
 }
 
@@ -553,7 +565,7 @@ POINT InputManager::GetMousePos() const
 	POINT pos;
 	GetCursorPos(&pos);
 
-	ScreenToClient(MaxHazardon!!, &pos);
+	ScreenToClient(THE_WINDOW->GetWindowHandle() , &pos);
 }
 
 bool InputManager::GetKey(KeyInfo key_) const
@@ -583,27 +595,27 @@ bool InputManager::GetKeyUp(KeyInfo key_) const
 	return false;
 }
 
-bool InputManager::GetButton(int num_, GamePadButton btn_) const
+bool InputManager::GetButton(GamePadButton btn_) const
 {
-	if (m_GamePadState[num_][static_cast<int>(btn_)] == InputState::Push)
+	if (m_GamePadState[static_cast<int>(btn_)] == InputState::Push)
 	{
 		return true;
 	}
 	return false;
 }
 
-bool InputManager::GetButtonDown(int num_, GamePadButton btn_) const
+bool InputManager::GetButtonDown(GamePadButton btn_) const
 {
-	if (m_GamePadState[num_][static_cast<int>(btn_)] == InputState::PushDown)
+	if (m_GamePadState[static_cast<int>(btn_)] == InputState::PushDown)
 	{
 		return true;
 	}
 	return false;
 }
 
-bool InputManager::GetButtonUp(int num_, GamePadButton btn_) const
+bool InputManager::GetButtonUp(GamePadButton btn_) const
 {
-	if (m_GamePadState[num_][static_cast<int>(btn_)] == InputState::Release)
+	if (m_GamePadState[static_cast<int>(btn_)] == InputState::Release)
 	{
 		return true;
 	}

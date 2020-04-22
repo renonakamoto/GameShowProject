@@ -150,6 +150,9 @@ enum class InputInfo
 
 class InputManager
 {
+
+	friend MySingletonTemplate::SingletonTemplate<InputManager>;
+
 public:
 	/**
 	* @brief Input機能の初期化関数
@@ -223,26 +226,36 @@ public:
 	* @param[in] num_ コントローラーの番号
 	* @param[in] btn_ ボタンの種類
 	*/
-	bool GetButton(int num_, GamePadButton btn_)const;
+	bool GetButton(GamePadButton btn_)const;
 
 	/**
 	* @brief ボタンが押されてた瞬間かの情報取得関数
 	* @param[in] num_ コントローラーの番号
 	* @param[in] btn_ ボタンの種類
 	*/
-	bool GetButtonDown(int num_, GamePadButton btn_)const;
+	bool GetButtonDown(GamePadButton btn_)const;
 
 	/**
 	* @brief ボタンが離された瞬間かの情報取得関数
 	* @param[in] num_ コントローラーの番号
 	* @param[in] btn_ ボタンの種類
 	*/
-	bool GetButtonUp(int num_, GamePadButton btn_)const;
+	bool GetButtonUp(GamePadButton btn_)const;
 
 //!< 以下仮想コントローラー用
 	int GetInputState(InputInfo id_)const;
 
 private:
+	/**
+	* @biref コンストラクタ
+	*/
+	InputManager();
+
+	/**
+	* @biref デストラクタ
+	*/
+	~InputManager() { }
+
 	/**
 	* @brief キーボード用のデバイスの生成
 	* キーボード用のDirectInputDeviceを生成、初期化します
@@ -296,17 +309,16 @@ private:
 	* @biref ゲームパッドの再起動関数
 	* デバイスロストの際にゲームパッドの再起動を行う関数です
 	*/
-	bool RestartGamePad(LPDIRECTINPUTDEVICE8 device, int num);
+	bool RestartGamePad(LPDIRECTINPUTDEVICE8 device);
 
 private:
-	static const int m_MaxGamePadNum = 1;
 	static const int m_Unresponsive_Range = 200;
 
 
 	static LPDIRECTINPUT8 m_Interface;		//!< DirectInput8のインターフェイス
 	LPDIRECTINPUTDEVICE8 m_KeyDevice;		//!< キーボード用デバイス
 	LPDIRECTINPUTDEVICE8 m_MouseDevice;		//!< マウス用のデバイス
-	LPDIRECTINPUTDEVICE8 m_GamePadDevices[m_MaxGamePadNum];	//!< ゲームパッド用のデバイス
+	LPDIRECTINPUTDEVICE8 m_GamePadDevice;	//!< ゲームパッド用のデバイス
 
 	InputState m_KeyState[static_cast<int>(KeyInfo::Max_Key_Info)];			//!< キーボード入力情報
 	int m_KeyInfo[static_cast<int>(KeyInfo::Max_Key_Info)] =
@@ -347,10 +359,12 @@ private:
 	};																		//!< キーボード割り当て情報
 
 	InputState m_MouseState[3];		//!< マウス入力情報
-	InputState m_GamePadState[m_MaxGamePadNum][static_cast<int>(GamePadButton::MAX_INFO)];		//!< ゲームパッド入力情報
+	InputState m_GamePadState[static_cast<int>(GamePadButton::MAX_INFO)];		//!< ゲームパッド入力情報
 
 	int m_InputState[static_cast<int>(InputInfo::Max_ID)];				//!< 入力情報
 };
 
+typedef MySingletonTemplate::SingletonTemplate<InputManager> InputMA;
+#define THE_INPUTMANAGER InputMA::GetInstance()
 
 #endif INPUT_MANAGER

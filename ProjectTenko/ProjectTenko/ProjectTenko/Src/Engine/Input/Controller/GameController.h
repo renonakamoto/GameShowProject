@@ -8,6 +8,17 @@ class GameController
 {
 public:
 	/**
+	* @biref コンストラクタ
+	*/
+	GameController() : m_StickRad()
+	{} 
+
+	/**
+	* @biref デストラクタ
+	*/
+	~GameController();
+
+	/**
 	* @biref 仮想コントローラーの初期化
 	* 仮想コントローラーの初期化を行います
 	* @return 初期化結果、成功の場合true
@@ -45,8 +56,17 @@ public:
 	*/
 	bool GetKeyUp(Button key_);
 
+	/**
+	* @biref アナログスティックを傾けている方向の角度を取得する関数
+	* 引数で指定した側のスティックが傾けられている方向を、コントローラー上を0として360度で値を返します
+	* @return 傾けている角度、エラーの場合は-1を返す
+	* @param[in] stick_ スティックの順、0が左
+	*/
+	int GetSthickRad(int stick_);
+
 private:
 	GameButton* m_Buttons[static_cast<int>(Button::MaxButtons)];
+	int m_StickRad[2];
 };
 
 #endif GAMECONTROLLER_H_
