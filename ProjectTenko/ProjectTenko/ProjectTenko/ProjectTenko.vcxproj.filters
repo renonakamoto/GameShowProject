@@ -223,8 +223,13 @@
     <ClCompile Include="Src\ObjectBase\MapObject\Skydome\Skydome.cpp">
       <Filter>Src\ObjectBase\MapObject\Skydome</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Src\Camera\Camera.cpp">
       <Filter>Src\Camera</Filter>
+=======
+    <ClCompile Include="Src\Engine\Input\Controller\GameButton.cpp">
+      <Filter>Src\Engine\Input\Controller</Filter>
+>>>>>>> BuildSceneManager
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
