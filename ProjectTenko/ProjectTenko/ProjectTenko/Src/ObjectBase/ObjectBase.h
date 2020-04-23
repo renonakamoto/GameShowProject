@@ -10,7 +10,8 @@ class ObjectBase
 public:
 	ObjectBase(D3DXVECTOR3 pos_, std::string key_) :
 		m_Pos(pos_),
-		m_FbxKey(key_)
+		m_FbxKey(key_),
+		m_Angle(0.f)
 	{
 	}
 
@@ -24,6 +25,8 @@ public:
 protected:
 	D3DXVECTOR3 m_Pos;
 	D3DXMATRIX  m_Mat_World;
+
+	float		m_Angle;
 	
 	std::string m_FbxKey;
 

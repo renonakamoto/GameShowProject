@@ -1,6 +1,7 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
+#include "../../../Camera/Camera.h"
 #include "../Character.h"
 
 class Player : public Character
@@ -13,9 +14,11 @@ public:
 	virtual void Update() override;
 	virtual void Draw() override;
 
-protected:
+	void Move();
 
 private:
+	float m_WalkSpeed;			//! 立ってる状態でのスピード
+	float m_SquatWalkSpeed;		//! しゃがんでる状態でのスピード
 
 };
 

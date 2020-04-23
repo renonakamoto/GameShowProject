@@ -14,21 +14,21 @@ public:
 	~Camera();
 
 	void Update();
-
 	void Move();
 	void Rotate();
 
 	void SetCamera(const D3DXVECTOR3& pos_, float distance_);
-
-	void SetViewMatrix();
-	void SetProjectionMatrix();
+	void SetCameraSensitivity(float horizon_, float vertical_);
 	
-
-	D3DXVECTOR3* GetPos()    { return &m_Pos; }
-	D3DXVECTOR3* GetLookAt() { return &m_LookAt; }
-	D3DXVECTOR3* GetUpVec()  { return &m_UpVec; }	
+	const D3DXVECTOR3  GetForwardVec()const;
+	const D3DXVECTOR3  GetLeftVec()const;
+	const D3DXVECTOR3* GetPos()const     { return &m_Pos;    }
+	const D3DXVECTOR3* GetLookAt()const  { return &m_LookAt; }
+	const D3DXVECTOR3* GetUpVec()const   { return &m_UpVec;  }
 	
 private:
+	void SetViewMatrix();
+	void SetProjectionMatrix();
 
 	D3DXVECTOR3 m_Pos;		//! カメラの座標
 	D3DXVECTOR3 m_LookAt;	//! 注視点
@@ -38,8 +38,7 @@ private:
 	float m_Yaw;			//! X軸回転
 	float m_Pitch;			//! Y軸回転
 
-	float m_Sensitivity;	//! カメラ感度
-
+	D3DXVECTOR2 m_Sensitivity;
 };
 
 #endif

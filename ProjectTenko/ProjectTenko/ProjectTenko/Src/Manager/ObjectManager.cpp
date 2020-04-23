@@ -20,13 +20,13 @@
 
 Objectmanager::Objectmanager()
 {
+	m_Object.push_back(new Player(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Player"));
+
 	m_Object.push_back(new Ebiten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Ebiten"));
 	m_Object.push_back(new Ikaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Ikaten"));
 	m_Object.push_back(new Kabochaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Kabochaten"));
 	m_Object.push_back(new Sitaketen(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Sitaketen"));
 	m_Object.push_back(new Tikuwaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Tikuwaten"));
-
-	m_Object.push_back(new Player(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Player"));
 
 	m_Object.push_back(new Barrel(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Barrel"));
 	m_Object.push_back(new Floor(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Floor"));
@@ -38,11 +38,13 @@ Objectmanager::Objectmanager()
 	m_Object.push_back(new VendingMachineBlue(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "VendingMachineBlue"));
 	m_Object.push_back(new VendingMachineRed(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "VendingMachineRed"));
 	m_Object.push_back(new Wall(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Wall"));
+
+	m_Camera = new Camera();
 }
 
 Objectmanager::~Objectmanager()
 {
-	m_Object.clear();
+	AllRelease();
 }
 
 void Objectmanager::Update()
@@ -51,6 +53,8 @@ void Objectmanager::Update()
 	{
 		itr->Update();
 	}
+
+	m_Camera->Update();
 }
 
 void Objectmanager::Draw()
@@ -59,4 +63,17 @@ void Objectmanager::Draw()
 	{
 		itr->Draw();
 	}
+}
+
+void Objectmanager::AllRelease()
+{
+	for (auto& itr : m_Object) {
+		delete itr;
+		itr = nullptr;
+	}
+
+	m_Object.clear();
+
+	delete m_Camera;
+	m_Camera = nullptr;
 }

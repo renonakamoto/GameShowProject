@@ -1,6 +1,7 @@
 #include "Utility/SingletonTemplate.h"
 #include "Engine/Window/Window.h"
 #include "Engine/Graphics/DirectGraphics.h"
+#include "Engine/Input/InputManager.h"
 #include "Engine/Fbx/FbxManager.h"
 #include "Manager/ObjectManager.h"
 
@@ -12,6 +13,7 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 	//! エンジンインスタンス生成
 	Window::Create();
 	DirectGraphics::Create();
+	InputMA::Create();
 	FbxMeshManager::Create();
 
 
@@ -24,6 +26,11 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 	if (THE_GRAPHICS->Init(THE_WINDOW->GetWindowHandle(), 1920, 1080, false) == false)
 	{
 		return -2;
+	}
+
+	if (THE_INPUTMANAGER->Init(hInstance_, THE_WINDOW->GetWindowHandle()))
+	{
+		return -3;
 	}
 
 	ObjectManager::Create();
@@ -58,6 +65,7 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 
 	Window::Destory();
 	DirectGraphics::Destory();
+	InputMA::Destory();
 	FbxMeshManager::Destory();
 	ObjectManager::Destory();
 	return 1;

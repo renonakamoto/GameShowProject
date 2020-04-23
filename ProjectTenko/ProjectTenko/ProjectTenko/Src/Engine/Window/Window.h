@@ -3,6 +3,7 @@
 
 #include "../../Utility/SingletonTemplate.h"
 #include <Windows.h>
+#include <d3dx9.h>
 
 /**
 * @namespace MyWindow
@@ -27,6 +28,10 @@ namespace MyWindow
 		const int GetWindowWidth()const { return m_Width; }
 
 		const int GetWindowHeight()const { return m_Height; }
+
+		const D3DXVECTOR2 GetCenterWindowPos()const {
+			return D3DXVECTOR2(m_Width / 2, m_Height / 2);
+		}
 
 	private:
 
