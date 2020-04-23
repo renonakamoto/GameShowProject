@@ -28,7 +28,7 @@ void PauseScene::Load()
 
 DWORD WINAPI PauseScene::LoadResources(LPVOID lpParam_)
 {
-
+    return 0;
 }
 
 

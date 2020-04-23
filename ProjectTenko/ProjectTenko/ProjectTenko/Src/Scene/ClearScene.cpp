@@ -28,7 +28,7 @@ void ClearScene::Load()
 
 DWORD WINAPI ClearScene::LoadResources(LPVOID lpParam_)
 {
-
+    return 0;
 }
 
 

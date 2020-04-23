@@ -10,7 +10,7 @@ public:
 	/**
 	* @biref コンストラクタ
 	*/
-	GameController() : m_StickRad()
+	GameController() : m_StickRad(), m_Buttons()
 	{} 
 
 	/**

@@ -14,7 +14,16 @@ GameButton::~GameButton()
 
 bool GameButton::SetConfig(InputInfo id_)
 {
+	for (const auto e : m_ButtonID)
+	{
+		if (id_ == e)
+		{
+			return false;
+		}
+	}
+
 	m_ButtonID.push_back(id_);
+	return true;
 }
 
 short GameButton::GetVal()const

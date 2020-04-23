@@ -13,7 +13,7 @@ public:
 	void Draw() override;
 
 private:
-	DWORD WINAPI LoadResources(LPVOID lpParam_) override;
+	static DWORD WINAPI LoadResources(LPVOID lpParam_);
 	void Main() override;
 	void Load() override;
 };

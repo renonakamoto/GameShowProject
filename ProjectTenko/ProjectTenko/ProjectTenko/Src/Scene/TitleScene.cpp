@@ -28,7 +28,7 @@ void TitleScene::Load()
 
 DWORD WINAPI TitleScene::LoadResources(LPVOID lpParam_)
 {
-
+    return 0;
 }
 
 
