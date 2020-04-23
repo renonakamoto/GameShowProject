@@ -23,6 +23,7 @@
     <ClCompile Include="Src\Engine\Fbx\FbxDrawer.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxLoader.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxManager.cpp" />
+    <ClCompile Include="Src\Engine\Fbx\FbxMotion.cpp" />
     <ClCompile Include="Src\Engine\Graphics\DirectGraphics.cpp" />
     <ClCompile Include="Src\Engine\Input\Controller\GameButton.cpp" />
     <ClCompile Include="Src\Engine\Input\Controller\GameController.cpp" />
@@ -67,6 +68,7 @@
     <ClInclude Include="Src\Engine\Fbx\FbxDrawer.h" />
     <ClInclude Include="Src\Engine\Fbx\FbxLoader.h" />
     <ClInclude Include="Src\Engine\Fbx\FbxManager.h" />
+    <ClInclude Include="Src\Engine\Fbx\FbxMotion.h" />
     <ClInclude Include="Src\Engine\Graphics\DirectGraphics.h" />
     <ClInclude Include="Src\Engine\Input\Controller\GameButton.h" />
     <ClInclude Include="Src\Engine\Input\Controller\GameController.h" />

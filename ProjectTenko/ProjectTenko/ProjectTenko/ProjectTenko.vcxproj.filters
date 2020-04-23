@@ -59,6 +59,7 @@
     <ClCompile Include="Src\Scene\ClearScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Engine\Fbx\FbxMotion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
@@ -128,6 +129,7 @@
     <ClInclude Include="Src\Scene\TitleScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Engine\Fbx\FbxMotion.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
