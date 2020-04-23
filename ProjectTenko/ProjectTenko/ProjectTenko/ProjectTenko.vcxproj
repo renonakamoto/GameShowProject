@@ -24,6 +24,7 @@
     <ClCompile Include="Src\Engine\Fbx\FbxLoader.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxManager.cpp" />
     <ClCompile Include="Src\Engine\Graphics\DirectGraphics.cpp" />
+    <ClCompile Include="Src\Engine\Input\Controller\GameButton.cpp" />
     <ClCompile Include="Src\Engine\Input\Controller\GameController.cpp" />
     <ClCompile Include="Src\Engine\Input\InputManager.cpp" />
     <ClCompile Include="Src\Engine\Texture\Texture.cpp" />
@@ -51,6 +52,14 @@
     <ClCompile Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine_Red.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Wall\Wall.cpp" />
     <ClCompile Include="Src\ObjectBase\ObjectBase.cpp" />
+    <ClCompile Include="Src\Scene\ClearScene.cpp" />
+    <ClCompile Include="Src\Scene\ConfigScene.cpp" />
+    <ClCompile Include="Src\Scene\GameoverScene.cpp" />
+    <ClCompile Include="Src\Scene\GameScene.cpp" />
+    <ClCompile Include="Src\Scene\OpeningScene.cpp" />
+    <ClCompile Include="Src\Scene\PauseScene.cpp" />
+    <ClCompile Include="Src\Scene\SceneManager.cpp" />
+    <ClCompile Include="Src\Scene\TitleScene.cpp" />
     <ClCompile Include="Src\Utility\3DHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +95,17 @@
     <ClInclude Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine_Red.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Wall\Wall.h" />
     <ClInclude Include="Src\ObjectBase\ObjectBase.h" />
+    <ClInclude Include="Src\Scene\ClearScene.h" />
+    <ClInclude Include="Src\Scene\ConfigScene.h" />
+    <ClInclude Include="Src\Scene\GameoverScene.h" />
+    <ClInclude Include="Src\Scene\GameScene.h" />
+    <ClInclude Include="Src\Scene\OpeningScene.h" />
+    <ClInclude Include="Src\Scene\PauseScene.h" />
+    <ClInclude Include="Src\Scene\Scene.h" />
+    <ClInclude Include="Src\Scene\SceneChanger.h" />
+    <ClInclude Include="Src\Scene\SceneDefinition.h" />
+    <ClInclude Include="Src\Scene\SceneManager.h" />
+    <ClInclude Include="Src\Scene\TitleScene.h" />
     <ClInclude Include="Src\Utility\3DHelper.h" />
     <ClInclude Include="Src\Utility\SingletonTemplate.h" />
   </ItemGroup>
