@@ -15,7 +15,7 @@ public:
 private:
 	void Load() override;
 	void Main() override;
-	DWORD WINAPI LoadResources(LPVOID lpParam_) override;
+	static DWORD WINAPI LoadResources(LPVOID lpParam_);
 };
 
 #endif // !GAMEOVERSCENE_H_

@@ -566,6 +566,8 @@ POINT InputManager::GetMousePos() const
 	GetCursorPos(&pos);
 
 	ScreenToClient(THE_WINDOW->GetWindowHandle() , &pos);
+
+	return pos;
 }
 
 bool InputManager::GetKey(KeyInfo key_) const

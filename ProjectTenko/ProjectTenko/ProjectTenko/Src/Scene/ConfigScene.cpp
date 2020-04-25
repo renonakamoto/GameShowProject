@@ -28,7 +28,7 @@ void ConfigScene::Load()
 
 DWORD WINAPI ConfigScene::LoadResources(LPVOID lpParam_)
 {
-
+    return 0;
 }
 
 

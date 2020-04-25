@@ -46,8 +46,6 @@ protected:
 	*/
 	virtual void Load() = 0;
 
-	virtual DWORD WINAPI LoadResources(LPVOID lpParam_) = 0;
-
 protected:
 	SceneChanger* m_SceneChanger;	//!< シーン変更のためのインターフェイスを保持するポインタ
 	SceneState m_CurrentState;		//!< 現在のシーンの状態

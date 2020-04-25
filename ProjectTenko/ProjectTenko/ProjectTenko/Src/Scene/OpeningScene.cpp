@@ -28,7 +28,7 @@ void OpeningScene::Load()
 
 DWORD WINAPI OpeningScene::LoadResources(LPVOID lpParam_)
 {
-
+    return 0;
 }
 
 

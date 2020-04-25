@@ -28,7 +28,7 @@ void GameScene::Load()
 
 DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 {
-
+    return 0;
 }
 
 
