@@ -52,9 +52,28 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 			}
 		}
 		else {
+			THE_INPUTMANAGER->Update();
 
 			THE_OBJECTMANAGER->Update();
 			
+			D3DLIGHT9 light;
+			ZeroMemory(&light, sizeof(light));
+			light.Type = D3DLIGHT_DIRECTIONAL;
+			light.Direction.x = 0.0f;
+			light.Direction.y = -0.5f;
+			light.Direction.z = 0.2f;
+			light.Diffuse.a = 1.0f;
+			light.Diffuse.r = 0.8f;
+			light.Diffuse.g = 0.8f;
+			light.Diffuse.b = 0.8f;
+			light.Ambient.a = 1.0f;
+			light.Ambient.r = 0.5f;
+			light.Ambient.g = 0.5f;
+			light.Ambient.b = 0.5f;
+
+			THE_GRAPHICS->GetD3DDevice()->LightEnable(0, TRUE);
+			THE_GRAPHICS->GetD3DDevice()->SetLight(0, &light);
+
 			THE_GRAPHICS->StartDraw();
 
 			THE_OBJECTMANAGER->Draw();

@@ -38,24 +38,27 @@ void Camera::Move()
 
 void Camera::Rotate()
 {
-	//! ウィンドウの中心を保存する
-	D3DXVECTOR2 center_window = THE_WINDOW->GetCenterWindowPos();
-
 	//! カーソルを中心に持ってくる
-	SetCursorPos(static_cast<int>(center_window.x), static_cast<int>(center_window.y));
-	
+	SetCursorPos(960, 540);
+
+	int a = THE_INPUTMANAGER->GetMousePos().x;
+	int b = THE_INPUTMANAGER->GetMousePos().y;
+
 	//! ウィンドウの中心からカーソルの位置でベクトルを算出する
-	m_Yaw   -= (THE_INPUTMANAGER->GetMousePos().x - center_window.x) / m_Sensitivity.x;
-	m_Pitch -= (THE_INPUTMANAGER->GetMousePos().y - center_window.y) / m_Sensitivity.y;
+	m_Yaw   -= (THE_INPUTMANAGER->GetMousePos().x - 951);
+	m_Pitch -= (THE_INPUTMANAGER->GetMousePos().y - 502);
 
 	//! 縦向き回転の稼働範囲制限
 	if (m_Pitch >  90.0f) { m_Pitch =  180.0f - m_Pitch; }
 	if (m_Pitch < -90.0f) { m_Pitch = -180.0f - m_Pitch; }
 	
 	// 回転を反映させる
-	m_Pos.x = m_LookAt.x + m_Distance *  sinf(D3DXToRadian(m_Yaw)) * cosf(D3DXToRadian(m_Pitch));
+	/*m_Pos.x = m_LookAt.x + m_Distance *  sinf(D3DXToRadian(m_Yaw)) * cosf(D3DXToRadian(m_Pitch));
 	m_Pos.y = m_LookAt.y + m_Distance *  sinf(D3DXToRadian(m_Pitch));
-	m_Pos.z = m_LookAt.z + m_Distance * -cosf(D3DXToRadian(m_Yaw)) * cosf(D3DXToRadian(m_Pitch));
+	m_Pos.z = m_LookAt.z + m_Distance * -cosf(D3DXToRadian(m_Yaw)) * cosf(D3DXToRadian(m_Pitch));*/
+
+	m_Pos.x = m_LookAt.x + 50 * sinf(D3DXToRadian(m_Yaw));
+	m_Pos.z = m_LookAt.z + 50 * -cosf(D3DXToRadian(m_Yaw));
 }
 
 void Camera::SetCamera(const D3DXVECTOR3& pos_, float distance_)
@@ -63,8 +66,7 @@ void Camera::SetCamera(const D3DXVECTOR3& pos_, float distance_)
 	m_Distance = distance_;
 
 	//! 注視点を設定
-	m_LookAt.x = pos_.x;
-	m_LookAt.z = pos_.z;
+	m_LookAt = pos_;
 }
 
 void Camera::SetCameraSensitivity(float horizon_, float vertical_)
@@ -73,7 +75,7 @@ void Camera::SetCameraSensitivity(float horizon_, float vertical_)
 	m_Sensitivity.y = vertical_;
 }
 
-const D3DXVECTOR3 Camera::GetForwardVec() const
+ D3DXVECTOR3 Camera::GetForwardVec()
 {
 	D3DXVECTOR3 forward;
 	//! 前向きベクトルを算出する
@@ -84,7 +86,7 @@ const D3DXVECTOR3 Camera::GetForwardVec() const
 	return forward;
 }
 
-const D3DXVECTOR3 Camera::GetLeftVec() const
+D3DXVECTOR3 Camera::GetLeftVec()
 {
 	D3DXVECTOR3 left;
 	//! 前向きベクトルから直角なベクトルを算出する
@@ -100,9 +102,9 @@ void Camera::SetViewMatrix()
 	D3DXMATRIX mat_view;
 	//! カメラのビュー行列の作成
 	D3DXMatrixLookAtLH(&mat_view,
-		this->GetPos(),
-		this->GetLookAt(),
-		this->GetUpVec());
+		&m_Pos,
+		&m_LookAt,
+		&m_UpVec);
 	THE_GRAPHICS->GetD3DDevice()->SetTransform(D3DTS_VIEW, &mat_view);
 }
 

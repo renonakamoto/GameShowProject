@@ -18,7 +18,7 @@ public:
 	void Draw();
 
 	Camera* GetCameraInstance()const {
-		if (m_Camera) { return nullptr; }
+		if (!m_Camera) { return nullptr; }
 		return m_Camera;
 	}
 

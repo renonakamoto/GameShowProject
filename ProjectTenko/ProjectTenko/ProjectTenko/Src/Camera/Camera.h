@@ -20,8 +20,8 @@ public:
 	void SetCamera(const D3DXVECTOR3& pos_, float distance_);
 	void SetCameraSensitivity(float horizon_, float vertical_);
 	
-	const D3DXVECTOR3  GetForwardVec()const;
-	const D3DXVECTOR3  GetLeftVec()const;
+	D3DXVECTOR3  GetForwardVec();
+	D3DXVECTOR3  GetLeftVec();
 	const D3DXVECTOR3* GetPos()const     { return &m_Pos;    }
 	const D3DXVECTOR3* GetLookAt()const  { return &m_LookAt; }
 	const D3DXVECTOR3* GetUpVec()const   { return &m_UpVec;  }

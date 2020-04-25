@@ -23,7 +23,7 @@ void MyFbx::FbxManager::AllReleaseFbxMesh()
 
 void MyFbx::FbxManager::Draw(std::string key_, const D3DXMATRIX& world_)
 {
-	if (HasKey(key_) == false) { return; }
+	//if (HasKey(key_) == false) { return; }
 
 	m_ObjectMeshData[key_].Model.world = world_;
 
