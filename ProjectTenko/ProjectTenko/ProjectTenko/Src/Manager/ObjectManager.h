@@ -30,6 +30,10 @@ private:
 
 	std::vector<ObjectBase*> m_Object;
 
+	std::vector<ObjectBase*> m_PlayerGroup;
+	std::vector<ObjectBase*> m_EnemyGroup;
+	std::vector<ObjectBase*> m_MapObjectGroup;
+
 	Camera* m_Camera;
 
 };

@@ -5,7 +5,7 @@
 Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 	Character(pos_, key_)
 {
-	THE_FBXMANAGER->LoadFBXMesh(key_, "assts/models/player/tenko_sample02.fbx");
+	THE_FBXMANAGER->LoadFBXMesh(key_, "assets/models/player/tenko_sample02.fbx");
 
 	m_Motion.AddMotion(PlayerMotionList::Wait,			1,	 200);
 	m_Motion.AddMotion(PlayerMotionList::Walk,			211, 270);
@@ -30,7 +30,7 @@ void Player::Update()
 	Camera* ref_camera = THE_OBJECTMANAGER->GetCameraInstance();
 	State();
 	Move();
-	ref_camera->SetCamera(m_Pos, 100);
+	ref_camera->SetCamera(m_Pos, 20);
 
 }
 
@@ -97,7 +97,13 @@ void Player::Move()
 
 void Player::Motion()
 {
-	m_Motion.Motion(m_CrrentMotion, m_FbxKey, true, nullptr);
+	if (m_CrrentMotion == PlayerMotionList::Squat)
+	{
+		m_Motion.Motion(m_CrrentMotion, m_FbxKey, false, nullptr);
+	}
+	else {
+		m_Motion.Motion(m_CrrentMotion, m_FbxKey, true, nullptr);
+	}
 }
 
 void Player::State()

@@ -38,15 +38,12 @@ void Camera::Move()
 
 void Camera::Rotate()
 {
-	//! カーソルを中心に持ってくる
-	SetCursorPos(960, 540);
-
-	int a = THE_INPUTMANAGER->GetMousePos().x;
-	int b = THE_INPUTMANAGER->GetMousePos().y;
-
 	//! ウィンドウの中心からカーソルの位置でベクトルを算出する
-	m_Yaw   -= (THE_INPUTMANAGER->GetMousePos().x - 951);
-	m_Pitch -= (THE_INPUTMANAGER->GetMousePos().y - 502);
+	m_Yaw   -= (THE_INPUTMANAGER->GetMousePos().x - THE_WINDOW->GetWindowWidth()  / 2) / m_Sensitivity.x;
+	m_Pitch -= (THE_INPUTMANAGER->GetMousePos().y - THE_WINDOW->GetWindowHeight() / 2) / m_Sensitivity.y;
+
+	//! カーソルを中心に持ってくる
+	SetCursorPos(THE_WINDOW->GetWindowWidth() / 2, THE_WINDOW->GetWindowHeight() / 2);
 
 	//! 縦向き回転の稼働範囲制限
 	if (m_Pitch >  90.0f) { m_Pitch =  180.0f - m_Pitch; }
@@ -57,8 +54,9 @@ void Camera::Rotate()
 	m_Pos.y = m_LookAt.y + m_Distance *  sinf(D3DXToRadian(m_Pitch));
 	m_Pos.z = m_LookAt.z + m_Distance * -cosf(D3DXToRadian(m_Yaw)) * cosf(D3DXToRadian(m_Pitch));*/
 
-	m_Pos.x = m_LookAt.x + 50 * sinf(D3DXToRadian(m_Yaw));
-	m_Pos.z = m_LookAt.z + 50 * -cosf(D3DXToRadian(m_Yaw));
+	m_Pos.x = m_LookAt.x + m_Distance *  sinf(D3DXToRadian(m_Yaw));
+	m_Pos.y = 35.0f;
+	m_Pos.z = m_LookAt.z + m_Distance * -cosf(D3DXToRadian(m_Yaw));
 }
 
 void Camera::SetCamera(const D3DXVECTOR3& pos_, float distance_)
@@ -99,6 +97,7 @@ D3DXVECTOR3 Camera::GetLeftVec()
 
 void Camera::SetViewMatrix()
 {
+	m_LookAt.y += 30.0f;
 	D3DXMATRIX mat_view;
 	//! カメラのビュー行列の作成
 	D3DXMatrixLookAtLH(&mat_view,
@@ -121,9 +120,9 @@ void Camera::SetProjectionMatrix()
 	//! 視錐台の作成
 	D3DXMatrixPerspectiveLH(
 		&mat_proj,
-		D3DXToRadian(60.0f),	//! 画角
+		D3DXToRadian(100.0f),	//! 画角
 		aspect,					//! アスペクト比
 		1.1f,					//! near
-		100000000.0f);			//! far
+		FLT_MAX);			//! far
 	THE_GRAPHICS->GetD3DDevice()->SetTransform(D3DTS_PROJECTION, &mat_proj);
 }

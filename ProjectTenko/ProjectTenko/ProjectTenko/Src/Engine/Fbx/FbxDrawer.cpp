@@ -15,7 +15,7 @@ void FbxDrawer::Animate(FBXMeshData * pData_, float sec_)
 	if (pData_ == nullptr) return;
 	if (pData_->Model.pMotion == nullptr) return;
 	//	モーション時間の更新
-	pData_->frame += sec_;
+	pData_->frame = sec_;
 
 	//	ループチェック
 	if (pData_->frame >= (*pData_->Model.pMotion)[pData_->motion].numFrame - 1)

@@ -3,6 +3,14 @@
 
 #include "../EnemyBase.h"
 
+enum class ChikuwaMotionList : unsigned char
+{
+	Wait,
+	Walk,
+	Sprint,
+	ChangeDirection,
+};
+
 class Tikuwaten : public Enemybase
 {
 public:
@@ -13,7 +21,8 @@ public:
 	virtual void Draw() override;
 
 private:
-
+	ChikuwaMotionList		     m_CrrentMotion;
+	FbxMotion<ChikuwaMotionList> m_Motion;
 
 };
 

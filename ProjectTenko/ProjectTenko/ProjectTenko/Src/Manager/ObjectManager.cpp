@@ -22,22 +22,22 @@ Objectmanager::Objectmanager()
 {
 	m_Object.push_back(new Player(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Player"));
 
-	m_Object.push_back(new Ebiten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Ebiten"));
-	m_Object.push_back(new Ikaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Ikaten"));
-	m_Object.push_back(new Kabochaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Kabochaten"));
-	m_Object.push_back(new Sitaketen(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Sitaketen"));
-	m_Object.push_back(new Tikuwaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Tikuwaten"));
+	//m_Object.push_back(new Ebiten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Ebiten"));
+	//m_Object.push_back(new Ikaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Ikaten"));
+	//m_Object.push_back(new Kabochaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Kabochaten"));
+	//m_Object.push_back(new Sitaketen(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Sitaketen"));
+	//m_Object.push_back(new Tikuwaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Tikuwaten"));
 
-	m_Object.push_back(new Barrel(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Barrel"));
+	//m_Object.push_back(new Barrel(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Barrel"));
 	m_Object.push_back(new Floor(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Floor"));
-	m_Object.push_back(new Gate(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Gate"));
-	m_Object.push_back(new Merrygoland(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "merrygoland_Foundation"));
-	m_Object.push_back(new Mountain(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Mountain"));
-	m_Object.push_back(new Skydome(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Skydome"));
-	m_Object.push_back(new Tent(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Tent"));
-	m_Object.push_back(new VendingMachineBlue(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "VendingMachineBlue"));
-	m_Object.push_back(new VendingMachineRed(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "VendingMachineRed"));
-	m_Object.push_back(new Wall(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Wall"));
+	//m_Object.push_back(new Gate(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Gate"));
+	//m_Object.push_back(new Merrygoland(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "merrygoland_Foundation"));
+	//m_Object.push_back(new Mountain(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Mountain"));
+	//m_Object.push_back(new Skydome(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Skydome"));
+	//m_Object.push_back(new Tent(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Tent"));
+	//m_Object.push_back(new VendingMachineBlue(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "VendingMachineBlue"));
+	//m_Object.push_back(new VendingMachineRed(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "VendingMachineRed"));
+	//m_Object.push_back(new Wall(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Wall"));
 
 	m_Camera = new Camera();
 }

@@ -3,7 +3,12 @@
 Tikuwaten::Tikuwaten(D3DXVECTOR3 pos_, std::string key_) :
 	Enemybase(pos_, key_)
 {
-	THE_FBXMANAGER->LoadFBXMesh(key_, "assets/models/enemies/tikuwaten/chikuwa.fbx");
+	THE_FBXMANAGER->LoadFBXMesh(key_, "assets/models/enemies/tikuwaten/chikuwa_animation.fbx");
+
+	m_Motion.AddMotion(ChikuwaMotionList::Wait,			   0,   60);
+	m_Motion.AddMotion(ChikuwaMotionList::Walk,			   70,  130);
+	m_Motion.AddMotion(ChikuwaMotionList::Sprint,		   140, 200);
+	m_Motion.AddMotion(ChikuwaMotionList::ChangeDirection, 210, 270);
 }
 
 void Tikuwaten::Update()

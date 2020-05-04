@@ -3,6 +3,15 @@
 
 #include "../EnemyBase.h"
 
+enum class KabochaMotionList : unsigned char
+{
+	Wait,
+	Walk,
+	Sprint,
+	LookAround,
+	ChangeDirection,
+};
+
 class Kabochaten : public Enemybase
 {
 public:
@@ -16,6 +25,8 @@ public:
 protected:
 
 private:
+	KabochaMotionList		     m_CrrentMotion;
+	FbxMotion<KabochaMotionList> m_Motion;
 
 };
 

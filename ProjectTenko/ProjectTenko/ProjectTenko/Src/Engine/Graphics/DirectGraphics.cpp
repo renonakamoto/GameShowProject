@@ -51,16 +51,22 @@ bool MyDirectGraphics::DirectGraphics::CreateGraphicsDevice(HWND windowHandle_, 
 
 	m_pD3DPresentParam->Windowed = !isFullScreen_;
 	m_pD3DPresentParam->hDeviceWindow = windowHandle_;
-	m_pD3DPresentParam->BackBufferWidth = width_;
-	m_pD3DPresentParam->BackBufferHeight = height_;
-	m_pD3DPresentParam->BackBufferFormat = D3DFMT_UNKNOWN;
+	m_pD3DPresentParam->BackBufferCount  = 1;
+	m_pD3DPresentParam->BackBufferFormat = D3DFMT_A8R8G8B8;
 	m_pD3DPresentParam->SwapEffect = D3DSWAPEFFECT_DISCARD;
 	m_pD3DPresentParam->MultiSampleType = D3DMULTISAMPLE_NONE;
 	m_pD3DPresentParam->MultiSampleQuality = 0;
 	m_pD3DPresentParam->Flags = 0;
 	m_pD3DPresentParam->AutoDepthStencilFormat = D3DFMT_D24S8;
 	m_pD3DPresentParam->EnableAutoDepthStencil = true;
-	m_pD3DPresentParam->FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
+	m_pD3DPresentParam->BackBufferWidth = width_;
+	m_pD3DPresentParam->BackBufferHeight = height_;
+
+
+	if (isFullScreen_)
+	{
+		m_pD3DPresentParam->FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
+	}
 
 	if (FAILED(m_pD3DInterface->CreateDevice(D3DADAPTER_DEFAULT,
 		D3DDEVTYPE_HAL,
@@ -84,7 +90,7 @@ bool MyDirectGraphics::DirectGraphics::SetViewPort()
 
 	viewPort.X = 0;
 	viewPort.Y = 0;
-	viewPort.Width = m_pD3DPresentParam->BackBufferWidth;
+	viewPort.Width  = m_pD3DPresentParam->BackBufferWidth;
 	viewPort.Height = m_pD3DPresentParam->BackBufferHeight;
 	viewPort.MinZ = 0.0f;
 	viewPort.MaxZ = 1.0f;
