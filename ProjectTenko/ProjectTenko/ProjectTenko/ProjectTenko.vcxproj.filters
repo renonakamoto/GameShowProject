@@ -60,6 +60,7 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Src\Engine\Fbx\FbxMotion.cpp" />
+    <ClCompile Include="Src\Engine\Sound\SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
@@ -130,6 +131,7 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Engine\Fbx\FbxMotion.h" />
+    <ClInclude Include="Src\Engine\Sound\SoundManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
