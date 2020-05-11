@@ -60,6 +60,8 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Src\Engine\Fbx\FbxMotion.cpp" />
+    <ClCompile Include="Src\Manager\CollisionManager.cpp" />
+    <ClCompile Include="Src\Collision\Collision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
@@ -130,6 +132,14 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Engine\Fbx\FbxMotion.h" />
+    <ClInclude Include="Src\Manager\CollisionManager.h" />
+    <ClInclude Include="Src\Collision\Collision.h" />
+    <ClInclude Include="Src\Collision\Shape\AABB.h" />
+    <ClInclude Include="Src\Collision\Shape\Cylinder.h" />
+    <ClInclude Include="Src\Collision\Shape\Shape.h" />
+    <ClInclude Include="Src\Collision\Shape\Point.h" />
+    <ClInclude Include="Src\Collision\Shape\Rect.h" />
+    <ClInclude Include="Src\Collision\FlexibleCollision.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

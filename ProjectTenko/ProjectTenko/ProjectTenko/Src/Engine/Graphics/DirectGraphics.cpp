@@ -56,7 +56,6 @@ bool MyDirectGraphics::DirectGraphics::CreateGraphicsDevice(HWND windowHandle_, 
 	m_pD3DPresentParam->SwapEffect = D3DSWAPEFFECT_DISCARD;
 	m_pD3DPresentParam->MultiSampleType = D3DMULTISAMPLE_NONE;
 	m_pD3DPresentParam->MultiSampleQuality = 0;
-	m_pD3DPresentParam->Flags = 0;
 	m_pD3DPresentParam->AutoDepthStencilFormat = D3DFMT_D24S8;
 	m_pD3DPresentParam->EnableAutoDepthStencil = true;
 	m_pD3DPresentParam->BackBufferWidth = width_;

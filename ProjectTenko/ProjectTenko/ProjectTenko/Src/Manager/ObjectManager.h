@@ -4,6 +4,8 @@
 #include "../Utility/SingletonTemplate.h"
 #include "../../Src/ObjectBase/ObjectBase.h"
 #include "../Camera/Camera.h"
+#include "CollisionManager.h"
+#include "../Collision/FlexibleCollision.h"
 #include <vector>
 #include <iostream>
 #include <memory>
@@ -22,6 +24,9 @@ public:
 		return m_Camera;
 	}
 
+	bool HitPlayerAndMapObject();
+	bool HitPlayerAndEnemy();
+
 	void AllRelease();
 
 private:
@@ -36,6 +41,8 @@ private:
 
 	Camera* m_Camera;
 
+	FlexibleCollision m_Collision;
+	
 };
 
 typedef MySingletonTemplate::SingletonTemplate<Objectmanager> ObjectManager;

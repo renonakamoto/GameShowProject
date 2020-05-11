@@ -38,6 +38,8 @@ private:
 	FbxMotion<PlayerMotionList> m_Motion;	//! モーションクラス
 
 	bool m_IsSquat;
+
+	D3DXVECTOR3 m_OldPos;					//! 前の座標
 	
 };
 

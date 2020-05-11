@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Camera\Camera.cpp" />
+    <ClCompile Include="Src\Collision\Collision.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxDrawer.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxLoader.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxManager.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="Src\Engine\Texture\Texture.cpp" />
     <ClCompile Include="Src\Engine\Window\Window.cpp" />
     <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\Manager\CollisionManager.cpp" />
     <ClCompile Include="Src\Manager\ObjectManager.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\Character.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.cpp" />
@@ -65,6 +67,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
+    <ClInclude Include="Src\Collision\FlexibleCollision.h" />
+    <ClInclude Include="Src\Collision\Shape\AABB.h" />
+    <ClInclude Include="Src\Collision\Collision.h" />
+    <ClInclude Include="Src\Collision\Shape\Cylinder.h" />
+    <ClInclude Include="Src\Collision\Shape\Point.h" />
+    <ClInclude Include="Src\Collision\Shape\Rect.h" />
+    <ClInclude Include="Src\Collision\Shape\Shape.h" />
     <ClInclude Include="Src\Engine\Fbx\FbxDrawer.h" />
     <ClInclude Include="Src\Engine\Fbx\FbxLoader.h" />
     <ClInclude Include="Src\Engine\Fbx\FbxManager.h" />
@@ -75,6 +84,7 @@
     <ClInclude Include="Src\Engine\Input\InputManager.h" />
     <ClInclude Include="Src\Engine\Texture\Texture.h" />
     <ClInclude Include="Src\Engine\Window\Window.h" />
+    <ClInclude Include="Src\Manager\CollisionManager.h" />
     <ClInclude Include="Src\Manager\ObjectManager.h" />
     <ClInclude Include="Src\ObjectBase\Character\Character.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.h" />

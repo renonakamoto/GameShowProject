@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "../../../Manager/ObjectManager.h"
 #include "../../../Engine/Input/InputManager.h"
+#include "../../../Collision/Shape/AABB.h"
 
 Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 	Character(pos_, key_)
@@ -21,6 +22,8 @@ Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 	m_IsSquat = false;
 
 	m_WalkSpeed = 5.0f;
+
+	m_Shape = new AABBShape(10.f, 20.f, 10.f);
 }
 
 void Player::Update()
@@ -31,7 +34,6 @@ void Player::Update()
 	State();
 	Move();
 	ref_camera->SetCamera(m_Pos, 20);
-
 }
 
 void Player::Draw()
@@ -84,10 +86,18 @@ void Player::Move()
 
 	if (result_move_vec.x != 0.0f || result_move_vec.z != 0.0f)
 	{
+		m_OldPos = m_Pos;
+
 		D3DXVec3Normalize(&result_move_vec, &result_move_vec);
 
 		m_Pos.x += result_move_vec.x * speed;
 		m_Pos.z += result_move_vec.z * speed;
+
+		m_Shape->Update(m_Pos);
+
+		if (THE_OBJECTMANAGER->HitPlayerAndMapObject() == true) {
+			m_Pos = m_OldPos;
+		}
 
 		m_Angle = atan2f(result_move_vec.x, result_move_vec.z);
 
