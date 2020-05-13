@@ -11,9 +11,9 @@ class FlexibleCollision : public Collision
 public:
 	FlexibleCollision() 
 	{
-		m_CollisionTable[ShapeAABB][ShapeAABB]     = new AABBAndAABB();
-		m_CollisionTable[ShapeAABB][ShapeCylinder] = new AABBandCylinder();
-		m_CollisionTable[ShapeCylinder][ShapeAABB] = new AABBandCylinder();
+		m_CollisionTable[ShapeAABB][ShapeAABB]     =     new AABBAndAABB();
+		m_CollisionTable[ShapeAABB][ShapeCylinder] =     new AABBandCylinder();
+		m_CollisionTable[ShapeCylinder][ShapeAABB] =     new AABBandCylinder();
 		m_CollisionTable[ShapeCylinder][ShapeCylinder] = new AABBAndAABB();
 	}
 	

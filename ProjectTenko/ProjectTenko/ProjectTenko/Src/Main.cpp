@@ -4,6 +4,7 @@
 #include "Engine/Input/InputManager.h"
 #include "Engine/Fbx/FbxManager.h"
 #include "Manager/ObjectManager.h"
+#include "Engine/Font/Font.h"
 
 int APIENTRY WinMain(HINSTANCE hInstance_,
 	HINSTANCE hPrevInstance_,
@@ -14,6 +15,7 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 	Window::Create();
 	DirectGraphics::Create();
 	InputMA::Create();
+	FontDevice::Create();
 	FbxMeshManager::Create();
 
 
@@ -28,9 +30,14 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 		return -2;
 	}
 
-	if (THE_INPUTMANAGER->Init(hInstance_, THE_WINDOW->GetWindowHandle()))
+	if (THE_FONT->Init() == false)
 	{
 		return -3;
+	}
+
+	if (THE_INPUTMANAGER->Init(hInstance_, THE_WINDOW->GetWindowHandle()))
+	{
+		return -4;
 	}
 
 	ObjectManager::Create();
@@ -77,6 +84,7 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 			THE_GRAPHICS->StartDraw();
 
 			THE_OBJECTMANAGER->Draw();
+			THE_FONT->DrawFont(0.f, 0.f, "TestTestTest", MyFontDevice::FontSize::Regular, MyFontDevice::FontColor::Black);
 
 			THE_GRAPHICS->EndDraw();
 		}
@@ -86,6 +94,7 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 	DirectGraphics::Destory();
 	InputMA::Destory();
 	FbxMeshManager::Destory();
+	FontDevice::Destory();
 	ObjectManager::Destory();
 	return 1;
 }

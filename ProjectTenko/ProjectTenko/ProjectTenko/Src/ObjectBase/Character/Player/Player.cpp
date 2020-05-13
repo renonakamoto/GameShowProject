@@ -33,7 +33,7 @@ void Player::Update()
 	Camera* ref_camera = THE_OBJECTMANAGER->GetCameraInstance();
 	State();
 	Move();
-	ref_camera->SetCamera(m_Pos, 20);
+	ref_camera->SetCamera(m_Pos, 30);
 }
 
 void Player::Draw()
