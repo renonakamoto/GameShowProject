@@ -1,5 +1,7 @@
 #include "TitleScene.h"
 
+#include "../Manager/ObjectManager.h"
+
 TitleScene::TitleScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
     m_ThreadHandle = CreateThread(
@@ -34,7 +36,7 @@ DWORD WINAPI TitleScene::LoadResources(LPVOID lpParam_)
 
 void TitleScene::Main()
 {
-
+	THE_OBJECTMANAGER->Update();
 }
 
 void TitleScene::Update()
@@ -54,5 +56,5 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-
+	THE_OBJECTMANAGER->Draw();
 }

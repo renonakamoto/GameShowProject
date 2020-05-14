@@ -7,6 +7,8 @@
 #include "ClearScene.h"
 #include "GameoverScene.h"
 
+#include "../Engine/Graphics/DirectGraphics.h"
+
 using namespace std;
 
 SceneManager::SceneManager()
@@ -106,5 +108,9 @@ void SceneManager::Update()
 
 void SceneManager::Draw()
 {
+	THE_GRAPHICS->StartDraw();
+
 	m_SceneStack.top()->Draw();
+
+	THE_GRAPHICS->EndDraw();
 }

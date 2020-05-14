@@ -5,6 +5,7 @@
 #include "Engine/Fbx/FbxManager.h"
 #include "Manager/ObjectManager.h"
 #include "Engine/Font/Font.h"
+#include "Scene/SceneManager.h"
 
 int APIENTRY WinMain(HINSTANCE hInstance_,
 	HINSTANCE hPrevInstance_,
@@ -18,6 +19,7 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 	FontDevice::Create();
 	FbxMeshManager::Create();
 
+	SceneManager scene_manager;
 
 	//! ƒGƒ“ƒWƒ“‰Šú‰»
 	if (THE_WINDOW->Init(hInstance_, "Tenko In Tempurand", 1920, 1080) == false)
@@ -61,7 +63,7 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 		else {
 			THE_INPUTMANAGER->Update();
 
-			THE_OBJECTMANAGER->Update();
+			scene_manager.Update();
 			
 			D3DLIGHT9 light;
 			ZeroMemory(&light, sizeof(light));
@@ -81,12 +83,7 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 			THE_GRAPHICS->GetD3DDevice()->LightEnable(0, TRUE);
 			THE_GRAPHICS->GetD3DDevice()->SetLight(0, &light);
 
-			THE_GRAPHICS->StartDraw();
-
-			THE_OBJECTMANAGER->Draw();
-			THE_FONT->DrawFont(0.f, 0.f, "TestTestTest", MyFontDevice::FontSize::Regular, MyFontDevice::FontColor::Black);
-
-			THE_GRAPHICS->EndDraw();
+			scene_manager.Draw();
 		}
 	}
 
