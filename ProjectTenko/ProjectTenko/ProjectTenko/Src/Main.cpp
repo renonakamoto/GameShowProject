@@ -18,8 +18,7 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 	InputMA::Create();
 	FontDevice::Create();
 	FbxMeshManager::Create();
-
-	SceneManager scene_manager;
+	TextureManager::Create();
 
 	//! エンジン初期化
 	if (THE_WINDOW->Init(hInstance_, "Tenko In Tempurand", 1920, 1080) == false)
@@ -42,7 +41,8 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 		return -4;
 	}
 
-	ObjectManager::Create();
+
+	SceneManager scene_manager;
 
 	//! ゲームループ開始
 	while (true)
@@ -93,5 +93,6 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 	FbxMeshManager::Destory();
 	FontDevice::Destory();
 	ObjectManager::Destory();
+	TextureManager::Destory();
 	return 1;
 }

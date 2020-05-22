@@ -1,7 +1,10 @@
 #include "GameScene.h"
+#include "../Manager/ObjectManager.h"
 
 GameScene::GameScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
+	ObjectManager::Create();
+
     m_ThreadHandle = CreateThread(
         nullptr,                    // セキュリティ属性
         0,                          // スタックサイズ
@@ -15,7 +18,6 @@ GameScene::GameScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 
 GameScene::~GameScene()
 {
-
 }
 
 void GameScene::Load()
@@ -34,7 +36,7 @@ DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 
 void GameScene::Main()
 {
-
+	THE_OBJECTMANAGER->Update();
 }
 
 void GameScene::Update()
@@ -54,5 +56,5 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
-
+	THE_OBJECTMANAGER->Draw();
 }

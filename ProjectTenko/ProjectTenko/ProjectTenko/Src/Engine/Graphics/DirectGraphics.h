@@ -2,6 +2,7 @@
 #define DIRECTGRAPHICS_H_
 
 #include "../../Utility/SingletonTemplate.h"
+#include "../Texture/Texture.h"
 #include <d3dx9.h>
 #include <Windows.h>
 
@@ -73,7 +74,7 @@ namespace MyDirectGraphics
 		/**
 		* @brief デストラクタの簡単な説明
 		*/
-		//~DirectGraphics() {}
+		~DirectGraphics() {}
 
 		/**
 		* @brief グラフィックインターフェースの作成

@@ -63,6 +63,8 @@
     <ClCompile Include="Src\Scene\PauseScene.cpp" />
     <ClCompile Include="Src\Scene\SceneManager.cpp" />
     <ClCompile Include="Src\Scene\TitleScene.cpp" />
+    <ClCompile Include="Src\UI\TitleUI\StartUI.cpp" />
+    <ClCompile Include="Src\UI\TitleUI\TitleUI.cpp" />
     <ClCompile Include="Src\Utility\3DHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -118,7 +120,13 @@
     <ClInclude Include="Src\Scene\SceneDefinition.h" />
     <ClInclude Include="Src\Scene\SceneManager.h" />
     <ClInclude Include="Src\Scene\TitleScene.h" />
+    <ClInclude Include="Src\UI\GameUI\GameUI.h" />
+    <ClInclude Include="Src\UI\TitleUI\StartUI.h" />
+    <ClInclude Include="Src\UI\TitleUI\TitleUI.h" />
+    <ClInclude Include="Src\UI\UI.h" />
+    <ClInclude Include="Src\Utility\2DHelper.h" />
     <ClInclude Include="Src\Utility\3DHelper.h" />
+    <ClInclude Include="Src\Utility\SimpleCollision.h" />
     <ClInclude Include="Src\Utility\SingletonTemplate.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

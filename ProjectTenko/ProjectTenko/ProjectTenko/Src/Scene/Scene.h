@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include "SceneDefinition.h"
 #include "SceneChanger.h"
+#include "../Engine/Texture/Texture.h"
 
 class Scene
 {
@@ -47,10 +48,10 @@ protected:
 	virtual void Load() = 0;
 
 protected:
-	SceneChanger* m_SceneChanger;	//!< シーン変更のためのインターフェイスを保持するポインタ
-	SceneState m_CurrentState;		//!< 現在のシーンの状態
-	HANDLE m_ThreadHandle;			//!< マルチスレッド用のハンドル保存変数
-	DWORD m_dwThreadID;				//!< マルチスレッド用のスレッドID
+	SceneChanger* m_SceneChanger;		//!< シーン変更のためのインターフェイスを保持するポインタ
+	SceneState m_CurrentState;			//!< 現在のシーンの状態
+	HANDLE m_ThreadHandle;				//!< マルチスレッド用のハンドル保存変数
+	DWORD m_dwThreadID;					//!< マルチスレッド用のスレッドID
 };
 
 #endif // !SCENE_H_
