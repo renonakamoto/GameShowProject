@@ -6,7 +6,7 @@
 class Barrel : public MapObject
 {
 public:
-	Barrel(D3DXVECTOR3 pos_, std::string key_);
+	Barrel(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_);
 
 	virtual ~Barrel() {}
 

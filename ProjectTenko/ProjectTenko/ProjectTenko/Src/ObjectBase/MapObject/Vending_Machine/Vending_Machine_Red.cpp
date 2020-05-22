@@ -1,8 +1,8 @@
 #include "Vending_Machine_Red.h"
 #include "../../../Collision/Shape/AABB.h"
 
-VendingMachineRed::VendingMachineRed(D3DXVECTOR3 pos_, std::string key_) :
-	MapObject(pos_, key_)
+VendingMachineRed::VendingMachineRed(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_) :
+	MapObject(pos_, key_, mapObjcectList_)
 {
 	THE_FBXMANAGER->LoadFBXMesh(m_FbxKey, "assets/objects/vending_machine/Vending_machine_Red.fbx");
 

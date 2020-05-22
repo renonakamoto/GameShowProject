@@ -5,6 +5,7 @@
 #include "../../Src/ObjectBase/ObjectBase.h"
 #include "../Camera/Camera.h"
 #include "../Collision/FlexibleCollision.h"
+#include "../ObjectBase/MapObject/MapDataBank.h"
 #include <vector>
 #include <iostream>
 #include <memory>
@@ -33,7 +34,6 @@ private:
 	~Objectmanager();
 
 	std::vector<ObjectBase*> m_Object;
-
 	std::vector<ObjectBase*> m_PlayerGroup;
 	std::vector<ObjectBase*> m_EnemyGroup;
 	std::vector<ObjectBase*> m_MapObjectGroup;
@@ -41,6 +41,7 @@ private:
 	Camera* m_Camera;
 
 	FlexibleCollision m_Collision;
+	MapDataBank m_MapDataBank;
 	
 };
 

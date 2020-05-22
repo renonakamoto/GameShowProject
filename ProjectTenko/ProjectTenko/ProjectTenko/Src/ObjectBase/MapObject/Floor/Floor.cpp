@@ -1,7 +1,7 @@
 #include "Floor.h"
 
-Floor::Floor(D3DXVECTOR3 pos_, std::string key_) :
-	MapObject(pos_, key_)
+Floor::Floor(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_) :
+	MapObject(pos_, key_, mapObjcectList_)
 {
 	THE_FBXMANAGER->LoadFBXMesh(m_FbxKey, "assets/objects/floor/floor.fbx");
 }

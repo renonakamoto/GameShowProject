@@ -6,7 +6,7 @@
 class Skydome : public MapObject
 {
 public:
-	Skydome(D3DXVECTOR3 pos_, std::string key_);
+	Skydome(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_);
 
 	virtual ~Skydome() {}
 

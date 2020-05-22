@@ -6,7 +6,7 @@
 Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 	Character(pos_, key_)
 {
-	THE_FBXMANAGER->LoadFBXMesh(key_, "assets/models/player/tenko_sample02.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh(key_, "assets/models/player/tenko_sample02.fbx");
 
 	m_Motion.AddMotion(PlayerMotionList::Wait,			1,	 200);
 	m_Motion.AddMotion(PlayerMotionList::Walk,			211, 270);

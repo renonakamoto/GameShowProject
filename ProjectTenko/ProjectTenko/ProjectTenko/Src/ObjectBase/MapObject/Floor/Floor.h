@@ -6,7 +6,7 @@
 class Floor : public MapObject
 {
 public:
-	Floor(D3DXVECTOR3 pos_, std::string key_);
+	Floor(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_);
 
 	virtual ~Floor() {}
 

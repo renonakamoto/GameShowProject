@@ -6,7 +6,7 @@
 class Mountain : public MapObject
 {
 public:
-	Mountain(D3DXVECTOR3 pos_, std::string key_);
+	Mountain(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_);
 
 	virtual ~Mountain() {}
 

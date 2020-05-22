@@ -6,7 +6,7 @@
 class Wall : public MapObject
 {
 public:
-	Wall(D3DXVECTOR3 pos_, std::string key_);
+	Wall(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_);
 
 	virtual ~Wall() {}
 

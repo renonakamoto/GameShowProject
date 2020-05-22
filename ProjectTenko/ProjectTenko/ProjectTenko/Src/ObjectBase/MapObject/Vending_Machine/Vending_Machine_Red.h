@@ -6,7 +6,7 @@
 class VendingMachineRed : public MapObject
 {
 public:
-	VendingMachineRed(D3DXVECTOR3 pos_, std::string key_);
+	VendingMachineRed(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_);
 
 	virtual ~VendingMachineRed() {}
 
