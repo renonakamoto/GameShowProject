@@ -1,4 +1,5 @@
 #include "Tikuwaten.h"
+#include <math.h>
 
 Tikuwaten::Tikuwaten(D3DXVECTOR3 pos_, std::string key_) :
 	Enemybase(pos_, key_)
@@ -13,6 +14,20 @@ Tikuwaten::Tikuwaten(D3DXVECTOR3 pos_, std::string key_) :
 
 void Tikuwaten::Update()
 {
+	switch (m_CurrentState)
+	{
+	case EnemyState::Patrol:
+		Patrol();
+		break;
+	case EnemyState::Chase:
+		Chase();
+		break;
+	case EnemyState::Return:
+		Return();
+		break;
+	default:
+		break;
+	}
 }
 
 void Tikuwaten::Draw()
@@ -22,4 +37,58 @@ void Tikuwaten::Draw()
 
 	m_Mat_World = mat_trans;
 	THE_FBXMANAGER->Draw(m_FbxKey, m_Mat_World);
+}
+
+void Tikuwaten::LoadRoute()
+{
+	
+}
+
+void Tikuwaten::Patrol()
+{
+	if (CanDetectPC() == true)
+	{
+		m_CurrentState = EnemyState::Chase;
+		return;
+	}
+
+	// 目的地に到達した場合の処理
+	if (m_Pos == m_PatrolRoute[m_NextRoute])
+	{
+		if (m_PatrolRoute.size() == m_NextRoute + 1)
+		{
+			m_NextRoute = 0;
+		}
+		else
+		{
+			m_NextRoute += 1;
+		}
+
+		// 次の移動ベクトルの算出
+		D3DXVECTOR3 vec = m_PatrolRoute[m_NextRoute];
+		double distance = sqrt(pow(vec.x - m_Pos.x, 2) + pow(vec.y - m_Pos.y, 2) + pow(vec.z - m_Pos.z, 2));
+		m_MovingVector = (vec - m_Pos) / distance; // 掛ける移動量
+	}
+	else
+	{
+		D3DXVECTOR3 nextpos = m_Pos + m_MovingVector;
+		if (fabs(nextpos.x - m_Pos.x) > fabs(m_PatrolRoute[m_NextRoute].x - m_Pos.x))
+		{
+			m_Pos = m_PatrolRoute[m_NextRoute];
+		}
+		else
+		{
+			m_Pos = nextpos;
+		}
+	}
+}
+
+void Tikuwaten::Chase()
+{
+
+}
+
+void Tikuwaten::Return()
+{
+
 }

@@ -21,6 +21,13 @@ public:
 	virtual void Draw() override;
 
 private:
+	void Patrol() override;
+	void Chase() override;
+	void Return() override;
+
+	bool CanDetectPC() override;
+
+private:
 	ChikuwaMotionList		     m_CrrentMotion;
 	FbxMotion<ChikuwaMotionList> m_Motion;
 

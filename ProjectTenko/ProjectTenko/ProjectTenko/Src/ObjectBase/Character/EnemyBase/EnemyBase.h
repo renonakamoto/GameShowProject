@@ -2,6 +2,14 @@
 #define ENEMYBASE_H_
 
 #include "../Character.h"
+#include <vector>
+
+enum class EnemyState
+{
+	Patrol,
+	Chase,
+	Return,
+};
 
 class Enemybase : public Character
 {
@@ -13,9 +21,17 @@ public:
 	virtual ~Enemybase() {}
 
 protected:
+	virtual void Patrol();
+	virtual void Chase();
+	virtual void Return();
+
+	virtual bool CanDetectPC();
+
+	EnemyState m_CurrentState;			//!< Œ»Ý‚Ìó‘Ô
+	std::vector<D3DXVECTOR3> m_PatrolRoute;
+	std::vector<D3DXVECTOR3> m_ReturnRoute;
 
 private:
-
 };
 
 #endif
