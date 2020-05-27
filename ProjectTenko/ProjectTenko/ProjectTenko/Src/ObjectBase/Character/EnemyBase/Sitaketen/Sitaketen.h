@@ -6,7 +6,7 @@
 class Sitaketen : public Enemybase
 {
 public:
-	Sitaketen(D3DXVECTOR3 pos_, std::string key_);
+	Sitaketen(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string key_);
 
 	~Sitaketen() {}
 

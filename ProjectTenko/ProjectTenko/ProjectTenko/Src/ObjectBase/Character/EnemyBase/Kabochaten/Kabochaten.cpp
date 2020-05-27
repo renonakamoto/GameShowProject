@@ -1,7 +1,7 @@
 #include "Kabochaten.h"
 
-Kabochaten::Kabochaten(D3DXVECTOR3 pos_, std::string key_) :
-	Enemybase(pos_, key_)
+Kabochaten::Kabochaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string key_) :
+	Enemybase(pos_, player_, key_)
 {
 	THE_FBXMANAGER->LoadFBXMesh(key_, "assets/models/enemies/kabochaten/pumpkin_animation.fbx");
 

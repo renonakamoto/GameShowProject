@@ -27,13 +27,13 @@ Objectmanager::Objectmanager()
 {
 	m_MapDataBank.Load();
 
-	m_PlayerGroup.push_back(new Player(D3DXVECTOR3(0.0f, 0.0f, 400.0f), "Player"));
+	m_Player = new Player(D3DXVECTOR3(0.0f, 0.0f, 400.0f), "Player");
 
-	//m_Object.push_back(new Ebiten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Ebiten"));
-	//m_Object.push_back(new Ikaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Ikaten"));
-	//m_Object.push_back(new Kabochaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Kabochaten"));
-	//m_Object.push_back(new Sitaketen(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Sitaketen"));
-	//m_Object.push_back(new Tikuwaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Tikuwaten"));
+	//m_Object.push_back(new Ebiten(D3DXVECTOR3(0.0f, 0.0f, 0.0f),	 m_Player, "Ebiten"));
+	//m_Object.push_back(new Ikaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f),	 m_Player, "Ikaten"));
+	//m_Object.push_back(new Kabochaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), m_Player, "Kabochaten"));
+	//m_Object.push_back(new Sitaketen(D3DXVECTOR3(0.0f, 0.0f, 0.0f),  m_Player, "Sitaketen"));
+	//m_Object.push_back(new Tikuwaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f),  m_Player, "Tikuwaten"));
 
 	m_MapObjectGroup.push_back(new Barrel(D3DXVECTOR3(0.0f, 0.0f, 300.0f), "Barrel", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Barrel)));
 	m_MapObjectGroup.push_back(new Tent(D3DXVECTOR3(300.0f, 0.0f, 600.0f), "Tent", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Tent)));
@@ -64,10 +64,7 @@ Objectmanager::~Objectmanager()
 
 void Objectmanager::Update()
 {
-	for (const auto& itr : m_PlayerGroup)
-	{
-		itr->Update();
-	}
+	m_Player->Update();
 
 	for (const auto& itr : m_EnemyGroup)
 	{
@@ -89,10 +86,7 @@ void Objectmanager::Update()
 
 void Objectmanager::Draw()
 {
-	for (const auto& itr : m_PlayerGroup)
-	{
-		itr->Draw();
-	}
+	m_Player->Draw();
 
 	for (const auto& itr : m_EnemyGroup)
 	{
@@ -115,7 +109,7 @@ bool Objectmanager::HitPlayerAndMapObject()
 {
 	for (auto& itr : m_MapObjectGroup) {
 
-		if (m_Collision.Test(*m_PlayerGroup[0]->GetShape(), *itr->GetShape()) == true)
+		if (m_Collision.Test(*m_Player->GetShape(), *itr->GetShape()) == true)
 		{
 			return true;
 		}
@@ -127,7 +121,7 @@ bool Objectmanager::HitPlayerAndMapObject()
 bool Objectmanager::HitPlayerAndEnemy()
 {
 	for (auto& itr : m_EnemyGroup) {
-		if (m_Collision.Test(*m_PlayerGroup[0]->GetShape(), *itr->GetShape()) == true)
+		if (m_Collision.Test(*m_Player->GetShape(), *itr->GetShape()) == true)
 		{
 			return true;
 		}
@@ -138,11 +132,8 @@ bool Objectmanager::HitPlayerAndEnemy()
 
 void Objectmanager::AllRelease()
 {
-	for (auto& itr : m_PlayerGroup) {
-		delete itr;
-		itr = nullptr;
-	}
-	m_PlayerGroup.clear();
+	delete m_Player;
+	m_Player = nullptr;
 
 	for (auto& itr : m_EnemyGroup) {
 		delete itr;
