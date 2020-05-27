@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "../Manager/ObjectManager.h"
+#include "../Engine/Input/InputManager.h"
 
 GameScene::GameScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
@@ -30,13 +31,18 @@ void GameScene::Load()
 
 DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 {
+	THE_FBXMANAGER->LoadFBXMesh("Player", "assets/models/player/tenko_sample02.fbx");
     return 0;
 }
-
 
 void GameScene::Main()
 {
 	THE_OBJECTMANAGER->Update();
+
+	if (THE_INPUTMANAGER->GetKeyDown(KeyInfo::Key_ESC))
+	{
+		m_SceneChanger->PushScene(SceneID::Pause);
+	}
 }
 
 void GameScene::Update()

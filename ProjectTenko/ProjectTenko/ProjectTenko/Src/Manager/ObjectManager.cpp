@@ -49,9 +49,9 @@ Objectmanager::Objectmanager()
 
 	m_Object.push_back(new Floor(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Floor", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Floor)));
 	m_Object.push_back(new Gate(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Gate", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Gate)));
-	m_Object.push_back(new Merrygoland(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "merrygoland_Foundation", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Merrygoland)));
+	m_Object.push_back(new Merrygoland(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Merrygoland", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Merrygoland)));
 	m_Object.push_back(new Mountain(D3DXVECTOR3(0.0f, -400.0f, 0.0f), "Mountain", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Mountain)));
-	m_Object.push_back(new Skydome(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Skydome", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Skydome)));
+	m_Object.push_back(new Skydome(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "SkyDome", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Skydome)));
 
 
 	m_Camera = new Camera();

@@ -3,7 +3,6 @@
 ShrimpStatue::ShrimpStatue(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_):
 	MapObject(pos_, key_, mapObjcectList_)
 {
-	THE_FBXMANAGER->LoadFBXMesh(m_FbxKey, "assets/objects/shrimp_statue/statue01.fbx");
 }
 
 void ShrimpStatue::Update()

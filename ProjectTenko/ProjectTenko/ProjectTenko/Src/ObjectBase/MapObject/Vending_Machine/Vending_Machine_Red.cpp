@@ -4,8 +4,6 @@
 VendingMachineRed::VendingMachineRed(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_) :
 	MapObject(pos_, key_, mapObjcectList_)
 {
-	THE_FBXMANAGER->LoadFBXMesh(m_FbxKey, "assets/objects/vending_machine/Vending_machine_Red.fbx");
-
 	m_Shape = new AABBShape(20.f, 40.f, 15.f);
 	m_Shape->Update(m_Pos);
 }

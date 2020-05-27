@@ -3,16 +3,18 @@
 
 #include "../UI.h"
 
-enum UI_LIST
+
+enum TITLE_UI_LIST
 {
-	UI_START,
-	UI_END,
+	TITLE_UI_TITLE,
+	TITLE_UI_START,
+	TITLE_UI_EXIT,
+	TITLE_UI_SETTING,
 
-
-	UI_MAX,
+	TITLE_UI_MAX,
 };
 
-class TitleUI
+class TitleUI : public UI
 {
 public:
 	TitleUI();
@@ -22,8 +24,11 @@ public:
 
 	void Draw();
 
+	bool IsSelect(TITLE_UI_LIST id_);
+
 private:
-	UI* m_TitleUIList[UI_MAX];
+	UI_PARAMETER m_TitleUIList[TITLE_UI_LIST::TITLE_UI_MAX];
+
 };
 
 #endif

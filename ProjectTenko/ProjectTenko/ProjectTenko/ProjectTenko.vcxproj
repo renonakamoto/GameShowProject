@@ -70,7 +70,9 @@
     <ClCompile Include="Src\Scene\PauseScene.cpp" />
     <ClCompile Include="Src\Scene\SceneManager.cpp" />
     <ClCompile Include="Src\Scene\TitleScene.cpp" />
-    <ClCompile Include="Src\UI\TitleUI\StartUI.cpp" />
+    <ClCompile Include="Src\UI\ConfigUI\ConfigUI.cpp" />
+    <ClCompile Include="Src\UI\GameOverUI\GameOverUI.cpp" />
+    <ClCompile Include="Src\UI\PauseUI\PauseUI.cpp" />
     <ClCompile Include="Src\UI\TitleUI\TitleUI.cpp" />
     <ClCompile Include="Src\Utility\3DHelper.cpp" />
   </ItemGroup>
@@ -134,8 +136,10 @@
     <ClInclude Include="Src\Scene\SceneDefinition.h" />
     <ClInclude Include="Src\Scene\SceneManager.h" />
     <ClInclude Include="Src\Scene\TitleScene.h" />
+    <ClInclude Include="Src\UI\ConfigUI\ConfigUI.h" />
+    <ClInclude Include="Src\UI\GameOverUI\GameOverUI.h" />
     <ClInclude Include="Src\UI\GameUI\GameUI.h" />
-    <ClInclude Include="Src\UI\TitleUI\StartUI.h" />
+    <ClInclude Include="Src\UI\PauseUI\PauseUI.h" />
     <ClInclude Include="Src\UI\TitleUI\TitleUI.h" />
     <ClInclude Include="Src\UI\UI.h" />
     <ClInclude Include="Src\Utility\2DHelper.h" />

@@ -4,7 +4,6 @@
 Tent::Tent(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_) :
 	MapObject(pos_, key_, mapObjcectList_)
 {
-	THE_FBXMANAGER->LoadFBXMesh(m_FbxKey, "assets/objects/tent/tent.fbx");
 	m_Shape = new CylinderShape(160.f, 185.f);
 	m_Shape->Update(m_Pos);
 }

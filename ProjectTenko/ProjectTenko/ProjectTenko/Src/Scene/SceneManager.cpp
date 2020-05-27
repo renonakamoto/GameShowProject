@@ -14,6 +14,7 @@ using namespace std;
 SceneManager::SceneManager()
 {
 	m_SceneStack.push(make_shared<TitleScene>(this));
+	m_IsQuit = false;
 }
 
 SceneManager::~SceneManager()
