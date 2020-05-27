@@ -39,11 +39,6 @@ void Tikuwaten::Draw()
 	THE_FBXMANAGER->Draw(m_FbxKey, m_Mat_World);
 }
 
-void Tikuwaten::LoadRoute()
-{
-	
-}
-
 void Tikuwaten::Patrol()
 {
 	if (CanDetectPC() == true)
