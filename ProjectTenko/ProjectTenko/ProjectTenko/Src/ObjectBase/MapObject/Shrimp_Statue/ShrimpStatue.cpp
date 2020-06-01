@@ -7,6 +7,7 @@ ShrimpStatue::ShrimpStatue(D3DXVECTOR3 pos_, std::string key_, std::vector<MapOb
 
 void ShrimpStatue::Update()
 {
+	CoordinateUpdate(MapData::MapObjectList::Shrimp_Statue);
 }
 
 void ShrimpStatue::Draw()

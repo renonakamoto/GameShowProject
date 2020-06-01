@@ -2,7 +2,9 @@
 #define MAPOBJECT_H_
 
 #include "../ObjectBase.h"
+#include "../MapObject/MapDataBank.h"
 #include <vector>
+
 
 struct MapObjectData
 {
@@ -28,6 +30,13 @@ public:
 		m_MapObjectDataList(mapObjcectList_)
 	{}
 	virtual ~MapObject() {}
+
+	void CoordinateUpdate(MapData::MapObjectList mapObjId_)
+	{
+		MapDataBank hoge;
+		hoge.Load();
+		m_MapObjectDataList = *hoge.GetMapObjectData(mapObjId_);
+	}
 
 protected:
 	std::vector<MapObjectData> m_MapObjectDataList;

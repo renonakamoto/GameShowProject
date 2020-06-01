@@ -10,6 +10,7 @@ VendingMachineRed::VendingMachineRed(D3DXVECTOR3 pos_, std::string key_, std::ve
 
 void VendingMachineRed::Update()
 {
+	CoordinateUpdate(MapData::MapObjectList::Vending_Machine);
 }
 
 void VendingMachineRed::Draw()

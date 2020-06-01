@@ -10,6 +10,7 @@ Wall::Wall(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObj
 
 void Wall::Update()
 {
+	CoordinateUpdate(MapData::MapObjectList::Wall);
 }
 
 void Wall::Draw()

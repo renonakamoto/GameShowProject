@@ -7,7 +7,7 @@ Tree::Tree(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObj
 
 void Tree::Update()
 {
-	
+	CoordinateUpdate(MapData::MapObjectList::Tree);
 }
 
 void Tree::Draw()

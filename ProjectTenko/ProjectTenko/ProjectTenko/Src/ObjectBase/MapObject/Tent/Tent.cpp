@@ -10,6 +10,7 @@ Tent::Tent(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObj
 
 void Tent::Update()
 {
+	CoordinateUpdate(MapData::MapObjectList::Tent);
 }
 
 void Tent::Draw()

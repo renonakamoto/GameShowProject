@@ -7,6 +7,7 @@ FerrisWheel::FerrisWheel(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObje
 
 void FerrisWheel::Update()
 {
+	CoordinateUpdate(MapData::MapObjectList::Ferris_Wheel);
 }
 
 void FerrisWheel::Draw()

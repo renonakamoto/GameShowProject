@@ -1,5 +1,6 @@
 #include "MapDataBank.h"
 #include "../../ExternalFle/Csv/Csv.h"
+#include "../MapObject/MapObject.h"
 
 bool MapDataBank::Load()
 {

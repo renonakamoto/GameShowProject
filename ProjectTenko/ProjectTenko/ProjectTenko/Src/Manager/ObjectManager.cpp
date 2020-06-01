@@ -1,4 +1,5 @@
 #include "ObjectManager.h"
+#include "../Engine/Input/InputManager.h"
 #include "../ObjectBase/Character/EnemyBase/Ebiten/Ebiten.h"
 #include "../ObjectBase/Character/EnemyBase/Ikaten/Ikaten.h"
 #include "../ObjectBase/Character/EnemyBase/Kabochaten/Kabochaten.h"
@@ -71,15 +72,20 @@ void Objectmanager::Update()
 		itr->Update();
 	}
 
-	for (const auto& itr : m_MapObjectGroup)
+	if (THE_INPUTMANAGER->GetKeyDown(KeyInfo::Key_R))
 	{
-		itr->Update();
+		for (const auto& itr : m_MapObjectGroup)
+		{
+			itr->Update();
+		}
+
+		for (const auto& itr : m_Object)
+		{
+			itr->Update();
+		}
 	}
 
-	for (const auto& itr : m_Object)
-	{
-		itr->Update();
-	}
+
 
 	m_Camera->Update();
 }

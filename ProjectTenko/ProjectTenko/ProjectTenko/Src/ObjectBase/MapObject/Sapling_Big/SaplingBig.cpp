@@ -7,6 +7,7 @@ SaplingBig::SaplingBig(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObject
 
 void SaplingBig::Update()
 {
+	CoordinateUpdate(MapData::MapObjectList::Sapling_Big);
 }
 
 void SaplingBig::Draw()

@@ -7,6 +7,7 @@ SaplingSmall::SaplingSmall(D3DXVECTOR3 pos_, std::string key_, std::vector<MapOb
 
 void SaplingSmall::Update()
 {
+	CoordinateUpdate(MapData::MapObjectList::Sapling_Small);
 }
 
 void SaplingSmall::Draw()

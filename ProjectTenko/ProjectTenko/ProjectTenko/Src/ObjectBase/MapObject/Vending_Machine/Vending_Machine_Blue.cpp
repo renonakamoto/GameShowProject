@@ -11,6 +11,7 @@ VendingMachineBlue::VendingMachineBlue(D3DXVECTOR3 pos_, std::string key_, std::
 
 void VendingMachineBlue::Update()
 {
+	CoordinateUpdate(MapData::MapObjectList::Vending_Machine);
 }
 
 void VendingMachineBlue::Draw()
