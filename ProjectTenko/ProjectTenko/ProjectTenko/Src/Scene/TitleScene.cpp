@@ -40,7 +40,7 @@ void TitleScene::Load()
 	THE_TEXTUREMANAGER->Load("assets/UI/title/title04.png");
 	THE_TEXTUREMANAGER->Load("assets/UI/title/title05.png");
 
-	THE_TEXTUREMANAGER->Load("assets/UI/NowLoding.png");
+	THE_TEXTUREMANAGER->Load("assets/UI/load.png");
 
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
@@ -107,8 +107,17 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
+	static int   load_time = 0;
+	static float load_ui_tu = 0.f;
 	if (m_CurrentState == SceneState::Load) {
-		THE_TEXTUREMANAGER->DrawTexture(0.f, 0.f, "assets/UI/NowLoding.png");
+		THE_TEXTUREMANAGER->DrawTexture(0.f, 0.f, load_ui_tu, 0.f, "assets/UI/load.png");
+		load_time++;
+		if (load_time % 30 == 0)
+		{
+			load_ui_tu += 0.25;
+
+			if (load_ui_tu > 1.f) { load_ui_tu = 0.f; }
+		}
 		return;
 	}
 

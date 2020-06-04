@@ -222,3 +222,22 @@ void MyTextureManager::TextureManager::DrawTexture(float posX_, float posY_, std
 	THE_GRAPHICS->GetD3DDevice()->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, v, sizeof(CustomVertex));
 
 }
+
+void MyTextureManager::TextureManager::DrawTexture(float posX_, float posY_, float tu_, float tv_, std::string key_)
+{
+	float width = m_TextureMap[key_]->width / 4.f;
+	float height = m_TextureMap[key_]->height;
+
+	CustomVertex v[4] =
+	{
+		{posX_, posY_, 0.0f, 1.0f, tu_, tv_},
+		{posX_ + width, posY_, 0.0f, 1.0f, tu_ + 0.25, 0.0f},
+		{posX_ + width, posY_ + height, 0.0f, 1.0f, tu_ + 0.25, tv_ + 1.0f},
+		{posX_, posY_ + height, 0.0f, 1.0f, tu_, tv_ + 1.0f},
+	};
+
+	THE_GRAPHICS->GetD3DDevice()->SetFVF(D3DFVF_XYZRHW | D3DFVF_TEX1);
+	THE_GRAPHICS->GetD3DDevice()->SetTexture(0, m_TextureMap[key_]->pTexture);
+	THE_GRAPHICS->GetD3DDevice()->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, v, sizeof(CustomVertex));
+
+}
