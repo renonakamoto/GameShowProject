@@ -42,6 +42,7 @@ void TitleScene::Load()
 
 	THE_TEXTUREMANAGER->Load("assets/UI/load.png");
 
+
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
         m_CurrentState = SceneState::Main;
@@ -112,7 +113,7 @@ void TitleScene::Draw()
 	if (m_CurrentState == SceneState::Load) {
 		THE_TEXTUREMANAGER->DrawTexture(0.f, 0.f, load_ui_tu, 0.f, "assets/UI/load.png");
 		load_time++;
-		if (load_time % 30 == 0)
+		if (load_time % 15 == 0)
 		{
 			load_ui_tu += 0.25;
 

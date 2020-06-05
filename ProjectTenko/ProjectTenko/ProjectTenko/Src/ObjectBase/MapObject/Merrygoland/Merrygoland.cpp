@@ -1,4 +1,5 @@
 #include "Merrygoland.h"
+#include "../../../Collision/Shape/Cylinder.h"
 
 Merrygoland::Merrygoland(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_) :
 	MapObject(pos_, key_, mapObjcectList_)
@@ -9,7 +10,8 @@ Merrygoland::Merrygoland(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObje
 	//THE_FBXMANAGER->LoadFBXMesh("merrygoland_shrimp2", "assets/objects/merrygoland/merrygoland_shrimp2.fbx");
 	//THE_FBXMANAGER->LoadFBXMesh("merrygoland_shrimp3", "assets/objects/merrygoland/merrygoland_shrimp3.fbx");
 	//THE_FBXMANAGER->LoadFBXMesh("merrygoland_shrimp4", "assets/objects/merrygoland/merrygoland_shrimp4.fbx");
-
+	m_Shape.push_back(new CylinderShape(209.0f, 180.0f));
+	m_Shape[0]->Update(m_MapObjectDataList[0].m_Pos);
 }
 
 void Merrygoland::Update()

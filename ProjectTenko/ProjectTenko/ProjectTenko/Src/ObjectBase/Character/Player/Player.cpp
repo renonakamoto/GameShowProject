@@ -21,7 +21,7 @@ Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 
 	m_WalkSpeed = 5.0f;
 
-	m_Shape = new AABBShape(10.f, 20.f, 10.f);
+	m_Shape.push_back(new AABBShape(4.0f, 20.f, 4.0f));
 }
 
 void Player::Update()
@@ -91,7 +91,7 @@ void Player::Move()
 		m_Pos.x += result_move_vec.x * speed;
 		m_Pos.z += result_move_vec.z * speed;
 
-		m_Shape->Update(m_Pos);
+		m_Shape[0]->Update(m_Pos);
 
 		if (THE_OBJECTMANAGER->HitPlayerAndMapObject() == true) {
 			m_Pos = m_OldPos;

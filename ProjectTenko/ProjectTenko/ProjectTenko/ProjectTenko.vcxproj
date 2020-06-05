@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Src\Camera\Camera.cpp" />
     <ClCompile Include="Src\Collision\Collision.cpp" />
+    <ClCompile Include="Src\Collision\FlexibleCollision.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxDrawer.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxLoader.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxManager.cpp" />

@@ -28,7 +28,7 @@ Objectmanager::Objectmanager()
 {
 	m_MapDataBank.Load();
 
-	m_Player = new Player(D3DXVECTOR3(0.0f, 0.0f, 400.0f), "Player");
+	m_Player = new Player(D3DXVECTOR3(-810.0f, 0.0f, 1.0f), "Player");
 
 	//m_Object.push_back(new Ebiten(D3DXVECTOR3(0.0f, 0.0f, 0.0f),	 m_Player, "Ebiten"));
 	//m_Object.push_back(new Ikaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f),	 m_Player, "Ikaten"));
@@ -41,12 +41,11 @@ Objectmanager::Objectmanager()
 	m_MapObjectGroup.push_back(new VendingMachineBlue(D3DXVECTOR3(0.0f, 0.0f, -100.0f), "VendingMachineBlue", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Vending_Machine)));
 	//m_MapObjectGroup.push_back(new VendingMachineRed(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "VendingMachineRed"));
 	m_MapObjectGroup.push_back(new Wall(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Wall", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Wall)));
-
-	m_Object.push_back(new Tree(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Tree", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Tree)));
-	m_Object.push_back(new SaplingBig(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "SaplingBig", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Sapling_Big)));
-	m_Object.push_back(new SaplingSmall(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "SaplingSmall", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Sapling_Small)));
-	m_Object.push_back(new FerrisWheel(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "FerrisWheel", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Ferris_Wheel)));
-	m_Object.push_back(new ShrimpStatue(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "ShrimpStatue", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Shrimp_Statue)));
+	m_MapObjectGroup.push_back(new Tree(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Tree", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Tree)));
+	m_MapObjectGroup.push_back(new SaplingBig(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "SaplingBig", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Sapling_Big)));
+	m_MapObjectGroup.push_back(new SaplingSmall(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "SaplingSmall", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Sapling_Small)));
+	m_MapObjectGroup.push_back(new FerrisWheel(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "FerrisWheel", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Ferris_Wheel)));
+	m_MapObjectGroup.push_back(new ShrimpStatue(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "ShrimpStatue", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Shrimp_Statue)));
 
 	m_Object.push_back(new Floor(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Floor", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Floor)));
 	m_Object.push_back(new Gate(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Gate", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Gate)));
@@ -86,7 +85,6 @@ void Objectmanager::Update()
 	}
 
 
-
 	m_Camera->Update();
 }
 
@@ -115,7 +113,7 @@ bool Objectmanager::HitPlayerAndMapObject()
 {
 	for (auto& itr : m_MapObjectGroup) {
 
-		if (m_Collision.Test(*m_Player->GetShape(), *itr->GetShape()) == true)
+		if (m_Collision.Test(m_Player->GetShape(), itr->GetShape()) == true)
 		{
 			return true;
 		}
@@ -127,7 +125,7 @@ bool Objectmanager::HitPlayerAndMapObject()
 bool Objectmanager::HitPlayerAndEnemy()
 {
 	for (auto& itr : m_EnemyGroup) {
-		if (m_Collision.Test(*m_Player->GetShape(), *itr->GetShape()) == true)
+		if (m_Collision.Test(m_Player->GetShape(), itr->GetShape()) == true)
 		{
 			return true;
 		}

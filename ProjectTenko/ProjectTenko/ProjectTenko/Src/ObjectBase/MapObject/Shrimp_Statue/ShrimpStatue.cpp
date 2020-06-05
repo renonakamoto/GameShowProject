@@ -1,8 +1,11 @@
 #include "ShrimpStatue.h"
+#include "../../../Collision/Shape/Cylinder.h"
 
 ShrimpStatue::ShrimpStatue(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_):
 	MapObject(pos_, key_, mapObjcectList_)
 {
+	m_Shape.push_back(new CylinderShape(84.0f, 30.0f));
+	m_Shape[0]->Update(m_MapObjectDataList[0].m_Pos);
 }
 
 void ShrimpStatue::Update()

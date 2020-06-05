@@ -43,6 +43,10 @@ namespace MapData
 		RotX,
 		RotY,
 		RotZ,
+
+		Width,
+		Height,
+		Depth,
 	};
 }
 

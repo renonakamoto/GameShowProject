@@ -3,10 +3,11 @@
 
 #include "Collision.h"
 #include "Shape/Shape.h"
+#include <vector>
 
-//#define A static_cast<int>(SHAPE_TYPE::Shape_Type_Num)
+class Shape;
 
-class FlexibleCollision : public Collision
+class FlexibleCollision
 {
 public:
 	FlexibleCollision() 
@@ -28,12 +29,7 @@ public:
 		}
 	}
 
-	bool Test(const Shape& s1_, const Shape& s2_)
-	{
-		int s1_type = static_cast<int>(s1_.GetType());
-		int s2_type = static_cast<int>(s2_.GetType());
-		return m_CollisionTable[s1_type][s2_type]->Test(s1_, s2_);
-	}
+	bool Test(const std::vector<Shape*>& s1_, const std::vector<Shape*>& s2_);
 
 
 private:

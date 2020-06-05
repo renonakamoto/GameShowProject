@@ -26,11 +26,10 @@ public:
 	virtual D3DXVECTOR3 GetMax() const { return D3DXVECTOR3(); }
 
 public:
-
+	
 	virtual D3DXVECTOR3 GetCenterPos() const { return D3DXVECTOR3(); }
 	virtual float GetRadius() const { return 0.f; }
 	virtual float GetHeight() const { return 0.f; }
-
 };
 
 #endif

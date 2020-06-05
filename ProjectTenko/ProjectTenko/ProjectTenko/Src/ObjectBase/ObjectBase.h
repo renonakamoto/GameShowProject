@@ -5,6 +5,7 @@
 #include "../Collision/Shape/Shape.h"
 #include <d3dx9.h>
 #include <string>
+#include <vector>
 
 class ObjectBase
 {
@@ -15,8 +16,7 @@ public:
 		m_Angle (0.f),
 		m_Width (0.f),
 		m_Height(0.f),
-		m_Depth (0.f),
-		m_Shape (nullptr)
+		m_Depth (0.f)
 	{}
 
 	ObjectBase(D3DXVECTOR3 pos_, std::string key_, float width_, float height_, float depth_) :
@@ -25,12 +25,10 @@ public:
 		m_Width (width_),
 		m_Height(height_),
 		m_Depth (depth_),
-		m_Angle (0.f),
-		m_Shape (nullptr)
+		m_Angle (0.f)
 	{}
 
 	virtual ~ObjectBase() {
-		delete m_Shape;
 	}
 
 	virtual void Update() {}
@@ -38,7 +36,7 @@ public:
 
 	D3DXVECTOR3 GetPos() const { return m_Pos; }
 
-	Shape* GetShape() const    { return m_Shape; }
+	std::vector<Shape*> GetShape() const    { return m_Shape; }
 
 	float GetAngle() const     { return m_Angle; }
 
@@ -52,7 +50,7 @@ protected:
 	float		m_Height;
 	float		m_Depth;
 
-	Shape*	    m_Shape;
+	std::vector<Shape*> m_Shape;
 
 	std::string m_FbxKey;
 

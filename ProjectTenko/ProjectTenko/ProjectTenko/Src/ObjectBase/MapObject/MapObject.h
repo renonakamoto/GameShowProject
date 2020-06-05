@@ -10,15 +10,21 @@ struct MapObjectData
 {
 	MapObjectData()
 	{}
-	MapObjectData(D3DXVECTOR3 pos_, D3DXVECTOR3 scale_, D3DXVECTOR3 rot_):
+	MapObjectData(D3DXVECTOR3 pos_, D3DXVECTOR3 scale_, D3DXVECTOR3 rot_, float width_, float height_, float depth_):
 		m_Pos(pos_),
 		m_Scale(scale_),
-		m_Rot(rot_)
+		m_Rot(rot_),
+		m_Width(width_),
+		m_Height(height_),
+		m_Depth(depth_)
 	{}
 
 	D3DXVECTOR3 m_Pos;
 	D3DXVECTOR3 m_Scale;
 	D3DXVECTOR3 m_Rot;
+	float	    m_Width;
+	float	    m_Height;
+	float	    m_Depth;
 
 };
 
