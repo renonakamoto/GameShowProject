@@ -29,7 +29,7 @@ protected:
 
 	EnemyState m_CurrentState;			//!< Œ»Ý‚Ìó‘Ô
 	std::vector<D3DXVECTOR3> m_PatrolRoute;
-	char m_NextRoute;
+	int m_NextRoute;
 
 	D3DXVECTOR3 m_MovingVector;
 
