@@ -74,6 +74,7 @@
     <ClCompile Include="Src\UI\ConfigUI\ConfigUI.cpp" />
     <ClCompile Include="Src\UI\PauseUI\PauseUI.cpp" />
     <ClCompile Include="Src\Collision\FlexibleCollision.cpp" />
+    <ClCompile Include="Src\Scene\DebugScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Src\UI\GameOverUI\GameOverUI.h" />
     <ClInclude Include="Src\UI\ConfigUI\ConfigUI.h" />
     <ClInclude Include="Src\UI\PauseUI\PauseUI.h" />
+    <ClInclude Include="Src\Scene\DebugScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

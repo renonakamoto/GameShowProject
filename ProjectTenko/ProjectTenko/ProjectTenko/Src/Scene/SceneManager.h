@@ -3,6 +3,7 @@
 
 #include "Scene.h"
 #include "SceneChanger.h"
+#include "DebugScene.h"
 #include "../Utility/SingletonTemplate.h"
 #include <stack>
 #include <memory>
@@ -58,9 +59,10 @@ public:
 		return m_IsQuit;
 	}
 private:
-	std::stack<std::shared_ptr<Scene>> m_SceneStack;
+	std::stack<std::shared_ptr<Scene>> m_SceneStack;		//!< シーン保持変数
+	std::unique_ptr<DebugScene> m_DebugScene;				//!< デバッグ用のシーン保持変数
 
-	bool m_IsQuit;
+	bool m_IsQuit;		//!< 終了フラグ
 };
 
 typedef MySingletonTemplate::SingletonTemplate<SceneManager> SingletonSceneManager;

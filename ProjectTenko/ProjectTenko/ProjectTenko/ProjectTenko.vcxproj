@@ -65,6 +65,7 @@
     <ClCompile Include="Src\ObjectBase\ObjectBase.cpp" />
     <ClCompile Include="Src\Scene\ClearScene.cpp" />
     <ClCompile Include="Src\Scene\ConfigScene.cpp" />
+    <ClCompile Include="Src\Scene\DebugScene.cpp" />
     <ClCompile Include="Src\Scene\GameoverScene.cpp" />
     <ClCompile Include="Src\Scene\GameScene.cpp" />
     <ClCompile Include="Src\Scene\OpeningScene.cpp" />
@@ -128,6 +129,7 @@
     <ClInclude Include="Src\ObjectBase\ObjectBase.h" />
     <ClInclude Include="Src\Scene\ClearScene.h" />
     <ClInclude Include="Src\Scene\ConfigScene.h" />
+    <ClInclude Include="Src\Scene\DebugScene.h" />
     <ClInclude Include="Src\Scene\GameoverScene.h" />
     <ClInclude Include="Src\Scene\GameScene.h" />
     <ClInclude Include="Src\Scene\OpeningScene.h" />
