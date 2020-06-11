@@ -6,6 +6,8 @@
 #include "SceneChanger.h"
 #include "../Engine/Texture/Texture.h"
 
+class SceneChanger;
+
 class Scene
 {
 public:
