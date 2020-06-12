@@ -116,7 +116,7 @@ void SceneManager::PopScene()
 void SceneManager::Update()
 {
 #ifdef _DEBUG_ON
-
+	m_DebugScene->Update();
 #else
 	m_SceneStack.top()->Update();
 #endif
@@ -127,7 +127,7 @@ void SceneManager::Draw()
 	THE_GRAPHICS->StartDraw();
 
 #ifdef _DEBUG_ON
-
+	m_DebugScene->Draw();
 #else
 	m_SceneStack.top()->Draw();
 #endif

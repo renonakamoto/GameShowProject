@@ -59,6 +59,11 @@ void DebugScene::Update()
         {
             m_SceneList.push(make_unique<GameoverScene>(this));
         }
+
+        if (!m_SceneList.empty())
+        {
+            m_SceneList.top()->Update();
+        }
     }
     else
     {
