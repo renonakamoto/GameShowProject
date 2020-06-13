@@ -149,7 +149,7 @@ bool Objectmanager::HitCameraAndObject()
 	return false;
 }
 
-bool Objectmanager::HitRayAndObject(const D3DXVECTOR3& origin_, const D3DXVECTOR3& delta_, float* distance_)
+bool Objectmanager::HitRayAndObject(const D3DXVECTOR3& origin_, const D3DXVECTOR3& delta_)
 {
 	std::vector<Shape*> tmp_ray;
 	tmp_ray.push_back(new Ray(origin_, delta_));

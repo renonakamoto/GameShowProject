@@ -28,7 +28,7 @@ public:
 	bool HitPlayerAndEnemy();
 
 	bool HitCameraAndObject();
-	bool HitRayAndObject(const D3DXVECTOR3& origin_, const D3DXVECTOR3& delta_, float* distance_ = nullptr);
+	bool HitRayAndObject(const D3DXVECTOR3& origin_, const D3DXVECTOR3& delta_);
 
 	void AllRelease();
 
