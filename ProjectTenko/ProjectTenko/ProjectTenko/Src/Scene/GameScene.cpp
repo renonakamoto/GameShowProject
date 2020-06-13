@@ -62,5 +62,19 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
+    	static int   load_time = 0;
+	static float load_ui_tu = 0.f;
+	if (m_CurrentState == SceneState::Load) {
+		THE_TEXTUREMANAGER->DrawTexture(0.f, 0.f, load_ui_tu, 0.f, "assets/UI/load.png");
+		load_time++;
+		if (load_time % 15 == 0)
+		{
+			load_ui_tu += 0.25;
+
+			if (load_ui_tu > 1.f) { load_ui_tu = 0.f; }
+		}
+		return;
+	}
+
 	THE_OBJECTMANAGER->Draw();
 }

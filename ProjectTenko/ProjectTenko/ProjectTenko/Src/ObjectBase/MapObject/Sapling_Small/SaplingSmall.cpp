@@ -16,6 +16,12 @@ SaplingSmall::SaplingSmall(D3DXVECTOR3 pos_, std::string key_, std::vector<MapOb
 void SaplingSmall::Update()
 {
 	CoordinateUpdate(MapData::MapObjectList::Sapling_Small);
+	for (const auto& itr : m_MapObjectDataList)
+	{
+		int shape_num = 0;
+		m_Shape[shape_num]->Update(itr.m_Pos);
+		shape_num++;
+	}
 }
 
 void SaplingSmall::Draw()

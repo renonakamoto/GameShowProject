@@ -23,6 +23,7 @@
 #include "../ObjectBase/MapObject/Sapling_Small/SaplingSmall.h"
 #include "../ObjectBase/MapObject/Ferris_Wheel/FerrisWheel.h"
 #include "../ObjectBase/MapObject/Shrimp_Statue/ShrimpStatue.h"
+#include "../Collision/Shape/Ray.h"
 
 Objectmanager::Objectmanager()
 {
@@ -126,6 +127,35 @@ bool Objectmanager::HitPlayerAndEnemy()
 {
 	for (auto& itr : m_EnemyGroup) {
 		if (m_Collision.Test(m_Player->GetShape(), itr->GetShape()) == true)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Objectmanager::HitCameraAndObject()
+{
+	std::vector<Shape*> tmp_camera_shape;
+	tmp_camera_shape.push_back(m_Camera->GetShape());
+	for (auto& itr : m_MapObjectGroup) {
+		if (m_Collision.Test(tmp_camera_shape, itr->GetShape()) == true)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Objectmanager::HitRayAndObject(const D3DXVECTOR3& origin_, const D3DXVECTOR3& delta_, float* distance_)
+{
+	std::vector<Shape*> tmp_ray;
+	tmp_ray.push_back(new Ray(origin_, delta_));
+
+	for (auto& itr : m_MapObjectGroup) {
+		if (m_Collision.Test(tmp_ray, itr->GetShape()) == true)
 		{
 			return true;
 		}
