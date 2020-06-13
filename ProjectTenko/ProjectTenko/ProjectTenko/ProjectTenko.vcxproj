@@ -84,6 +84,7 @@
     <ClInclude Include="Src\Collision\Collision.h" />
     <ClInclude Include="Src\Collision\Shape\Cylinder.h" />
     <ClInclude Include="Src\Collision\Shape\Point.h" />
+    <ClInclude Include="Src\Collision\Shape\Ray.h" />
     <ClInclude Include="Src\Collision\Shape\Rect.h" />
     <ClInclude Include="Src\Collision\Shape\Shape.h" />
     <ClInclude Include="Src\Engine\Fbx\FbxDrawer.h" />

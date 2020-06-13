@@ -7,6 +7,10 @@ bool FlexibleCollision::Test(const std::vector<Shape*>& s1_, const std::vector<S
 	{
 		for (int j = 0; j < s2_.size(); ++j)
 		{
+			if (m_CollisionTable[(int)s1_[i]->GetType()][(int)s2_[j]->GetType()] == nullptr)
+			{
+				continue;
+			}
 
 			if (m_CollisionTable[(int)s1_[i]->GetType()][(int)s2_[j]->GetType()]->Test(*s1_[i], *s2_[j]) == true)
 			{

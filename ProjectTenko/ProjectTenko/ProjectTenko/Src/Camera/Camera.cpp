@@ -2,6 +2,8 @@
 #include "../Engine/Graphics/DirectGraphics.h"
 #include "../Engine/Window/Window.h"
 #include "../Engine/Input/InputManager.h"
+#include "../Collision/Shape/Ray.h"
+#include "../Manager/ObjectManager.h"
 #include <math.h>
 
 
@@ -18,6 +20,8 @@ Camera::Camera()
 
 	m_Sensitivity.x = 50.0f;
 	m_Sensitivity.y = 50.0f;
+
+	m_Shape = new Ray();
 }
 
 Camera::~Camera()
@@ -46,8 +50,8 @@ void Camera::Rotate()
 	SetCursorPos(THE_WINDOW->GetWindowWidth() / 2, THE_WINDOW->GetWindowHeight() / 2);
 
 	//! cŒü‚«‰ñ“]‚Ì‰Ò“­”ÍˆÍ§ŒÀ
-	if (m_Pitch >  90.0f) { m_Pitch =  180.0f - m_Pitch; }
-	if (m_Pitch < -90.0f) { m_Pitch = -180.0f - m_Pitch; }
+	if (m_Pitch >  20.0f) { m_Pitch =  20.0f; }
+	if (m_Pitch < -20.0f) { m_Pitch = -20.0f; }
 	
 	// ‰ñ“]‚ð”½‰f‚³‚¹‚é
 	/*m_Pos.x = m_LookAt.x + m_Distance *  sinf(D3DXToRadian(m_Yaw)) * cosf(D3DXToRadian(m_Pitch));
@@ -55,14 +59,22 @@ void Camera::Rotate()
 	m_Pos.z = m_LookAt.z + m_Distance * -cosf(D3DXToRadian(m_Yaw)) * cosf(D3DXToRadian(m_Pitch));*/
 
 	m_Pos.x = m_LookAt.x + m_Distance *  sinf(D3DXToRadian(m_Yaw));
-	m_Pos.y = 35.0f;
+	m_Pos.y = 35.0f  + -m_Pitch;
 	m_Pos.z = m_LookAt.z + m_Distance * -cosf(D3DXToRadian(m_Yaw));
 }
 
 void Camera::SetCamera(const D3DXVECTOR3& pos_, float distance_)
 {
-	m_Distance = distance_;
-
+	D3DXVECTOR3 ray_vec = m_LookAt - m_Pos;
+	if (THE_OBJECTMANAGER->HitRayAndObject(m_Pos, ray_vec) == true)
+	{
+		m_Distance--;
+	}
+	else if (m_Distance < 30)
+	{
+		m_Distance++;
+	}
+	//m_Distance = distance_;
 	//! ’Ž‹“_‚ðÝ’è
 	m_LookAt = pos_;
 }

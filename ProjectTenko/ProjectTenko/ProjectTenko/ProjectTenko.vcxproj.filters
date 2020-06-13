@@ -167,6 +167,7 @@
     <ClInclude Include="Src\UI\GameOverUI\GameOverUI.h" />
     <ClInclude Include="Src\UI\ConfigUI\ConfigUI.h" />
     <ClInclude Include="Src\UI\PauseUI\PauseUI.h" />
+    <ClInclude Include="Src\Collision\Shape\Ray.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

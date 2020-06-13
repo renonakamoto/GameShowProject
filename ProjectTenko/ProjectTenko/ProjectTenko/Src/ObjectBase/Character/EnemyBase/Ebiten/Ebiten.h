@@ -6,7 +6,8 @@
 class Ebiten : public Enemybase
 {
 public:
-	Ebiten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string key_);
+	Ebiten(D3DXVECTOR3 pos_, const ObjectBase* 
+		_, std::string key_);
 
 	~Ebiten() {}
 

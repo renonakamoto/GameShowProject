@@ -14,7 +14,8 @@ enum class ChikuwaMotionList : unsigned char
 class Tikuwaten : public Enemybase
 {
 public:
-	Tikuwaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string key_);
+	Tikuwaten(D3DXVECTOR3 pos_, const ObjectBase* 
+		_, std::string key_);
 	virtual ~Tikuwaten() {}
 
 	virtual void Update() override;

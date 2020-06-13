@@ -7,6 +7,14 @@
 class AABBShape : public Shape
 {
 public:
+	AABBShape():
+		m_Width(0.0f),
+		m_Height(0.0f),
+		m_Depth(0.0f),
+		m_Min(D3DXVECTOR3()),
+		m_Max(D3DXVECTOR3())
+	{}
+
 	AABBShape(float width_, float height_, float depth_) :
 		m_Width (width_),
 		m_Height(height_),
