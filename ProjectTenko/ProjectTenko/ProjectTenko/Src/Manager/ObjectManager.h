@@ -30,6 +30,8 @@ public:
 	bool HitCameraAndObject();
 	bool HitRayAndObject(const D3DXVECTOR3& origin_, const D3DXVECTOR3& delta_);
 
+	bool HitPlayerAndClearTrigger();
+
 	void AllRelease();
 
 private:
@@ -40,6 +42,7 @@ private:
 	ObjectBase* m_Player;
 	std::vector<ObjectBase*> m_EnemyGroup;
 	std::vector<ObjectBase*> m_MapObjectGroup;
+
 
 	Camera* m_Camera;
 

@@ -23,6 +23,16 @@ public:
 		m_Max(D3DXVECTOR3())
 	{}
 
+	AABBShape(D3DXVECTOR3 pos_,float width_, float height_, float depth_) :
+		m_Width(width_),
+		m_Height(height_),
+		m_Depth(depth_),
+		m_Min(D3DXVECTOR3()),
+		m_Max(D3DXVECTOR3())
+	{
+		Update(pos_);
+	}
+
 	virtual ~AABBShape() {}
 
 	SHAPE_TYPE GetType() const override { return SHAPE_TYPE::Shape_AABB; }

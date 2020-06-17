@@ -217,6 +217,8 @@ void MyTextureManager::TextureManager::DrawTexture(float posX_, float posY_, std
 		{posX_, posY_ + height, 0.0f, 1.0f, 0.0f, 1.0f},
 	};
 
+	//THE_GRAPHICS->GetD3DDevice()->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+
 	THE_GRAPHICS->GetD3DDevice()->SetFVF(D3DFVF_XYZRHW | D3DFVF_TEX1);
 	THE_GRAPHICS->GetD3DDevice()->SetTexture(0, m_TextureMap[key_]->pTexture);
 	THE_GRAPHICS->GetD3DDevice()->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, v, sizeof(CustomVertex));

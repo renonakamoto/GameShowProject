@@ -1,7 +1,8 @@
 #include "FbxDrawer.h"
 #include "fbxsdk.h"
+#include "../Graphics/DirectGraphics.h"
 
-void FbxDrawer::RenderFbxMesh(FBXMeshData* pData_)
+void FbxDrawer::RenderFbxMesh(FBXMeshData* pData_, UCHAR alpha_)
 {
 	if (pData_ == nullptr) return;
 

@@ -24,6 +24,7 @@
 #include "../ObjectBase/MapObject/Ferris_Wheel/FerrisWheel.h"
 #include "../ObjectBase/MapObject/Shrimp_Statue/ShrimpStatue.h"
 #include "../Collision/Shape/Ray.h"
+#include "../Collision/Shape/AABB.h"
 
 Objectmanager::Objectmanager()
 {
@@ -37,6 +38,7 @@ Objectmanager::Objectmanager()
 	//m_Object.push_back(new Sitaketen(D3DXVECTOR3(0.0f, 0.0f, 0.0f),  m_Player, "Sitaketen"));
 	//m_Object.push_back(new Tikuwaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f),  m_Player, "Tikuwaten"));
 
+
 	m_MapObjectGroup.push_back(new Barrel(D3DXVECTOR3(0.0f, 0.0f, 300.0f), "Barrel", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Barrel)));
 	m_MapObjectGroup.push_back(new Tent(D3DXVECTOR3(300.0f, 0.0f, 600.0f), "Tent", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Tent)));
 	m_MapObjectGroup.push_back(new VendingMachineBlue(D3DXVECTOR3(0.0f, 0.0f, -100.0f), "VendingMachineBlue", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Vending_Machine)));
@@ -47,10 +49,11 @@ Objectmanager::Objectmanager()
 	m_MapObjectGroup.push_back(new SaplingSmall(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "SaplingSmall", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Sapling_Small)));
 	m_MapObjectGroup.push_back(new FerrisWheel(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "FerrisWheel", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Ferris_Wheel)));
 	m_MapObjectGroup.push_back(new ShrimpStatue(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "ShrimpStatue", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Shrimp_Statue)));
+	m_MapObjectGroup.push_back(new Merrygoland(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Merrygoland", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Merrygoland)));
+	m_MapObjectGroup.push_back(new Gate(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Gate", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Gate)));
+
 
 	m_Object.push_back(new Floor(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Floor", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Floor)));
-	m_Object.push_back(new Gate(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Gate", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Gate)));
-	m_Object.push_back(new Merrygoland(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Merrygoland", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Merrygoland)));
 	m_Object.push_back(new Mountain(D3DXVECTOR3(0.0f, -400.0f, 0.0f), "Mountain", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Mountain)));
 	m_Object.push_back(new Skydome(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "SkyDome", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Skydome)));
 
@@ -159,6 +162,18 @@ bool Objectmanager::HitRayAndObject(const D3DXVECTOR3& origin_, const D3DXVECTOR
 		{
 			return true;
 		}
+	}
+
+	return false;
+}
+
+bool Objectmanager::HitPlayerAndClearTrigger()
+{
+	std::vector<Shape*> hoge;
+	hoge.push_back(new AABBShape(D3DXVECTOR3(1413.0f, 0.0f, -260.0f), 89.0f, 89.0f, 89.0f));
+
+	if (m_Collision.Test(m_Player->GetShape(), hoge) == true) {
+		return true;
 	}
 
 	return false;

@@ -44,6 +44,7 @@ public:
 	}
 
 	bool Test(const std::vector<Shape*>& s1_, const std::vector<Shape*>& s2_);
+	bool Test(const Shape& s1_, const Shape& s2_);
 
 
 private:

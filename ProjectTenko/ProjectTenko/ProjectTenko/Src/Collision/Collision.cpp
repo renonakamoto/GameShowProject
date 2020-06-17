@@ -27,7 +27,6 @@ bool AABBandCylinder::Test(const Shape& s1, const Shape& s2)
 	float	    circle_radius	  = s2.GetRadius();
 
 
-
 	if (circle_center_pos.x > s1_min.x
 		&& circle_center_pos.x < s1_max.x
 		&& circle_center_pos.z > s1_max.z - circle_radius

@@ -39,6 +39,17 @@ void GameScene::Main()
 {
 	THE_OBJECTMANAGER->Update();
 
+
+    if (THE_OBJECTMANAGER->HitPlayerAndClearTrigger() == true)
+    {
+        m_SceneChanger->ChangeScene(SceneID::Clear);
+    }
+
+    if (THE_OBJECTMANAGER->HitPlayerAndEnemy() == true)
+    {
+        m_SceneChanger->ChangeScene(SceneID::Gameover);
+    }
+
 	if (THE_INPUTMANAGER->GetKeyDown(KeyInfo::Key_ESC))
 	{
 		m_SceneChanger->PushScene(SceneID::Pause);

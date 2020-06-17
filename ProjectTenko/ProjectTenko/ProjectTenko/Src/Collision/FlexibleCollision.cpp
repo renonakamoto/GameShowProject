@@ -1,6 +1,5 @@
 #include "FlexibleCollision.h"
 
-
 bool FlexibleCollision::Test(const std::vector<Shape*>& s1_, const std::vector<Shape*>& s2_)
 {
 	for (int i = 0; i < s1_.size(); ++i)
@@ -17,6 +16,21 @@ bool FlexibleCollision::Test(const std::vector<Shape*>& s1_, const std::vector<S
 				return true;
 			}
 		}
+	}
+
+	return false;
+}
+
+bool FlexibleCollision::Test(const Shape& s1_, const Shape& s2_)
+{
+	if (m_CollisionTable[(int)s1_.GetType()][(int)s2_.GetType()] == nullptr)
+	{
+		return false;
+	}
+
+	if (m_CollisionTable[(int)s1_.GetType()][(int)s2_.GetType()]->Test(s1_, s2_) == true)
+	{
+		return true;
 	}
 
 	return false;
