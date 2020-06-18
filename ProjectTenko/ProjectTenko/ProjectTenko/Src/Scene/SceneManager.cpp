@@ -7,19 +7,33 @@
 #include "ClearScene.h"
 #include "GameoverScene.h"
 
+#include "../Engine/Graphics/DirectGraphics.h"
+
+#define _DEBUG_ON
+
 using namespace std;
 
 SceneManager::SceneManager()
 {
+#ifdef _DEBUG_ON
+	m_DebugScene = make_unique<DebugScene>(this);
+	m_IsQuit = false;
+#else
 	m_SceneStack.push(make_shared<TitleScene>(this));
+	m_IsQuit = false;
+#endif
 }
 
 SceneManager::~SceneManager()
 {
+#ifdef _DEBUG_ON
+	m_DebugScene.release();
+#else
 	while (!m_SceneStack.empty())
 	{
 		m_SceneStack.pop();
 	}
+#endif
 }
 
 void SceneManager::ChangeScene(SceneID id_)
@@ -101,10 +115,22 @@ void SceneManager::PopScene()
 
 void SceneManager::Update()
 {
+#ifdef _DEBUG_ON
+	m_DebugScene->Update();
+#else
 	m_SceneStack.top()->Update();
+#endif
 }
 
 void SceneManager::Draw()
 {
+	THE_GRAPHICS->StartDraw();
+
+#ifdef _DEBUG_ON
+	m_DebugScene->Draw();
+#else
 	m_SceneStack.top()->Draw();
+#endif
+
+	THE_GRAPHICS->EndDraw();
 }

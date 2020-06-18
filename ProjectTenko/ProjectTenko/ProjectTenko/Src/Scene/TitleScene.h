@@ -2,6 +2,7 @@
 #define TITLESCENE_H_
 
 #include "Scene.h"
+#include "../UI/TitleUI/TitleUI.h"
 
 class TitleScene : public Scene
 {
@@ -16,6 +17,8 @@ private:
 	static DWORD WINAPI LoadResources(LPVOID lpParam_);
 	void Main() override;
 	void Load() override;
+
+	TitleUI* m_TitleUI;
 };
 
 #endif // !TITLESCENE_H_

@@ -1,9 +1,8 @@
 #include "Mountain.h"
 
-Mountain::Mountain(D3DXVECTOR3 pos_, std::string key_) :
-	MapObject(pos_, key_)
+Mountain::Mountain(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_) :
+	MapObject(pos_, key_, mapObjcectList_)
 {
-	THE_FBXMANAGER->LoadFBXMesh(m_FbxKey, "assets/objects/mountain/mountain.fbx");
 }
 
 void Mountain::Update()

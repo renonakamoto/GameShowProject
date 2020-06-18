@@ -60,15 +60,14 @@ bool MyWindow::Window::Init(HINSTANCE hInstance_, const char* pName_, int width_
 	m_Height = rect.bottom - rect.top;
 
 	//! 登録したクラスのウィンドウクラスを生成
-	m_HWnd = CreateWindowEx(
-		WS_EX_LEFT,
+	m_HWnd = CreateWindow(
 		TEXT("Tenko"),
-		pName_,
+		TEXT("Tenko"),
 		(WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME) | WS_VISIBLE,
 		0,
 		0,
-		m_Width,
-		m_Height,
+		width_,
+		height_,
 		NULL,
 		NULL,
 		hInstance_,

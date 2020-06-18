@@ -6,7 +6,7 @@
 class Merrygoland : public MapObject
 {
 public:
-	Merrygoland(D3DXVECTOR3 pos_, std::string key_);
+	Merrygoland(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_);
 
 	virtual ~Merrygoland() {}
 

@@ -2,6 +2,7 @@
 #define PAUSESCENE_H_
 
 #include "Scene.h"
+#include "../UI/PauseUI/PauseUI.h"
 
 class PauseScene : public Scene
 {
@@ -16,6 +17,8 @@ private:
 	void Load() override;
 	void Main() override;
 	static DWORD WINAPI LoadResources(LPVOID lpParam_);
+
+	PauseUI* m_PauseUI;
 
 };
 

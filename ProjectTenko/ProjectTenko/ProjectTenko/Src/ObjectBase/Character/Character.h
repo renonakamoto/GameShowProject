@@ -2,6 +2,7 @@
 #define CHARACTER_H_
 
 #include "../ObjectBase.h"
+#include "../../Engine/Fbx/FbxMotion.h"
 
 class Character : public ObjectBase
 {

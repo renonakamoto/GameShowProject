@@ -6,7 +6,7 @@
 class Gate : public MapObject
 {
 public:
-	Gate(D3DXVECTOR3 pos_, std::string key_);
+	Gate(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_);
 
 	virtual ~Gate() {}
 

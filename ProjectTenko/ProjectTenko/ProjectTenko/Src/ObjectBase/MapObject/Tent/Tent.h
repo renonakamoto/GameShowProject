@@ -6,7 +6,7 @@
 class Tent : public MapObject
 {
 public:
-	Tent(D3DXVECTOR3 pos_, std::string key_);
+	Tent(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_);
 
 	virtual ~Tent() {}
 

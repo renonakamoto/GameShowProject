@@ -42,7 +42,7 @@ namespace MyFbx
 		* @brief 描画する関数
 		* @param[in] key_ オブジェクトに設定しているキー
 		*/
-		void Draw(std::string key_, const D3DXMATRIX& world_);
+		void Draw(std::string key_, const D3DXMATRIX& world_, UCHAR alpha_ = 255);
 
 		/**
 		* @brief アニメーション関数

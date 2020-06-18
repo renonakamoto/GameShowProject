@@ -1,9 +1,15 @@
 #include "Kabochaten.h"
 
-Kabochaten::Kabochaten(D3DXVECTOR3 pos_, std::string key_) :
-	Enemybase(pos_, key_)
+Kabochaten::Kabochaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string key_) :
+	Enemybase(pos_, player_, key_)
 {
-	THE_FBXMANAGER->LoadFBXMesh(key_, "assets/models/enemies/kabochaten/pumpkin.fbx");
+	THE_FBXMANAGER->LoadFBXMesh(key_, "assets/models/enemies/kabochaten/pumpkin_animation.fbx");
+
+	m_Motion.AddMotion(KabochaMotionList::Wait, 0, 60);
+	m_Motion.AddMotion(KabochaMotionList::Wait, 70, 130);
+	m_Motion.AddMotion(KabochaMotionList::Wait, 140, 200);
+	m_Motion.AddMotion(KabochaMotionList::Wait, 210, 270);
+	m_Motion.AddMotion(KabochaMotionList::Wait, 280, 340);
 }
 
 void Kabochaten::Update()
