@@ -39,6 +39,17 @@ void GameScene::Main()
 {
 	THE_OBJECTMANAGER->Update();
 
+
+    if (THE_OBJECTMANAGER->HitPlayerAndClearTrigger() == true)
+    {
+        m_SceneChanger->ChangeScene(SceneID::Clear);
+    }
+
+    if (THE_OBJECTMANAGER->HitPlayerAndEnemy() == true)
+    {
+        m_SceneChanger->ChangeScene(SceneID::Gameover);
+    }
+
 	if (THE_INPUTMANAGER->GetKeyDown(KeyInfo::Key_ESC))
 	{
 		m_SceneChanger->PushScene(SceneID::Pause);
@@ -62,5 +73,19 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
+    	static int   load_time = 0;
+	static float load_ui_tu = 0.f;
+	if (m_CurrentState == SceneState::Load) {
+		THE_TEXTUREMANAGER->DrawTexture(0.f, 0.f, load_ui_tu, 0.f, "assets/UI/load.png");
+		load_time++;
+		if (load_time % 15 == 0)
+		{
+			load_ui_tu += 0.25;
+
+			if (load_ui_tu > 1.f) { load_ui_tu = 0.f; }
+		}
+		return;
+	}
+
 	THE_OBJECTMANAGER->Draw();
 }

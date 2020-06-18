@@ -19,8 +19,9 @@ Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 
 	m_IsSquat = false;
 
-	m_WalkSpeed = 5.0f;
-
+	m_WalkSpeed = 1.5f;
+	m_SquatWalkSpeed = 1.0f;
+	m_OldPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Shape.push_back(new AABBShape(4.0f, 20.f, 4.0f));
 }
 
@@ -52,11 +53,11 @@ void Player::Draw()
 
 void Player::Move()
 {
-	Camera* ref_camera = THE_OBJECTMANAGER->GetCameraInstance();
+	Camera*     ref_camera		= THE_OBJECTMANAGER->GetCameraInstance();
 	D3DXVECTOR3 camera_forward  = ref_camera->GetForwardVec();
 	D3DXVECTOR3 camera_left		= ref_camera->GetLeftVec();
 	D3DXVECTOR3 result_move_vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	float	    speed = m_WalkSpeed;
+	float	    speed			= m_WalkSpeed;
 
 
 	if (THE_INPUTMANAGER->GetKey(KeyInfo::Key_W) == true)
@@ -125,4 +126,4 @@ void Player::State()
 	{
 		m_CrrentMotion = PlayerMotionList::Squat;
 	}
-}	
+}
