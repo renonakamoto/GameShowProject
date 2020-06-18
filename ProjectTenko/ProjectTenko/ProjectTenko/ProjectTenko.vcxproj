@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Src\Camera\Camera.cpp" />
     <ClCompile Include="Src\Collision\Collision.cpp" />
+    <ClCompile Include="Src\Collision\FlexibleCollision.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxDrawer.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxLoader.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxManager.cpp" />
@@ -35,6 +36,8 @@
     <ClCompile Include="Src\ExternalFle\Csv\Csv.cpp" />
     <ClCompile Include="Src\Main.cpp" />
     <ClCompile Include="Src\Manager\ObjectManager.cpp" />
+    <ClCompile Include="Src\NavigationAI\MovingPathCreator.cpp" />
+    <ClCompile Include="Src\NavigationAI\NavigationAI.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\Character.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyBase.cpp" />
@@ -64,13 +67,16 @@
     <ClCompile Include="Src\ObjectBase\ObjectBase.cpp" />
     <ClCompile Include="Src\Scene\ClearScene.cpp" />
     <ClCompile Include="Src\Scene\ConfigScene.cpp" />
+    <ClCompile Include="Src\Scene\DebugScene.cpp" />
     <ClCompile Include="Src\Scene\GameoverScene.cpp" />
     <ClCompile Include="Src\Scene\GameScene.cpp" />
     <ClCompile Include="Src\Scene\OpeningScene.cpp" />
     <ClCompile Include="Src\Scene\PauseScene.cpp" />
     <ClCompile Include="Src\Scene\SceneManager.cpp" />
     <ClCompile Include="Src\Scene\TitleScene.cpp" />
-    <ClCompile Include="Src\UI\TitleUI\StartUI.cpp" />
+    <ClCompile Include="Src\UI\ConfigUI\ConfigUI.cpp" />
+    <ClCompile Include="Src\UI\GameOverUI\GameOverUI.cpp" />
+    <ClCompile Include="Src\UI\PauseUI\PauseUI.cpp" />
     <ClCompile Include="Src\UI\TitleUI\TitleUI.cpp" />
     <ClCompile Include="Src\Utility\3DHelper.cpp" />
   </ItemGroup>
@@ -81,6 +87,7 @@
     <ClInclude Include="Src\Collision\Collision.h" />
     <ClInclude Include="Src\Collision\Shape\Cylinder.h" />
     <ClInclude Include="Src\Collision\Shape\Point.h" />
+    <ClInclude Include="Src\Collision\Shape\Ray.h" />
     <ClInclude Include="Src\Collision\Shape\Rect.h" />
     <ClInclude Include="Src\Collision\Shape\Shape.h" />
     <ClInclude Include="Src\Engine\Fbx\FbxDrawer.h" />
@@ -96,6 +103,9 @@
     <ClInclude Include="Src\Engine\Window\Window.h" />
     <ClInclude Include="Src\ExternalFle\Csv\Csv.h" />
     <ClInclude Include="Src\Manager\ObjectManager.h" />
+    <ClInclude Include="Src\NavigationAI\MovingPathCreater.h" />
+    <ClInclude Include="Src\NavigationAI\MovingPathCreator.h" />
+    <ClInclude Include="Src\NavigationAI\NavigationAI.h" />
     <ClInclude Include="Src\ObjectBase\Character\Character.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyBase.h" />
@@ -125,6 +135,7 @@
     <ClInclude Include="Src\ObjectBase\ObjectBase.h" />
     <ClInclude Include="Src\Scene\ClearScene.h" />
     <ClInclude Include="Src\Scene\ConfigScene.h" />
+    <ClInclude Include="Src\Scene\DebugScene.h" />
     <ClInclude Include="Src\Scene\GameoverScene.h" />
     <ClInclude Include="Src\Scene\GameScene.h" />
     <ClInclude Include="Src\Scene\OpeningScene.h" />
@@ -134,8 +145,10 @@
     <ClInclude Include="Src\Scene\SceneDefinition.h" />
     <ClInclude Include="Src\Scene\SceneManager.h" />
     <ClInclude Include="Src\Scene\TitleScene.h" />
+    <ClInclude Include="Src\UI\ConfigUI\ConfigUI.h" />
+    <ClInclude Include="Src\UI\GameOverUI\GameOverUI.h" />
     <ClInclude Include="Src\UI\GameUI\GameUI.h" />
-    <ClInclude Include="Src\UI\TitleUI\StartUI.h" />
+    <ClInclude Include="Src\UI\PauseUI\PauseUI.h" />
     <ClInclude Include="Src\UI\TitleUI\TitleUI.h" />
     <ClInclude Include="Src\UI\UI.h" />
     <ClInclude Include="Src\Utility\2DHelper.h" />
@@ -199,12 +212,12 @@
     <LibraryPath>$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(DXSDK_DIR)Include;C:\Program Files\Autodesk\FBX\FBX SDK\2020.0.1\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x64;C:\Program Files\Autodesk\FBX\FBX SDK\2020.0.1\lib\vs2017\x64\debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)Include;$(FBXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(FBXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(DXSDK_DIR)Include;C:\Program Files\Autodesk\FBX\FBX SDK\2020.0.1\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x64;C:\Program Files\Autodesk\FBX\FBX SDK\2020.0.1\lib\vs2017\x64\debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)Include;$(FBXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(FBXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -228,7 +241,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -256,7 +269,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>

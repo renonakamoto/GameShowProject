@@ -40,6 +40,7 @@ namespace MyTextureManager
 
 		void DrawTexture(float posX_, float posY_, std::string key_);
 
+		void DrawTexture(float posX_, float posY_, float tu_, float tv_, std::string key_);
 
 	private:
 		TextureManager() {

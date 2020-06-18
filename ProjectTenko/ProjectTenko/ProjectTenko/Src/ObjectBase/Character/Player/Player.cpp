@@ -6,8 +6,6 @@
 Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 	Character(pos_, key_)
 {
-	//THE_FBXMANAGER->LoadFBXMesh(key_, "assets/models/player/tenko_sample02.fbx");
-
 	m_Motion.AddMotion(PlayerMotionList::Wait,			1,	 200);
 	m_Motion.AddMotion(PlayerMotionList::Walk,			211, 270);
 	m_Motion.AddMotion(PlayerMotionList::Squat,			281, 340);
@@ -21,9 +19,10 @@ Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 
 	m_IsSquat = false;
 
-	m_WalkSpeed = 5.0f;
-
-	m_Shape = new AABBShape(10.f, 20.f, 10.f);
+	m_WalkSpeed = 1.5f;
+	m_SquatWalkSpeed = 1.0f;
+	m_OldPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_Shape.push_back(new AABBShape(4.0f, 20.f, 4.0f));
 }
 
 void Player::Update()
@@ -54,11 +53,11 @@ void Player::Draw()
 
 void Player::Move()
 {
-	Camera* ref_camera = THE_OBJECTMANAGER->GetCameraInstance();
+	Camera*     ref_camera		= THE_OBJECTMANAGER->GetCameraInstance();
 	D3DXVECTOR3 camera_forward  = ref_camera->GetForwardVec();
 	D3DXVECTOR3 camera_left		= ref_camera->GetLeftVec();
 	D3DXVECTOR3 result_move_vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	float	    speed = m_WalkSpeed;
+	float	    speed			= m_WalkSpeed;
 
 
 	if (THE_INPUTMANAGER->GetKey(KeyInfo::Key_W) == true)
@@ -93,7 +92,7 @@ void Player::Move()
 		m_Pos.x += result_move_vec.x * speed;
 		m_Pos.z += result_move_vec.z * speed;
 
-		m_Shape->Update(m_Pos);
+		m_Shape[0]->Update(m_Pos);
 
 		if (THE_OBJECTMANAGER->HitPlayerAndMapObject() == true) {
 			m_Pos = m_OldPos;
@@ -127,4 +126,4 @@ void Player::State()
 	{
 		m_CrrentMotion = PlayerMotionList::Squat;
 	}
-}	
+}

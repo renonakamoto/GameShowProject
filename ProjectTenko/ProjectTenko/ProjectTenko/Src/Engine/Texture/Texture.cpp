@@ -124,15 +124,15 @@ bool MyTextureManager::TextureManager::Load(std::string key_)
 	LPDIRECT3DTEXTURE9 tex_info = nullptr;
 	D3DXIMAGE_INFO info;
 	D3DXGetImageInfoFromFileA(key_.c_str(), &info);
-
+	LPDIRECT3DDEVICE9 hoge = THE_GRAPHICS->GetD3DDevice();
 	HRESULT hr = D3DXCreateTextureFromFileExA(
-		THE_GRAPHICS->GetD3DDevice(),									// Direct3DDevice
+		THE_GRAPHICS->GetD3DDevice(),			// Direct3DDevice
 		key_.c_str(),							// ファイル名
 		info.Width,								// 横幅(D3DX_DEFAULTでファイルから判定)
 		info.Height,							// 高さ(D3DX_DEFAULTでファイルから判定)
 		1,										// ミップマップの数
 		0,										// 使用用途
-		D3DFMT_UNKNOWN,						// フォーマット
+		D3DFMT_UNKNOWN,							// フォーマット
 		D3DPOOL_MANAGED,						// メモリの管理設定
 		D3DX_DEFAULT,							// フィルター設定
 		D3DX_DEFAULT,							// ミップマップフィルターの設定
@@ -186,7 +186,9 @@ void MyTextureManager::TextureManager::Release(std::string key_)
 {
 	if (m_TextureMap.empty() == true)  return;
 	if (m_TextureMap[key_] == nullptr) return;
+	delete m_TextureMap[key_];
 	m_TextureMap[key_] = nullptr;
+	m_TextureMap.erase(key_);
 }
 
 void MyTextureManager::TextureManager::AllRelease()
@@ -204,7 +206,7 @@ void MyTextureManager::TextureManager::AllRelease()
 
 void MyTextureManager::TextureManager::DrawTexture(float posX_, float posY_, std::string key_)
 {
-	float width = m_TextureMap[key_]->width;
+	float width  = m_TextureMap[key_]->width;
 	float height = m_TextureMap[key_]->height;
 
 	CustomVertex v[4] =
@@ -213,6 +215,27 @@ void MyTextureManager::TextureManager::DrawTexture(float posX_, float posY_, std
 		{posX_ + width, posY_, 0.0f, 1.0f, 1.0f, 0.0f},
 		{posX_ + width, posY_ + height, 0.0f, 1.0f, 1.0f, 1.0f},
 		{posX_, posY_ + height, 0.0f, 1.0f, 0.0f, 1.0f},
+	};
+
+	//THE_GRAPHICS->GetD3DDevice()->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+
+	THE_GRAPHICS->GetD3DDevice()->SetFVF(D3DFVF_XYZRHW | D3DFVF_TEX1);
+	THE_GRAPHICS->GetD3DDevice()->SetTexture(0, m_TextureMap[key_]->pTexture);
+	THE_GRAPHICS->GetD3DDevice()->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, v, sizeof(CustomVertex));
+
+}
+
+void MyTextureManager::TextureManager::DrawTexture(float posX_, float posY_, float tu_, float tv_, std::string key_)
+{
+	float width = m_TextureMap[key_]->width / 4.f;
+	float height = m_TextureMap[key_]->height;
+
+	CustomVertex v[4] =
+	{
+		{posX_, posY_, 0.0f, 1.0f, tu_, tv_},
+		{posX_ + width, posY_, 0.0f, 1.0f, tu_ + 0.25, 0.0f},
+		{posX_ + width, posY_ + height, 0.0f, 1.0f, tu_ + 0.25, tv_ + 1.0f},
+		{posX_, posY_ + height, 0.0f, 1.0f, tu_, tv_ + 1.0f},
 	};
 
 	THE_GRAPHICS->GetD3DDevice()->SetFVF(D3DFVF_XYZRHW | D3DFVF_TEX1);

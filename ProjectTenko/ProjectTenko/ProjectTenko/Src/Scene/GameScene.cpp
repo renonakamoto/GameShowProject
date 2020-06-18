@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "../Manager/ObjectManager.h"
+#include "../Engine/Input/InputManager.h"
 
 GameScene::GameScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
@@ -30,13 +31,29 @@ void GameScene::Load()
 
 DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 {
+	THE_FBXMANAGER->LoadFBXMesh("Player", "assets/models/player/tenko_sample02.fbx");
     return 0;
 }
-
 
 void GameScene::Main()
 {
 	THE_OBJECTMANAGER->Update();
+
+
+    if (THE_OBJECTMANAGER->HitPlayerAndClearTrigger() == true)
+    {
+        m_SceneChanger->ChangeScene(SceneID::Clear);
+    }
+
+    if (THE_OBJECTMANAGER->HitPlayerAndEnemy() == true)
+    {
+        m_SceneChanger->ChangeScene(SceneID::Gameover);
+    }
+
+	if (THE_INPUTMANAGER->GetKeyDown(KeyInfo::Key_ESC))
+	{
+		m_SceneChanger->PushScene(SceneID::Pause);
+	}
 }
 
 void GameScene::Update()
@@ -56,5 +73,19 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
+    	static int   load_time = 0;
+	static float load_ui_tu = 0.f;
+	if (m_CurrentState == SceneState::Load) {
+		THE_TEXTUREMANAGER->DrawTexture(0.f, 0.f, load_ui_tu, 0.f, "assets/UI/load.png");
+		load_time++;
+		if (load_time % 15 == 0)
+		{
+			load_ui_tu += 0.25;
+
+			if (load_ui_tu > 1.f) { load_ui_tu = 0.f; }
+		}
+		return;
+	}
+
 	THE_OBJECTMANAGER->Draw();
 }

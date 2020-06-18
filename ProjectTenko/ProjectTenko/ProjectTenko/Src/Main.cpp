@@ -19,6 +19,8 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 	FontDevice::Create();
 	FbxMeshManager::Create();
 	TextureManager::Create();
+	SingletonSceneManager::Create();
+	ObjectManager::Create();
 
 	//! エンジン初期化
 	if (THE_WINDOW->Init(hInstance_, "Tenko In Tempurand", 1920, 1080) == false)
@@ -41,11 +43,8 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 		return -4;
 	}
 
-
-	SceneManager scene_manager;
-
 	//! ゲームループ開始
-	while (true)
+	while (!THE_SCENEMANAGER->IsQuit())
 	{
 		MSG msg;
 
@@ -63,7 +62,7 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 		else {
 			THE_INPUTMANAGER->Update();
 
-			scene_manager.Update();
+			THE_SCENEMANAGER->Update();
 			
 			D3DLIGHT9 light;
 			ZeroMemory(&light, sizeof(light));
@@ -83,7 +82,7 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 			THE_GRAPHICS->GetD3DDevice()->LightEnable(0, TRUE);
 			THE_GRAPHICS->GetD3DDevice()->SetLight(0, &light);
 
-			scene_manager.Draw();
+			THE_SCENEMANAGER->Draw();
 		}
 	}
 

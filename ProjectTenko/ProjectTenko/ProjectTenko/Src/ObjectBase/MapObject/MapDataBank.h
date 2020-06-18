@@ -1,9 +1,10 @@
 #ifndef MAPDATABANK_H_
 #define MAPDATABANK_H_
 
-#include "MapObject.h"
 #include <string>
 #include <vector>
+
+class MapObjectData;
 
 namespace MapData
 {
@@ -42,6 +43,10 @@ namespace MapData
 		RotX,
 		RotY,
 		RotZ,
+
+		Width,
+		Height,
+		Depth,
 	};
 }
 

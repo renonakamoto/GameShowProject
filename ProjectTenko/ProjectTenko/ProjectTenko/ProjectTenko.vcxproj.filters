@@ -62,7 +62,6 @@
     <ClCompile Include="Src\Engine\Fbx\FbxMotion.cpp" />
     <ClCompile Include="Src\Collision\Collision.cpp" />
     <ClCompile Include="Src\Engine\Font\Font.cpp" />
-    <ClCompile Include="Src\UI\TitleUI\StartUI.cpp" />
     <ClCompile Include="Src\UI\TitleUI\TitleUI.cpp" />
     <ClCompile Include="Src\ExternalFle\Csv\Csv.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\MapDataBank.cpp" />
@@ -71,6 +70,13 @@
     <ClCompile Include="Src\ObjectBase\MapObject\Sapling_Big\SaplingBig.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Ferris_Wheel\FerrisWheel.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Shrimp_Statue\ShrimpStatue.cpp" />
+    <ClCompile Include="Src\UI\GameOverUI\GameOverUI.cpp" />
+    <ClCompile Include="Src\UI\ConfigUI\ConfigUI.cpp" />
+    <ClCompile Include="Src\UI\PauseUI\PauseUI.cpp" />
+    <ClCompile Include="Src\Collision\FlexibleCollision.cpp" />
+    <ClCompile Include="Src\Scene\DebugScene.cpp" />
+    <ClCompile Include="Src\NavigationAI\MovingPathCreator.cpp" />
+    <ClCompile Include="Src\NavigationAI\NavigationAI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
@@ -153,7 +159,6 @@
     <ClInclude Include="Src\UI\UI.h" />
     <ClInclude Include="Src\UI\GameUI\GameUI.h" />
     <ClInclude Include="Src\UI\TitleUI\TitleUI.h" />
-    <ClInclude Include="Src\UI\TitleUI\StartUI.h" />
     <ClInclude Include="Src\Utility\SimpleCollision.h" />
     <ClInclude Include="Src\ExternalFle\Csv\Csv.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\MapDataBank.h" />
@@ -162,6 +167,13 @@
     <ClInclude Include="Src\ObjectBase\MapObject\Sapling_Big\SaplingBig.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Ferris_Wheel\FerrisWheel.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Shrimp_Statue\ShrimpStatue.h" />
+    <ClInclude Include="Src\UI\GameOverUI\GameOverUI.h" />
+    <ClInclude Include="Src\UI\ConfigUI\ConfigUI.h" />
+    <ClInclude Include="Src\UI\PauseUI\PauseUI.h" />
+    <ClInclude Include="Src\Scene\DebugScene.h" />
+    <ClInclude Include="Src\NavigationAI\NavigationAI.h" />
+    <ClInclude Include="Src\NavigationAI\MovingPathCreater.h" />
+    <ClInclude Include="Src\NavigationAI\MovingPathCreator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

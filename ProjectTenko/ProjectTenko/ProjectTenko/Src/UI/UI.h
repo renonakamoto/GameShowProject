@@ -7,9 +7,7 @@
 class UI
 {
 public:
-	UI(D3DXVECTOR2 pos_, std::string texHandle_):
-		m_Pos(pos_),
-		m_TexturHandleKey(texHandle_)
+	UI()
 	{}
 
 	virtual ~UI(){}
@@ -17,14 +15,24 @@ public:
 	virtual void Update() = 0;
 
 	virtual void Draw() = 0;
-	
-	//!	UIÇ™ëIëÇ≥ÇÍÇΩÇ©Ç«Ç§Ç©Çï‘Ç∑ä÷êî
-	virtual bool IsSelect() { return false; }
 
 protected:
-	D3DXVECTOR2 m_Pos;
+	struct UI_PARAMETER
+	{
+		UI_PARAMETER(){}
+		UI_PARAMETER(D3DXVECTOR2 pos_, float spriteWidth_, float spriteHeight, std::string texHandleKey):
+			m_Pos(pos_),
+			m_SpriteWidth(spriteWidth_),
+			m_SpriteHeight(spriteHeight),
+			m_TexturHandleKey(texHandleKey)
+		{}
 
-	std::string m_TexturHandleKey;
+		D3DXVECTOR2 m_Pos;
+		float m_SpriteWidth;
+		float m_SpriteHeight;
+
+		std::string m_TexturHandleKey;
+	};
 	
 };
 

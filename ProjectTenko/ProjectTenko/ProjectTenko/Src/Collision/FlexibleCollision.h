@@ -3,24 +3,39 @@
 
 #include "Collision.h"
 #include "Shape/Shape.h"
+#include <vector>
 
-//#define A static_cast<int>(SHAPE_TYPE::Shape_Type_Num)
+class Shape;
 
-class FlexibleCollision : public Collision
+class FlexibleCollision
 {
 public:
 	FlexibleCollision() 
 	{
-		m_CollisionTable[ShapeAABB][ShapeAABB]     =     new AABBAndAABB();
-		m_CollisionTable[ShapeAABB][ShapeCylinder] =     new AABBandCylinder();
-		m_CollisionTable[ShapeCylinder][ShapeAABB] =     new AABBandCylinder();
-		m_CollisionTable[ShapeCylinder][ShapeCylinder] = new AABBAndAABB();
+		int shape_aabb	   = (int)SHAPE_TYPE::Shape_AABB;
+		int shape_cylinder = (int)SHAPE_TYPE::Shape_Cylinder;
+		int shape_ray      = (int)SHAPE_TYPE::Shape_Ray;
+		// 当たり判定テーブルの作成
+		m_CollisionTable[shape_aabb][shape_aabb]			= new AABBAndAABB();
+		m_CollisionTable[shape_aabb][shape_cylinder]		= new AABBandCylinder();
+		m_CollisionTable[shape_aabb][shape_ray]				= new AABBandRay();
+
+		m_CollisionTable[shape_cylinder][shape_cylinder]	= nullptr;
+		m_CollisionTable[shape_cylinder][shape_aabb]		= new AABBandCylinder();
+		m_CollisionTable[shape_cylinder][shape_ray]			= new CylinderAndRay();
+
+		m_CollisionTable[shape_ray][shape_ray]				= nullptr;
+		m_CollisionTable[shape_ray][shape_aabb]				= new AABBandRay();
+		m_CollisionTable[shape_ray][shape_cylinder]			= new CylinderAndRay();
+		
 	}
 	
 	virtual ~FlexibleCollision() 
 	{
-		for (int i = 0; i < ShapeNum; ++i) {
-			for (int j = 0; j < ShapeNum; ++j) {
+		int shape_num = (int)SHAPE_TYPE::Shape_Type_Num;
+
+		for (int i = 0; i < shape_num; ++i) {
+			for (int j = 0; j < shape_num; ++j) {
 				if (m_CollisionTable[i][j] != nullptr) {
 					delete m_CollisionTable[i][j];
 				}
@@ -28,21 +43,13 @@ public:
 		}
 	}
 
-	bool Test(const Shape& s1_, const Shape& s2_)
-	{
-		int s1_type = static_cast<int>(s1_.GetType());
-		int s2_type = static_cast<int>(s2_.GetType());
-		return m_CollisionTable[s1_type][s2_type]->Test(s1_, s2_);
-	}
+	bool Test(const std::vector<Shape*>& s1_, const std::vector<Shape*>& s2_);
+	bool Test(const Shape& s1_, const Shape& s2_);
 
 
 private:
-	static const int ShapeAABB	   = static_cast<int>(SHAPE_TYPE::Shape_AABB);
-	static const int ShapeCylinder = static_cast<int>(SHAPE_TYPE::Shape_Cylinder);
-	static const int ShapeNum	   = static_cast<int>(SHAPE_TYPE::Shape_Type_Num);
-
 	//! 当たりテーブル
-	Collision* m_CollisionTable[ShapeNum][ShapeNum];
+	Collision* m_CollisionTable[(int)SHAPE_TYPE::Shape_Type_Num][(int)SHAPE_TYPE::Shape_Type_Num];
 };
 
 #endif

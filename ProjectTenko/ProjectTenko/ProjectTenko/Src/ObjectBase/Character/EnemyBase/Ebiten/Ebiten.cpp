@@ -1,7 +1,7 @@
 #include "Ebiten.h"
 
-Ebiten::Ebiten(D3DXVECTOR3 pos_, std::string key_):
-	Enemybase(pos_, key_)
+Ebiten::Ebiten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string key_) :
+	Enemybase(pos_, player_, key_)
 {
 	THE_FBXMANAGER->LoadFBXMesh(key_, "assets/models/enemies/ebiten/Shrimp.fbx");
 }

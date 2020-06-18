@@ -27,6 +27,11 @@ public:
 	bool HitPlayerAndMapObject();
 	bool HitPlayerAndEnemy();
 
+	bool HitCameraAndObject();
+	bool HitRayAndObject(const D3DXVECTOR3& origin_, const D3DXVECTOR3& delta_);
+
+	bool HitPlayerAndClearTrigger();
+
 	void AllRelease();
 
 private:
@@ -34,9 +39,10 @@ private:
 	~Objectmanager();
 
 	std::vector<ObjectBase*> m_Object;
-	std::vector<ObjectBase*> m_PlayerGroup;
+	ObjectBase* m_Player;
 	std::vector<ObjectBase*> m_EnemyGroup;
 	std::vector<ObjectBase*> m_MapObjectGroup;
+
 
 	Camera* m_Camera;
 

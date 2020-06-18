@@ -1,19 +1,22 @@
 #include "Merrygoland.h"
+#include "../../../Collision/Shape/Cylinder.h"
 
 Merrygoland::Merrygoland(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_) :
 	MapObject(pos_, key_, mapObjcectList_)
 {
-	THE_FBXMANAGER->LoadFBXMesh(m_FbxKey, "assets/objects/merrygoland/merrygoland_Foundation.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("merrygoland_Paul",    "assets/objects/merrygoland/merrygoland_Paul.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("merrygoland_shrimp1", "assets/objects/merrygoland/merrygoland_shrimp1.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("merrygoland_shrimp2", "assets/objects/merrygoland/merrygoland_shrimp2.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("merrygoland_shrimp3", "assets/objects/merrygoland/merrygoland_shrimp3.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("merrygoland_shrimp4", "assets/objects/merrygoland/merrygoland_shrimp4.fbx");
-
+	//THE_FBXMANAGER->LoadFBXMesh(m_FbxKey, "assets/objects/merrygoland/merrygoland_Foundation.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("merrygoland_Paul",    "assets/objects/merrygoland/merrygoland_Paul.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("merrygoland_shrimp1", "assets/objects/merrygoland/merrygoland_shrimp1.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("merrygoland_shrimp2", "assets/objects/merrygoland/merrygoland_shrimp2.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("merrygoland_shrimp3", "assets/objects/merrygoland/merrygoland_shrimp3.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("merrygoland_shrimp4", "assets/objects/merrygoland/merrygoland_shrimp4.fbx");
+	m_Shape.push_back(new CylinderShape(130.0f, 180.0f));
+	m_Shape[0]->Update(m_MapObjectDataList[0].m_Pos);
 }
 
 void Merrygoland::Update()
 {
+	CoordinateUpdate(MapData::Merrygoland);
 }
 
 void Merrygoland::Draw()

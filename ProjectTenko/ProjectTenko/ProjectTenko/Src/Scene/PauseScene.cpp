@@ -1,7 +1,16 @@
 #include "PauseScene.h"
+#include "../Engine/Input/InputManager.h"
+#include "../Engine/Texture/Texture.h"
 
 PauseScene::PauseScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
+	m_PauseUI = new PauseUI();
+
+	THE_TEXTUREMANAGER->Load("assets/UI/pause/pause01.png");
+	THE_TEXTUREMANAGER->Load("assets/UI/pause/pause02.png");
+	THE_TEXTUREMANAGER->Load("assets/UI/pause/pause04.png");
+	THE_TEXTUREMANAGER->Load("assets/UI/pause/pause05.png");
+
     m_ThreadHandle = CreateThread(
         nullptr,                    // セキュリティ属性
         0,                          // スタックサイズ
@@ -15,7 +24,13 @@ PauseScene::PauseScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 
 PauseScene::~PauseScene()
 {
+	THE_TEXTUREMANAGER->Release("assets/UI/pause/pause01.png");
+	THE_TEXTUREMANAGER->Release("assets/UI/pause/pause02.png");
+	THE_TEXTUREMANAGER->Release("assets/UI/pause/pause04.png");
+	THE_TEXTUREMANAGER->Release("assets/UI/pause/pause05.png");
 
+	delete m_PauseUI;
+	m_PauseUI = nullptr;
 }
 
 void PauseScene::Load()
@@ -34,6 +49,26 @@ DWORD WINAPI PauseScene::LoadResources(LPVOID lpParam_)
 
 void PauseScene::Main()
 {
+	m_PauseUI->Update();
+
+	if (THE_INPUTMANAGER->GetKeyDown(KeyInfo::Key_ESC))
+	{
+		m_SceneChanger->PopScene();
+	}
+
+	if (THE_INPUTMANAGER->GetMouseDown(MouseButton::Left) == false) { return; }
+	if (m_PauseUI->IsSelect(PAUSE_UI_LIST::PAUSE_UI_RETURN_GAME))
+	{
+		m_SceneChanger->PopScene();
+	}
+	else if (m_PauseUI->IsSelect(PAUSE_UI_LIST::PAUSE_UI_RETURN_TITLE))
+	{
+		m_SceneChanger->ChangeScene(SceneID::Tilte);
+	}
+	else if (m_PauseUI->IsSelect(PAUSE_UI_LIST::PAUSE_UI_SETTING))
+	{
+		m_SceneChanger->PushScene(SceneID::Config);
+	}
 
 }
 
@@ -54,5 +89,5 @@ void PauseScene::Update()
 
 void PauseScene::Draw()
 {
-
+	m_PauseUI->Draw();
 }

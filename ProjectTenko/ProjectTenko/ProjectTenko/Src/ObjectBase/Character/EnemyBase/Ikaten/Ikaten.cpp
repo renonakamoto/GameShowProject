@@ -1,7 +1,7 @@
 #include "Ikaten.h"
 
-Ikaten::Ikaten(D3DXVECTOR3 pos_, std::string key_) :
-	Enemybase(pos_, key_)
+Ikaten::Ikaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string key_) :
+	Enemybase(pos_, player_, key_)
 {
 	THE_FBXMANAGER->LoadFBXMesh(key_, "assets/models/enemies/ikaten/.fbx");
 }

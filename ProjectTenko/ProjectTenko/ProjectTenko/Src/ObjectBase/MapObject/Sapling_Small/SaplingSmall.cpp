@@ -1,13 +1,27 @@
 #include "SaplingSmall.h"
+#include "../../../Collision/Shape/AABB.h"
 
 SaplingSmall::SaplingSmall(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_):
 	MapObject(pos_, key_, mapObjcectList_)
 {
-	THE_FBXMANAGER->LoadFBXMesh(m_FbxKey, "assets/objects/sapling/NAEGI_01.fbx");
+	int shape_num = 0;
+	for (const auto& itr : m_MapObjectDataList)
+	{
+		m_Shape.push_back(new AABBShape(itr.m_Width, itr.m_Height, itr.m_Depth));
+		m_Shape[shape_num]->Update(itr.m_Pos);
+		shape_num++;
+	}
 }
 
 void SaplingSmall::Update()
 {
+	CoordinateUpdate(MapData::MapObjectList::Sapling_Small);
+	for (const auto& itr : m_MapObjectDataList)
+	{
+		int shape_num = 0;
+		m_Shape[shape_num]->Update(itr.m_Pos);
+		shape_num++;
+	}
 }
 
 void SaplingSmall::Draw()

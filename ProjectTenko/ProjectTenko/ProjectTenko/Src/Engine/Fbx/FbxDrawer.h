@@ -14,7 +14,7 @@ public:
 	~FbxDrawer() {}
 
 	// FBXメッシュの描画
-	void RenderFbxMesh(FBXMeshData* pData_);
+	void RenderFbxMesh(FBXMeshData* pData_, UCHAR alpha_ = 255);
 
 	// FBXのアニメーション
 	// 描画ではないがこの関数を呼ばないとアニメーションできない

@@ -6,7 +6,7 @@
 class Ikaten : public Enemybase
 {
 public:
-	Ikaten(D3DXVECTOR3 pos_, std::string key_);
+	Ikaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string key_);
 
 	~Ikaten() {}
 

@@ -15,7 +15,7 @@ enum class KabochaMotionList : unsigned char
 class Kabochaten : public Enemybase
 {
 public:
-	Kabochaten(D3DXVECTOR3 pos_, std::string key_);
+	Kabochaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string key_);
 
 	~Kabochaten() {}
 
