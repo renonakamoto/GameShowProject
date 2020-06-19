@@ -35,7 +35,7 @@ public:
 	* 指定したセカンダリ・バッファのサウンドを再生します
 	* @param[in] key_ 再生したいサウンドのキー
 	*/
-	void Play(std::string key_);
+	void Play(std::string key_, bool isLoop_);
 
 	/**
 	* @brief サウンド停止関数

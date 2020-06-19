@@ -132,14 +132,14 @@ bool SoundManager::LoadSound(std::string file_name, std::string key_name)
 	return true;
 }
 
-void SoundManager::Play(std::string key_)
+void SoundManager::Play(std::string key_, bool isLoop_)
 {
 	if (HasKey(key_) == false)
 	{
 		return;
 	}
 
-	m_SoundData[key_]->Play(0, 0, DSBPLAY_LOOPING);
+	m_SoundData[key_]->Play(0, 0, DSBPLAY_LOOPING & isLoop_);
 }
 
 void SoundManager::Stop(std::string key_)
