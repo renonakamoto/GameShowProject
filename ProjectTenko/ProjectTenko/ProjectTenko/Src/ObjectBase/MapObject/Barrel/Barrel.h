@@ -13,9 +13,10 @@ public:
 	virtual void Update() override;
 	virtual void Draw() override;
 
-protected:
-
 private:
+
+	// TODO ƒoƒŒƒ‹‚Ì‘å‚«‚³‚ğ}‚é
+	// TODO ƒoƒŒƒ‹‚Ì“–‚½‚è”»’è‚Ì‰ü—Ç
 
 };
 

@@ -5,7 +5,7 @@
 
 TitleUI::TitleUI()
 {
-	m_TitleUIList[TITLE_UI_LIST::TITLE_UI_TITLE]   = UI_PARAMETER(D3DXVECTOR2(520.f, 140.f), 1024.f, 256.f, "assets/UI/title/title01.png");
+	m_TitleUIList[TITLE_UI_LIST::TITLE_UI_TITLE]   = UI_PARAMETER(D3DXVECTOR2(0.0f, 0.0f), 1024.f, 256.f,   "assets/UI/title/title01.png");
 	m_TitleUIList[TITLE_UI_LIST::TITLE_UI_START]   = UI_PARAMETER(D3DXVECTOR2(720.f, 640.f), 512.f,  64.f,  "assets/UI/title/title02.png");
 	m_TitleUIList[TITLE_UI_LIST::TITLE_UI_SETTING] = UI_PARAMETER(D3DXVECTOR2(720.f, 740.f), 512.f,  64.f,  "assets/UI/title/title04.png");
 	m_TitleUIList[TITLE_UI_LIST::TITLE_UI_EXIT]    = UI_PARAMETER(D3DXVECTOR2(720.f, 840.f), 512.f,  64.f,  "assets/UI/title/title05.png");

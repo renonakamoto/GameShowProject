@@ -18,8 +18,9 @@ public:
 	virtual ~Shape() {}
 
 	virtual SHAPE_TYPE GetType() const = 0;
-
 	virtual void Update(const D3DXVECTOR3& pos_) = 0;
+	
+	virtual D3DXVECTOR3 GetPos()const = 0;
 
 public:
 

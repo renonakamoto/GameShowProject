@@ -28,8 +28,9 @@ public:
 		m_Delta  = delta_;
 	}
 
+	D3DXVECTOR3 GetPos() const override   { return m_Origin; }
 	D3DXVECTOR3 GetOrigin()const override { return m_Origin; }
-	D3DXVECTOR3 GetDelta()const override  { return m_Delta; }
+	D3DXVECTOR3 GetDelta()const override  { return m_Delta;  }
 
 private:
 	D3DXVECTOR3 m_Origin;	// Œõü‚ÌŒ´“_

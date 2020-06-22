@@ -4,6 +4,8 @@
 #include "Scene.h"
 #include "../UI/TitleUI/TitleUI.h"
 
+class Camera;
+
 class TitleScene : public Scene
 {
 public:
@@ -18,6 +20,7 @@ private:
 	void Main() override;
 	void Load() override;
 
+	Camera*  m_Camera;
 	TitleUI* m_TitleUI;
 };
 
