@@ -31,7 +31,7 @@ namespace MyFontDevice
 	public:
 		bool Init();
 
-		void DrawFont(float posX_, float posY_, std::string text_, FontSize fontSize_, FontColor fontColor_);
+		void DrawFont(float posX_, float posY_, std::string text_, FontSize fontSize_ = FontSize::Regular, FontColor fontColor_ = FontColor::Black);
 
 	private:
 		

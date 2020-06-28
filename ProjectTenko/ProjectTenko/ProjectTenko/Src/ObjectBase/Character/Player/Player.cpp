@@ -19,7 +19,7 @@ Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 
 	m_IsSquat = false;
 
-	m_WalkSpeed = 1.5f;
+	m_WalkSpeed = 5.5f;
 	m_SquatWalkSpeed = 1.0f;
 	m_OldPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Shape.push_back(new AABBShape(4.0f, 20.f, 4.0f));
@@ -117,9 +117,12 @@ void Player::Motion()
 
 void Player::State()
 {
+	Camera* ref_camera = THE_OBJECTMANAGER->GetCameraInstance();
+
 	if (THE_INPUTMANAGER->GetKeyDown(KeyInfo::Key_C) == true)
 	{
-		m_IsSquat ? m_IsSquat = false : m_IsSquat = true;
+		m_IsSquat = !m_IsSquat;
+		
 	}
 
 	if (m_IsSquat == true)

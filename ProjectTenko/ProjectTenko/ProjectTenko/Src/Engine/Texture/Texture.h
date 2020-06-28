@@ -32,7 +32,7 @@ namespace MyTextureManager
 
 		bool Load(std::string key_);
 
-		TextureData* GetTexturue(std::string key_);
+		TextureData* GetTexture(std::string key_);
 
 		void Release(std::string key_);
 

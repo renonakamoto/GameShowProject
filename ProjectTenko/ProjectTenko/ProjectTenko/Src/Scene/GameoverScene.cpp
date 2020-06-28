@@ -1,7 +1,10 @@
 #include "GameoverScene.h"
+#include "../Engine/Input/InputManager.h"
 
 GameoverScene::GameoverScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
+    m_GameOverUI = new GameOverUI();
+
     m_ThreadHandle = CreateThread(
         nullptr,                    // セキュリティ属性
         0,                          // スタックサイズ
@@ -15,11 +18,13 @@ GameoverScene::GameoverScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 
 GameoverScene::~GameoverScene()
 {
-
+    delete m_GameOverUI;
+    m_GameOverUI = nullptr;
 }
 
 void GameoverScene::Load()
 {
+
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
         m_CurrentState = SceneState::Main;
@@ -54,5 +59,5 @@ void GameoverScene::Update()
 
 void GameoverScene::Draw()
 {
-
+    m_GameOverUI->Draw();
 }

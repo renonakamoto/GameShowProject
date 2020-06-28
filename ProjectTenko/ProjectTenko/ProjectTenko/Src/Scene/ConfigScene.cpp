@@ -10,6 +10,8 @@ ConfigScene::ConfigScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 	THE_TEXTUREMANAGER->Load("assets/UI/config/config02.png");
 	THE_TEXTUREMANAGER->Load("assets/UI/config/config03.png");
 	THE_TEXTUREMANAGER->Load("assets/UI/config/config04.png");
+	THE_TEXTUREMANAGER->Load("assets/UI/config/config05.png");
+	THE_TEXTUREMANAGER->Load("assets/UI/config/config06.png");
 
     m_ThreadHandle = CreateThread(
         nullptr,                    // セキュリティ属性
@@ -31,6 +33,8 @@ ConfigScene::~ConfigScene()
 	THE_TEXTUREMANAGER->Release("assets/UI/config/config02.png");
 	THE_TEXTUREMANAGER->Release("assets/UI/config/config03.png");
 	THE_TEXTUREMANAGER->Release("assets/UI/config/config04.png");
+	THE_TEXTUREMANAGER->Release("assets/UI/config/config05.png");
+	THE_TEXTUREMANAGER->Release("assets/UI/config/config06.png");
 }
 
 void ConfigScene::Load()
@@ -49,10 +53,10 @@ DWORD WINAPI ConfigScene::LoadResources(LPVOID lpParam_)
 
 void ConfigScene::Main()
 {
-	m_ConfigUI->Update();
 
-	
-	if (THE_INPUTMANAGER->GetMouseDown(MouseButton::Left) == false) { return; }
+    m_ConfigUI->Update();
+    if (THE_INPUTMANAGER->GetMouseDown(MouseButton::Left) == false) { return; }
+
 	if (m_ConfigUI->IsSelect(CONFIG_UI_LIST::CONFIG_UI_RETURN))
 	{
 		m_SceneChanger->PopScene();

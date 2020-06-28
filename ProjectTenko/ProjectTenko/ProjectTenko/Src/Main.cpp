@@ -6,6 +6,7 @@
 #include "Manager/ObjectManager.h"
 #include "Engine/Font/Font.h"
 #include "Scene/SceneManager.h"
+#include "Manager/ConfigManager.h"
 
 int APIENTRY WinMain(HINSTANCE hInstance_,
 	HINSTANCE hPrevInstance_,
@@ -21,9 +22,10 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 	TextureManager::Create();
 	SingletonSceneManager::Create();
 	ObjectManager::Create();
+	ConfigManager::Create();
 
 	//! ƒGƒ“ƒWƒ“‰Šú‰»
-	if (THE_WINDOW->Init(hInstance_, "Tenko In Tempurand", 1920, 1080) == false)
+	if (THE_WINDOW->Init(hInstance_, "Tenko In Tempurand", GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)) == false)
 	{
 		return -1;
 	}

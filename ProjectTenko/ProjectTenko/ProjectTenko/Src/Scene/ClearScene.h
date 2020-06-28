@@ -2,6 +2,7 @@
 #define CLEARSCENE_H_
 
 #include "Scene.h"
+#include "../UI/GameClearUI/GameClearUI.h"
 
 class ClearScene : public Scene
 {
@@ -16,6 +17,8 @@ private:
 	void Load() override;
 	void Main() override;
 	static DWORD WINAPI LoadResources(LPVOID lpParam_);
+
+	GameClearUI* m_GameClearUI;
 };
 
 #endif // !CLEARSCENE_H_
