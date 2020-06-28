@@ -14,6 +14,9 @@ class Camera
 {
 public:
 	Camera();
+
+	Camera(D3DXVECTOR3 pos_, D3DXVECTOR3 lookAt_, D3DXVECTOR3 upVec_, float distance_);
+
 	~Camera();
 
 	void Update();

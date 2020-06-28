@@ -46,6 +46,7 @@ public:
 		m_Max = D3DXVECTOR3(pos_.x + half_width, pos_.y + half_height, pos_.z + half_depth);
 	}
 
+	D3DXVECTOR3 GetPos() const override { return m_Max / 2; }
 	D3DXVECTOR3 GetMin() const override { return m_Min; }
 	D3DXVECTOR3 GetMax() const override { return m_Max; }
 

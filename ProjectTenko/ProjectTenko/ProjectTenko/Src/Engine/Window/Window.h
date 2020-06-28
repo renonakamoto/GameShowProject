@@ -26,7 +26,6 @@ namespace MyWindow
 		const HWND GetWindowHandle()const { return m_HWnd; }
 
 		const int GetWindowWidth()const { return m_Width; }
-
 		const int GetWindowHeight()const { return m_Height; }
 
 		const D3DXVECTOR2 GetCenterWindowPos()const {
