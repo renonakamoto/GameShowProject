@@ -33,6 +33,8 @@ bool MovingPathCreator::CreateMovingPath(D3DXVECTOR3 originPos_, float xzPlaneX_
 	// フィールド情報の格納配列
 	std::unique_ptr<std::unique_ptr<PathInfo[]>[]> p_info = std::make_unique<std::unique_ptr<PathInfo[]>[]>(xz_x);
 	
+	std::vector<std::vector<std::string>> pathfile;
+	
 	for (int i = 0; i < xz_z; i++)
 	{
 		p_info[i] = std::make_unique<PathInfo[]>(xz_z);
@@ -48,6 +50,8 @@ bool MovingPathCreator::CreateMovingPath(D3DXVECTOR3 originPos_, float xzPlaneX_
 			p_info[i][j].m_x = j;
 			p_info[i][j].m_z = i;
 
+			//pathfile.push_back();
+
 			// 8方向へのベクトルの生成
 			D3DXVECTOR3 vec[8];
 			Create8Vec(pos, cellsize_, vec);
@@ -62,7 +66,6 @@ bool MovingPathCreator::CreateMovingPath(D3DXVECTOR3 originPos_, float xzPlaneX_
 		pos.x = originPos_.x + (cellsize_ / 2);
 		pos.z += cellsize_;
 	}
-
 
 	return false;
 }
