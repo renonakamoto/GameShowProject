@@ -1,7 +1,9 @@
 #include "MovingPathCreator.h"
 #include "..//Manager/ObjectManager.h"
+#include "..//Collision/FlexibleCollision.h"
 #include <memory>
 #include <math.h>
+#include <vector>
 
 MovingPathCreator::MovingPathCreator()
 {
