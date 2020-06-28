@@ -36,3 +36,26 @@ bool Csv::Load(const std::string& fileName_, std::vector<std::vector<std::string
 
 	return true;
 }
+
+bool Csv::Create(const std::string& fileName_, std::vector<std::vector<std::string>>& table_, const char delimiter_)
+{
+	// ファイルを生成
+	std::ofstream ofs(fileName_);
+	if (!ofs.is_open())
+	{
+		// ファイルを生成できなかった場合
+		return false;
+	}
+
+	// ファイルに書き込む
+	for (const auto& x : table_)
+	{
+		for (const auto& y : x)
+		{
+			ofs << y << ",";
+		}
+		ofs << std::endl;
+	}
+
+	return true;
+}
