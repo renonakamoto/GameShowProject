@@ -69,6 +69,13 @@ bool MovingPathCreator::CreateMovingPath(D3DXVECTOR3 originPos_, float xzPlaneX_
 		pos.z += cellsize_;
 	}
 
+	std::string filename("MovingPath.csv");
+	Csv csv;
+	if (csv.Create(filename, csvdata))
+	{
+		return true;
+	}
+
 	return false;
 }
 
