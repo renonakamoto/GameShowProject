@@ -80,6 +80,11 @@
     <ClCompile Include="Src\Utility\SimpleCalculation.cpp" />
     <ClCompile Include="Src\Manager\ConfigManager.cpp" />
     <ClCompile Include="Src\UI\GameClearUI\GameClearUI.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Patrol.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Turn.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Chase.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Return.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Move.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
@@ -181,6 +186,12 @@
     <ClInclude Include="Src\Utility\SimpleCalculation.h" />
     <ClInclude Include="Src\Manager\ConfigManager.h" />
     <ClInclude Include="Src\UI\GameClearUI\GameClearUI.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\State.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Patrol.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Move.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Turn.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Chase.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Return.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

@@ -14,20 +14,7 @@ Tikuwaten::Tikuwaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string ke
 
 void Tikuwaten::Update()
 {
-	switch (m_CurrentState)
-	{
-	case EnemyState::Patrol:
-		Patrol();
-		break;
-	case EnemyState::Chase:
-		Chase();
-		break;
-	case EnemyState::Return:
-		Return();
-		break;
-	default:
-		break;
-	}
+	m_State->Update(this);
 }
 
 void Tikuwaten::Draw()
@@ -43,7 +30,7 @@ void Tikuwaten::Patrol()
 {
 	if (CanDetectPC() == true)
 	{
-		m_CurrentState = EnemyState::Chase;
+		
 		return;
 	}
 
@@ -76,6 +63,14 @@ void Tikuwaten::Patrol()
 			m_Pos = nextpos;
 		}
 	}
+}
+
+void Tikuwaten::Move()
+{
+}
+
+void Tikuwaten::Turn()
+{
 }
 
 void Tikuwaten::Chase()
