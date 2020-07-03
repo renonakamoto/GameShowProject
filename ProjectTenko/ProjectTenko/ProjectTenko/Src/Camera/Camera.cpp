@@ -4,6 +4,7 @@
 #include "../Engine/Input/InputManager.h"
 #include "../Collision/Shape/Ray.h"
 #include "../Manager/ObjectManager.h"
+#include "../Manager/ConfigManager.h"
 #include <math.h>
 
 
@@ -24,6 +25,26 @@ Camera::Camera()
 	m_Shape = new Ray();
 }
 
+Camera::Camera(D3DXVECTOR3 pos_, D3DXVECTOR3 lookAt_, D3DXVECTOR3 upVec_, float distance_)
+{
+	m_Pos	 = pos_;
+	m_LookAt = lookAt_;
+	m_UpVec  = upVec_;
+
+	m_Yaw    = 0.0f;
+	m_Pitch  = 0.0f;
+
+	m_Distance		= distance_;
+
+	m_Sensitivity.x = 0.0f;
+	m_Sensitivity.y = 0.0f;
+
+	m_Shape = new Ray();
+
+	SetViewMatrix();
+	SetProjectionMatrix();
+}
+
 Camera::~Camera()
 {
 }
@@ -42,12 +63,51 @@ void Camera::Move()
 
 void Camera::Rotate()
 {
-	//! ウィンドウの中心からカーソルの位置でベクトルを算出する
-	m_Yaw   -= (THE_INPUTMANAGER->GetMousePos().x - THE_WINDOW->GetWindowWidth()  / 2) / m_Sensitivity.x;
-	m_Pitch -= (THE_INPUTMANAGER->GetMousePos().y - THE_WINDOW->GetWindowHeight() / 2) / m_Sensitivity.y;
+	//float mouse_x = THE_INPUTMANAGER->GetMousePos().x;
+	//float mouse_y = THE_INPUTMANAGER->GetMousePos().y;
+	//int window_width  = THE_WINDOW->GetWindowWidth();
+	//int window_height = THE_WINDOW->GetWindowHeight();
 
-	//! カーソルを中心に持ってくる
-	SetCursorPos(THE_WINDOW->GetWindowWidth() / 2, THE_WINDOW->GetWindowHeight() / 2);
+	//float horizon_magnification  = (float)GetSystemMetrics(SM_CXSCREEN) / (float)THE_WINDOW->GetWindowWidth();
+	//float vertical_magnification = (float)GetSystemMetrics(SM_CYSCREEN) / (float)THE_WINDOW->GetWindowHeight();
+	//RECT rect;
+	//GetClientRect(THE_WINDOW->GetWindowHandle(), &rect);
+	//rect.bottom /= horizon_magnification;
+	//rect.right  /= vertical_magnification;
+
+	////! ウィンドウの中心からカーソルの位置でベクトルを算出する
+	//m_Yaw   -= (THE_INPUTMANAGER->GetMousePos().x - THE_WINDOW->GetWindowWidth()  / 2) / m_Sensitivity.x;
+	//m_Pitch -= (THE_INPUTMANAGER->GetMousePos().y - THE_WINDOW->GetWindowHeight() / 2) / m_Sensitivity.y;
+
+	////! カーソルを中心に持ってくる
+	//SetCursorPos(GetSystemMetrics(SM_CXSCREEN) / 2, GetSystemMetrics(SM_CYSCREEN) / 2);
+	
+	RECT client_rect;
+	GetClientRect(THE_WINDOW->GetWindowHandle(), &client_rect);
+
+	// クライアントサイズの取得
+	float half_gclient_width  = client_rect.right  / 2;
+	float half_client_height  = client_rect.bottom / 2;
+
+	int mouse_x = THE_INPUTMANAGER->GetMousePos().x * 0.8f;
+	int mouse_y = THE_INPUTMANAGER->GetMousePos().y * 0.8f;
+
+
+	// クライアントの真ん中からマウス座標へのベクトルを算出
+	if (THE_CONFIGMANAGER->IsMouseFlip())
+	{
+		m_Yaw   -= (mouse_x - half_gclient_width) / 1920.0f * 20.0f;
+		m_Pitch -= (mouse_y - 432.0f) / 1080.0f * 20.0f;
+	}
+	else
+	{
+		m_Yaw   += (mouse_x - half_gclient_width) / 1920.0f * 20.0f;
+		m_Pitch += (mouse_y - 432.0f) / 1080.0f * 20.0f;
+	}
+
+
+	// マウスをクライアントの真ん中にもってくる
+	SetCursorPos(768, 432);
 
 	//! 縦向き回転の稼働範囲制限
 	if (m_Pitch >  20.0f) { m_Pitch =  20.0f; }

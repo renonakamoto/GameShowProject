@@ -37,8 +37,7 @@ Objectmanager::Objectmanager()
 	//m_Object.push_back(new Kabochaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), m_Player, "Kabochaten"));
 	//m_Object.push_back(new Sitaketen(D3DXVECTOR3(0.0f, 0.0f, 0.0f),  m_Player, "Sitaketen"));
 	//m_Object.push_back(new Tikuwaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f),  m_Player, "Tikuwaten"));
-
-
+	
 	m_MapObjectGroup.push_back(new Barrel(D3DXVECTOR3(0.0f, 0.0f, 300.0f), "Barrel", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Barrel)));
 	m_MapObjectGroup.push_back(new Tent(D3DXVECTOR3(300.0f, 0.0f, 600.0f), "Tent", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Tent)));
 	m_MapObjectGroup.push_back(new VendingMachineBlue(D3DXVECTOR3(0.0f, 0.0f, -100.0f), "VendingMachineBlue", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Vending_Machine)));
@@ -52,7 +51,6 @@ Objectmanager::Objectmanager()
 	m_MapObjectGroup.push_back(new Merrygoland(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Merrygoland", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Merrygoland)));
 	m_MapObjectGroup.push_back(new Gate(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Gate", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Gate)));
 
-
 	m_Object.push_back(new Floor(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Floor", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Floor)));
 	m_Object.push_back(new Mountain(D3DXVECTOR3(0.0f, -400.0f, 0.0f), "Mountain", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Mountain)));
 	m_Object.push_back(new Skydome(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "SkyDome", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Skydome)));
@@ -64,6 +62,25 @@ Objectmanager::Objectmanager()
 Objectmanager::~Objectmanager()
 {
 	AllRelease();
+}
+
+void Objectmanager::JudgementCollition(std::vector<Shape*>* pOut_, const D3DXVECTOR3& basePoint_, float length)
+{
+	D3DXVECTOR3 base_pos = basePoint_;
+	D3DXVECTOR3 base_to_mapobject;
+
+	for (const auto& v : m_MapObjectGroup)
+	{
+		for (const auto& w : v->GetShape())
+		{
+			base_to_mapobject = w->GetPos() - base_pos;
+
+			if (D3DXVec3Length(&base_to_mapobject) < length)
+			{
+				pOut_->push_back(w);
+			}
+		}
+	}
 }
 
 void Objectmanager::Update()
@@ -115,12 +132,13 @@ void Objectmanager::Draw()
 
 bool Objectmanager::HitPlayerAndMapObject()
 {
-	for (auto& itr : m_MapObjectGroup) {
+	std::vector<Shape*> collition_list;
 
-		if (m_Collision.Test(m_Player->GetShape(), itr->GetShape()) == true)
-		{
-			return true;
-		}
+	JudgementCollition(&collition_list, m_Player->GetPos(), 500.0f);
+
+	if (m_Collision.Test(m_Player->GetShape(), collition_list) == true)
+	{
+		return true;
 	}
 
 	return false;

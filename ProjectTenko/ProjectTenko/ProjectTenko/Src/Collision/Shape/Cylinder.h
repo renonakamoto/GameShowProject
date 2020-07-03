@@ -21,6 +21,9 @@ public:
 		m_CenterPos = pos_;
 	}
 
+
+	D3DXVECTOR3 GetPos() const override { return m_CenterPos; }
+
 	D3DXVECTOR3 GetCenterPos() const override { return m_CenterPos; }
 
 	float GetRadius() const			 override { return m_Radius; }

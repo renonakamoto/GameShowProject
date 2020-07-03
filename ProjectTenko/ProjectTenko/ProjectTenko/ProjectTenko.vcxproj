@@ -36,11 +36,17 @@
     <ClCompile Include="Src\Engine\Window\Window.cpp" />
     <ClCompile Include="Src\ExternalFle\Csv\Csv.cpp" />
     <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\Manager\ConfigManager.cpp" />
     <ClCompile Include="Src\Manager\ObjectManager.cpp" />
     <ClCompile Include="Src\NavigationAI\MovingPathCreator.cpp" />
     <ClCompile Include="Src\NavigationAI\NavigationAI.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\Character.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Chase.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Move.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Patrol.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Turn.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Return.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyBase.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Ikaten\Ikaten.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Kabochaten\Kabochaten.cpp" />
@@ -76,10 +82,12 @@
     <ClCompile Include="Src\Scene\SceneManager.cpp" />
     <ClCompile Include="Src\Scene\TitleScene.cpp" />
     <ClCompile Include="Src\UI\ConfigUI\ConfigUI.cpp" />
+    <ClCompile Include="Src\UI\GameClearUI\GameClearUI.cpp" />
     <ClCompile Include="Src\UI\GameOverUI\GameOverUI.cpp" />
     <ClCompile Include="Src\UI\PauseUI\PauseUI.cpp" />
     <ClCompile Include="Src\UI\TitleUI\TitleUI.cpp" />
     <ClCompile Include="Src\Utility\3DHelper.cpp" />
+    <ClCompile Include="Src\Utility\SimpleCalculation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
@@ -104,12 +112,19 @@
     <ClInclude Include="Src\Engine\Texture\Texture.h" />
     <ClInclude Include="Src\Engine\Window\Window.h" />
     <ClInclude Include="Src\ExternalFle\Csv\Csv.h" />
+    <ClInclude Include="Src\Manager\ConfigManager.h" />
     <ClInclude Include="Src\Manager\ObjectManager.h" />
     <ClInclude Include="Src\NavigationAI\MovingPathCreater.h" />
     <ClInclude Include="Src\NavigationAI\MovingPathCreator.h" />
     <ClInclude Include="Src\NavigationAI\NavigationAI.h" />
     <ClInclude Include="Src\ObjectBase\Character\Character.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Chase.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Move.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Patrol.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Turn.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Return.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\State.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyBase.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Ikaten\Ikaten.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Kabochaten\Kabochaten.h" />
@@ -148,6 +163,7 @@
     <ClInclude Include="Src\Scene\SceneManager.h" />
     <ClInclude Include="Src\Scene\TitleScene.h" />
     <ClInclude Include="Src\UI\ConfigUI\ConfigUI.h" />
+    <ClInclude Include="Src\UI\GameClearUI\GameClearUI.h" />
     <ClInclude Include="Src\UI\GameOverUI\GameOverUI.h" />
     <ClInclude Include="Src\UI\GameUI\GameUI.h" />
     <ClInclude Include="Src\UI\PauseUI\PauseUI.h" />
@@ -155,6 +171,7 @@
     <ClInclude Include="Src\UI\UI.h" />
     <ClInclude Include="Src\Utility\2DHelper.h" />
     <ClInclude Include="Src\Utility\3DHelper.h" />
+    <ClInclude Include="Src\Utility\SimpleCalculation.h" />
     <ClInclude Include="Src\Utility\SimpleCollision.h" />
     <ClInclude Include="Src\Utility\SingletonTemplate.h" />
   </ItemGroup>
@@ -256,7 +273,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>

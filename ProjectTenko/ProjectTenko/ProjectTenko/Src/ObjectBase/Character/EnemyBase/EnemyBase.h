@@ -4,13 +4,7 @@
 #include "../Player/Player.h"
 #include "../Character.h"
 #include <vector>
-
-enum class EnemyState
-{
-	Patrol,
-	Chase,
-	Return,
-};
+#include "EnemyAI/State.h"
 
 class Enemybase : public Character
 {
@@ -22,16 +16,19 @@ public:
 
 	virtual ~Enemybase() {}
 
-protected:
 	virtual void Patrol(){}
+	virtual void Move() {}
+	virtual void Turn() {}
+
 	virtual void Chase(){}
 	virtual void Return(){}
 
-	virtual bool CanDetectPC() { return true; }
+	virtual bool CanDetectPC() { return false; }
 
-	EnemyState m_CurrentState;			//!< Œ»Ý‚Ìó‘Ô
+protected:
+	State* m_State;			//!< Œ»Ý‚Ìó‘Ô
 	std::vector<D3DXVECTOR3> m_PatrolRoute;
-	char m_NextRoute;
+	int m_NextRoute;
 
 	D3DXVECTOR3 m_MovingVector;
 

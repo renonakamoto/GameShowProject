@@ -1,13 +1,28 @@
 #include "SaplingBig.h"
 #include "../../../Collision/Shape/AABB.h"
+#include "../../../Utility/SimpleCalculation.h"
 
 SaplingBig::SaplingBig(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_):
 	MapObject(pos_, key_, mapObjcectList_)
 {	
+	m_Width  = 100.0f;
+	m_Height = 100.0f;
+	m_Depth  = 50.0f;
+
+
+	D3DXVECTOR3 scale;	// x = width // y = height // z = depth
 	int shape_num = 0;
 	for (const auto& itr : m_MapObjectDataList)
 	{
-		m_Shape.push_back(new AABBShape(itr.m_Width, itr.m_Height, itr.m_Depth));
+		scale.x = m_Width  * itr.m_Scale.x;
+		scale.y = m_Height * itr.m_Scale.y;
+		scale.z = m_Depth  * itr.m_Scale.z;
+
+		SimpleCalculation::D3DXVec3RotationX(&scale, itr.m_Rot.x);
+		SimpleCalculation::D3DXVec3RotationY(&scale, itr.m_Rot.y);
+		SimpleCalculation::D3DXVec3RotationZ(&scale, itr.m_Rot.z);
+
+		m_Shape.push_back(new AABBShape(scale.x, scale.y, scale.z));
 		m_Shape[shape_num]->Update(itr.m_Pos);
 		shape_num++;
 	}

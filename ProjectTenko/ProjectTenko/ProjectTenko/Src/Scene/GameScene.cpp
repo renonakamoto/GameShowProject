@@ -31,7 +31,7 @@ void GameScene::Load()
 
 DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 {
-	THE_FBXMANAGER->LoadFBXMesh("Player", "assets/models/player/tenko_sample02.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("Player", "assets/models/player/tenko01.fbx");
     return 0;
 }
 

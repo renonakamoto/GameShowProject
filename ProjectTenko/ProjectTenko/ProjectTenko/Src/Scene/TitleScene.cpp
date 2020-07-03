@@ -4,10 +4,15 @@
 #include "../Engine/Input/InputManager.h"
 #include "SceneManager.h"
 #include "../Engine/Texture/Texture.h"
+#include "../Engine/Font/Font.h"
+#include "../Camera/Camera.h"
+
+#include <sstream>
 
 TitleScene::TitleScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
 	m_TitleUI = new TitleUI();
+	m_Camera  = new Camera(D3DXVECTOR3(-1000, 250.0f, 4.0f), D3DXVECTOR3(-716.0f, 100.0f, 0.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), 0.0f);
 
     m_ThreadHandle = CreateThread(
         nullptr,                    // セキュリティ属性
@@ -24,6 +29,9 @@ TitleScene::~TitleScene()
 {
 	delete m_TitleUI;
 	m_TitleUI = nullptr;
+	
+	delete m_Camera;
+	m_Camera = nullptr;
 
 	THE_TEXTUREMANAGER->Release("assets/UI/title/title01.png");
 	THE_TEXTUREMANAGER->Release("assets/UI/title/title02.png");
@@ -121,6 +129,15 @@ void TitleScene::Draw()
 		}
 		return;
 	}
+
+	int mouse_x = THE_INPUTMANAGER->GetMousePos().x;
+	int mouse_y = THE_INPUTMANAGER->GetMousePos().y;
+
+	std::ostringstream oss;
+	oss << "X= " << mouse_x << " Y= " << mouse_y;
+	
+
+	THE_FONT->DrawFont(mouse_x, mouse_y, oss.str());
 
 	THE_OBJECTMANAGER->Draw();
 	if (m_TitleUI != nullptr) m_TitleUI->Draw();

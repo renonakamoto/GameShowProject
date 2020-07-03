@@ -2,14 +2,17 @@
 #include "../../Engine/Texture/Texture.h"
 #include "../../Utility/SimpleCollision.h"
 #include "../../Engine/Input/InputManager.h"
+#include "../../Manager/ConfigManager.h"
+#include "../../Utility/SimpleCalculation.h"
 
 ConfigUI::ConfigUI()
 {
 	m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_CONFIG]		= UI_PARAMETER(D3DXVECTOR2(0.f, 0.f),    1920.f, 1080.f, "assets/UI/config/config01.png");
 	m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_MOUSE_NORMAL]  = UI_PARAMETER(D3DXVECTOR2(680.f, 320.f), 256.f,  128.f,  "assets/UI/config/config02.png");
 	m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_MOUSE_REVERSE] = UI_PARAMETER(D3DXVECTOR2(1000.f, 320.f), 256.f,  128.f,  "assets/UI/config/config03.png");
+	m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_SELECTING_MOUSE_NORMAL]  = UI_PARAMETER(D3DXVECTOR2(680.f, 320.f), 256.f,  128.f,  "assets/UI/config/config05.png");
+	m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_SELECTING_MOUSE_REVERSE] = UI_PARAMETER(D3DXVECTOR2(1000.f, 320.f), 256.f,  128.f,  "assets/UI/config/config06.png");
 	m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_RETURN]		= UI_PARAMETER(D3DXVECTOR2(840.f, 930.f), 256.f, 128.f,  "assets/UI/config/config04.png");
-
 }
 
 ConfigUI::~ConfigUI()
@@ -18,13 +21,32 @@ ConfigUI::~ConfigUI()
 
 void ConfigUI::Update()
 {
+	if (THE_INPUTMANAGER->GetMouseDown(MouseButton::Left) == false) { return; }
+
+	if (IsSelect(CONFIG_UI_LIST::CONFIG_UI_MOUSE_NORMAL))
+	{
+		THE_CONFIGMANAGER->SetMouseFlip(false);
+	}
+	else if (IsSelect(CONFIG_UI_LIST::CONFIG_UI_MOUSE_REVERSE))
+	{
+		THE_CONFIGMANAGER->SetMouseFlip(true);
+	}
 }
 
 void ConfigUI::Draw()
 {
-	for (int i = 0; i < CONFIG_UI_LIST::CONFIG_UI_MAX; ++i)
+	THE_TEXTUREMANAGER->DrawTexture(m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_CONFIG].m_Pos.x, m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_CONFIG].m_Pos.y, m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_CONFIG].m_TexturHandleKey);
+	THE_TEXTUREMANAGER->DrawTexture(m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_RETURN].m_Pos.x, m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_RETURN].m_Pos.y, m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_RETURN].m_TexturHandleKey);
+
+	if (THE_CONFIGMANAGER->IsMouseFlip())
 	{
-		THE_TEXTUREMANAGER->DrawTexture(m_ConfigUIList[i].m_Pos.x, m_ConfigUIList[i].m_Pos.y, m_ConfigUIList[i].m_TexturHandleKey);
+		THE_TEXTUREMANAGER->DrawTexture(m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_SELECTING_MOUSE_REVERSE].m_Pos.x, m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_SELECTING_MOUSE_REVERSE].m_Pos.y, m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_SELECTING_MOUSE_REVERSE].m_TexturHandleKey);
+		THE_TEXTUREMANAGER->DrawTexture(m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_MOUSE_NORMAL].m_Pos.x, m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_MOUSE_NORMAL].m_Pos.y, m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_MOUSE_NORMAL].m_TexturHandleKey);
+	}
+	else
+	{
+		THE_TEXTUREMANAGER->DrawTexture(m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_SELECTING_MOUSE_NORMAL].m_Pos.x, m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_SELECTING_MOUSE_NORMAL].m_Pos.y, m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_SELECTING_MOUSE_NORMAL].m_TexturHandleKey);
+		THE_TEXTUREMANAGER->DrawTexture(m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_MOUSE_REVERSE].m_Pos.x, m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_MOUSE_REVERSE].m_Pos.y, m_ConfigUIList[CONFIG_UI_LIST::CONFIG_UI_MOUSE_REVERSE].m_TexturHandleKey);
 	}
 }
 

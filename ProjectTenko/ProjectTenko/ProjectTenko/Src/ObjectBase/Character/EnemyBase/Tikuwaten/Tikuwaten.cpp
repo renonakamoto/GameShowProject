@@ -14,20 +14,7 @@ Tikuwaten::Tikuwaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string ke
 
 void Tikuwaten::Update()
 {
-	switch (m_CurrentState)
-	{
-	case EnemyState::Patrol:
-		Patrol();
-		break;
-	case EnemyState::Chase:
-		Chase();
-		break;
-	case EnemyState::Return:
-		Return();
-		break;
-	default:
-		break;
-	}
+	m_State->Update(this);
 }
 
 void Tikuwaten::Draw()
@@ -43,7 +30,7 @@ void Tikuwaten::Patrol()
 {
 	if (CanDetectPC() == true)
 	{
-		m_CurrentState = EnemyState::Chase;
+		
 		return;
 	}
 
@@ -78,12 +65,53 @@ void Tikuwaten::Patrol()
 	}
 }
 
+void Tikuwaten::Move()
+{
+}
+
+void Tikuwaten::Turn()
+{
+}
+
 void Tikuwaten::Chase()
 {
-
+	if (CanDetectPC() == false)
+	{
+		m_CurrentState = EnemyState::Return;
+		return;
+	}
 }
 
 void Tikuwaten::Return()
 {
+	if (CanDetectPC() == true)
+	{
+		m_CurrentState = EnemyState::Chase;
+		return;
+	}
+
+	D3DXVECTOR3 vec = m_ReturnRoute.back();
+
+	if (vec == m_Pos)
+	{
+		// ŽŸ‚ÌˆÚ“®ƒxƒNƒgƒ‹‚ÌŽZo
+		m_ReturnRoute.pop_back();
+		vec = m_ReturnRoute.back();
+		double distance = sqrt(pow(vec.x - m_Pos.x, 2) + pow(vec.y - m_Pos.y, 2) + pow(vec.z - m_Pos.z, 2));
+		m_MovingVector = (vec - m_Pos) / distance; // Š|‚¯‚éˆÚ“®—Ê
+	}
+	else
+	{
+		D3DXVECTOR3 nextpos = m_Pos + m_MovingVector;
+		if (fabs(nextpos.x - m_Pos.x) > fabs(m_PatrolRoute[m_NextRoute].x - m_Pos.x))
+		{
+			m_Pos = m_PatrolRoute[m_NextRoute];
+		}
+		else
+		{
+			m_Pos = nextpos;
+		}
+
+	}
 
 }

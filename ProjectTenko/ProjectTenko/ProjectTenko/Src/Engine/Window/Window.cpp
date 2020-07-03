@@ -44,28 +44,19 @@ bool MyWindow::Window::Init(HINSTANCE hInstance_, const char* pName_, int width_
 		return false;
 	}
 
-	//! ウィンドウスタイル
-	DWORD dw_style = (WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME) | WS_VISIBLE;
-
-	RECT rect;
-	rect.left = 0;
-	rect.top  = 0;
-	rect.right  = m_Width;
-	rect.bottom = m_Height;
-
-	//! ウィンドウクラスのスタイルに合わせた適切なサイズを取得する
-	AdjustWindowRect(&rect, dw_style, false);
-
-	m_Width = rect.right - rect.left;
-	m_Height = rect.bottom - rect.top;
+	RECT rc = { 0,0,width_, height_ };
+	AdjustWindowRect(
+		&rc,
+		(WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME),
+		FALSE);
 
 	//! 登録したクラスのウィンドウクラスを生成
 	m_HWnd = CreateWindow(
 		TEXT("Tenko"),
 		TEXT("Tenko"),
-		(WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME) | WS_VISIBLE,
-		0,
-		0,
+		(WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME),
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
 		width_,
 		height_,
 		NULL,
@@ -78,6 +69,49 @@ bool MyWindow::Window::Init(HINSTANCE hInstance_, const char* pName_, int width_
 		MessageBox(NULL, TEXT("ウィンドウの作成に失敗しました"), NULL, MB_OK);
 		return false;
 	}
+	
+	RECT window_rect;
+	RECT client_rect;
+
+	// ウィンドウサイズとクライアント領域の取得
+	if (GetWindowRect(m_HWnd, &window_rect) == false
+		|| GetClientRect(m_HWnd, &client_rect) == false)
+	{
+		return false;
+	}
+
+	float horizon_magnification  = (float)GetSystemMetrics(SM_CXSCREEN)  / width_;
+	float vertical_magnification = (float)GetSystemMetrics(SM_CYSCREEN) / height_;
+
+	window_rect.left	/= horizon_magnification;
+	window_rect.right	/= horizon_magnification;
+	window_rect.bottom	/= horizon_magnification;
+	window_rect.top		/= horizon_magnification;
+
+	client_rect.left /= horizon_magnification;
+	client_rect.right /= horizon_magnification;
+	client_rect.bottom /= horizon_magnification;
+	client_rect.top /= horizon_magnification;
+
+	
+
+	// フレームサイズ算出
+	int frame_size_x = (window_rect.right - window_rect.left) - (client_rect.right - client_rect.left);
+	int frame_size_y = (window_rect.bottom - window_rect.top) - (client_rect.bottom - client_rect.top);
+	
+	// リサイズ用サイズの算出
+	int resize_width  = frame_size_x + width_;
+	int resize_height = frame_size_y + height_;
+
+	// ウィンドウサイズ更新
+	SetWindowPos(
+		m_HWnd,
+		NULL,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		resize_width,
+		resize_height,
+		SWP_NOMOVE);	
 
 	//! ウインドウの表示
 	ShowWindow(m_HWnd, SW_SHOW);

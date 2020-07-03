@@ -23,6 +23,8 @@ public:
 
 private:
 	void Patrol() override;
+	void Move() override;
+	void Turn() override;
 	void Chase() override;
 	void Return() override;
 

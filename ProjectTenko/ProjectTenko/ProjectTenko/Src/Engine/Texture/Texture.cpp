@@ -160,7 +160,7 @@ bool MyTextureManager::TextureManager::Load(std::string key_)
 	return false;
 }
 
-TextureData* MyTextureManager::TextureManager::GetTexturue(std::string key_)
+TextureData* MyTextureManager::TextureManager::GetTexture(std::string key_)
 {
 	// テクスチャを検索
 	std::map<std::string, TextureData*>::iterator itr = m_TextureMap.find(key_);
@@ -206,8 +206,10 @@ void MyTextureManager::TextureManager::AllRelease()
 
 void MyTextureManager::TextureManager::DrawTexture(float posX_, float posY_, std::string key_)
 {
-	float width  = m_TextureMap[key_]->width;
-	float height = m_TextureMap[key_]->height;
+	TextureData* tecture_data = GetTexture(key_);
+
+	float width  = tecture_data->width;
+	float height = tecture_data->height;
 
 	CustomVertex v[4] =
 	{
@@ -220,7 +222,7 @@ void MyTextureManager::TextureManager::DrawTexture(float posX_, float posY_, std
 	//THE_GRAPHICS->GetD3DDevice()->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 
 	THE_GRAPHICS->GetD3DDevice()->SetFVF(D3DFVF_XYZRHW | D3DFVF_TEX1);
-	THE_GRAPHICS->GetD3DDevice()->SetTexture(0, m_TextureMap[key_]->pTexture);
+	THE_GRAPHICS->GetD3DDevice()->SetTexture(0, tecture_data->pTexture);
 	THE_GRAPHICS->GetD3DDevice()->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, v, sizeof(CustomVertex));
 
 }
