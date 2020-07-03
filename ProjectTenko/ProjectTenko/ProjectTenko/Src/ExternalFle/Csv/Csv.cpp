@@ -37,7 +37,7 @@ bool Csv::Load(const std::string& fileName_, std::vector<std::vector<std::string
 	return true;
 }
 
-bool Csv::Create(const std::string& fileName_, std::vector<std::vector<std::string>>& table_, const char delimiter_)
+bool Csv::Create(const std::string& fileName_, std::vector<std::vector<std::string>>& table_)
 {
 	// ƒtƒ@ƒCƒ‹‚ğ¶¬
 	std::ofstream ofs(fileName_);
