@@ -2,12 +2,9 @@
 #define NAVIGATIONAI_H_
 
 #include "..//ExternalFle/Csv/Csv.h"
-
-struct EnemyRoute
-{
-	std::string Name;
-	std::vector<float> RouteList;
-};
+#include <string>
+#include <vector>
+#include <d3dx9.h>
 
 class Navigator
 {
@@ -27,7 +24,7 @@ public:
 	* エネミーに自身の巡回ルートを教えます
 	* @return ルートを与えられたらtrue、ルート提供に失敗したらfalse
 	*/
-	bool GetEnemyRoute(std::string Name_);
+	bool GetEnemyRoute(std::string name_, std::vector<D3DXVECTOR3>& route_);
 
 	/**
 	* @biref マップの移動可能個所の情報を与えます
@@ -39,8 +36,8 @@ private:
 	bool LoadResouces();
 
 private:
-	std::vector <EnemyRoute> m_EnemyRoute;
-
+	std::vector<std::vector<std::string>> m_Route;
+	std::vector<std::vector<std::string>> m_MovingPath;
 };
 
 #endif // !NAVIGATIONAI_H_
