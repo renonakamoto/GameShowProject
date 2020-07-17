@@ -2,6 +2,8 @@
 #include "../../../Manager/ObjectManager.h"
 #include "../../../Engine/Input/InputManager.h"
 #include "../../../Collision/Shape/AABB.h"
+#include "State/PlayerWait.h"
+//#include "../../../Manager/EffectManager.h"
 
 Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 	Character(pos_, key_)
@@ -15,29 +17,59 @@ Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 	m_Motion.AddMotion(PlayerMotionList::Squat_Scared,	651, 710);
 	m_Motion.AddMotion(PlayerMotionList::Scared,		711, 725);
 
-	m_CrrentMotion = PlayerMotionList::Wait;
-
 	m_IsSquat = false;
+	m_IsMove  = false;
 
-	m_WalkSpeed = 5.5f;
-	m_SquatWalkSpeed = 1.0f;
-	m_OldPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_WalkSpeed			= 5.5f;
+	m_SquatWalkSpeed	= 1.0f;
+	m_CenterPos			= m_Pos;
 	m_Shape.push_back(new AABBShape(4.0f, 20.f, 4.0f));
+
+	m_State			= new PlayerWait();
+	m_PlayerEffect	= new PlayerEffect();
+}
+
+Player::~Player()
+{
+	delete m_State;
+	delete m_PlayerEffect;
 }
 
 void Player::Update()
 {
-	m_IsSquat ? m_CrrentMotion = PlayerMotionList::Squat_Wait : m_CrrentMotion = PlayerMotionList::Wait;
-
-	Camera* ref_camera = THE_OBJECTMANAGER->GetCameraInstance();
-	State();
+	if (m_RefCamera == nullptr)
+	{
+		m_RefCamera = THE_OBJECTMANAGER->GetCameraInstance();
+	}
 	Move();
-	ref_camera->SetCamera(m_Pos, 30);
+
+	m_State->Update(this);
+
+	if (m_IsSquat == true)
+	{
+		if (m_CenterPos.y >= -10.0f)m_CenterPos.y -= 10.0f / 60.0f;
+	}
+	else
+	{
+		if (m_CenterPos.y <= 0.0f)m_CenterPos.y += 10.0f / 60.0f;
+	}
+
+	// Y情報は含めたくない
+	m_CenterPos.x = m_Pos.x;
+	m_CenterPos.z = m_Pos.z;
+	m_RefCamera->SetCamera(m_CenterPos, 30);
+
+
+	if (   m_State->GetType() == PlayerMotionList::Squat
+		|| m_State->GetType() == PlayerMotionList::Squat_Wait
+		|| m_State->GetType() == PlayerMotionList::Squat_Walk)
+	{
+		m_PlayerEffect->Update(PlayerEffectType::PlayerSneak);
+	}
 }
 
 void Player::Draw()
-{
-	Motion();
+{	
 
 	D3DXMATRIX mat_rot, mat_trans;
 	D3DXMatrixIdentity(&mat_rot);
@@ -49,13 +81,21 @@ void Player::Draw()
 
 	m_Mat_World = mat_rot * mat_trans;
 	THE_FBXMANAGER->Draw(m_FbxKey, m_Mat_World);
+
+
+	if (   m_State->GetType() == PlayerMotionList::Squat
+		|| m_State->GetType() == PlayerMotionList::Squat_Wait
+		|| m_State->GetType() == PlayerMotionList::Squat_Walk)
+	{
+		m_PlayerEffect->Draw(PlayerEffectType::PlayerSneak);
+	}
+
 }
 
 void Player::Move()
 {
-	Camera*     ref_camera		= THE_OBJECTMANAGER->GetCameraInstance();
-	D3DXVECTOR3 camera_forward  = ref_camera->GetForwardVec();
-	D3DXVECTOR3 camera_left		= ref_camera->GetLeftVec();
+	D3DXVECTOR3 camera_forward  = m_RefCamera->GetForwardVec();
+	D3DXVECTOR3 camera_left		= m_RefCamera->GetLeftVec();
 	D3DXVECTOR3 result_move_vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	float	    speed			= m_WalkSpeed;
 
@@ -65,6 +105,7 @@ void Player::Move()
 		result_move_vec.x += camera_forward.x;
 		result_move_vec.z += camera_forward.z;
 	}
+	
 	else if (THE_INPUTMANAGER->GetKey(KeyInfo::Key_S) == true)
 	{
 		result_move_vec.x += -camera_forward.x;
@@ -85,48 +126,45 @@ void Player::Move()
 
 	if (result_move_vec.x != 0.0f || result_move_vec.z != 0.0f)
 	{
-		m_OldPos = m_Pos;
+		// 現在の座標を保存する
+		D3DXVECTOR3 old_pos = m_Pos;
 
+		// ベクトルを正規化
 		D3DXVec3Normalize(&result_move_vec, &result_move_vec);
 
+		// 正規化したベクトルを加算する
 		m_Pos.x += result_move_vec.x * speed;
 		m_Pos.z += result_move_vec.z * speed;
 
-		m_Shape[0]->Update(m_Pos);
-
-		if (THE_OBJECTMANAGER->HitPlayerAndMapObject() == true) {
-			m_Pos = m_OldPos;
+		// 移動したのでコリジョンにも変更をかける
+		for (const auto& shape : m_Shape)
+		{
+			shape->Update(m_Pos);
 		}
 
+		// 移動後障害物に当たった場合戻す
+		if (THE_OBJECTMANAGER->HitPlayerAndMapObject() == true) {
+			m_Pos = old_pos;
+		}
+
+		// 移動ベクトルからプレイヤーの角度を算出
 		m_Angle = atan2f(result_move_vec.x, result_move_vec.z);
 
-		m_IsSquat ? m_CrrentMotion = PlayerMotionList::Squat_Walk : m_CrrentMotion = PlayerMotionList::Walk;
-	}
+		    // 動いた
+		    m_IsMove = true;
+		    // 動いてない
+	}else { m_IsMove = false; }
 }
 
-void Player::Motion()
+void Player::Motion(PlayerMotionList motionId_, bool isLoop_, bool* isEnd_)
 {
-	if (m_CrrentMotion == PlayerMotionList::Squat)
-	{
-		m_Motion.Motion(m_CrrentMotion, m_FbxKey, false, nullptr);
-	}
-	else {
-		m_Motion.Motion(m_CrrentMotion, m_FbxKey, true, nullptr);
-	}
+	m_Motion.Motion(motionId_, m_FbxKey, isLoop_, isEnd_);
 }
 
-void Player::State()
+void Player::ChangeState(PlayerStateBase* state_)
 {
-	Camera* ref_camera = THE_OBJECTMANAGER->GetCameraInstance();
+	if (state_ == nullptr) return;
 
-	if (THE_INPUTMANAGER->GetKeyDown(KeyInfo::Key_C) == true)
-	{
-		m_IsSquat = !m_IsSquat;
-		
-	}
-
-	if (m_IsSquat == true)
-	{
-		m_CrrentMotion = PlayerMotionList::Squat;
-	}
+	m_State = state_;
+	m_State->Init(this);
 }

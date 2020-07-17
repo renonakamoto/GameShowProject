@@ -28,7 +28,14 @@ public:
 		m_Angle (0.f)
 	{}
 
-	virtual ~ObjectBase() {
+	virtual ~ObjectBase() 
+	{
+		for(int i = 0; i < m_Shape.size(); i++)
+		{ 
+			delete m_Shape[i];
+		}
+
+		m_Shape.clear();
 	}
 
 	virtual void Update() {}

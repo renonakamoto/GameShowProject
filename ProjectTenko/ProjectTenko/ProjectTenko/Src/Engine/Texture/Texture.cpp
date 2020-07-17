@@ -206,7 +206,11 @@ void MyTextureManager::TextureManager::AllRelease()
 
 void MyTextureManager::TextureManager::DrawTexture(float posX_, float posY_, std::string key_)
 {
+	if (key_ == "") return;
+
 	TextureData* tecture_data = GetTexture(key_);
+
+	if (tecture_data == nullptr) return;
 
 	float width  = tecture_data->width;
 	float height = tecture_data->height;

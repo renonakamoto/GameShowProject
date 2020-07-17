@@ -8,4 +8,5 @@ GameConfigManager::GameConfigManager()
 
 GameConfigManager::~GameConfigManager()
 {
+	
 }

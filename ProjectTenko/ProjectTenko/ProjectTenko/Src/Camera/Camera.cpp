@@ -96,13 +96,13 @@ void Camera::Rotate()
 	// クライアントの真ん中からマウス座標へのベクトルを算出
 	if (THE_CONFIGMANAGER->IsMouseFlip())
 	{
-		m_Yaw   -= (mouse_x - half_gclient_width) / 1920.0f * 20.0f;
-		m_Pitch -= (mouse_y - 432.0f) / 1080.0f * 20.0f;
+		m_Yaw   += (mouse_x - half_gclient_width) / 1920.0f * 20.0f;
+		m_Pitch += (mouse_y - 432.0f) / 1080.0f * 20.0f;
 	}
 	else
 	{
-		m_Yaw   += (mouse_x - half_gclient_width) / 1920.0f * 20.0f;
-		m_Pitch += (mouse_y - 432.0f) / 1080.0f * 20.0f;
+		m_Yaw   -= (mouse_x - half_gclient_width) / 1920.0f * 20.0f;
+		m_Pitch -= (mouse_y - 432.0f) / 1080.0f * 20.0f;
 	}
 
 
@@ -187,6 +187,7 @@ void Camera::SetProjectionMatrix()
 	//! アスペクト比を算出
 	D3DVIEWPORT9 vp;
 	THE_GRAPHICS->GetD3DDevice()->GetViewport(&vp);
+	float a = (float)vp.Width / (float)vp.Height;
 	float aspect = 1.f;
 
 	//! 視錐台の作成

@@ -40,7 +40,7 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 		return -3;
 	}
 
-	if (THE_INPUTMANAGER->Init(hInstance_, THE_WINDOW->GetWindowHandle()))
+	if (THE_INPUTMANAGER->Init(hInstance_, THE_WINDOW->GetWindowHandle()) == false)
 	{
 		return -4;
 	}
@@ -88,12 +88,13 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 		}
 	}
 
+	
 	Window::Destory();
 	DirectGraphics::Destory();
-	InputMA::Destory();
 	FbxMeshManager::Destory();
 	FontDevice::Destory();
 	ObjectManager::Destory();
 	TextureManager::Destory();
+	InputMA::Destory();
 	return 1;
 }

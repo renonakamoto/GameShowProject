@@ -16,12 +16,12 @@ void MyDirectGraphics::DirectGraphics::StartDraw()
 		D3DCOLOR_XRGB(0, 0, 255),
 		1.0f,
 		0);
-
+	
 	m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
 	m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
-	m_pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+	//m_pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 
 	m_pD3DDevice->BeginScene();
 }
