@@ -49,17 +49,19 @@ bool InputManager::Init(HINSTANCE hInstance_, HWND hWindow_)
 		return false;
 	}
 
-	if (CreateKeyDevice(hWindow_) == false)
-	{
-		return false;
-	}
+	bool key = false;
+	bool pad = false;
+
+	key = CreateKeyDevice(hWindow_);
 
 	if (CreateMouseDevice(hWindow_) == false)
 	{
 		return false;
 	}
 
-	if (CreateGamePadDevice(hWindow_) == false)
+	pad = CreateGamePadDevice(hWindow_);
+
+	if (key == false && pad == false)
 	{
 		return false;
 	}
