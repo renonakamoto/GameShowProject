@@ -28,41 +28,41 @@ void Tikuwaten::Draw()
 
 void Tikuwaten::Patrol()
 {
-	if (CanDetectPC() == true)
-	{
-		
-		return;
-	}
+	//if (CanDetectPC() == true)
+	//{
+	//	
+	//	return;
+	//}
 
-	// 目的地に到達した場合の処理
-	if (m_Pos == m_PatrolRoute[m_NextRoute])
-	{
-		if (m_PatrolRoute.size() == m_NextRoute + 1)
-		{
-			m_NextRoute = 0;
-		}
-		else
-		{
-			m_NextRoute += 1;
-		}
+	//// 目的地に到達した場合の処理
+	//if (m_Pos == m_PatrolRoute[m_NextRoute])
+	//{
+	//	if (m_PatrolRoute.size() == m_NextRoute + 1)
+	//	{
+	//		m_NextRoute = 0;
+	//	}
+	//	else
+	//	{
+	//		m_NextRoute += 1;
+	//	}
 
-		// 次の移動ベクトルの算出
-		D3DXVECTOR3 vec = m_PatrolRoute[m_NextRoute];
-		double distance = sqrt(pow(vec.x - m_Pos.x, 2) + pow(vec.y - m_Pos.y, 2) + pow(vec.z - m_Pos.z, 2));
-		m_MovingVector = (vec - m_Pos) / distance; // 掛ける移動量
-	}
-	else
-	{
-		D3DXVECTOR3 nextpos = m_Pos + m_MovingVector;
-		if (fabs(nextpos.x - m_Pos.x) > fabs(m_PatrolRoute[m_NextRoute].x - m_Pos.x))
-		{
-			m_Pos = m_PatrolRoute[m_NextRoute];
-		}
-		else
-		{
-			m_Pos = nextpos;
-		}
-	}
+	//	// 次の移動ベクトルの算出
+	//	D3DXVECTOR3 vec = m_PatrolRoute[m_NextRoute];
+	//	double distance = sqrt(pow(vec.x - m_Pos.x, 2) + pow(vec.y - m_Pos.y, 2) + pow(vec.z - m_Pos.z, 2));
+	//	m_MovingVector = (vec - m_Pos) / distance; // 掛ける移動量
+	//}
+	//else
+	//{
+	//	D3DXVECTOR3 nextpos = m_Pos + m_MovingVector;
+	//	if (fabs(nextpos.x - m_Pos.x) > fabs(m_PatrolRoute[m_NextRoute].x - m_Pos.x))
+	//	{
+	//		m_Pos = m_PatrolRoute[m_NextRoute];
+	//	}
+	//	else
+	//	{
+	//		m_Pos = nextpos;
+	//	}
+	//}
 }
 
 void Tikuwaten::Move()
@@ -77,7 +77,7 @@ void Tikuwaten::Chase()
 {
 	if (CanDetectPC() == false)
 	{
-		m_CurrentState = EnemyState::Return;
+		// m_CurrentState = EnemyState::Return;
 		return;
 	}
 }
@@ -86,7 +86,7 @@ void Tikuwaten::Return()
 {
 	if (CanDetectPC() == true)
 	{
-		m_CurrentState = EnemyState::Chase;
+		// m_CurrentState = EnemyState::Chase;
 		return;
 	}
 
@@ -103,14 +103,14 @@ void Tikuwaten::Return()
 	else
 	{
 		D3DXVECTOR3 nextpos = m_Pos + m_MovingVector;
-		if (fabs(nextpos.x - m_Pos.x) > fabs(m_PatrolRoute[m_NextRoute].x - m_Pos.x))
-		{
-			m_Pos = m_PatrolRoute[m_NextRoute];
-		}
-		else
-		{
-			m_Pos = nextpos;
-		}
+		//if (fabs(nextpos.x - m_Pos.x) > fabs(m_PatrolRoute[m_NextRoute].x - m_Pos.x))
+		//{
+		//	m_Pos = m_PatrolRoute[m_NextRoute];
+		//}
+		//else
+		//{
+		//	m_Pos = nextpos;
+		//}
 
 	}
 

@@ -3,6 +3,8 @@
 
 #include "..//EnemyBase.h"
 
+class Enemybase;
+
 class State
 {
 public:
@@ -16,8 +18,7 @@ public:
 	*/
 	virtual ~State() { }
 
-	virtual void Init(Enemybase* enemy_);
-	virtual void Update(Enemybase* enemy_);
+	virtual void Update(Enemybase* enemy_) = 0;
 };
 
 #endif // !STATE_H_
