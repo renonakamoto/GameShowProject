@@ -58,10 +58,11 @@ public:
 	*/
 	bool HitRayAndObject(const D3DXVECTOR3& origin_, const D3DXVECTOR3& delta_);
 
-
-
 	Camera* GetCameraInstance()const {
-		if (!m_Camera) { return nullptr; }
+		if (m_Camera == nullptr)
+		{
+			new Camera();
+		}
 		return m_Camera;
 	}
 
@@ -73,6 +74,13 @@ private:
 
 	/*
 		当たり判定を行うオブジェクトを算出する関数
+	*/
+
+	/**
+	* @brief レイとオブジェクトとの当たり判定
+	* @param[in] pOut_	     レイの原点
+	* @param[in] basePoint_  レイの向きと大きさ(ベクトル)
+	* @return bool 成功:true 失敗:false
 	*/
 	void JudgementCollition(std::vector<Shape*>* pOut_, const D3DXVECTOR3& basePoint_, float length);
 	

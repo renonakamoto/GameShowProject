@@ -21,7 +21,6 @@
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Sitaketen\Sitaketen.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Tikuwaten\Tikuwaten.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\Player\Player.cpp" />
-    <ClCompile Include="Src\ObjectBase\EffectBase\EffectBase.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Barrel\Barrel.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Floor\Floor.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Gate\Gate.cpp" />
@@ -85,6 +84,15 @@
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Chase.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Return.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Move.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\Player\PlayerEffect.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerWait.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerSprint.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerSquat.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerSquatWait.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerStandUp.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerSquatWalk.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerSquatScared.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerScared.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
@@ -106,7 +114,6 @@
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Sitaketen\Sitaketen.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Tikuwaten\Tikuwaten.h" />
     <ClInclude Include="Src\ObjectBase\Character\Player\Player.h" />
-    <ClInclude Include="Src\ObjectBase\EffectBase\EffectBase.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Barrel\Barrel.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Floor\Floor.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Gate\Gate.h" />
@@ -192,6 +199,16 @@
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Turn.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Chase.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Return.h" />
+    <ClInclude Include="Src\ObjectBase\Character\Player\PlayerEffect.h" />
+    <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerStateBase.h" />
+    <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerWait.h" />
+    <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerSprint.h" />
+    <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerSquat.h" />
+    <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerSquatWait.h" />
+    <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerStandUp.h" />
+    <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerSquatWalk.h" />
+    <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerSquatScared.h" />
+    <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerScared.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

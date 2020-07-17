@@ -19,8 +19,7 @@
 namespace MyDirectGraphics
 {
 	/**
-	* @brief 簡単なクラスの説明
-	* @details 詳細なクラスの説明
+	* @brief   ダイレクトグラフィックスを扱うクラス
 	*/
 	class DirectGraphics
 	{

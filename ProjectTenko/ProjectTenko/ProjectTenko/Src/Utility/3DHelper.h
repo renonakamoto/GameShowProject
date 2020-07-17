@@ -48,9 +48,9 @@ struct MeshData
 	UINT					indexNum;		// インデックス数
 	UINT					materialIndex;	// マテリアル番号
 
-	MeshVertex* pVertices;		// 頂点データ
+	MeshVertex*				pVertices;		// 頂点データ
 	IDirect3DVertexBuffer9* pVertexBuffer;	// 頂点バッファ
-	IDirect3DIndexBuffer9* pIndexBuffer;	// インデックスバッファ
+	IDirect3DIndexBuffer9*	pIndexBuffer;	// インデックスバッファ
 };
 
 static const int BONE_MAX = 256;

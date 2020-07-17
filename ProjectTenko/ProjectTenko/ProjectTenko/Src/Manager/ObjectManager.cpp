@@ -55,8 +55,11 @@ Objectmanager::Objectmanager()
 	m_Object.push_back(new Mountain(D3DXVECTOR3(0.0f, -400.0f, 0.0f), "Mountain", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Mountain)));
 	m_Object.push_back(new Skydome(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "SkyDome", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Skydome)));
 
+	if (m_Camera == nullptr)
+	{
+		m_Camera = new Camera();
+	}
 
-	m_Camera = new Camera();
 }
 
 Objectmanager::~Objectmanager()
