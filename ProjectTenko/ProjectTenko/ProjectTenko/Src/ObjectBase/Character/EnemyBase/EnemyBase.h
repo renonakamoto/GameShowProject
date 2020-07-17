@@ -6,6 +6,8 @@
 #include <vector>
 #include "EnemyAI/State.h"
 
+class State;
+
 class Enemybase : public Character
 {
 public:
@@ -23,13 +25,15 @@ public:
 	virtual void Chase(){}
 	virtual void Return(){}
 
+	void DecideReturnPoint();
+
 	virtual bool CanDetectPC() { return false; }
 
 protected:
 	State* m_State;			//!< Œ»Ý‚Ìó‘Ô
 	std::vector<D3DXVECTOR3> m_PatrolRoute;
-	int m_NextRoute;
-
+	D3DXVECTOR3 m_NextRoute;
+	float m_NextAngle;
 	D3DXVECTOR3 m_MovingVector;
 
 	std::vector<D3DXVECTOR3> m_ReturnRoute;
