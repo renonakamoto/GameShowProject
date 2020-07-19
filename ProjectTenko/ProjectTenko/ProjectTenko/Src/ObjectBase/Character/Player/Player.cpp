@@ -3,19 +3,22 @@
 #include "../../../Engine/Input/InputManager.h"
 #include "../../../Collision/Shape/AABB.h"
 #include "State/PlayerWait.h"
-//#include "../../../Manager/EffectManager.h"
 
 Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 	Character(pos_, key_)
 {
-	m_Motion.AddMotion(PlayerMotionList::Wait,			1,	 200);
-	m_Motion.AddMotion(PlayerMotionList::Walk,			211, 270);
-	m_Motion.AddMotion(PlayerMotionList::Squat,			281, 340);
-	m_Motion.AddMotion(PlayerMotionList::Squat_Wait,	341, 460);
-	m_Motion.AddMotion(PlayerMotionList::Stand_Up,		461, 520);
-	m_Motion.AddMotion(PlayerMotionList::Squat_Walk,	521, 640);
-	m_Motion.AddMotion(PlayerMotionList::Squat_Scared,	651, 710);
-	m_Motion.AddMotion(PlayerMotionList::Scared,		711, 725);
+	m_Motion		= std::make_unique<FbxMotion<PlayerMotionList>>();
+	m_State			= std::make_unique<PlayerWait>();
+	m_PlayerEffect  = std::make_unique<PlayerEffect>();
+
+	m_Motion->AddMotion(PlayerMotionList::Wait,			1,	 200);
+	m_Motion->AddMotion(PlayerMotionList::Walk,			211, 270);
+	m_Motion->AddMotion(PlayerMotionList::Squat,		281, 340);
+	m_Motion->AddMotion(PlayerMotionList::Squat_Wait,	341, 460);
+	m_Motion->AddMotion(PlayerMotionList::Stand_Up,		461, 520);
+	m_Motion->AddMotion(PlayerMotionList::Squat_Walk,	521, 640);
+	m_Motion->AddMotion(PlayerMotionList::Squat_Scared,	651, 710);
+	m_Motion->AddMotion(PlayerMotionList::Scared,		711, 725);
 
 	m_IsSquat = false;
 	m_IsMove  = false;
@@ -25,14 +28,13 @@ Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 	m_CenterPos			= m_Pos;
 	m_Shape.push_back(new AABBShape(4.0f, 20.f, 4.0f));
 
-	m_State			= new PlayerWait();
-	m_PlayerEffect	= new PlayerEffect();
 }
 
 Player::~Player()
 {
-	delete m_State;
-	delete m_PlayerEffect;
+	m_Motion.reset();
+	m_State.reset();
+	m_PlayerEffect.reset();
 }
 
 void Player::Update()
@@ -41,6 +43,7 @@ void Player::Update()
 	{
 		m_RefCamera = THE_OBJECTMANAGER->GetCameraInstance();
 	}
+
 	Move();
 
 	m_State->Update(this);
@@ -59,10 +62,8 @@ void Player::Update()
 	m_CenterPos.z = m_Pos.z;
 	m_RefCamera->SetCamera(m_CenterPos, 30);
 
-
-	if (   m_State->GetType() == PlayerMotionList::Squat
-		|| m_State->GetType() == PlayerMotionList::Squat_Wait
-		|| m_State->GetType() == PlayerMotionList::Squat_Walk)
+	// しゃがんでいたら
+	if (m_IsSquat)
 	{
 		m_PlayerEffect->Update(PlayerEffectType::PlayerSneak);
 	}
@@ -108,19 +109,19 @@ void Player::Move()
 	
 	else if (THE_INPUTMANAGER->GetKey(KeyInfo::Key_S) == true)
 	{
-		result_move_vec.x += -camera_forward.x;
-		result_move_vec.z += -camera_forward.z;
+		result_move_vec.x -= camera_forward.x;
+		result_move_vec.z -= camera_forward.z;
 	}
 
 	if (THE_INPUTMANAGER->GetKey(KeyInfo::Key_A) == true)
 	{
-		result_move_vec.x += -camera_left.x;
+		result_move_vec.x -= camera_left.x;
 		result_move_vec.z += camera_left.z;
 	}
 	else if (THE_INPUTMANAGER->GetKey(KeyInfo::Key_D) == true)
 	{
 		result_move_vec.x += camera_left.x;
-		result_move_vec.z += -camera_left.z;
+		result_move_vec.z -= camera_left.z;
 	}
 
 
@@ -150,21 +151,21 @@ void Player::Move()
 		// 移動ベクトルからプレイヤーの角度を算出
 		m_Angle = atan2f(result_move_vec.x, result_move_vec.z);
 
-		    // 動いた
+		    // 動いている
 		    m_IsMove = true;
-		    // 動いてない
+		    // 動いていない
 	}else { m_IsMove = false; }
 }
 
 void Player::Motion(PlayerMotionList motionId_, bool isLoop_, bool* isEnd_)
 {
-	m_Motion.Motion(motionId_, m_FbxKey, isLoop_, isEnd_);
+	m_Motion->Motion(motionId_, m_FbxKey, isLoop_, isEnd_);
 }
 
 void Player::ChangeState(PlayerStateBase* state_)
 {
 	if (state_ == nullptr) return;
 
-	m_State = state_;
+	m_State.reset(state_);
 	m_State->Init(this);
 }

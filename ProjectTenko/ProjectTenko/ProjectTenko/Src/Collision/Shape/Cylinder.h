@@ -4,6 +4,9 @@
 #include "Shape.h"
 #include <d3dx9.h>
 
+/**
+* @brief ‰~’ŒƒNƒ‰ƒX
+*/
 class CylinderShape : public Shape
 {
 public:
@@ -36,6 +39,5 @@ private:
 	float       m_Height;		// ‚‚³
 
 };
-
 
 #endif

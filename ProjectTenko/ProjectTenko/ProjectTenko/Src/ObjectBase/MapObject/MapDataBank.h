@@ -8,57 +8,80 @@ class MapObjectData;
 
 namespace MapData
 {
-	enum MapObjectList
+	/**
+	* @brief   マップオブジェクトの種類
+	*/
+	enum class MapObjectList
 	{
-		Barrel,
-		Floor,
-		Gate,
-		Merrygoland,
-		Mountain,
-		Skydome,
-		Tent,
-		Vending_Machine,
-		Wall,
-		Tree,
-		Sapling_Small,
-		Sapling_Big,
-		Ferris_Wheel,
-		Shrimp_Statue,
+		Barrel,				//! 樽
+		Floor,				//! 床
+		Gate,				//! ゲート
+		Merrygoland,		//! メリーゴーランド
+		Mountain,			//! 山
+		Skydome,			//!	スカイドーム
+		Tent,				//!	テント
+		Vending_Machine,	//!	自販機
+		Wall,				//!	壁
+		Tree,				//!	木
+		Sapling_Small,		//!	苗木(小)
+		Sapling_Big,		//! 苗木(大)
+		Ferris_Wheel,		//!	観覧車
+		Shrimp_Statue,		//!	海老天の像
 
-		MAXMapObject,
+		MaxMapObject,		//! 種類の数
 	};
 
-	enum MapObjectDataList
+	/**
+	* @brief   マップオブジェクトのデータリスト
+	*/
+	enum class MapObjectDataList
 	{
-		ObjectName,
+		ObjectName,	//! オブジェクトの名前
 
-		PosX,
-		PosY,
-		PosZ,
+		PosX,		//! X座標
+		PosY,		//! Y座標
+		PosZ,		//! Z座標
 
-		ScalX,
-		ScalY,
-		ScalZ,
+		ScalX,		//! Xスケール
+		ScalY,		//!	Yスケール
+		ScalZ,		//!	Zスケール
 
-		RotX,
-		RotY,
-		RotZ,
+		RotX,		//!	X軸回転
+		RotY,		//!	Y軸回転
+		RotZ,		//!	Z軸回転
 
-		Width,
-		Height,
-		Depth,
+		Width,		//!	横幅
+		Height,		//!	縦幅
+		Depth,		//!	奥行き
 	};
 }
 
+/**
+* @brief   マップオブジェクトのデータを扱うクラス
+* @details マップオブジェクトのデータをCSVから読み込み変換する
+*/
 class MapDataBank
 {
 public:
+	/**
+	* @brief Csvからマップデータを読み込む
+	* @return bool 成功:true 失敗:false
+	*/
 	bool Load();
 
-	std::vector<MapObjectData>* GetMapObjectData(MapData::MapObjectList objectId_);
+	/**
+	* @brief マップのデータを返す関数
+	* @param[in] objectId_ オブジェクトの種類
+	* @return std::vector<MapObjectData>* マップオブジェクトデータ
+	*/
+	std::vector<MapObjectData>* GetMapObjectData(MapData::MapObjectList objectId_)
+	{
+		return &m_MapObjectDataList[static_cast<int>(objectId_)];
+	}
 
 private:
-	std::vector<MapObjectData> m_MapObjectDataList[MapData::MAXMapObject];
+	//!	外部から読み込んだマップオブジェクトのデータを保存する変数
+	std::vector<MapObjectData> m_MapObjectDataList[static_cast<int>(MapData::MapObjectList::MaxMapObject)];
 
 };
 

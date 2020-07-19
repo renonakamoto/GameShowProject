@@ -58,7 +58,6 @@
     <ClCompile Include="Src\Scene\ClearScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Engine\Fbx\FbxMotion.cpp" />
     <ClCompile Include="Src\Collision\Collision.cpp" />
     <ClCompile Include="Src\Engine\Font\Font.cpp" />
     <ClCompile Include="Src\UI\TitleUI\TitleUI.cpp" />
@@ -166,7 +165,6 @@
     <ClInclude Include="Src\Collision\Shape\AABB.h" />
     <ClInclude Include="Src\Collision\Shape\Cylinder.h" />
     <ClInclude Include="Src\Collision\Shape\Shape.h" />
-    <ClInclude Include="Src\Collision\Shape\Point.h" />
     <ClInclude Include="Src\Collision\Shape\Rect.h" />
     <ClInclude Include="Src\Collision\FlexibleCollision.h" />
     <ClInclude Include="Src\Engine\Font\Font.h" />

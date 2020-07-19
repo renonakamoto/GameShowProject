@@ -3,9 +3,9 @@
 #include <string.h>
 
 
-FBXMeshData FbxLoader::LoadFBXMesh(const char* pFileName_)
+FBXMeshData* FbxLoader::LoadFBXMesh(const char* pFileName_)
 {
-	FBXMeshData fbxMeshData;
+	FBXMeshData* fbxMeshData = new FBXMeshData;
 	ZeroMemory(&fbxMeshData, sizeof(fbxMeshData));
 
 	strcpy_s(m_RootPath, pFileName_);
@@ -42,13 +42,13 @@ FBXMeshData FbxLoader::LoadFBXMesh(const char* pFileName_)
 	MaterialData* pMaterialData = (MaterialData*)malloc(materialNum * sizeof(MaterialData));
 	ZeroMemory(pMaterialData, materialNum * sizeof(MaterialData));
 
-	D3DXMatrixIdentity(&fbxMeshData.Model.world);
-	fbxMeshData.Model.meshNum = meshNum;
-	fbxMeshData.Model.pMesh = pMeshData;
-	fbxMeshData.Model.materialNum = materialNum;
-	fbxMeshData.Model.pMaterial = pMaterialData;
-	fbxMeshData.Model.boneNum = 0;
-	ZeroMemory(fbxMeshData.Model.bone, sizeof(fbxMeshData.Model.bone));
+	D3DXMatrixIdentity(&fbxMeshData->Model.world);
+	fbxMeshData->Model.meshNum = meshNum;
+	fbxMeshData->Model.pMesh = pMeshData;
+	fbxMeshData->Model.materialNum = materialNum;
+	fbxMeshData->Model.pMaterial = pMaterialData;
+	fbxMeshData->Model.boneNum = 0;
+	ZeroMemory(fbxMeshData->Model.bone, sizeof(fbxMeshData->Model.bone));
 
 	//	モーション情報取得
 	FbxArray<FbxString*> names;
@@ -63,10 +63,10 @@ FBXMeshData FbxLoader::LoadFBXMesh(const char* pFileName_)
 		FbxLongLong fps60 = FbxTime::GetOneFrameValue(FbxTime::eFrames60);
 		StartFrame = (int)(start / fps60);
 
-		fbxMeshData.Model.pMotion = new std::map<std::string, Motion>();
-		(*fbxMeshData.Model.pMotion)["default"].numFrame = (int)((stop - start) / fps60);
+		fbxMeshData->Model.pMotion = new std::map<std::string, Motion>();
+		(*fbxMeshData->Model.pMotion)["default"].numFrame = (int)((stop - start) / fps60);
 	}
-	fbxMeshData.Model.startFrame = StartFrame;
+	fbxMeshData->Model.startFrame = StartFrame;
 
 	// メッシュ単位で展開していく
 	for (int i = 0; i < meshNum; i++)
@@ -75,7 +75,7 @@ FBXMeshData FbxLoader::LoadFBXMesh(const char* pFileName_)
 
 		LoadMesh(&pMeshData[i], pMesh);
 		LoadMaterial(&pMaterialData[i], pMesh);
-		LoadBone(&fbxMeshData.Model, &pMeshData[i], pMesh);
+		LoadBone(&fbxMeshData->Model, &pMeshData[i], pMesh);
 		pMeshData[i].materialIndex = i;
 	}
 
@@ -84,7 +84,7 @@ FBXMeshData FbxLoader::LoadFBXMesh(const char* pFileName_)
 	SAFE_DESTROY(pManager);
 
 
-	Play(&fbxMeshData, "default");
+	Play(fbxMeshData, "default");
 
 	return fbxMeshData;
 }

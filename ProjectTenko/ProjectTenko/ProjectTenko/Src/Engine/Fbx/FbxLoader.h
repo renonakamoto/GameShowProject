@@ -5,13 +5,15 @@
 #include <fbxsdk.h>
 #include <string>
 
-// FBXの読み込みと解放クラス
-// 利用者が触る必要はない
+/**
+* @brief	Fbxの読み込みクラス
+* @details	FbxManagerで管理されるので利用者がさわる必要はない
+*/
 class FbxLoader
 {
 public:
 	// FBXメッシュの読み込み
-	FBXMeshData LoadFBXMesh(const char* pFileName_);
+	FBXMeshData* LoadFBXMesh(const char* pFileName_);
 	// FBXメッシュの解放
 	void ReleaseFbxMesh(FBXMeshData* pData_);
 	// モーションの読み込み(仮)

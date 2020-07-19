@@ -4,6 +4,10 @@
 #include "Shape.h"
 #include <d3dx9.h>
 
+
+/**
+* @brief AABBƒNƒ‰ƒX
+*/
 class AABBShape : public Shape
 {
 public:

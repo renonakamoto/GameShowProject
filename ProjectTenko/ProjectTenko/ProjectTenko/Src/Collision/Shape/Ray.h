@@ -4,6 +4,9 @@
 #include "Shape.h"
 #include <d3dx9.h>
 
+/**
+* @brief ƒŒƒCƒNƒ‰ƒX
+*/
 class Ray : public Shape
 {
 public:

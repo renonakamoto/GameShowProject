@@ -8,8 +8,21 @@
 
 struct MapObjectData
 {
-	MapObjectData()
+	/**
+	* @brief	コンストラクタ
+	*/
+	MapObjectData() :
+		m_Pos(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
+		m_Scale(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
+		m_Rot(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
+		m_Width(0.0f),
+		m_Height(0.0f),
+		m_Depth(0.0f)
 	{}
+
+	/**
+	* @brief	引数付きコンストラクタ
+	*/
 	MapObjectData(D3DXVECTOR3 pos_, D3DXVECTOR3 scale_, D3DXVECTOR3 rot_, float width_, float height_, float depth_):
 		m_Pos(pos_),
 		m_Scale(scale_),
@@ -19,12 +32,12 @@ struct MapObjectData
 		m_Depth(depth_)
 	{}
 
-	D3DXVECTOR3 m_Pos;
-	D3DXVECTOR3 m_Scale;
-	D3DXVECTOR3 m_Rot;
-	float	    m_Width;
-	float	    m_Height;
-	float	    m_Depth;
+	D3DXVECTOR3 m_Pos;		//! 座標
+	D3DXVECTOR3 m_Scale;	//! スケール
+	D3DXVECTOR3 m_Rot;		//! 回転
+	float	    m_Width;	//! 横幅
+	float	    m_Height;	//! 縦幅
+	float	    m_Depth;	//! 奥
 
 };
 
@@ -47,7 +60,6 @@ public:
 protected:
 	std::vector<MapObjectData> m_MapObjectDataList;
 		 
-private:
 
 };
 

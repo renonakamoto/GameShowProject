@@ -5,12 +5,22 @@
 #include "../Character.h"
 #include "PlayerEffect.h"
 #include "State/PlayerStateBase.h"
+#include <memory>
 
+/**
+* @brief   プレイヤークラス
+*/
 class Player : public Character
 {
 public:
+	/**
+	* @brief コンストラクタ
+	*/
 	Player(D3DXVECTOR3 pos_, std::string key_);
 
+	/**
+	* @brief デストラクタ
+	*/
 	virtual ~Player();
 
 	/**
@@ -25,7 +35,7 @@ public:
 
 	/**
 	* @brief		
-	* @return bool	マウス反転している:true マウス反転していない:
+	* @return bool	true: 動いている false: 動いていない
 	*/
 	bool IsMove() { return m_IsMove; }
 
@@ -57,6 +67,7 @@ private:
 	* @brief 移動処理
 	*/
 	void Move();
+	
 
 	Camera* m_RefCamera;					//! カメラの参照用変数
 
@@ -68,10 +79,10 @@ private:
 
 	D3DXVECTOR3 m_CenterPos;				//! プレイヤーの中心点(しゃがんだ時にカメラを下げるために追加)
 
-	FbxMotion<PlayerMotionList> m_Motion;	//! モーションクラス
-	PlayerStateBase* m_State;				//! プレイヤー状態管理クラス
 
-	PlayerEffect*	 m_PlayerEffect;		//! エフェクトクラス
+	std::unique_ptr<FbxMotion<PlayerMotionList>> m_Motion;			//! モーションクラス
+	std::unique_ptr<PlayerStateBase>             m_State;			//! プレイヤー状態管理クラス
+	std::unique_ptr<PlayerEffect>				 m_PlayerEffect;	//! エフェクトクラス
 	
 };
 

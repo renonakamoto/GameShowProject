@@ -10,6 +10,9 @@
 #include <iostream>
 #include <memory>
 
+/**
+* @brief オブジェクト管理クラス
+*/
 class Objectmanager
 {
 
@@ -69,30 +72,32 @@ public:
 	void AllRelease();
 
 private:
-	Objectmanager();
-	~Objectmanager();
-
-	/*
-		当たり判定を行うオブジェクトを算出する関数
+	/**
+	* @brief コンストラクタ
 	*/
+	Objectmanager();
 
 	/**
-	* @brief レイとオブジェクトとの当たり判定
+	* @brief デストラクタ
+	*/
+	~Objectmanager();
+
+	/**
+	* @brief 当たり判定を行うオブジェクトを算出する関数
 	* @param[in] pOut_	     レイの原点
 	* @param[in] basePoint_  レイの向きと大きさ(ベクトル)
-	* @return bool 成功:true 失敗:false
 	*/
 	void JudgementCollition(std::vector<Shape*>* pOut_, const D3DXVECTOR3& basePoint_, float length);
 	
 
-	ObjectBase* m_Player;
-	std::vector<ObjectBase*> m_Object;
-	std::vector<ObjectBase*> m_EnemyGroup;
-	std::vector<ObjectBase*> m_MapObjectGroup;
+	ObjectBase* m_Player;							//! プレイヤー
+	std::vector<ObjectBase*> m_EnemyGroup;			//! エネミーグループ
+	std::vector<ObjectBase*> m_Object;				//! 当たり判定のないオブジェクトグループ
+	std::vector<ObjectBase*> m_MapObjectGroup;		//! 当たり判定のあるオブジェクトグループ
 
-	Camera* m_Camera;
+	Camera* m_Camera;						
 
-	FlexibleCollision m_Collision;
+	FlexibleCollision m_Collision;	
 	MapDataBank m_MapDataBank;
 	
 };
