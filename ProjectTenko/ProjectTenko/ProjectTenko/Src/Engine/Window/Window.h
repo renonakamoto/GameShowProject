@@ -29,7 +29,7 @@ namespace MyWindow
 		const int GetWindowHeight()const { return m_Height; }
 
 		const D3DXVECTOR2 GetCenterWindowPos()const {
-			return D3DXVECTOR2(m_Width / 2, m_Height / 2);
+			return D3DXVECTOR2(static_cast<float>(m_Width) / 2.0f, static_cast<float>(m_Height) / 2.0f);
 		}
 
 	private:
