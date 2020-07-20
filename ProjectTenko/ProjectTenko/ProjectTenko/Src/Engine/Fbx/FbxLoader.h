@@ -12,15 +12,21 @@
 class FbxLoader
 {
 public:
-	// FBXメッシュの読み込み
-	FBXMeshData* LoadFBXMesh(const char* pFileName_);
-	// FBXメッシュの解放
+	/**
+	* @brief Fbxの読み込み
+	* @param[in] pFileName_ ファイル名(パス付)
+	* @return FBXMeshData メッシュデータ
+	*/
+	FBXMeshData LoadFBXMesh(const char* pFileName_);
+
+	/**
+	* @brief Fbxの解放
+	* @param[in] pData_ メッシュデータ
+	*/
 	void ReleaseFbxMesh(FBXMeshData* pData_);
-	// モーションの読み込み(仮)
-	void LoadMotion(Model* pModel_, std::string name_, const char* pFilename_);
 
 private:
-	char m_RootPath[MAX_PATH]; // ファイルのパス
+	char m_RootPath[MAX_PATH]; //! ファイルのパス
 
 	// FBXの解析類
 	// マテリアルの解析
@@ -44,7 +50,6 @@ private:
 	// 法線の解析
 	void LoadNormal(MeshData* pMeshData_, FbxMesh* pMesh_);
 
-	// おそらくモーションに名前を付けてる
 	void Play(FBXMeshData* pData_, std::string name_);
 
 };

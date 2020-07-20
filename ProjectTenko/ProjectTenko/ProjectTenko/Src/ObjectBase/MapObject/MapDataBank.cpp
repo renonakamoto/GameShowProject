@@ -34,9 +34,6 @@ bool MapDataBank::Load()
 		data.m_Scale.x = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ScalX)]);
 		data.m_Scale.y = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ScalY)]);
 		data.m_Scale.z = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ScalZ)]);
-		data.m_Width   = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::Width)]);
-		data.m_Height  = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::Height)]);
-		data.m_Depth   = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::Depth)]);
 
 		if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "Barrel")
 		{

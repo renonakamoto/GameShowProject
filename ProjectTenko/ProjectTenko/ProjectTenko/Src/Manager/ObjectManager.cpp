@@ -15,8 +15,7 @@
 #include "../ObjectBase/MapObject/Mountain/Mountain.h"
 #include "../ObjectBase/MapObject/Skydome/Skydome.h"
 #include "../ObjectBase/MapObject/Tent/Tent.h"
-#include "../ObjectBase/MapObject/Vending_Machine/Vending_Machine_Blue.h"
-#include "../ObjectBase/MapObject/Vending_Machine/Vending_Machine_Red.h"
+#include "../ObjectBase/MapObject/Vending_Machine/Vending_Machine.h"
 #include "../ObjectBase/MapObject/Wall/Wall.h"
 #include "../ObjectBase/MapObject/Tree/Tree.h"
 #include "../ObjectBase/MapObject/Sapling_Big/SaplingBig.h"
@@ -40,7 +39,7 @@ Objectmanager::Objectmanager()
 	
 	m_MapObjectGroup.push_back(new Barrel(D3DXVECTOR3(0.0f, 0.0f, 300.0f), "Barrel", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Barrel)));
 	m_MapObjectGroup.push_back(new Tent(D3DXVECTOR3(300.0f, 0.0f, 600.0f), "Tent", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Tent)));
-	m_MapObjectGroup.push_back(new VendingMachineBlue(D3DXVECTOR3(0.0f, 0.0f, -100.0f), "VendingMachineBlue", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Vending_Machine)));
+	m_MapObjectGroup.push_back(new VendingMachine(D3DXVECTOR3(0.0f, 0.0f, -100.0f), "VendingMachineBlue", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Vending_Machine)));
 	//m_MapObjectGroup.push_back(new VendingMachineRed(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "VendingMachineRed"));
 	m_MapObjectGroup.push_back(new Wall(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Wall", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Wall)));
 	m_MapObjectGroup.push_back(new Tree(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Tree", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Tree)));

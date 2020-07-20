@@ -73,6 +73,10 @@ private:
 
 	float m_WalkSpeed;						//! 立ってる状態でのスピード
 	float m_SquatWalkSpeed;					//! しゃがんでる状態でのスピード
+	D3DXVECTOR3 m_Speed;					//! 速度
+	float m_Resist;							//! 空気抵抗
+	float m_Force;							//! 力
+	float m_Weight;							//! 重さ
 
 	bool m_IsSquat;							//! しゃがんでいるかどうか保存する変数
 	bool m_IsMove;							//! 動いているかどうかを保存そる変数
@@ -80,9 +84,9 @@ private:
 	D3DXVECTOR3 m_CenterPos;				//! プレイヤーの中心点(しゃがんだ時にカメラを下げるために追加)
 
 
-	std::unique_ptr<FbxMotion<PlayerMotionList>> m_Motion;			//! モーションクラス
-	std::unique_ptr<PlayerStateBase>             m_State;			//! プレイヤー状態管理クラス
-	std::unique_ptr<PlayerEffect>				 m_PlayerEffect;	//! エフェクトクラス
+	FbxMotion<PlayerMotionList>		             m_Motion;			//! モーションクラス
+	PlayerStateBase*							 m_State;			//! プレイヤー状態管理クラス
+	PlayerEffect*								 m_PlayerEffect;	//! エフェクトクラス
 	
 };
 

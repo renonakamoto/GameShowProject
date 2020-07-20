@@ -7,6 +7,9 @@
 
 class Shape;
 
+/**
+* @brief “–‚½‚è”»’èŠÇ—ƒNƒ‰ƒX
+*/
 class FlexibleCollision
 {
 public:

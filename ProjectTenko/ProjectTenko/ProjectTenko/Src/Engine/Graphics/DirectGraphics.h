@@ -19,7 +19,7 @@
 namespace MyDirectGraphics
 {
 	/**
-	* @brief   ダイレクトグラフィックスを扱うクラス
+	* @brief   DirectGraphicsを扱うクラス
 	*/
 	class DirectGraphics
 	{
@@ -96,12 +96,10 @@ namespace MyDirectGraphics
 		*/
 		bool SetViewPort();
 
-		//! ほにゃららで使う変数
-		LPDIRECT3D9			   m_pD3DInterface;
-		//! ほにゃららで使う変数
-		LPDIRECT3DDEVICE9	   m_pD3DDevice;
-		//! ほにゃららで使う変数
-		D3DPRESENT_PARAMETERS* m_pD3DPresentParam;
+
+		LPDIRECT3D9			   m_pD3DInterface;			//! グラフィックインターフェース
+		LPDIRECT3DDEVICE9	   m_pD3DDevice;			//! グラフィックデバイス
+		D3DPRESENT_PARAMETERS* m_pD3DPresentParam;		//! プレゼントパラメータ
 	};
 }
 

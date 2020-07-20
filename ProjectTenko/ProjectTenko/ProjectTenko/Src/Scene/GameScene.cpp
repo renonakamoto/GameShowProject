@@ -31,7 +31,7 @@ void GameScene::Load()
 
 DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 {
-	//THE_FBXMANAGER->LoadFBXMesh("Player", "assets/models/player/tenko01.fbx");
+	THE_FBXMANAGER->LoadFBXMesh("Player", "assets/models/player/tenko01.fbx");
     return 0;
 }
 
@@ -40,10 +40,10 @@ void GameScene::Main()
 	THE_OBJECTMANAGER->Update();
 
 
-    if (THE_OBJECTMANAGER->HitPlayerAndClearTrigger() == true)
-    {
-        m_SceneChanger->ChangeScene(SceneID::Clear);
-    }
+   //if (THE_OBJECTMANAGER->HitPlayerAndClearTrigger() == true)
+   //{
+   //    m_SceneChanger->ChangeScene(SceneID::Clear);
+   //}
 
     if (THE_OBJECTMANAGER->HitPlayerAndEnemy() == true)
     {

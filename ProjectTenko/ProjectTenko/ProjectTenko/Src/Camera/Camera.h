@@ -29,7 +29,7 @@ public:
 	D3DXVECTOR3  GetForwardVec();
 	D3DXVECTOR3  GetLeftVec();
 
-	Shape* GetShape() {return m_Shape;}
+	Shape* GetShape()					 { return m_Shape;   }
 	const D3DXVECTOR3* GetPos()const     { return &m_Pos;    }
 	const D3DXVECTOR3* GetLookAt()const  { return &m_LookAt; }
 	const D3DXVECTOR3* GetUpVec()const   { return &m_UpVec;  }

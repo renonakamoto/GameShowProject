@@ -49,10 +49,6 @@ namespace MapData
 		RotX,		//!	X²‰ñ“]
 		RotY,		//!	Y²‰ñ“]
 		RotZ,		//!	Z²‰ñ“]
-
-		Width,		//!	‰¡•
-		Height,		//!	c•
-		Depth,		//!	‰œs‚«
 	};
 }
 

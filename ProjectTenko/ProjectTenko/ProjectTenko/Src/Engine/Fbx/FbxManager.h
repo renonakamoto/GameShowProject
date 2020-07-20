@@ -79,7 +79,7 @@ namespace MyFbx
 		bool HasKey(std::string key_);
 
 		//! オブジェクトを保存する変数
-		std::map<std::string, FBXMeshData*> m_ObjectMeshData;
+		std::map<std::string, FBXMeshData> m_ObjectMeshData;
 
 		//! 読み込み担当クラス
 		std::unique_ptr<FbxLoader> m_FbxLoader;
