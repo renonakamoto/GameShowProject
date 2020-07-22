@@ -7,8 +7,11 @@
 #define INPUT_MANAGER
 
 #include <dinput.h>
+#include <XInput.h>
 #include <vector>
 #include "..//..//Utility/SingletonTemplate.h"
+
+#define MAX_CONTROLLERS 4	//!< XInputの取得可能な最大コントローラー数
 
 enum class InputState
 {
@@ -64,32 +67,33 @@ enum class KeyInfo
 	Max_Key_Info
 };
 
-enum class GamePadButton
+enum class XInput_Button
 {
-	Btn_1,
-	Btn_2,
-	Btn_3,
-	Btn_4,
-	Btn_5,
-	Btn_6,
-	Btn_7,
-	Btn_8,
-	Btn_9,
-	Btn_10,
-	Stc_lLeft,
-	Stc_lRight,
-	Stc_lUp,
-	Stc_lDown,
-	Stc_rLeft,
-	Stc_rRight,
-	Stc_rUp,
-	Stc_rDown,
-	Arw_Left,
-	Arw_Right,
-	Arw_Up,
-	Arw_Down,
+	DPad_Up,
+	DPad_Down,
+	DPad_Left,
+	DPad_Right,
+	Start,
+	Back,
+	Left_Thumb,
+	Right_Thumb,
+	Left_Shoulder,
+	Right_Shoulder,
+	A,
+	B,
+	X,
+	Y,
+	Left_Trigger,
+	Right_Trigger,
+	L_Up,
+	L_Down,
+	L_Left,
+	L_Right,
+	R_Up,
+	R_Down,
+	R_Left,
+	R_Right,
 	MAX_INFO,
-
 };
 
 enum class InputInfo
@@ -130,21 +134,30 @@ enum class InputInfo
 	Mouse_Left,
 	Mouse_Right,
 	Mouse_Wheel,
-	Pad_1,
-	Pad_2,
-	Pad_3,
-	Pad_4,
-	Pad_5,
-	Pad_6,
-	Pad_7,
-	Pad_8,
-	Pad_9,
-	Pad_10,
-	Pad_lX,
-	Pad_lY,
-	Pad_rX,
-	Pad_rY,
-	Pad_POV,
+	DPad_Up,
+	DPad_Down,
+	DPad_Left,
+	DPad_Right,
+	Start,
+	Back,
+	Left_Thumb,
+	Right_Thumb,
+	Left_Shoulder,
+	Right_Shoulder,
+	A,
+	B,
+	X,
+	Y,
+	Left_Trigger,
+	Right_Trigger,
+	L_Up,
+	L_Down,
+	L_Left,
+	L_Right,
+	R_Up,
+	R_Down,
+	R_Left,
+	R_Right,
 	Max_ID,
 };
 
@@ -226,21 +239,21 @@ public:
 	* @param[in] num_ コントローラーの番号
 	* @param[in] btn_ ボタンの種類
 	*/
-	bool GetButton(GamePadButton btn_)const;
+	bool GetButton(XInput_Button btn_)const;
 
 	/**
 	* @brief ボタンが押されてた瞬間かの情報取得関数
 	* @param[in] num_ コントローラーの番号
 	* @param[in] btn_ ボタンの種類
 	*/
-	bool GetButtonDown(GamePadButton btn_)const;
+	bool GetButtonDown(XInput_Button btn_)const;
 
 	/**
 	* @brief ボタンが離された瞬間かの情報取得関数
 	* @param[in] num_ コントローラーの番号
 	* @param[in] btn_ ボタンの種類
 	*/
-	bool GetButtonUp(GamePadButton btn_)const;
+	bool GetButtonUp(XInput_Button btn_)const;
 
 //!< 以下仮想コントローラー用
 	int GetInputState(InputInfo id_)const;
@@ -292,6 +305,11 @@ private:
 	* @brief ゲームパッドの入力情報更新関数
 	*/
 	void UpdateGamePadState();
+
+	/**
+	* @biref XInput対応コントローラーの入力情報更新関数
+	*/
+	void UpdateXInput();
 
 	/**
 	* @biref ゲームパッド列挙用関数
@@ -359,7 +377,7 @@ private:
 	};																		//!< キーボード割り当て情報
 
 	InputState m_MouseState[3];		//!< マウス入力情報
-	InputState m_GamePadState[static_cast<int>(GamePadButton::MAX_INFO)];		//!< ゲームパッド入力情報
+	InputState m_GamePadState[static_cast<int>(XInput_Button::MAX_INFO)];		//!< ゲームパッド入力情報
 
 	int m_InputState[static_cast<int>(InputInfo::Max_ID)];				//!< 入力情報
 };
