@@ -2,52 +2,11 @@
 #define NAVIGATIONAI_H_
 
 #include "..//ExternalFle/Csv/Csv.h"
+#include "Node.h"
 #include <string>
 #include <vector>
+#include <list>
 #include <d3dx9.h>
-
-struct Cell
-{
-	Cell() : Row(-1), Column(-1)
-	{
-	}
-
-	Cell(int row, int column) : Row(row), Column(column)
-	{
-	}
-
-	int Row;		//!< 行
-	int Column;		//!< 列
-};
-
-struct Node
-{
-	Node()
-	{
-	}
-
-	Node(int row, int column) : Cell(row, column)
-	{
-	}
-
-	Cell Cell;						//!< ノードの位置
-	std::vector<Node*> Edges;		//!< 隣接ノード
-};
-
-struct Route
-{
-	Route(Node* node, float cost) : Node(node), Cost(cost)
-	{
-	}
-
-	bool operator<(const Route& route) const
-	{
-		return Cost < route.Cost;
-	}
-
-	Node* Node;		//!< ノード
-	float Cost;		//!< コスト
-};
 
 class Navigator
 {
@@ -73,7 +32,7 @@ public:
 	* @biref マップの移動可能個所の情報を与えます
 	* @return 情報を与えられたらtrue、失敗したらfalse
 	*/
-	bool GetReturnRoute(D3DXVECTOR3& pos_, D3DXVECTOR3& goal_, std::vector<D3DXVECTOR3>& route_);
+	void GetReturnRoute(D3DXVECTOR3& pos_, D3DXVECTOR3& goal_, std::vector<D3DXVECTOR3>& route_);
 
 	bool LoadResouces();
 
@@ -81,6 +40,12 @@ public:
 
 private:
 	bool IsCellInRange(int row_, int column_, int width_, int height_);
+
+	bool IsEqualCell(const Cell& a, const Cell& b);
+
+	float CalculateHeruristicCost(const Node* node_, const Node* goal_);
+
+	void AddRoute(std::list<Route>& open_, std::list<Route>& close_, Route& current_, Node* add_, float cost);
 
 private:
 	std::vector<std::vector<std::string>> m_Route;

@@ -35,10 +35,11 @@ bool MovingPathCreator::CreateMovingPath(D3DXVECTOR3 originPos_, float xzPlaneX_
 	// CSVに送るためにstringをvectorで作る
 	std::vector<std::vector <std::string>> csvdata;
 
-	// 一段目にフィールドのサイズを入力
+	// 一段目にフィールドのサイズとセルのサイズを入力
 	std::vector<std::string> data;
 	data.push_back(std::to_string(xz_x));
 	data.push_back(std::to_string(xz_z));
+	data.push_back(std::to_string(cellsize_));
 	csvdata.push_back(data);
 
 	data.clear();

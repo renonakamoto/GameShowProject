@@ -28,22 +28,44 @@ bool Navigator::GetEnemyRoute(std::string name_, std::vector<D3DXVECTOR3>& route
 	return false;
 }
 
-bool Navigator::GetReturnRoute(D3DXVECTOR3& pos_, D3DXVECTOR3& goal_, std::vector<D3DXVECTOR3>& route_)
+void Navigator::GetReturnRoute(D3DXVECTOR3& pos_, D3DXVECTOR3& goal_, std::vector<D3DXVECTOR3>& route_)
 {
 	std::list<Route> open_list;
 	std::list<Route> close_list;
 
+	float cellsize = std::stof(m_MovingPath[0][2]);
 
-	// open_list.push_back(Route);
+	Route start(
+		&m_Graph[static_cast<int>(pos_.x / cellsize)][static_cast<int>(pos_.z / cellsize)],
+		0.0f);
+	Cell goal_cell(static_cast<int>(goal_.x / cellsize), static_cast<int>(goal_.z / cellsize));
 
-	while (!open_list.empty())
+	open_list.push_back(start);
+
+	while (open_list.empty() == false)
 	{
 		auto route = open_list.begin();
 
+		if (IsEqualCell(route->m_Node->m_Cell, m_Graph[goal_cell.m_Row][goal_cell.m_Column].m_Cell))
+		{
+			close_list.push_back(*route);
+			break;
+		}
 
+		for (Node* node : route->m_Node->m_Edges)
+		{
+			float hcost = CalculateHeruristicCost(node, &m_Graph[goal_cell.m_Row][goal_cell.m_Column]);
+			float cost = hcost + route->m_Cost;
+
+			AddRoute(open_list, close_list, *route, node, cost);
+		}
+
+		close_list.push_back(*route);
+
+		open_list.erase(route);
 	}
 
-	return false;
+	close_list.back().AddPos(route_, cellsize);
 }
 
 bool Navigator::LoadResouces()
@@ -97,10 +119,10 @@ void Navigator::CreateGraph()
 
 			for (const Cell& cell : surround)
 			{
-				if (IsCellInRange(cell.Row, cell.Column, row, column) &&
+				if (IsCellInRange(cell.m_Row, cell.m_Column, row, column) &&
 					std::stoi(m_MovingPath[pos][counter]) == 1)
 				{
-					m_Graph[i][j].Edges.push_back(&m_Graph[cell.Row][cell.Column]);
+					m_Graph[i][j].m_Edges.push_back(&m_Graph[cell.m_Row][cell.m_Column]);
 				}
 				pos++;
 				counter++;
@@ -117,4 +139,67 @@ bool Navigator::IsCellInRange(int row_, int column_, int width_, int height_)
 	}
 
 	return false;
+}
+
+bool Navigator::IsEqualCell(const Cell& a, const Cell& b)
+{
+	if (a.m_Column == b.m_Column &&
+		a.m_Row == b.m_Row)
+	{
+		return true;
+	}
+	return false;
+}
+
+float Navigator::CalculateHeruristicCost(const Node* node_, const Node* goal_)
+{
+	float column = fabsf(goal_->m_Cell.m_Column - node_->m_Cell.m_Column);
+	float row = fabsf(goal_->m_Cell.m_Row - node_->m_Cell.m_Row);
+	return sqrtf(column * column + row * row);
+}
+
+void Navigator::AddRoute(std::list<Route>& open_, std::list<Route>& close_, Route& current_, Node* add_, float cost_)
+{
+	bool is_same_route_open = false;
+	bool is_same_route_close = false;
+
+	for (auto itr = close_.begin(); itr != close_.end(); itr++)
+	{
+		if (IsEqualCell(add_->m_Cell, itr->m_Node->m_Cell))
+		{
+			is_same_route_close = true;
+
+			if (cost_ < itr->m_Cost)
+			{
+				close_.erase(itr);
+				open_.push_back(Route(add_, cost_, &current_));
+
+				open_.sort();
+				return;
+			}
+		}
+	}
+
+	for (auto itr = open_.begin(); itr != open_.end(); itr++)
+	{
+		if (IsEqualCell(add_->m_Cell, itr->m_Node->m_Cell))
+		{
+			is_same_route_open = true;
+
+			if (cost_ < itr->m_Cost)
+			{
+				open_.erase(itr);
+				open_.push_back(Route(add_, cost_, &current_));
+
+				open_.sort();
+				return;
+			}
+		}
+	}
+
+	if (is_same_route_close == false && is_same_route_open == false)
+	{
+		open_.push_back(Route(add_, cost_, &current_));
+		open_.sort();
+	}
 }

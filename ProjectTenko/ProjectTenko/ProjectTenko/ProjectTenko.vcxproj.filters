@@ -209,6 +209,7 @@
     <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerSquatWalk.h" />
     <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerSquatScared.h" />
     <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerScared.h" />
+    <ClInclude Include="Src\NavigationAI\Node.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
