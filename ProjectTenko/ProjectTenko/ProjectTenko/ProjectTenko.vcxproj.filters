@@ -93,6 +93,7 @@
     <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerSquatWalk.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerSquatScared.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerScared.cpp" />
+    <ClCompile Include="Src\NavigationAI\Node.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
