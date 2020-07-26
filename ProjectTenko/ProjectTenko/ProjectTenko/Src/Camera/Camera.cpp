@@ -92,7 +92,7 @@ void Camera::Rotate()
 	
 	// ‰ñ“]‚ð”½‰f‚³‚¹‚é
 	m_Pos.x = m_LookAt.x + m_Distance *  sinf(D3DXToRadian(m_Yaw));
-	m_Pos.y = 35.0f  + -m_Pitch;
+	m_Pos.y = 35.0f  + (-m_Pitch);
 	m_Pos.z = m_LookAt.z + m_Distance * -cosf(D3DXToRadian(m_Yaw));
 }
 

@@ -15,7 +15,7 @@ Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 	m_Motion.AddMotion(PlayerMotionList::Squat,			281, 340);
 	m_Motion.AddMotion(PlayerMotionList::Squat_Wait,	341, 460);
 	m_Motion.AddMotion(PlayerMotionList::Stand_Up,		461, 520);
-	m_Motion.AddMotion(PlayerMotionList::Squat_Walk,	521, 640);
+	m_Motion.AddMotion(PlayerMotionList::Squat_Walk,	531, 640);
 	m_Motion.AddMotion(PlayerMotionList::Squat_Scared,	651, 710);
 	m_Motion.AddMotion(PlayerMotionList::Scared,		711, 725);
 
@@ -77,7 +77,8 @@ void Player::Draw()
 	D3DXMatrixIdentity(&mat_rot);
 	D3DXMatrixIdentity(&mat_trans);
 	D3DXMatrixIdentity(&m_Mat_World);
-
+	LPD3DXEFFECT a;
+	
 	D3DXMatrixRotationY(&mat_rot, m_Angle);
 	D3DXMatrixTranslation(&mat_trans, m_Pos.x, m_Pos.y, m_Pos.z);
 
@@ -128,6 +129,21 @@ void Player::Move()
 	// 正規化したベクトルをスピードに加算する
 	m_Speed.x += result_move_vec.x * speed;
 	m_Speed.z += result_move_vec.z * speed;
+
+	// 動いていない時にスピードが0に近かったら0にする
+	if (result_move_vec.x == 0.0f || result_move_vec.z == 0.0f)
+	{
+		if (m_Speed.x <= m_Resist / m_Weight && m_Speed.x >= -(m_Resist / m_Weight))
+		{
+			m_Speed.x = 0.0f;
+		}
+
+		if (m_Speed.z <= m_Resist / m_Weight && m_Speed.z >= -(m_Resist / m_Weight))
+		{
+			m_Speed.z = 0.0f;
+		}
+
+	}
 
 	// 動いていたら
 	if (m_Speed.x != 0.0f || m_Speed.z != 0.0f)

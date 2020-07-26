@@ -13,7 +13,7 @@ TitleScene::TitleScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
 	m_TitleUI = new TitleUI();
 	m_Camera  = new Camera(D3DXVECTOR3(-1000, 250.0f, 4.0f), D3DXVECTOR3(-716.0f, 100.0f, 0.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), 0.0f);
-
+	THE_OBJECTMANAGER->EntryObject(Objectmanager::ObjectType::MapObject);
     m_ThreadHandle = CreateThread(
         nullptr,                    // セキュリティ属性
         0,                          // スタックサイズ
@@ -28,10 +28,7 @@ TitleScene::TitleScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 TitleScene::~TitleScene()
 {
 	delete m_TitleUI;
-	m_TitleUI = nullptr;
-	
 	delete m_Camera;
-	m_Camera = nullptr;
 
 	THE_TEXTUREMANAGER->Release("assets/UI/title/title01.png");
 	THE_TEXTUREMANAGER->Release("assets/UI/title/title02.png");

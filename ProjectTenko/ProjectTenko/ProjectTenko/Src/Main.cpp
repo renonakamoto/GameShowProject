@@ -7,12 +7,15 @@
 #include "Engine/Font/Font.h"
 #include "Scene/SceneManager.h"
 #include "Manager/ConfigManager.h"
+#include <crtdbg.h>
 
 int APIENTRY WinMain(HINSTANCE hInstance_,
 	HINSTANCE hPrevInstance_,
 	LPSTR     lpCmpLine_,
 	INT       nCmdShow_)
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	
 	//! エンジンインスタンス生成
 	Window::Create();
 	DirectGraphics::Create();

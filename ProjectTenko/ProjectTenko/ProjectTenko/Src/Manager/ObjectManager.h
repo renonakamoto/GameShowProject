@@ -18,6 +18,20 @@ class Objectmanager
 
 	friend MySingletonTemplate::SingletonTemplate<Objectmanager>;
 public:
+	/**
+	* @brief オブジェクトの種類列挙
+	*/
+	enum class ObjectType
+	{
+		Player,				//! プレイヤー
+		Enemy,				//! エネミー
+		Camera,				//! カメラ
+		MapObject,			//!	マップオブジェクト
+
+		TypeNum,			//! タイプの数
+	};
+
+public:
 	
 	/**
 	* @brief オブジェクトの更新関数
@@ -28,6 +42,12 @@ public:
 	* @brief オブジェクトの描画関数）
 	*/
 	void Draw();
+	
+	void EntryObject(ObjectType type_);
+
+	void ExitObject(ObjectType type_);
+
+	void AllRelease();
 
 	/**
 	* @brief プレイヤーとマップ障害物との当たり判定関数
@@ -69,8 +89,6 @@ public:
 		return m_Camera;
 	}
 
-	void AllRelease();
-
 private:
 	/**
 	* @brief コンストラクタ
@@ -84,10 +102,25 @@ private:
 
 	/**
 	* @brief 当たり判定を行うオブジェクトを算出する関数
-	* @param[in] pOut_	     レイの原点
-	* @param[in] basePoint_  レイの向きと大きさ(ベクトル)
+	* @param[out] pOut_	     当たり判定を行うオブジェクト
+	* @param[in] basePoint_  オブジェクトの座標
 	*/
 	void JudgementCollition(std::vector<Shape*>* pOut_, const D3DXVECTOR3& basePoint_, float length);
+
+	/**
+	* @brief プレイヤー生成関数
+	*/
+	void CreatePlayer();
+
+	/**
+	* @brief 敵生成関数
+	*/
+	void CreateEnemies();
+
+	/**
+	* @brief マップ生成関数
+	*/
+	void CreateMap();
 	
 
 	ObjectBase* m_Player;							//! プレイヤー
@@ -95,7 +128,7 @@ private:
 	std::vector<ObjectBase*> m_Object;				//! 当たり判定のないオブジェクトグループ
 	std::vector<ObjectBase*> m_MapObjectGroup;		//! 当たり判定のあるオブジェクトグループ
 
-	Camera* m_Camera;						
+	Camera* m_Camera;	
 
 	FlexibleCollision m_Collision;	
 	MapDataBank m_MapDataBank;

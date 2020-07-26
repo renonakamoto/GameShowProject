@@ -4,6 +4,10 @@
 
 GameScene::GameScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
+    THE_OBJECTMANAGER->EntryObject(Objectmanager::ObjectType::Player);
+    THE_OBJECTMANAGER->EntryObject(Objectmanager::ObjectType::Enemy);
+    THE_OBJECTMANAGER->EntryObject(Objectmanager::ObjectType::Camera);
+
 	ObjectManager::Create();
 
     m_ThreadHandle = CreateThread(
@@ -19,6 +23,9 @@ GameScene::GameScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 
 GameScene::~GameScene()
 {
+    THE_OBJECTMANAGER->ExitObject(Objectmanager::ObjectType::Player);
+    THE_OBJECTMANAGER->ExitObject(Objectmanager::ObjectType::Enemy);
+    THE_OBJECTMANAGER->ExitObject(Objectmanager::ObjectType::Camera);
 }
 
 void GameScene::Load()
@@ -40,10 +47,10 @@ void GameScene::Main()
 	THE_OBJECTMANAGER->Update();
 
 
-   //if (THE_OBJECTMANAGER->HitPlayerAndClearTrigger() == true)
-   //{
-   //    m_SceneChanger->ChangeScene(SceneID::Clear);
-   //}
+   if (THE_OBJECTMANAGER->HitPlayerAndClearTrigger() == true)
+   {
+       m_SceneChanger->ChangeScene(SceneID::Clear);
+   }
 
     if (THE_OBJECTMANAGER->HitPlayerAndEnemy() == true)
     {

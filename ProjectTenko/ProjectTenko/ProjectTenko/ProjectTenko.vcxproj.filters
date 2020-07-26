@@ -202,6 +202,7 @@
     <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerSquatScared.h" />
     <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerScared.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine.h" />
+    <ClInclude Include="Src\Utility\Singleton.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

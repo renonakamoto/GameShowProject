@@ -181,6 +181,7 @@
     <ClInclude Include="Src\Utility\3DHelper.h" />
     <ClInclude Include="Src\Utility\SimpleCalculation.h" />
     <ClInclude Include="Src\Utility\SimpleCollision.h" />
+    <ClInclude Include="Src\Utility\Singleton.h" />
     <ClInclude Include="Src\Utility\SingletonTemplate.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
