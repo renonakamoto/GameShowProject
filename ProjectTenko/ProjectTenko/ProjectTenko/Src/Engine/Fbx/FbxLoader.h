@@ -17,7 +17,7 @@ public:
 	* @param[in] pFileName_ ファイル名(パス付)
 	* @return FBXMeshData メッシュデータ
 	*/
-	FBXMeshData LoadFBXMesh(const char* pFileName_);
+	FBXMeshData* LoadFBXMesh(const char* pFileName_);
 
 	/**
 	* @brief Fbxの解放

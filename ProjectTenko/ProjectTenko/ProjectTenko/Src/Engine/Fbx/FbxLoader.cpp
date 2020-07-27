@@ -3,10 +3,10 @@
 #include <string.h>
 
 
-FBXMeshData FbxLoader::LoadFBXMesh(const char* pFileName_)
+FBXMeshData* FbxLoader::LoadFBXMesh(const char* pFileName_)
 {
-	FBXMeshData fbxMeshData;
-	ZeroMemory(&fbxMeshData, sizeof(fbxMeshData));
+	FBXMeshData* fbx_mesh_data = new FBXMeshData();
+	ZeroMemory(fbx_mesh_data, sizeof(fbx_mesh_data));
 
 	strcpy_s(m_RootPath, pFileName_);
 	UINT i;
@@ -32,6 +32,14 @@ FBXMeshData FbxLoader::LoadFBXMesh(const char* pFileName_)
 	// 全てを三角形にする
 	converter.Triangulate(pScene, true);
 
+	FbxSystemUnit system_unit = pScene->GetGlobalSettings().GetSystemUnit();
+	if (system_unit.GetScaleFactor() != 1.0f)
+	{
+		// シーンの単位をcmに設定する
+		FbxSystemUnit::cm.ConvertScene(pScene);
+	}
+
+
 	// メッシュ分のバッファを確保
 	int meshNum = pScene->GetSrcObjectCount<FbxMesh>();
 	MeshData* pMeshData = (MeshData*)malloc(meshNum * sizeof(MeshData));
@@ -42,13 +50,13 @@ FBXMeshData FbxLoader::LoadFBXMesh(const char* pFileName_)
 	MaterialData* pMaterialData = (MaterialData*)malloc(materialNum * sizeof(MaterialData));
 	ZeroMemory(pMaterialData, materialNum * sizeof(MaterialData));
 
-	D3DXMatrixIdentity(&fbxMeshData.Model.world);
-	fbxMeshData.Model.meshNum = meshNum;
-	fbxMeshData.Model.pMesh = pMeshData;
-	fbxMeshData.Model.materialNum = materialNum;
-	fbxMeshData.Model.pMaterial = pMaterialData;
-	fbxMeshData.Model.boneNum = 0;
-	ZeroMemory(fbxMeshData.Model.bone, sizeof(fbxMeshData.Model.bone));
+	D3DXMatrixIdentity(&fbx_mesh_data->Model.world);
+	fbx_mesh_data->Model.meshNum = meshNum;
+	fbx_mesh_data->Model.pMesh = pMeshData;
+	fbx_mesh_data->Model.materialNum = materialNum;
+	fbx_mesh_data->Model.pMaterial = pMaterialData;
+	fbx_mesh_data->Model.boneNum = 0;
+	ZeroMemory(fbx_mesh_data->Model.bone, sizeof(fbx_mesh_data->Model.bone));
 
 	//	モーション情報取得
 	FbxArray<FbxString*> names;
@@ -63,10 +71,10 @@ FBXMeshData FbxLoader::LoadFBXMesh(const char* pFileName_)
 		FbxLongLong fps60 = FbxTime::GetOneFrameValue(FbxTime::eFrames60);
 		StartFrame = (int)(start / fps60);
 
-		fbxMeshData.Model.pMotion = new std::map<std::string, Motion>();
-		(*fbxMeshData.Model.pMotion)["default"].numFrame = (int)((stop - start) / fps60);
+		fbx_mesh_data->Model.pMotion = new std::map<std::string, Motion>();
+		(*fbx_mesh_data->Model.pMotion)["default"].numFrame = (int)((stop - start) / fps60);
 	}
-	fbxMeshData.Model.startFrame = StartFrame;
+	fbx_mesh_data->Model.startFrame = StartFrame;
 
 	// メッシュ単位で展開していく
 	for (int i = 0; i < meshNum; i++)
@@ -75,7 +83,7 @@ FBXMeshData FbxLoader::LoadFBXMesh(const char* pFileName_)
 
 		LoadMesh(&pMeshData[i], pMesh);
 		LoadMaterial(&pMaterialData[i], pMesh);
-		LoadBone(&fbxMeshData.Model, &pMeshData[i], pMesh);
+		LoadBone(&fbx_mesh_data->Model, &pMeshData[i], pMesh);
 		pMeshData[i].materialIndex = i;
 	}
 
@@ -84,9 +92,9 @@ FBXMeshData FbxLoader::LoadFBXMesh(const char* pFileName_)
 	SAFE_DESTROY(pManager);
 
 
-	Play(&fbxMeshData, "default");
+	Play(fbx_mesh_data, "default");
 
-	return fbxMeshData;
+	return fbx_mesh_data;
 }
 
 void FbxLoader::ReleaseFbxMesh(FBXMeshData * pData_)
@@ -123,8 +131,8 @@ bool FbxLoader::LoadMesh(MeshData * pMeshData_, FbxMesh * pMesh_)
 void FbxLoader::LoadMaterial(MaterialData * pMaterialData_, FbxMesh * pMesh_)
 {
 	InitMaterial(pMaterialData_, 1);
-
 	FbxLayerElementMaterial* pElementMaterial = pMesh_->GetElementMaterial();
+
 	if (pElementMaterial)
 	{
 		// マテリアル解析
@@ -133,8 +141,35 @@ void FbxLoader::LoadMaterial(MaterialData * pMaterialData_, FbxMesh * pMesh_)
 		FbxSurfaceMaterial* pMaterial = pMesh_->GetNode()->GetSrcObject<FbxSurfaceMaterial>(index);
 		if (pMaterial)
 		{
+			{
+				FbxProperty prop = pMaterial->FindProperty(FbxSurfaceMaterial::sAmbient);
+				const auto& color = prop.Get<FbxDouble3>();
+				pMaterialData_->material.Ambient.r = color[0];
+				pMaterialData_->material.Ambient.g = color[1];
+				pMaterialData_->material.Ambient.b = color[2];
+			}
+
+			{
+				FbxProperty prop = pMaterial->FindProperty(FbxSurfaceMaterial::sEmissive);
+				const auto& color = prop.Get<FbxDouble3>();
+				pMaterialData_->material.Emissive.r = color[0];
+				pMaterialData_->material.Emissive.g = color[1];
+				pMaterialData_->material.Emissive.b = color[2];
+			}
+
+			{
+				FbxProperty prop = pMaterial->FindProperty(FbxSurfaceMaterial::sSpecular);
+				const auto& color = prop.Get<FbxDouble3>();
+				pMaterialData_->material.Specular.r = color[0];
+				pMaterialData_->material.Specular.g = color[1];
+				pMaterialData_->material.Specular.b = color[2];
+			}
 			FbxProperty prop = pMaterial->FindProperty(FbxSurfaceMaterial::sDiffuse);
-			//FbxFileTexture* pFileTexture = prop.GetSrcObject<FbxFileTexture>();
+			const auto& color = prop.Get<FbxDouble3>();
+			pMaterialData_->material.Diffuse.r = color[0];
+			pMaterialData_->material.Diffuse.g = color[1];
+			pMaterialData_->material.Diffuse.b = color[2];
+
 
 			//	テクスチャ読み込み
 			const char* filename = NULL;
@@ -176,7 +211,7 @@ void FbxLoader::LoadMaterial(MaterialData * pMaterialData_, FbxMesh * pMesh_)
 				strcat_s(path, "/texture/");
 				strcat_s(path, pFileName);
 			}
-			//strcpy_s(path, "Fbx/sky.png");
+			
 			LoadTexture(path, &pMaterialData_->textureData);
 
 			FbxFree(pFileName);

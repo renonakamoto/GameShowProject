@@ -100,6 +100,15 @@ void Objectmanager::Draw()
 		itr->Draw();
 	}
 
+
+	D3DXMATRIX mat_world, mat_Scale;
+	D3DXMatrixIdentity(&mat_world);
+	D3DXMatrixScaling(&mat_Scale, 4.f, 4.f, 4.f);
+	D3DXMatrixTranslation(&mat_world, -810.0f, 0.0f, 1.0f);
+
+	mat_world = mat_Scale * mat_world;
+
+	THE_FBXMANAGER->Draw("Box", mat_world);
 }
 
 void Objectmanager::EntryObject(ObjectType type_)

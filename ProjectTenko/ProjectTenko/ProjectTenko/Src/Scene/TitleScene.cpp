@@ -56,21 +56,23 @@ void TitleScene::Load()
 
 DWORD WINAPI TitleScene::LoadResources(LPVOID lpParam_)
 {
-	THE_FBXMANAGER->LoadFBXMesh("Barrel", "assets/objects/barrel/Barrel.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("FerrisWheel", "assets/objects/ferris_wheel/dodai.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("Floor", "assets/objects/floor/floor.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("Gate", "assets/objects/gate/gate2.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("Merrygoland", "assets/objects/merrygoland/merrygoland_Foundation.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("Mountain", "assets/objects/mountain/mountain.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("SaplingBig", "assets/objects/sapling/NAEGI_02.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("SaplingSmall", "assets/objects/sapling/NAEGI_01.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("ShrimpStatue", "assets/objects/shrimp_statue/statue01.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("SkyDome", "assets/objects/skydome/sky_dome4.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("Tent", "assets/objects/tent/tent.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("Tree", "assets/objects/tree/wood_01.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("VendingMachineBlue", "assets/objects/vending_machine/Vending_machine_blue.fbx");
-	// THE_FBXMANAGER->LoadFBXMesh("VendingMachineRed", "assets/objects/vending_machine/Vending_machine_Red.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("Wall", "assets/objects/wall/wall.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("Barrel", "assets/objects/barrel/Barrel.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("FerrisWheel", "assets/objects/ferris_wheel/dodai.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("Floor", "assets/objects/floor/floor.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("Gate", "assets/objects/gate/gate2.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("Merrygoland", "assets/objects/merrygoland/merrygoland_Foundation.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("Mountain", "assets/objects/mountain/mountain.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("SaplingBig", "assets/objects/sapling/NAEGI_02.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("SaplingSmall", "assets/objects/sapling/NAEGI_01.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("ShrimpStatue", "assets/objects/shrimp_statue/statue01.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("SkyDome", "assets/objects/skydome/sky_dome4.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("Tent", "assets/objects/tent/tent.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("Tree", "assets/objects/tree/wood_01.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("VendingMachineBlue", "assets/objects/vending_machine/Vending_machine_blue.fbx");
+	//// THE_FBXMANAGER->LoadFBXMesh("VendingMachineRed", "assets/objects/vending_machine/Vending_machine_Red.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("Wall", "assets/objects/wall/wall.fbx");
+
+	THE_FBXMANAGER->LoadFBXMesh("Box", "TestBox.fbx");
 
     return 0;
 }

@@ -83,6 +83,11 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 			light.Ambient.r = 0.5f;
 			light.Ambient.g = 0.5f;
 			light.Ambient.b = 0.5f;
+			
+			light.Specular.a = 1.0f;
+			light.Specular.r = 0.3f;
+			light.Specular.g = 0.3f;
+			light.Specular.b = 0.3f;
 
 			THE_GRAPHICS->GetD3DDevice()->LightEnable(0, TRUE);
 			THE_GRAPHICS->GetD3DDevice()->SetLight(0, &light);
