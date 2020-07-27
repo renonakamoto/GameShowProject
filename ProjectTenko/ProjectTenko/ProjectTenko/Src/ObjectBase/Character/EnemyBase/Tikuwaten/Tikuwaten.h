@@ -15,7 +15,7 @@ class Tikuwaten : public Enemybase
 {
 public:
 	Tikuwaten(D3DXVECTOR3 pos_, const ObjectBase* 
-		_, std::string key_);
+		player_, std::string key_);
 	virtual ~Tikuwaten() {}
 
 	virtual void Update() override;
@@ -27,8 +27,6 @@ private:
 	void Turn() override;
 	void Chase() override;
 	void Return() override;
-
-	bool CanDetectPC() override { return true; }
 
 private:
 	ChikuwaMotionList		     m_CrrentMotion;

@@ -4,7 +4,11 @@
 #include "../Player/Player.h"
 #include "../Character.h"
 #include <vector>
+#include <d3dx9.h>
 #include "EnemyAI/State.h"
+
+#define ENEMY_VIEW 20.0f
+#define ENEMY_VIEW_ANGLE 45.0f
 
 class State;
 
@@ -13,7 +17,12 @@ class Enemybase : public Character
 public:
 	Enemybase(D3DXVECTOR3 pos_,const ObjectBase* player_ ,std::string key_):
 		m_RefPlayer(player_),
-		Character(pos_, key_)
+		Character(pos_, key_),
+		m_State(nullptr),
+		m_NextRoute(0.0f, 0.0f, 0.0f),
+		m_NextRouteNum(0),
+		m_NextAngle(0.0f),
+		m_Speed(0.35f)
 	{}
 
 	virtual ~Enemybase() {}
@@ -27,12 +36,15 @@ public:
 
 	void DecideReturnPoint();
 
-	virtual bool CanDetectPC() { return false; }
+	bool CanDetectPC();
 
 protected:
 	State* m_State;			//!< Œ»Ý‚Ìó‘Ô
 	std::vector<D3DXVECTOR3> m_PatrolRoute;
 	D3DXVECTOR3 m_NextRoute;
+	unsigned m_NextRouteNum;
+
+	float m_Speed;
 	float m_NextAngle;
 	D3DXVECTOR3 m_MovingVector;
 

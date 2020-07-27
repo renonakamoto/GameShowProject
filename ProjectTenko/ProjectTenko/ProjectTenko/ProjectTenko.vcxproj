@@ -47,6 +47,7 @@
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Patrol.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Turn.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Return.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\StateManager.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyBase.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Ikaten\Ikaten.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Kabochaten\Kabochaten.cpp" />
@@ -133,6 +134,7 @@
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Turn.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Return.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\State.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\StateManager.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyBase.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Ikaten\Ikaten.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Kabochaten\Kabochaten.h" />
