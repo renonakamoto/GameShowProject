@@ -47,6 +47,7 @@ Camera::Camera(D3DXVECTOR3 pos_, D3DXVECTOR3 lookAt_, D3DXVECTOR3 upVec_, float 
 
 Camera::~Camera()
 {
+	delete m_Shape;
 }
 
 void Camera::Update()
@@ -57,31 +58,8 @@ void Camera::Update()
 	SetProjectionMatrix();
 }
 
-void Camera::Move()
-{
-}
-
 void Camera::Rotate()
-{
-	//float mouse_x = THE_INPUTMANAGER->GetMousePos().x;
-	//float mouse_y = THE_INPUTMANAGER->GetMousePos().y;
-	//int window_width  = THE_WINDOW->GetWindowWidth();
-	//int window_height = THE_WINDOW->GetWindowHeight();
-
-	//float horizon_magnification  = (float)GetSystemMetrics(SM_CXSCREEN) / (float)THE_WINDOW->GetWindowWidth();
-	//float vertical_magnification = (float)GetSystemMetrics(SM_CYSCREEN) / (float)THE_WINDOW->GetWindowHeight();
-	//RECT rect;
-	//GetClientRect(THE_WINDOW->GetWindowHandle(), &rect);
-	//rect.bottom /= horizon_magnification;
-	//rect.right  /= vertical_magnification;
-
-	////! ウィンドウの中心からカーソルの位置でベクトルを算出する
-	//m_Yaw   -= (THE_INPUTMANAGER->GetMousePos().x - THE_WINDOW->GetWindowWidth()  / 2) / m_Sensitivity.x;
-	//m_Pitch -= (THE_INPUTMANAGER->GetMousePos().y - THE_WINDOW->GetWindowHeight() / 2) / m_Sensitivity.y;
-
-	////! カーソルを中心に持ってくる
-	//SetCursorPos(GetSystemMetrics(SM_CXSCREEN) / 2, GetSystemMetrics(SM_CYSCREEN) / 2);
-	
+{	
 	RECT client_rect;
 	GetClientRect(THE_WINDOW->GetWindowHandle(), &client_rect);
 
@@ -105,7 +83,6 @@ void Camera::Rotate()
 		m_Pitch -= (mouse_y - 432.0f) / 1080.0f * 20.0f;
 	}
 
-
 	// マウスをクライアントの真ん中にもってくる
 	SetCursorPos(768, 432);
 
@@ -114,12 +91,8 @@ void Camera::Rotate()
 	if (m_Pitch < -20.0f) { m_Pitch = -20.0f; }
 	
 	// 回転を反映させる
-	/*m_Pos.x = m_LookAt.x + m_Distance *  sinf(D3DXToRadian(m_Yaw)) * cosf(D3DXToRadian(m_Pitch));
-	m_Pos.y = m_LookAt.y + m_Distance *  sinf(D3DXToRadian(m_Pitch));
-	m_Pos.z = m_LookAt.z + m_Distance * -cosf(D3DXToRadian(m_Yaw)) * cosf(D3DXToRadian(m_Pitch));*/
-
 	m_Pos.x = m_LookAt.x + m_Distance *  sinf(D3DXToRadian(m_Yaw));
-	m_Pos.y = 35.0f  + -m_Pitch;
+	m_Pos.y = 35.0f  + (-m_Pitch);
 	m_Pos.z = m_LookAt.z + m_Distance * -cosf(D3DXToRadian(m_Yaw));
 }
 
@@ -134,18 +107,12 @@ void Camera::SetCamera(const D3DXVECTOR3& pos_, float distance_)
 	{
 		m_Distance++;
 	}
-	//m_Distance = distance_;
+
 	//! 注視点を設定
 	m_LookAt = pos_;
 }
 
-void Camera::SetCameraSensitivity(float horizon_, float vertical_)
-{
-	m_Sensitivity.x = horizon_;
-	m_Sensitivity.y = vertical_;
-}
-
- D3DXVECTOR3 Camera::GetForwardVec()
+ D3DXVECTOR3 Camera::GetForwardVec()const
 {
 	D3DXVECTOR3 forward;
 	//! 前向きベクトルを算出する
@@ -156,7 +123,7 @@ void Camera::SetCameraSensitivity(float horizon_, float vertical_)
 	return forward;
 }
 
-D3DXVECTOR3 Camera::GetLeftVec()
+D3DXVECTOR3 Camera::GetLeftVec()const
 {
 	D3DXVECTOR3 left;
 	//! 前向きベクトルから直角なベクトルを算出する
@@ -187,7 +154,7 @@ void Camera::SetProjectionMatrix()
 	//! アスペクト比を算出
 	D3DVIEWPORT9 vp;
 	THE_GRAPHICS->GetD3DDevice()->GetViewport(&vp);
-	float a = (float)vp.Width / (float)vp.Height;
+	float a = static_cast<float>(vp.Width) / static_cast<float>(vp.Height);
 	float aspect = 1.f;
 
 	//! 視錐台の作成

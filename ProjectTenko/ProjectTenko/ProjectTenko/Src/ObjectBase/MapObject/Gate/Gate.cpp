@@ -39,7 +39,7 @@ Gate::Gate(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObj
 
 void Gate::Update()
 {
-	CoordinateUpdate(MapData::Gate);
+	CoordinateUpdate(MapData::MapObjectList::Gate);
 }
 
 void Gate::Draw()

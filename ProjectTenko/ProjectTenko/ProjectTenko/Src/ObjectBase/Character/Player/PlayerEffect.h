@@ -2,44 +2,72 @@
 #define PLAYEREFFECT_H_
 
 #include <string>
-#include <vector>
 #include <map>
 
-enum class PlayerEffectType
+/**
+* @brief プレイヤーのエフェクトタイプ
+*/
+enum class PlayerEffectType : unsigned char
 {
-	PlyaerChase,
-	PlayerSneak,
+	PlyaerChase,			//! チェイス
+	PlayerSneak,			//! スニーク
 
-	MaxPlayerEffectType,
+	MaxPlayerEffectType,	//! エフェクトの数
 
-	Non,
+	Non,					//! 無し
 };
 
+/**
+* @brief プレイヤーのエフェクトクラス
+*/
 class PlayerEffect
 {
+	/**
+	* @brief エフェクトデータ構造体
+	*/
 	struct PlayerEffectData
 	{
-		int  PlayerFrame;
-		int  CurrentNum;
-		int  MaxNum;
-		int  ChangeFlameNum;
+		int  CurrentFrameNum;	//! 現在のエフェクトのフレーム数
+		int  CurrentNum;		//! 現在のエフェクトの番号
+		int  MaxNum;			//! エフェクトの数
+		int  ChangeFlameNum;	//! 切り替えタイミング
 	};
 
 public:
+	/**
+	* @brief コンストラクタ
+	*/
 	PlayerEffect();
+
+	/**
+	* @brief デストラクタ
+	*/
 	~PlayerEffect();
 	
+	/**
+	* @brief エフェクトの初期化
+	* @param[in] type_ エフェクトタイプ
+	*/
 	void InitEffect(PlayerEffectType type_);
 
+	/**
+	* @brief エフェクト更新関数
+	* @param[in] type_ エフェクトタイプ
+	*/
 	void Update(PlayerEffectType type_);
 
+	/**
+	* @brief エフェクト描画関数
+	* @param[in] type_ エフェクトタイプ
+	*/
 	void Draw(PlayerEffectType type_);
 
-private:
+private:	
+	//! プレイヤーのエフェクト
+	PlayerEffectData m_PlayerEffect[static_cast<int>(PlayerEffectType::MaxPlayerEffectType)];
 	
-	PlayerEffectData m_PlayerEffect[(int)PlayerEffectType::MaxPlayerEffectType];
-	
-	std::map<std::pair<PlayerEffectType, int>, std::string> m_TextureTable;
+	//! エフェクトのテクスチャーテーブル
+	std::map<std::pair<PlayerEffectType, int>, std::string> m_TextureKeyTable;
 };
 
 #endif

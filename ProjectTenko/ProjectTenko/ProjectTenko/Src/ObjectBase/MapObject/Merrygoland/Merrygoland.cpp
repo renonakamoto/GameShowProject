@@ -16,7 +16,7 @@ Merrygoland::Merrygoland(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObje
 
 void Merrygoland::Update()
 {
-	CoordinateUpdate(MapData::Merrygoland);
+	CoordinateUpdate(MapData::MapObjectList::Merrygoland);
 }
 
 void Merrygoland::Draw()

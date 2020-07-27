@@ -5,12 +5,22 @@
 #include "../Character.h"
 #include "PlayerEffect.h"
 #include "State/PlayerStateBase.h"
+#include <memory>
 
+/**
+* @brief   プレイヤークラス
+*/
 class Player : public Character
 {
 public:
+	/**
+	* @brief コンストラクタ
+	*/
 	Player(D3DXVECTOR3 pos_, std::string key_);
 
+	/**
+	* @brief デストラクタ
+	*/
 	virtual ~Player();
 
 	/**
@@ -25,7 +35,7 @@ public:
 
 	/**
 	* @brief		
-	* @return bool	マウス反転している:true マウス反転していない:
+	* @return bool	true: 動いている false: 動いていない
 	*/
 	bool IsMove() { return m_IsMove; }
 
@@ -57,21 +67,26 @@ private:
 	* @brief 移動処理
 	*/
 	void Move();
+	
 
 	Camera* m_RefCamera;					//! カメラの参照用変数
 
 	float m_WalkSpeed;						//! 立ってる状態でのスピード
 	float m_SquatWalkSpeed;					//! しゃがんでる状態でのスピード
+	D3DXVECTOR3 m_Speed;					//! 速度
+	float m_Resist;							//! 空気抵抗
+	float m_Force;							//! 力
+	float m_Weight;							//! 重さ
 
 	bool m_IsSquat;							//! しゃがんでいるかどうか保存する変数
 	bool m_IsMove;							//! 動いているかどうかを保存そる変数
 
 	D3DXVECTOR3 m_CenterPos;				//! プレイヤーの中心点(しゃがんだ時にカメラを下げるために追加)
 
-	FbxMotion<PlayerMotionList> m_Motion;	//! モーションクラス
-	PlayerStateBase* m_State;				//! プレイヤー状態管理クラス
 
-	PlayerEffect*	 m_PlayerEffect;		//! エフェクトクラス
+	FbxMotion<PlayerMotionList>		             m_Motion;			//! モーションクラス
+	PlayerStateBase*							 m_State;			//! プレイヤー状態管理クラス
+	PlayerEffect*								 m_PlayerEffect;	//! エフェクトクラス
 	
 };
 

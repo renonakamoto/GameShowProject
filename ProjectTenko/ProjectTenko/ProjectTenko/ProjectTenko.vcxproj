@@ -25,7 +25,6 @@
     <ClCompile Include="Src\Engine\Fbx\FbxDrawer.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxLoader.cpp" />
     <ClCompile Include="Src\Engine\Fbx\FbxManager.cpp" />
-    <ClCompile Include="Src\Engine\Fbx\FbxMotion.cpp" />
     <ClCompile Include="Src\Engine\Font\Font.cpp" />
     <ClCompile Include="Src\Engine\Graphics\DirectGraphics.cpp" />
     <ClCompile Include="Src\Engine\Input\Controller\GameButton.cpp" />
@@ -39,7 +38,6 @@
     <ClCompile Include="Src\Manager\ObjectManager.cpp" />
     <ClCompile Include="Src\NavigationAI\MovingPathCreator.cpp" />
     <ClCompile Include="Src\NavigationAI\NavigationAI.cpp" />
-    <ClCompile Include="Src\ObjectBase\Character\Character.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Chase.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Move.cpp" />
@@ -75,10 +73,8 @@
     <ClCompile Include="Src\ObjectBase\MapObject\Skydome\Skydome.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Tent\Tent.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Tree\Tree.cpp" />
-    <ClCompile Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine_Blue.cpp" />
-    <ClCompile Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine_Red.cpp" />
+    <ClCompile Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Wall\Wall.cpp" />
-    <ClCompile Include="Src\ObjectBase\ObjectBase.cpp" />
     <ClCompile Include="Src\Scene\ClearScene.cpp" />
     <ClCompile Include="Src\Scene\ConfigScene.cpp" />
     <ClCompile Include="Src\Scene\DebugScene.cpp" />
@@ -102,7 +98,6 @@
     <ClInclude Include="Src\Collision\Shape\AABB.h" />
     <ClInclude Include="Src\Collision\Collision.h" />
     <ClInclude Include="Src\Collision\Shape\Cylinder.h" />
-    <ClInclude Include="Src\Collision\Shape\Point.h" />
     <ClInclude Include="Src\Collision\Shape\Ray.h" />
     <ClInclude Include="Src\Collision\Shape\Rect.h" />
     <ClInclude Include="Src\Collision\Shape\Shape.h" />
@@ -161,8 +156,7 @@
     <ClInclude Include="Src\ObjectBase\MapObject\Skydome\Skydome.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Tent\Tent.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Tree\Tree.h" />
-    <ClInclude Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine_Blue.h" />
-    <ClInclude Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine_Red.h" />
+    <ClInclude Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Wall\Wall.h" />
     <ClInclude Include="Src\ObjectBase\ObjectBase.h" />
     <ClInclude Include="Src\Scene\ClearScene.h" />
@@ -180,7 +174,6 @@
     <ClInclude Include="Src\UI\ConfigUI\ConfigUI.h" />
     <ClInclude Include="Src\UI\GameClearUI\GameClearUI.h" />
     <ClInclude Include="Src\UI\GameOverUI\GameOverUI.h" />
-    <ClInclude Include="Src\UI\GameUI\GameUI.h" />
     <ClInclude Include="Src\UI\PauseUI\PauseUI.h" />
     <ClInclude Include="Src\UI\TitleUI\TitleUI.h" />
     <ClInclude Include="Src\UI\UI.h" />
@@ -188,6 +181,7 @@
     <ClInclude Include="Src\Utility\3DHelper.h" />
     <ClInclude Include="Src\Utility\SimpleCalculation.h" />
     <ClInclude Include="Src\Utility\SimpleCollision.h" />
+    <ClInclude Include="Src\Utility\Singleton.h" />
     <ClInclude Include="Src\Utility\SingletonTemplate.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -20,7 +20,7 @@ bool AABBAndAABB::Test(const Shape& s1, const Shape& s2)
 }
 
 
-bool AABBandCylinder::Test(const Shape& s1, const Shape& s2)
+bool AABBAndCylinder::Test(const Shape& s1, const Shape& s2)
 {
 	D3DXVECTOR3 s1_max = s1.GetMax(), s1_min = s1.GetMin();
 	D3DXVECTOR3 circle_center_pos = s2.GetCenterPos();

@@ -13,29 +13,83 @@ class ObjectBase;
 class Camera
 {
 public:
+	/**
+	* @brief コンストラクタ
+	*/
 	Camera();
 
+	/**
+	* @brief コンストラクタ
+	*/
 	Camera(D3DXVECTOR3 pos_, D3DXVECTOR3 lookAt_, D3DXVECTOR3 upVec_, float distance_);
 
+	/**
+	* @brief デストラクタ
+	*/
 	~Camera();
 
+	/**
+	* @brief 更新関数
+	*/
 	void Update();
-	void Move();
-	void Rotate();
 
+	/**
+	* @brief 対象を見るようにカメラの位置をセットする
+	* @param[in] 対象となるオブジェクト 
+	* @param[in] distance_  カメラ離す距離
+	*/
 	void SetCamera(const D3DXVECTOR3& pos_, float distance_);
-	void SetCameraSensitivity(float horizon_, float vertical_);
-	
-	D3DXVECTOR3  GetForwardVec();
-	D3DXVECTOR3  GetLeftVec();
 
-	Shape* GetShape() {return m_Shape;}
+	/**
+	* @brief 前向きのベクトルを返す関数
+	* @return D3DXVECTOR3 前向きベクトル
+	*/
+	D3DXVECTOR3  GetForwardVec()const;
+
+	/**
+	* @brief 左向きのベクトルを返す関数
+	* @return D3DXVECTOR3 左向きベクトル
+	*/
+	D3DXVECTOR3  GetLeftVec()const;
+
+	/**
+	* @brief 形状を返す関数
+	* @return Shape*
+	*/
+	Shape* GetShape()const				 { return m_Shape;   }
+
+	/**
+	* @brief カメラの座標を返す関数
+	* @return D3DXVECTOR3*
+	*/
 	const D3DXVECTOR3* GetPos()const     { return &m_Pos;    }
+	
+	/**
+	* @brief カメラの注視点を返す関数
+	* @return D3DXVECTOR3*
+	*/
 	const D3DXVECTOR3* GetLookAt()const  { return &m_LookAt; }
+	
+	/**
+	* @brief カメラの上向きベクトルを返す関数
+	* @return D3DXVECTOR3*
+	*/
 	const D3DXVECTOR3* GetUpVec()const   { return &m_UpVec;  }
 	
 private:
+	/**
+	* @brief カメラの回転関数
+	*/
+	void Rotate();
+
+	/**
+	* @brief ビュー座標変換
+	*/
 	void SetViewMatrix();
+
+	/**
+	* @brief プロジェクション座標変換
+	*/
 	void SetProjectionMatrix();
 
 	D3DXVECTOR3 m_Pos;		//! カメラの座標
@@ -46,9 +100,9 @@ private:
 	float m_Yaw;			//! X軸回転
 	float m_Pitch;			//! Y軸回転
 
-	D3DXVECTOR2 m_Sensitivity;
+	D3DXVECTOR2 m_Sensitivity;	//! カメラ感度
 
-	Shape* m_Shape;
+	Shape* m_Shape;			//! 形状
 };
 
 #endif
