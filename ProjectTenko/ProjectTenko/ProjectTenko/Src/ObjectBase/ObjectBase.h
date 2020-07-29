@@ -7,9 +7,15 @@
 #include <string>
 #include <vector>
 
+/**
+* @brief オブジェクト基底クラス
+*/
 class ObjectBase
 {
 public:
+	/**
+	* @brief コンストラクタ
+	*/
 	ObjectBase(D3DXVECTOR3 pos_, std::string key_) :
 		m_Pos   (pos_),
 		m_FbxKey(key_),
@@ -19,6 +25,9 @@ public:
 		m_Depth (0.f)
 	{}
 
+	/**
+	* @brief コンストラクタ
+	*/
 	ObjectBase(D3DXVECTOR3 pos_, std::string key_, float width_, float height_, float depth_) :
 		m_Pos   (pos_),
 		m_FbxKey(key_),
@@ -28,6 +37,9 @@ public:
 		m_Angle (0.f)
 	{}
 
+	/**
+	* @brief デストラクタ
+	*/
 	virtual ~ObjectBase() 
 	{
 		for(int i = 0; i < m_Shape.size(); i++)
@@ -38,27 +50,55 @@ public:
 		m_Shape.clear();
 	}
 
+	/**
+	* @brief 更新関数
+	*/
 	virtual void Update() {}
+
+	/**
+	* @brief 描画関数
+	*/
 	virtual void Draw() {}
 
-	D3DXVECTOR3 GetPos() const { return m_Pos; }
+	/**
+	* @brief 座標を返す関数
+	*/
+	D3DXVECTOR3 GetPos() const{ return m_Pos; }
 
-	std::vector<Shape*> GetShape() const    { return m_Shape; }
+	/**
+	* @brief 当たり判定の形状を返す関数
+	*/
+	std::vector<Shape*> GetShape() const{ return m_Shape; }
 
-	float GetAngle() const     { return m_Angle; }
+	/**
+	* @brief 角度を返す関数
+	*/
+	float GetAngle() const{ return m_Angle; }
 
 protected:
+
+	//! 座標
 	D3DXVECTOR3 m_Pos;
+	
+	//! ワールド
 	D3DXMATRIX  m_Mat_World;
 
+	//! 角度
 	float		m_Angle;
 
+	//! 横幅
 	float		m_Width;
+
+	//! 高さ
 	float		m_Height;
+
+	//! 奥行き
 	float		m_Depth;
 
+	//! 形状クラス
 	std::vector<Shape*> m_Shape;
-
+	
+	//! Fbxキー
 	std::string m_FbxKey;
 
 };

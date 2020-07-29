@@ -13,7 +13,6 @@
     <ClCompile Include="Src\Engine\Window\Window.cpp" />
     <ClCompile Include="Src\Main.cpp" />
     <ClCompile Include="Src\Manager\ObjectManager.cpp" />
-    <ClCompile Include="Src\ObjectBase\Character\Character.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyBase.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Ikaten\Ikaten.cpp" />
@@ -29,10 +28,7 @@
     <ClCompile Include="Src\ObjectBase\MapObject\Mountain\Mountain.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Skydome\Skydome.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Tent\Tent.cpp" />
-    <ClCompile Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine_Blue.cpp" />
-    <ClCompile Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine_Red.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Wall\Wall.cpp" />
-    <ClCompile Include="Src\ObjectBase\ObjectBase.cpp" />
     <ClCompile Include="Src\Utility\3DHelper.cpp" />
     <ClCompile Include="Src\Scene\SceneManager.cpp">
       <Filter>Scene</Filter>
@@ -58,7 +54,6 @@
     <ClCompile Include="Src\Scene\ClearScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Engine\Fbx\FbxMotion.cpp" />
     <ClCompile Include="Src\Collision\Collision.cpp" />
     <ClCompile Include="Src\Engine\Font\Font.cpp" />
     <ClCompile Include="Src\UI\TitleUI\TitleUI.cpp" />
@@ -93,8 +88,7 @@
     <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerSquatWalk.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerSquatScared.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerScared.cpp" />
-    <ClCompile Include="Src\NavigationAI\Node.cpp" />
-    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\StateManager.cpp" />
+    <ClCompile Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
@@ -124,8 +118,6 @@
     <ClInclude Include="Src\ObjectBase\MapObject\Mountain\Mountain.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Skydome\Skydome.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Tent\Tent.h" />
-    <ClInclude Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine_Blue.h" />
-    <ClInclude Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine_Red.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Wall\Wall.h" />
     <ClInclude Include="Src\ObjectBase\ObjectBase.h" />
     <ClInclude Include="Src\Utility\3DHelper.h" />
@@ -168,13 +160,11 @@
     <ClInclude Include="Src\Collision\Shape\AABB.h" />
     <ClInclude Include="Src\Collision\Shape\Cylinder.h" />
     <ClInclude Include="Src\Collision\Shape\Shape.h" />
-    <ClInclude Include="Src\Collision\Shape\Point.h" />
     <ClInclude Include="Src\Collision\Shape\Rect.h" />
     <ClInclude Include="Src\Collision\FlexibleCollision.h" />
     <ClInclude Include="Src\Engine\Font\Font.h" />
     <ClInclude Include="Src\Utility\2DHelper.h" />
     <ClInclude Include="Src\UI\UI.h" />
-    <ClInclude Include="Src\UI\GameUI\GameUI.h" />
     <ClInclude Include="Src\UI\TitleUI\TitleUI.h" />
     <ClInclude Include="Src\Utility\SimpleCollision.h" />
     <ClInclude Include="Src\ExternalFle\Csv\Csv.h" />
@@ -211,8 +201,8 @@
     <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerSquatWalk.h" />
     <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerSquatScared.h" />
     <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerScared.h" />
-    <ClInclude Include="Src\NavigationAI\Node.h" />
-    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\StateManager.h" />
+    <ClInclude Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine.h" />
+    <ClInclude Include="Src\Utility\Singleton.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

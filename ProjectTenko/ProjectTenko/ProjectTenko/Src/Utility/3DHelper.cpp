@@ -69,6 +69,7 @@ void RenderModel(Model* pModel)
 
 			// 頂点フォーマットの指定
 			pDevice->SetFVF(pMesh->fvf);
+			pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
 			if (pMesh->pIndexBuffer)
 			{

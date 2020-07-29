@@ -6,6 +6,7 @@ LPDIRECTINPUT8 InputManager::m_Interface = nullptr;
 
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
+#pragma comment(lib, "xinput.lib")
 
 struct GamePadEnumParam
 {
@@ -579,10 +580,10 @@ void InputManager::UpdateXInput()
 			isPush[static_cast<int>(XInput_Button::R_Left)] = true;
 		}
 		
-		m_InputState[static_cast<int>(InputInfo::Pad_lX)] = state.Gamepad.sThumbLX;
-		m_InputState[static_cast<int>(InputInfo::Pad_lY)] = state.Gamepad.sThumbLY;
-		m_InputState[static_cast<int>(InputInfo::Pad_rX)] = state.Gamepad.sThumbRX;
-		m_InputState[static_cast<int>(InputInfo::Pad_rY)] = state.Gamepad.sThumbRY;
+		m_InputState[static_cast<int>(InputInfo::L_Up)] = state.Gamepad.sThumbLX;
+		m_InputState[static_cast<int>(InputInfo::L_Left)] = state.Gamepad.sThumbLY;
+		m_InputState[static_cast<int>(InputInfo::R_Up)] = state.Gamepad.sThumbRX;
+		m_InputState[static_cast<int>(InputInfo::R_Left)] = state.Gamepad.sThumbRY;
 
 		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP)		isPush[static_cast<int>(XInput_Button::DPad_Up)] = true;
 		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)		isPush[static_cast<int>(XInput_Button::DPad_Down)] = true;
