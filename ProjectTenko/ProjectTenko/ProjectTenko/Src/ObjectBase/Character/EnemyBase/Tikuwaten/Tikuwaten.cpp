@@ -92,7 +92,6 @@ void Tikuwaten::Move()
 			m_Pos = nextpos;
 		}
 	}
-
 }
 
 void Tikuwaten::Turn()

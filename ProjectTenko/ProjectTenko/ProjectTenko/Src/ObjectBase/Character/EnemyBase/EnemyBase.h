@@ -22,7 +22,8 @@ public:
 		m_NextRoute(0.0f, 0.0f, 0.0f),
 		m_NextRouteNum(0),
 		m_NextAngle(0.0f),
-		m_Speed(0.35f)
+		m_Speed(0.35f),
+		m_IsThinking(false)
 	{}
 
 	virtual ~Enemybase() {}
@@ -49,6 +50,7 @@ protected:
 	D3DXVECTOR3 m_MovingVector;
 
 	std::vector<D3DXVECTOR3> m_ReturnRoute;
+	bool m_IsThinking;
 
 	const ObjectBase* m_RefPlayer;		//!< プレイヤーの参照用変数
 
