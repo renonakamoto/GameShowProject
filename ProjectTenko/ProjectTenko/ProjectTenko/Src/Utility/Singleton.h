@@ -17,7 +17,7 @@ protected:
 
 
 private:
-	void operator=(const Singleton6 object_) {}
+	void operator=(const Singleton object_) {}
 	Singleton(const Singleton& object_){}
 
 };

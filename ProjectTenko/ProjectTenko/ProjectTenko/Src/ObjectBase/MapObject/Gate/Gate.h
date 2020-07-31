@@ -12,7 +12,7 @@ public:
 	/**
 	* @brief コンストラクタ
 	*/
-	Gate(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_);
+	Gate(std::vector<MapObjectData>* mapObjcectList_, const std::string& key_);
 
 	/**
 	* @brief デストラクタ

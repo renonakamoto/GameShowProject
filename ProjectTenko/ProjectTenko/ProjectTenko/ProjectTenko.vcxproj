@@ -34,7 +34,6 @@
     <ClCompile Include="Src\Engine\Window\Window.cpp" />
     <ClCompile Include="Src\ExternalFle\Csv\Csv.cpp" />
     <ClCompile Include="Src\Main.cpp" />
-    <ClCompile Include="Src\Manager\ConfigManager.cpp" />
     <ClCompile Include="Src\Manager\ObjectManager.cpp" />
     <ClCompile Include="Src\NavigationAI\MovingPathCreator.cpp" />
     <ClCompile Include="Src\NavigationAI\NavigationAI.cpp" />

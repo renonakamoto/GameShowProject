@@ -14,7 +14,7 @@ public:
 	/**
 	* @brief コンストラクタ
 	*/
-	Skydome(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_);
+	Skydome(std::vector<MapObjectData>* mapObjcectList_, const std::string& key_);
 
 	/**
 	* @brief デストラクタ

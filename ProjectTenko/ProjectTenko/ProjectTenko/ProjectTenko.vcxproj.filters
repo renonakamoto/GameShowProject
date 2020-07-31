@@ -72,7 +72,6 @@
     <ClCompile Include="Src\NavigationAI\MovingPathCreator.cpp" />
     <ClCompile Include="Src\NavigationAI\NavigationAI.cpp" />
     <ClCompile Include="Src\Utility\SimpleCalculation.cpp" />
-    <ClCompile Include="Src\Manager\ConfigManager.cpp" />
     <ClCompile Include="Src\UI\GameClearUI\GameClearUI.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Patrol.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Turn.cpp" />

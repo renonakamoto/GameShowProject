@@ -35,14 +35,15 @@ struct MapObjectData
 class MapObject : public ObjectBase
 {
 public:
-
 	/**
 	* @brief 引数付きコンストラクタ
 	*/
-	MapObject(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_) :
-		ObjectBase(pos_, key_),
+	template<typename... KeyList>
+	MapObject(std::vector<MapObjectData>* mapObjcectList_, const KeyList&... keyList) :
 		m_MapObjectDataList(mapObjcectList_)
-	{}
+	{
+		Develop(keyList...);
+	}
 
 	/**
 	* @brief デストラクタ
@@ -55,12 +56,28 @@ public:
 		//TODO MapDataBankをシングルトン
 		MapDataBank hoge;
 		hoge.Load();
-		m_MapObjectDataList = *hoge.GetMapObjectData(mapObjId_);
+		m_MapObjectDataList = hoge.GetMapObjectData(mapObjId_);
 	}
 
 protected:
-	std::vector<MapObjectData> m_MapObjectDataList;
+	std::vector<MapObjectData>* m_MapObjectDataList;
+	//! ワールド行列
+	std::vector<D3DXMATRIX> m_MatWorld;
+	//! Fbxデータのキー
+	std::vector<std::string> m_FbxKeys;
 		 
+
+private:
+	template<typename First, typename... Rest>
+	void Develop(const First& first_, const Rest&... rest_)
+	{
+		m_FbxKeys.push_back(first_);
+		Develop(rest_...);
+	}
+
+	//! 無限ループにならないように
+	void Develop() { return; }
+
 };
 
 #endif

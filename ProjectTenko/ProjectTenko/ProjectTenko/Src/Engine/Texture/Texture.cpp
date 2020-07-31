@@ -233,14 +233,14 @@ void MyTextureManager::TextureManager::DrawTexture(float posX_, float posY_, std
 
 void MyTextureManager::TextureManager::DrawTexture(float posX_, float posY_, float tu_, float tv_, std::string key_)
 {
-	float width = m_TextureMap[key_]->width / 4.f;
+	float width  = m_TextureMap[key_]->width / 4.0f;
 	float height = m_TextureMap[key_]->height;
 
 	CustomVertex v[4] =
 	{
 		{posX_, posY_, 0.0f, 1.0f, tu_, tv_},
 		{posX_ + width, posY_, 0.0f, 1.0f, tu_ + 0.25, 0.0f},
-		{posX_ + width, posY_ + height, 0.0f, 1.0f, tu_ + 0.25, tv_ + 1.0f},
+		{posX_ + width, posY_ + height, 0.0f, 1.0f, tu_ + 0.25f, tv_ + 1.0f},
 		{posX_, posY_ + height, 0.0f, 1.0f, tu_, tv_ + 1.0f},
 	};
 

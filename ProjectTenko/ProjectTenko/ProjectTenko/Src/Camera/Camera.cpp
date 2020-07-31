@@ -14,7 +14,7 @@ Camera::Camera()
 	m_LookAt = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_UpVec  = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 
-	m_Yaw	 = 0.0f;
+	m_Yaw	 = -90.0f;
 	m_Pitch	 = 0.0f;
 
 	m_Distance = 0.0f;
@@ -103,13 +103,14 @@ void Camera::SetCamera(const D3DXVECTOR3& pos_, float distance_)
 	{
 		m_Distance--;
 	}
-	else if (m_Distance < 30)
+	else if (m_Distance < distance_)
 	{
 		m_Distance++;
 	}
 
 	//! 注視点を設定
 	m_LookAt = pos_;
+	m_LookAt.y += 30.0f;
 }
 
  D3DXVECTOR3 Camera::GetForwardVec()const
@@ -136,7 +137,6 @@ D3DXVECTOR3 Camera::GetLeftVec()const
 
 void Camera::SetViewMatrix()
 {
-	m_LookAt.y += 30.0f;
 	D3DXMATRIX mat_view;
 	//! カメラのビュー行列の作成
 	D3DXMatrixLookAtLH(&mat_view,
@@ -154,7 +154,6 @@ void Camera::SetProjectionMatrix()
 	//! アスペクト比を算出
 	D3DVIEWPORT9 vp;
 	THE_GRAPHICS->GetD3DDevice()->GetViewport(&vp);
-	float a = static_cast<float>(vp.Width) / static_cast<float>(vp.Height);
 	float aspect = 1.f;
 
 	//! 視錐台の作成
