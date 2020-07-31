@@ -53,6 +53,12 @@ struct Route
 	{
 	}
 
+
+	bool operator<(const Route& route) const
+	{
+		return m_Cost < route.m_Cost;
+	};
+
 	void AddPos(std::vector<D3DXVECTOR3>& route_, float size_) const;
 
 	Node* m_Node;
