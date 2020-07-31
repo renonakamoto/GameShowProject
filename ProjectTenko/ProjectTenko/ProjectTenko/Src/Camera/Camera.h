@@ -2,6 +2,7 @@
 #define CAMERA_H_
 
 #include "../Collision/Shape/Shape.h"
+#include "../Utility/Singleton.h"
 #include <d3dx9.h>
 
 class ObjectBase;
@@ -10,8 +11,10 @@ class ObjectBase;
 * @brief カメラクラス
 * @details 詳細なクラスの説明
 */
-class Camera
+class Camera //: public Singleton<Camera>
 {
+	//friend class Singleton<Camera>;
+
 public:
 	/**
 	* @brief コンストラクタ
@@ -35,8 +38,8 @@ public:
 
 	/**
 	* @brief 対象を見るようにカメラの位置をセットする
-	* @param[in] 対象となるオブジェクト 
-	* @param[in] distance_  カメラ離す距離
+	* @param[in] pos_ 対象となるオブジェクト 
+	* @param[in] distance_  カメラと離す距離
 	*/
 	void SetCamera(const D3DXVECTOR3& pos_, float distance_);
 

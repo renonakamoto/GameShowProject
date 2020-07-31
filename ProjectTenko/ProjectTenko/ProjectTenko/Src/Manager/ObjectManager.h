@@ -130,8 +130,8 @@ private:
 
 	Camera* m_Camera;	
 
-	FlexibleCollision m_Collision;	
-	MapDataBank m_MapDataBank;
+	FlexibleCollision m_Collision;
+	std::unique_ptr<MapDataBank> m_MapDataBank;
 	
 };
 

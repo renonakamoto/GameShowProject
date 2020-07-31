@@ -16,9 +16,8 @@ public:
 	/**
 	* @brief コンストラクタ
 	*/
-	ObjectBase(D3DXVECTOR3 pos_, std::string key_) :
-		m_Pos   (pos_),
-		m_FbxKey(key_),
+	ObjectBase() :
+		m_Pos   (D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
 		m_Angle (0.f),
 		m_Width (0.f),
 		m_Height(0.f),
@@ -28,13 +27,23 @@ public:
 	/**
 	* @brief コンストラクタ
 	*/
-	ObjectBase(D3DXVECTOR3 pos_, std::string key_, float width_, float height_, float depth_) :
+	ObjectBase(D3DXVECTOR3 pos_) :
+		m_Pos(pos_),
+		m_Angle(0.f),
+		m_Width(0.f),
+		m_Height(0.f),
+		m_Depth(0.f)
+	{}
+
+	/**
+	* @brief コンストラクタ
+	*/
+	ObjectBase(D3DXVECTOR3 pos_, float width_, float height_, float depth_) :
 		m_Pos   (pos_),
-		m_FbxKey(key_),
 		m_Width (width_),
 		m_Height(height_),
 		m_Depth (depth_),
-		m_Angle (0.f)
+		m_Angle (0.0f)
 	{}
 
 	/**
@@ -42,7 +51,7 @@ public:
 	*/
 	virtual ~ObjectBase() 
 	{
-		for(int i = 0; i < m_Shape.size(); i++)
+		for(size_t i = 0; i < m_Shape.size(); i++)
 		{ 
 			delete m_Shape[i];
 		}
@@ -79,9 +88,6 @@ protected:
 
 	//! 座標
 	D3DXVECTOR3 m_Pos;
-	
-	//! ワールド
-	D3DXMATRIX  m_Mat_World;
 
 	//! 角度
 	float		m_Angle;
@@ -97,9 +103,6 @@ protected:
 
 	//! 形状クラス
 	std::vector<Shape*> m_Shape;
-	
-	//! Fbxキー
-	std::string m_FbxKey;
 
 };
 

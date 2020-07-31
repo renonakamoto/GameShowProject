@@ -12,7 +12,7 @@ public:
 	/**
 	* @brief コンストラクタ
 	*/
-	Mountain(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_);
+	Mountain(std::vector<MapObjectData>* mapObjcectList_, const std::string& key_);
 
 	/**
 	* @brief デストラクタ

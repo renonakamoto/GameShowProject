@@ -88,6 +88,18 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 			light.Specular.r = 0.3f;
 			light.Specular.g = 0.3f;
 			light.Specular.b = 0.3f;
+			//light.Type = D3DLIGHT_DIRECTIONAL;
+			//light.Direction.x = 0.0f;
+			//light.Direction.y = -0.5f;
+			//light.Direction.z = 0.2f;
+			//light.Diffuse.a = 1.0f;
+			//light.Diffuse.r = 1.0f;
+			//light.Diffuse.g = 1.0f;
+			//light.Diffuse.b = 1.0f;
+			//light.Specular.a = 1.0f;
+			//light.Specular.r = 1.0f;
+			//light.Specular.g = 1.0f;
+			//light.Specular.b = 1.0f;
 
 			THE_GRAPHICS->GetD3DDevice()->LightEnable(0, TRUE);
 			THE_GRAPHICS->GetD3DDevice()->SetLight(0, &light);

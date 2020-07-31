@@ -14,13 +14,21 @@ public:
 	* @brief コンストラクタ
 	*/
 	Character(D3DXVECTOR3 pos_, std::string key_) :
-		ObjectBase(pos_, key_)
+		ObjectBase(pos_),
+		m_FbxKey(key_)
 	{}
 
 	/**
 	* @brief デストラクタ
 	*/
 	virtual ~Character() {}
+
+protected:
+	//! ワールド行列
+	D3DXMATRIX  m_Mat_World;
+
+	//! Fbxキー
+	std::string m_FbxKey;
 
 };
 
