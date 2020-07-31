@@ -64,11 +64,11 @@ bool MovingPathCreator::CreateMovingPath(D3DXVECTOR3 originPos_, float xzPlaneX_
 			}
 
 			csvdata.push_back(data);
+			data.clear();
 			pos.x += cellsize_;
 		}
 		pos.x = originPos_.x + (cellsize_ / 2);
 		pos.z += cellsize_;
-		data.clear();
 	}
 
 	std::string filename("MovingPath.csv");

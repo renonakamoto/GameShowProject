@@ -7,6 +7,8 @@ std::vector<std::vector<Node>> Navigator::m_Graph;
 
 Navigator::Navigator()
 {
+	LoadResouces();
+	CreateGraph();
 }
 
 Navigator::~Navigator()
@@ -79,8 +81,8 @@ unsigned __stdcall Navigator::GetReturnRoute(void* data_)
 bool Navigator::LoadResouces()
 {
 	Csv csv;
-	std::string route("");
-	std::string path("");
+	std::string route("assets\Csv\EnemyMovementPoint.csv");
+	std::string path("assets\Csv\MovingPath.csv");
 
 	if (csv.Load(route, m_Route) && csv.Load(path, m_MovingPath))
 	{
