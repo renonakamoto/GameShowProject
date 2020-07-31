@@ -1,5 +1,9 @@
 #include "NavigationAI.h"
+#include "..//ExternalFle/Csv/Csv.h"
 #include <list>
+
+std::vector<std::vector<std::string>> Navigator::m_MovingPath;
+std::vector<std::vector<Node>> Navigator::m_Graph;
 
 Navigator::Navigator()
 {
@@ -68,6 +72,8 @@ unsigned __stdcall Navigator::GetReturnRoute(void* data_)
 	}
 
 	close_list.back().AddPos(data->Route, cellsize);
+
+	return 0;
 }
 
 bool Navigator::LoadResouces()
