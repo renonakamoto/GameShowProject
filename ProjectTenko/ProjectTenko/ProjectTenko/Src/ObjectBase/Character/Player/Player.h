@@ -86,7 +86,7 @@ private:
 
 	FbxMotion<PlayerMotionList>		             m_Motion;			//! モーションクラス
 	PlayerStateBase*							 m_State;			//! プレイヤー状態管理クラス
-	PlayerEffect*								 m_PlayerEffect;	//! エフェクトクラス
+	PlayerEffect								 m_PlayerEffect;	//! エフェクトクラス
 	
 };
 

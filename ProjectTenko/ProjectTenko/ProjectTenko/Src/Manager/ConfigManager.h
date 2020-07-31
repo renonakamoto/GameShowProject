@@ -29,12 +29,15 @@ private:
 	/**
 	* @brief コンストラクタ
 	*/
-	GameConfigManager();
+	GameConfigManager()
+	{
+		m_IsMouseFlip = false;
+	}
 
 	/**
 	* @brief デストラクタ
 	*/
-	~GameConfigManager();
+	~GameConfigManager(){}
 
 
 	bool m_IsMouseFlip;	//! マウスの反転情報を保存する変数

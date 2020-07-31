@@ -17,24 +17,27 @@ bool MapDataBank::Load()
 
 	// “Ç‚İ‚İ‚É¸”s
 	if (!status) { return false; }
-
+	
 
 	MapObjectData data;
+	// CSV‚Ìˆês–Ú‚Í–³‹‚·‚é
 	for (int i = 1; i < map_table.size(); i++)
 	{
 		// ‹ó”’‚Ìê‡
 		if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "") { continue; }
 		
-		data.m_Pos.x = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::PosX)]);
-		data.m_Pos.y = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::PosY)]);
-		data.m_Pos.z = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::PosZ)]);
-		data.m_Rot.x = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::RotX)]);
-		data.m_Rot.y = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::RotY)]);
-		data.m_Rot.z = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::RotZ)]);
+		// •¶š—ñ‚ğ”’l‚É•ÏŠ·‚µŠi”[‚·‚é
+		data.m_Pos.x   = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::PosX)]);
+		data.m_Pos.y   = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::PosY)]);
+		data.m_Pos.z   = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::PosZ)]);
+		data.m_Rot.x   = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::RotX)]);
+		data.m_Rot.y   = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::RotY)]);
+		data.m_Rot.z   = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::RotZ)]);
 		data.m_Scale.x = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ScalX)]);
 		data.m_Scale.y = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ScalY)]);
 		data.m_Scale.z = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ScalZ)]);
 
+		// ƒf[ƒ^‚²‚Æ‚ÉU‚è•ª‚¯‚é
 		if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "Barrel")
 		{
 			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Barrel)].push_back(data);

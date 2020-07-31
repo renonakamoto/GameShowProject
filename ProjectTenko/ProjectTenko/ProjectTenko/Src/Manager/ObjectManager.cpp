@@ -100,15 +100,6 @@ void Objectmanager::Draw()
 		itr->Draw();
 	}
 
-
-	D3DXMATRIX mat_world, mat_Scale;
-	D3DXMatrixIdentity(&mat_world);
-	D3DXMatrixScaling(&mat_Scale, 4.f, 4.f, 4.f);
-	D3DXMatrixTranslation(&mat_world, -810.0f, 0.0f, 1.0f);
-
-	mat_world = mat_Scale * mat_world;
-
-	THE_FBXMANAGER->Draw("Box", mat_world);
 }
 
 void Objectmanager::EntryObject(ObjectType type_)
@@ -242,10 +233,10 @@ bool Objectmanager::HitRayAndObject(const D3DXVECTOR3& origin_, const D3DXVECTOR
 
 bool Objectmanager::HitPlayerAndClearTrigger()
 {
-	std::vector<Shape*> hoge;
-	hoge.push_back(new AABBShape(D3DXVECTOR3(1413.0f, 0.0f, -260.0f), 89.0f, 89.0f, 89.0f));
+	std::vector<Shape*> clear_trigger;
+	clear_trigger.push_back(new AABBShape(D3DXVECTOR3(1413.0f, 0.0f, -260.0f), 89.0f, 89.0f, 89.0f));
 
-	if (m_Collision.Test(m_Player->GetShape(), hoge) == true) {
+	if (m_Collision.Test(m_Player->GetShape(), clear_trigger) == true) {
 		return true;
 	}
 
@@ -265,7 +256,7 @@ void Objectmanager::AllRelease()
 void Objectmanager::CreatePlayer()
 {
 	if (m_Player) return;
-	m_Player = new Player(D3DXVECTOR3(-810.0f, 0.0f, 1.0f), "Player");
+	m_Player = new Player(D3DXVECTOR3(-800.0f, 0.0f, 1.0f), "Player");
 }
 
 void Objectmanager::CreateEnemies()
@@ -282,21 +273,21 @@ void Objectmanager::CreateEnemies()
 void Objectmanager::CreateMap()
 {
 	if (!m_MapObjectGroup.empty() || !m_Object.empty()) return;
-
-	m_MapDataBank.Load();
-	m_MapObjectGroup.push_back(new Barrel(D3DXVECTOR3(0.0f, 0.0f, 300.0f), "Barrel", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Barrel)));
-	m_MapObjectGroup.push_back(new Tent(D3DXVECTOR3(300.0f, 0.0f, 600.0f), "Tent", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Tent)));
-	m_MapObjectGroup.push_back(new VendingMachine(D3DXVECTOR3(0.0f, 0.0f, -100.0f), "VendingMachineBlue", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Vending_Machine)));
-	m_MapObjectGroup.push_back(new Wall(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Wall", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Wall)));
-	m_MapObjectGroup.push_back(new Tree(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Tree", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Tree)));
-	m_MapObjectGroup.push_back(new SaplingBig(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "SaplingBig", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Sapling_Big)));
-	m_MapObjectGroup.push_back(new SaplingSmall(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "SaplingSmall", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Sapling_Small)));
-	m_MapObjectGroup.push_back(new FerrisWheel(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "FerrisWheel", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Ferris_Wheel)));
-	m_MapObjectGroup.push_back(new ShrimpStatue(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "ShrimpStatue", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Shrimp_Statue)));
-	m_MapObjectGroup.push_back(new Merrygoland(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Merrygoland", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Merrygoland)));
-	m_MapObjectGroup.push_back(new Gate(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Gate", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Gate)));
-
-	m_Object.push_back(new Floor(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "Floor", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Floor)));
-	m_Object.push_back(new Mountain(D3DXVECTOR3(0.0f, -400.0f, 0.0f), "Mountain", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Mountain)));
-	m_Object.push_back(new Skydome(D3DXVECTOR3(0.0f, 0.0f, 0.0f), "SkyDome", *m_MapDataBank.GetMapObjectData(MapData::MapObjectList::Skydome)));
+	m_MapDataBank = std::make_unique<MapDataBank>();
+	m_MapDataBank->Load();
+	m_MapObjectGroup.push_back(new Barrel(			m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Barrel),				"Barrel"			));
+	m_MapObjectGroup.push_back(new Tent(			m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Tent),				"Tent"				));
+	m_MapObjectGroup.push_back(new VendingMachine(	m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Vending_Machine),	"VendingMachineBlue"));
+	m_MapObjectGroup.push_back(new Wall(			m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Wall),				"Wall"				));
+	m_MapObjectGroup.push_back(new Tree(			m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Tree),				"Tree"				));
+	m_MapObjectGroup.push_back(new SaplingBig(		m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Sapling_Big),		"SaplingBig"		));
+	m_MapObjectGroup.push_back(new SaplingSmall(	m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Sapling_Small),		"SaplingSmall"		));
+	m_MapObjectGroup.push_back(new FerrisWheel(		m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Ferris_Wheel),		"FerrisWheel1", "FerrisWheel2" ));
+	m_MapObjectGroup.push_back(new ShrimpStatue(	m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Shrimp_Statue),		"ShrimpStatue"		));
+	m_MapObjectGroup.push_back(new Merrygoland(		m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Merrygoland),		"Merrygoland1", "Merrygoland1", "Merrygoland_Shrinp1", "Merrygoland_Shrinp2", "Merrygoland_Shrinp3", "Merrygoland_Shrinp4"));
+	m_MapObjectGroup.push_back(new Gate(			m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Gate),				"Gate"				));
+																																	
+	m_Object.push_back(new Floor(	m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Floor),		"Floor"   ));								
+	m_Object.push_back(new Mountain(m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Mountain),	"Mountain"));
+	m_Object.push_back(new Skydome(	m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Skydome),	"SkyDome" ));
 }

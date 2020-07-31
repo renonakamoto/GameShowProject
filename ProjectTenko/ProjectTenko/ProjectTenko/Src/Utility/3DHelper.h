@@ -55,7 +55,6 @@ struct MeshData
 
 static const int BONE_MAX = 256;
 
-
 //	アニメーション
 struct Motion
 {
@@ -75,11 +74,11 @@ struct Model
 	UINT							materialNum;	// マテリアル数
 	UINT							boneNum;		// ボーン数
 
-	MeshData* pMesh;			// メッシュ情報
-	MaterialData* pMaterial;		// マテリアル情報
+	MeshData*						pMesh;			// メッシュ情報
+	MaterialData*					pMaterial;		// マテリアル情報
 	Bone							bone[BONE_MAX];	// ボーン情報
 	int								startFrame;		// 開始フレーム
-	std::map<std::string, Motion>* pMotion;		// モーション
+	std::map<std::string, Motion>*	pMotion;		// モーション
 
 	D3DXMATRIX						world;			// ワールドマトリックス
 };

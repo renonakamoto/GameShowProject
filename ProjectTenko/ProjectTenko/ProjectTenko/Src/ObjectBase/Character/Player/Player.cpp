@@ -8,7 +8,6 @@ Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 	Character(pos_, key_)
 {
 	m_State			= new PlayerWait();
-	m_PlayerEffect  = new PlayerEffect();
 
 	m_Motion.AddMotion(PlayerMotionList::Wait,			1,	 200);
 	m_Motion.AddMotion(PlayerMotionList::Walk,			211, 270);
@@ -27,17 +26,16 @@ Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 	m_CenterPos			= m_Pos;
 	m_Shape.push_back(new AABBShape(4.0f, 20.f, 4.0f));
 
-
-	m_Speed  = D3DXVECTOR3(0.0f,0.0f,0.0f);
-	m_Resist = 0.3f;
-	m_Force  = 0.5f;
-	m_Weight = 1.2f;
+	m_RefCamera = nullptr;
+	m_Speed		= D3DXVECTOR3(0.0f,0.0f,0.0f);
+	m_Resist	= 0.3f;
+	m_Force		= 0.5f;
+	m_Weight	= 1.2f;
 }
 
 Player::~Player()
 {
 	//delete m_State;
-	//delete m_PlayerEffect;
 }
 
 void Player::Update()
@@ -68,23 +66,22 @@ void Player::Update()
 
 	//	カメラを移動させる
 	m_RefCamera->SetCamera(m_CenterPos, 30);
-}
 
-void Player::Draw()
-{	
-
+	// ワールド行列作成
 	D3DXMATRIX mat_rot, mat_trans;
 	D3DXMatrixIdentity(&mat_rot);
 	D3DXMatrixIdentity(&mat_trans);
 	D3DXMatrixIdentity(&m_Mat_World);
-	LPD3DXEFFECT a;
-	
+
 	D3DXMatrixRotationY(&mat_rot, m_Angle);
 	D3DXMatrixTranslation(&mat_trans, m_Pos.x, m_Pos.y, m_Pos.z);
 
 	m_Mat_World = mat_rot * mat_trans;
-	THE_FBXMANAGER->Draw(m_FbxKey, m_Mat_World);
+}
 
+void Player::Draw()
+{	
+	THE_FBXMANAGER->Draw(m_FbxKey, m_Mat_World);
 }
 
 void Player::Move()

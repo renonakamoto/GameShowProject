@@ -144,31 +144,31 @@ void FbxLoader::LoadMaterial(MaterialData * pMaterialData_, FbxMesh * pMesh_)
 			{
 				FbxProperty prop = pMaterial->FindProperty(FbxSurfaceMaterial::sAmbient);
 				const auto& color = prop.Get<FbxDouble3>();
-				pMaterialData_->material.Ambient.r = color[0];
-				pMaterialData_->material.Ambient.g = color[1];
-				pMaterialData_->material.Ambient.b = color[2];
+				pMaterialData_->material.Ambient.r = static_cast<float>(color[0] * 255.0);
+				pMaterialData_->material.Ambient.g = static_cast<float>(color[1] * 255.0);
+				pMaterialData_->material.Ambient.b = static_cast<float>(color[2] * 255.0);
 			}
 
 			{
 				FbxProperty prop = pMaterial->FindProperty(FbxSurfaceMaterial::sEmissive);
 				const auto& color = prop.Get<FbxDouble3>();
-				pMaterialData_->material.Emissive.r = color[0];
-				pMaterialData_->material.Emissive.g = color[1];
-				pMaterialData_->material.Emissive.b = color[2];
+				pMaterialData_->material.Emissive.r = static_cast<float>(color[0] * 255.0);
+				pMaterialData_->material.Emissive.g = static_cast<float>(color[1] * 255.0);
+				pMaterialData_->material.Emissive.b = static_cast<float>(color[2] * 255.0);
 			}
 
 			{
 				FbxProperty prop = pMaterial->FindProperty(FbxSurfaceMaterial::sSpecular);
 				const auto& color = prop.Get<FbxDouble3>();
-				pMaterialData_->material.Specular.r = color[0];
-				pMaterialData_->material.Specular.g = color[1];
-				pMaterialData_->material.Specular.b = color[2];
+				pMaterialData_->material.Specular.r = static_cast<float>(color[0] * 255.0);
+				pMaterialData_->material.Specular.g = static_cast<float>(color[1] * 255.0);
+				pMaterialData_->material.Specular.b = static_cast<float>(color[2] * 255.0);
 			}
 			FbxProperty prop = pMaterial->FindProperty(FbxSurfaceMaterial::sDiffuse);
 			const auto& color = prop.Get<FbxDouble3>();
-			pMaterialData_->material.Diffuse.r = color[0];
-			pMaterialData_->material.Diffuse.g = color[1];
-			pMaterialData_->material.Diffuse.b = color[2];
+			pMaterialData_->material.Diffuse.r = static_cast<float>(color[0] * 255.0);
+			pMaterialData_->material.Diffuse.g = static_cast<float>(color[1] * 255.0);
+			pMaterialData_->material.Diffuse.b = static_cast<float>(color[2] * 255.0);
 
 
 			//	テクスチャ読み込み

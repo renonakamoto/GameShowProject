@@ -10,9 +10,9 @@ class Barrel : public MapObject
 {
 public:
 	/**
-	* @brief 更新関数
+	* @brief コンストラクタ
 	*/
-	Barrel(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_);
+	Barrel(std::vector<MapObjectData>* mapObjcectList_, const std::string& key_);
 
 	/**
 	* @brief デストラクタ
