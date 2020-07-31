@@ -9,9 +9,10 @@ enum class StateType
 {
 	Move,
 	Patrol,
-	Trun,
+	Turn,
 	Chase,
 	Return,
+	Thinking
 };
 
 class StateManager

@@ -38,12 +38,15 @@
     <ClCompile Include="Src\Manager\ObjectManager.cpp" />
     <ClCompile Include="Src\NavigationAI\MovingPathCreator.cpp" />
     <ClCompile Include="Src\NavigationAI\NavigationAI.cpp" />
+    <ClCompile Include="Src\NavigationAI\Node.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Chase.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Move.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Patrol.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Turn.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Return.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\StateManager.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Thinking.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyBase.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Ikaten\Ikaten.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Kabochaten\Kabochaten.cpp" />
@@ -118,6 +121,7 @@
     <ClInclude Include="Src\NavigationAI\MovingPathCreater.h" />
     <ClInclude Include="Src\NavigationAI\MovingPathCreator.h" />
     <ClInclude Include="Src\NavigationAI\NavigationAI.h" />
+    <ClInclude Include="Src\NavigationAI\Node.h" />
     <ClInclude Include="Src\ObjectBase\Character\Character.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Chase.h" />
@@ -126,6 +130,8 @@
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Turn.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Return.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\State.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\StateManager.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Thinking.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyBase.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Ikaten\Ikaten.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Kabochaten\Kabochaten.h" />

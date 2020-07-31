@@ -89,6 +89,9 @@
     <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerSquatScared.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerScared.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine.cpp" />
+    <ClCompile Include="Src\NavigationAI\Node.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\StateManager.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Thinking.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
@@ -203,6 +206,9 @@
     <ClInclude Include="Src\ObjectBase\Character\Player\State\PlayerScared.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine.h" />
     <ClInclude Include="Src\Utility\Singleton.h" />
+    <ClInclude Include="Src\NavigationAI\Node.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\StateManager.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Thinking.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

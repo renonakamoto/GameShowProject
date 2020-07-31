@@ -28,17 +28,19 @@ bool Navigator::GetEnemyRoute(std::string name_, std::vector<D3DXVECTOR3>& route
 	return false;
 }
 
-void Navigator::GetReturnRoute(D3DXVECTOR3& pos_, D3DXVECTOR3& goal_, std::vector<D3DXVECTOR3>& route_)
+unsigned __stdcall Navigator::GetReturnRoute(void* data_)
 {
+	NavData* data = static_cast<NavData*>(data_);
+
 	std::list<Route> open_list;
 	std::list<Route> close_list;
 
 	float cellsize = std::stof(m_MovingPath[0][2]);
 
 	Route start(
-		&m_Graph[static_cast<int>(pos_.x / cellsize)][static_cast<int>(pos_.z / cellsize)],
+		&m_Graph[static_cast<int>(data->Pos.x / cellsize)][static_cast<int>(data->Pos.z / cellsize)],
 		0.0f);
-	Cell goal_cell(static_cast<int>(goal_.x / cellsize), static_cast<int>(goal_.z / cellsize));
+	Cell goal_cell(static_cast<int>(data->Goal.x / cellsize), static_cast<int>(data->Goal.z / cellsize));
 
 	open_list.push_back(start);
 
@@ -65,7 +67,7 @@ void Navigator::GetReturnRoute(D3DXVECTOR3& pos_, D3DXVECTOR3& goal_, std::vecto
 		open_list.erase(route);
 	}
 
-	close_list.back().AddPos(route_, cellsize);
+	close_list.back().AddPos(data->Route, cellsize);
 }
 
 bool Navigator::LoadResouces()

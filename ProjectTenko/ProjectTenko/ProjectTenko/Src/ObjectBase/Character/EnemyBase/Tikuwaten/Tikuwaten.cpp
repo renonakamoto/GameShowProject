@@ -2,6 +2,7 @@
 #include "..//EnemyAI/StateManager.h"
 #include "..//..//..//..//NavigationAI/NavigationAI.h"
 #include <math.h>
+#include <process.h>
 
 Tikuwaten::Tikuwaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string key_) :
 	Enemybase(pos_, player_, key_), m_CrrentMotion(ChikuwaMotionList::Wait)
@@ -63,35 +64,37 @@ void Tikuwaten::Move()
 		m_MovingVector = (m_NextRoute - m_Pos) / distance;
 
 		// 向きの算出
-		float angle = ((curr_vec.x * m_MovingVector.x) + (curr_vec.z * m_MovingVector.z)) /
-			((sqrtf((curr_vec.x * curr_vec.x) + (curr_vec.z * curr_vec.z))) *
-				(sqrtf((m_MovingVector.x * m_MovingVector.x) + (m_MovingVector.z * m_MovingVector.z))));
-		
+		m_NextAngle = atan2f(m_MovingVector.x, m_MovingVector.z);
+
+		// 外積で右回りか左回りか判定
 		float cross = (curr_vec.x * m_MovingVector.z) - (m_MovingVector.x * curr_vec.z);
 
 		if (cross > 0)
 		{
-			m_NextAngle = m_Angle + D3DXToDegree(acosf(angle));
+			m_IsClockwise = false;
 		}
 		else
 		{
-			m_NextAngle = m_Angle - D3DXToDegree(acosf(angle));
+			m_IsClockwise = true;
 		}
 
-		m_State = StateManager::GetInstance()->GetState(StateType::Trun);
+		m_State = StateManager::GetInstance()->GetState(StateType::Turn);
 	}
 	else
 	{
 		D3DXVECTOR3 nextpos = m_Pos + m_MovingVector * m_Speed;
-		if (fabsf(nextpos.x - m_Pos.x) > fabsf(m_PatrolRoute[m_NextRouteNum].x - m_Pos.x))
+		if (fabsf(nextpos.x - m_Pos.x) > fabsf(m_NextRoute.x - m_Pos.x))
 		{
-			m_Pos = m_PatrolRoute[m_NextRouteNum];
+			m_Pos = m_NextRoute;
+			m_Angle = atan2f(m_MovingVector.x, m_MovingVector.z);
 		}
 		else
 		{
 			m_Pos = nextpos;
+			m_Angle = atan2f(m_MovingVector.x, m_MovingVector.z);
 		}
 	}
+	m_Motion.Motion(ChikuwaMotionList::Walk, m_FbxKey, true);
 }
 
 void Tikuwaten::Turn()
@@ -107,35 +110,15 @@ void Tikuwaten::Turn()
 		m_State = StateManager::GetInstance()->GetState(StateType::Move);
 	}
 
-	float diff = m_NextAngle - m_Angle;
-	float next_angle = m_Angle;
-
-	if (diff > 0 && fabsf(diff) < 180)
+	if (m_IsClockwise)
 	{
-		next_angle += 5.0f;
+		m_Angle -= ENEMY_ROTATE;
 	}
 	else
 	{
-		next_angle -= 5.0f;
+		m_Angle += ENEMY_ROTATE;
 	}
-
-	if (fabsf(next_angle - m_Angle) > fabsf(m_NextAngle - m_Angle))
-	{
-		m_Angle = m_NextAngle;
-	}
-	else
-	{
-		m_Angle = next_angle;
-	}
-
-	if (m_Angle > 360)
-	{
-		m_Angle -= 360;
-	}
-	else if (m_Angle < 0)
-	{
-		m_Angle += 360;
-	}
+	m_Motion.Motion(ChikuwaMotionList::Wait, m_FbxKey, true);
 }
 
 void Tikuwaten::Chase()
@@ -154,6 +137,9 @@ void Tikuwaten::Chase()
 	vec /= distance;
 
 	m_Pos += vec * m_Speed;
+	m_Angle = atan2f(vec.x, vec.z);
+
+	m_Motion.Motion(ChikuwaMotionList::Sprint, m_FbxKey, true);
 }
 
 void Tikuwaten::Return()
@@ -164,30 +150,60 @@ void Tikuwaten::Return()
 		return;
 	}
 
-	
-
-	D3DXVECTOR3 vec = m_ReturnRoute.back();
-
-	if (vec == m_Pos)
+	if (m_Pos == m_NextRoute)
 	{
 		// 次の移動ベクトルの算出
 		m_ReturnRoute.pop_back();
-		vec = m_ReturnRoute.back();
-		double distance = sqrtf(powf(vec.x - m_Pos.x, 2) + powf(vec.y - m_Pos.y, 2) + powf(vec.z - m_Pos.z, 2));
-		m_MovingVector = (vec - m_Pos) / distance; // 掛ける移動量
+
+		if (m_ReturnRoute.empty())
+		{
+			m_State = StateManager::GetInstance()->GetState(StateType::Patrol);
+			return;
+		}
+
+		m_NextRoute = m_ReturnRoute.back();
+		double distance = sqrtf(powf(m_NextRoute.x - m_Pos.x, 2) + powf(m_NextRoute.y - m_Pos.y, 2) + powf(m_NextRoute.z - m_Pos.z, 2));
+		m_MovingVector = (m_NextRoute - m_Pos) / distance;
+		m_Angle = atan2f(m_MovingVector.x, m_MovingVector.z);
 	}
 	else
 	{
-		D3DXVECTOR3 nextpos = m_Pos + m_MovingVector;
-		//if (fabs(nextpos.x - m_Pos.x) > fabs(m_PatrolRoute[m_NextRoute].x - m_Pos.x))
-		//{
-		//	m_Pos = m_PatrolRoute[m_NextRoute];
-		//}
-		//else
-		//{
-		//	m_Pos = nextpos;
-		//}
+		D3DXVECTOR3 nextpos = m_Pos + (m_MovingVector * m_Speed);
+		if (fabs(nextpos.x - m_Pos.x) > fabs(m_NextRoute.x - m_Pos.x))
+		{
+			m_Pos = m_NextRoute;
+		}
+		else
+		{
+			m_Pos = nextpos;
+		}
+	}
+	m_Motion.Motion(ChikuwaMotionList::Walk, m_FbxKey, true);
+}
 
+void Tikuwaten::Thinking()
+{
+	if (CanDetectPC() == true)
+	{
+		m_State = StateManager::GetInstance()->GetState(StateType::Chase);
+		return;
 	}
 
+	if (m_Handle == nullptr)
+	{
+		DecideReturnPoint();
+		NavData data = { m_ReturnRoute, m_Pos, m_NextRoute };
+
+		m_Handle = (HANDLE)_beginthreadex(NULL, 0, &Navigator::GetReturnRoute, static_cast<void*>(&data), 0, NULL);
+	}
+	else
+	{
+		if (WaitForSingleObject(m_Handle, 0) != WAIT_OBJECT_0)
+		{
+			m_Handle = nullptr;
+			m_State = StateManager::GetInstance()->GetState(StateType::Return);
+		}
+	}
+
+	m_Motion.Motion(ChikuwaMotionList::Wait, m_FbxKey, true);
 }

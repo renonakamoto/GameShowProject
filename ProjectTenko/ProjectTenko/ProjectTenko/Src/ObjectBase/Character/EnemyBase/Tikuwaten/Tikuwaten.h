@@ -27,6 +27,7 @@ private:
 	void Turn() override;
 	void Chase() override;
 	void Return() override;
+	void Thinking() override;
 
 private:
 	ChikuwaMotionList		     m_CrrentMotion;

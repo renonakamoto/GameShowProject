@@ -14,7 +14,6 @@ void Enemybase::DecideReturnPoint()
 			m_NextRoute = e;
 		}
 	}
-
 }
 
 bool Enemybase::CanDetectPC()

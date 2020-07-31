@@ -9,6 +9,7 @@
 
 #define ENEMY_VIEW 20.0f
 #define ENEMY_VIEW_ANGLE 45.0f
+#define ENEMY_ROTATE 0.026f
 
 class State;
 
@@ -23,7 +24,8 @@ public:
 		m_NextRouteNum(0),
 		m_NextAngle(0.0f),
 		m_Speed(0.35f),
-		m_IsThinking(false)
+		m_IsThinking(false),
+		m_Handle(nullptr)
 	{}
 
 	virtual ~Enemybase() {}
@@ -34,6 +36,7 @@ public:
 
 	virtual void Chase(){}
 	virtual void Return(){}
+	virtual void Thinking(){}
 
 	void DecideReturnPoint();
 
@@ -48,11 +51,14 @@ protected:
 	float m_Speed;
 	float m_NextAngle;
 	D3DXVECTOR3 m_MovingVector;
+	bool m_IsClockwise;
 
 	std::vector<D3DXVECTOR3> m_ReturnRoute;
 	bool m_IsThinking;
 
 	const ObjectBase* m_RefPlayer;		//!< プレイヤーの参照用変数
+
+	HANDLE m_Handle;
 
 private:
 };

@@ -4,6 +4,7 @@
 #include "Patrol/Turn.h"
 #include "Chase.h"
 #include "Return.h"
+#include "Thinking.h"
 #include <memory>
 
 StateManager::StateManager()
@@ -13,6 +14,7 @@ StateManager::StateManager()
 	m_StateList.push_back(std::make_unique<Turn>());
 	m_StateList.push_back(std::make_unique<Chase>());
 	m_StateList.push_back(std::make_unique<Return>());
+	m_StateList.push_back(std::make_unique<Thinking>());
 }
 
 StateManager::~StateManager()
