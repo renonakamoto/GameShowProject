@@ -47,7 +47,9 @@ Barrel::Barrel(std::vector<MapObjectData>* mapObjcectList_, const std::string& k
 
 void Barrel::Update()
 {
+#ifdef MAP_DEBUG
 	CoordinateUpdate(MapData::MapObjectList::Barrel);
+#endif
 
 	for (const auto& itr : *m_MapObjectDataList)
 	{

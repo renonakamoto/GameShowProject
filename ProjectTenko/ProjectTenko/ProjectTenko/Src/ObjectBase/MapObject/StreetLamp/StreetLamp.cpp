@@ -1,22 +1,22 @@
-#include "SaplingSmall.h"
-#include "../../../Collision/Shape/AABB.h"
+#include "StreetLamp.h"
 #include "../../../Utility/SimpleCalculation.h"
+#include "../../../Collision/Shape/AABB.h"
 
-SaplingSmall::SaplingSmall(std::vector<MapObjectData>* mapObjcectList_, const std::string& key_):
+StreetLamp::StreetLamp(std::vector<MapObjectData>* mapObjcectList_, const std::string& key_):
 	MapObject(mapObjcectList_, key_)
 {
-	m_Width  = 20.0f;
-	m_Height = 20.0f;
-	m_Depth  = 20.0f;
-
+	m_Width  = 2.0f;
+	m_Height = 65.0f;
+	m_Depth  = 2.0f;
 
 	D3DXVECTOR3 scale;	// x = width // y = height // z = depth
+
 	int shape_num = 0;
 	for (const auto& itr : *m_MapObjectDataList)
 	{
-		scale.x = m_Width  * itr.m_Scale.x;
+		scale.x = m_Width * itr.m_Scale.x;
 		scale.y = m_Height * itr.m_Scale.y;
-		scale.z = m_Depth  * itr.m_Scale.z;
+		scale.z = m_Depth * itr.m_Scale.z;
 
 		SimpleCalculation::D3DXVec3RotationX(&scale, itr.m_Rot.x);
 		SimpleCalculation::D3DXVec3RotationY(&scale, itr.m_Rot.y);
@@ -44,21 +44,14 @@ SaplingSmall::SaplingSmall(std::vector<MapObjectData>* mapObjcectList_, const st
 	}
 }
 
-void SaplingSmall::Update()
+void StreetLamp::Update()
 {
 #ifdef MAP_DEBUG
-	CoordinateUpdate(MapData::MapObjectList::Sapling_Small);
+	CoordinateUpdate(MapData::MapObjectList::StreetLamp);
 #endif
-
-	for (const auto& itr : *m_MapObjectDataList)
-	{
-		int shape_num = 0;
-		m_Shape[shape_num]->Update(itr.m_Pos);
-		shape_num++;
-	}
 }
 
-void SaplingSmall::Draw()
+void StreetLamp::Draw()
 {
 	for (const auto& mat_world : m_MatWorld)
 	{

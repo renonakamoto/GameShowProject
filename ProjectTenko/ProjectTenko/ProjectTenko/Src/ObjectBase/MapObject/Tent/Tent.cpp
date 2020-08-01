@@ -26,7 +26,9 @@ Tent::Tent(std::vector<MapObjectData>* mapObjcectList_, const std::string& key_)
 
 void Tent::Update()
 {
+#ifdef MAP_DEBUG
 	CoordinateUpdate(MapData::MapObjectList::Tent);
+#endif
 }
 
 void Tent::Draw()

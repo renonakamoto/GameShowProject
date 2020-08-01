@@ -46,7 +46,9 @@ SaplingBig::SaplingBig(std::vector<MapObjectData>* mapObjcectList_, const std::s
 
 void SaplingBig::Update()
 {
+#ifdef MAP_DEBUG
 	CoordinateUpdate(MapData::MapObjectList::Sapling_Big);
+#endif
 	for (const auto& itr : *m_MapObjectDataList)
 	{
 		int shape_num = 0;

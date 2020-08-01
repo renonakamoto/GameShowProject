@@ -1,23 +1,23 @@
-#ifndef SKYDOME_H_
-#define SKYDOME_H_
+#ifndef StreetLamp_H_
+#define StreetLamp_H_
 
 #include "../MapObject.h"
 
 /**
-* @brief スカイドームクラス
+* @brief 街灯クラス
 */
-class Skydome : public MapObject
+class StreetLamp : public MapObject
 {
 public:
 	/**
 	* @brief コンストラクタ
 	*/
-	Skydome(std::vector<MapObjectData>* mapObjcectList_, const std::string& key_);
+	StreetLamp(std::vector<MapObjectData>* mapObjcectList_, const std::string& key_);
 
 	/**
 	* @brief デストラクタ
 	*/
-	virtual ~Skydome() {}
+	virtual ~StreetLamp() {}
 
 	/**
 	* @brief 更新関数

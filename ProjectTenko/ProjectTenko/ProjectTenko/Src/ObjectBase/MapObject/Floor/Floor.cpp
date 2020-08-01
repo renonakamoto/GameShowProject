@@ -22,6 +22,9 @@ Floor::Floor(std::vector<MapObjectData>* mapObjcectList_, const std::string& key
 
 void Floor::Update()
 {
+#ifdef MAP_DEBUG
+	CoordinateUpdate(MapData::MapObjectList::Floor);
+#endif
 }
 
 void Floor::Draw()

@@ -73,6 +73,7 @@
     <ClCompile Include="Src\ObjectBase\MapObject\Sapling_Small\SaplingSmall.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Shrimp_Statue\ShrimpStatue.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Skydome\Skydome.cpp" />
+    <ClCompile Include="Src\ObjectBase\MapObject\StreetLamp\StreetLamp.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Tent\Tent.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Tree\Tree.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Src\ObjectBase\MapObject\Sapling_Small\SaplingSmall.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Shrimp_Statue\ShrimpStatue.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Skydome\Skydome.h" />
+    <ClInclude Include="Src\ObjectBase\MapObject\StreetLamp\StreetLamp.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Tent\Tent.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Tree\Tree.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\Vending_Machine\Vending_Machine.h" />

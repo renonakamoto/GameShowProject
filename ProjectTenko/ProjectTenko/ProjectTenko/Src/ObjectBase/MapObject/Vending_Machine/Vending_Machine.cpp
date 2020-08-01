@@ -2,7 +2,9 @@
 
 void VendingMachine::Update()
 {
+#ifdef MAP_DEBUG
 	CoordinateUpdate(MapData::MapObjectList::Vending_Machine);
+#endif
 }
 
 void VendingMachine::Draw()

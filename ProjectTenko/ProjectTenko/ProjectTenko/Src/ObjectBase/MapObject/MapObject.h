@@ -5,6 +5,7 @@
 #include "../MapObject/MapDataBank.h"
 #include <vector>
 
+//#define MAP_DEBUG
 
 struct MapObjectData
 {

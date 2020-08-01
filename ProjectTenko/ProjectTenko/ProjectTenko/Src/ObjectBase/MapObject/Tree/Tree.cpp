@@ -2,7 +2,10 @@
 
 void Tree::Update()
 {
+#ifdef MAP_DEBUG
 	CoordinateUpdate(MapData::MapObjectList::Tree);
+#endif
+
 	for (const auto& itr : *m_MapObjectDataList)
 	{
 		int shape_num = 0;

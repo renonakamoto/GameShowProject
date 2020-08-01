@@ -10,6 +10,12 @@
 */
 class FerrisWheel : public MapObject
 {
+	enum class FerrisWheelParts
+	{
+		FerrisWheel_Foundation,
+		FerrisWheel_Rotating,
+	};
+
 public:
 	/**
 	* @brief コンストラクタ
@@ -32,6 +38,9 @@ public:
 	*/
 	virtual void Draw() override;
 
+private:
+	std::vector<D3DXMATRIX> m_WorldRotatingParts;	//! 観覧車の回る部分のワールド行列
+
 };
 
 template<typename ...KeyList>
@@ -46,6 +55,7 @@ inline FerrisWheel::FerrisWheel(std::vector<MapObjectData>* mapObjcectList_, con
 		shape_num++;
 	}
 
+	D3DXMATRIX mat_world;
 	D3DXMATRIX mat_trans;
 	D3DXMATRIX mat_scale;
 	D3DXMATRIX mat_rot, mat_rot_x, mat_rot_y, mat_rot_z;
@@ -58,8 +68,10 @@ inline FerrisWheel::FerrisWheel(std::vector<MapObjectData>* mapObjcectList_, con
 		D3DXMatrixRotationY(&mat_rot_y, D3DXToRadian(itr.m_Rot.y));
 		D3DXMatrixRotationZ(&mat_rot_z, D3DXToRadian(itr.m_Rot.z));
 		mat_rot = mat_rot_x * mat_rot_y * mat_rot_z;
+		mat_world = mat_scale * mat_rot * mat_trans;
 
-		m_MatWorld.push_back(mat_scale * mat_rot * mat_trans);
+		m_WorldRotatingParts.push_back(mat_world);
+		m_MatWorld.push_back(mat_world);
 	}
 }
 

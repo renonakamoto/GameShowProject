@@ -27,7 +27,9 @@ ShrimpStatue::ShrimpStatue(std::vector<MapObjectData>* mapObjcectList_, const st
 
 void ShrimpStatue::Update()
 {
+#ifdef MAP_DEBUG
 	CoordinateUpdate(MapData::MapObjectList::Shrimp_Statue);
+#endif
 }
 
 void ShrimpStatue::Draw()
