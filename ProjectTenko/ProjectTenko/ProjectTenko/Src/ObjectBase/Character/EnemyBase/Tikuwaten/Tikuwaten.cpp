@@ -15,6 +15,7 @@ Tikuwaten::Tikuwaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string ke
 	m_Motion.AddMotion(ChikuwaMotionList::ChangeDirection, 210, 270);
 
 	Navigator::GetInstance().GetEnemyRoute("Chikuwa", m_PatrolRoute);
+	m_State = StateManager::GetInstance()->GetState(StateType::Move);
 }
 
 void Tikuwaten::Update()
