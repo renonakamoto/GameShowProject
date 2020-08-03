@@ -22,6 +22,9 @@ Mountain::Mountain(std::vector<MapObjectData>* mapObjcectList_, const std::strin
 
 void Mountain::Update()
 {
+#ifdef MAP_DEBUG
+	CoordinateUpdate(MapData::MapObjectList::Mountain);
+#endif
 }
 
 void Mountain::Draw()

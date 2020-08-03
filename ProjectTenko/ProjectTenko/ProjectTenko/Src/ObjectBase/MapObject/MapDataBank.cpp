@@ -94,6 +94,10 @@ bool MapDataBank::Load()
 		{
 			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Shrimp_Statue)].push_back(data);
 		}
+		else if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "StreetLamp")
+		{
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::StreetLamp)].push_back(data);
+		}
 
 	}
 

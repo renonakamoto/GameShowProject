@@ -27,6 +27,7 @@ namespace MapData
 		Sapling_Big,		//! •c–Ø(‘å)
 		Ferris_Wheel,		//!	ŠÏ——Ô
 		Shrimp_Statue,		//!	ŠC˜V“V‚Ì‘œ
+		StreetLamp,			//!	ŠX“”
 
 		MaxMapObject,		//! í—Ş‚Ì”
 	};

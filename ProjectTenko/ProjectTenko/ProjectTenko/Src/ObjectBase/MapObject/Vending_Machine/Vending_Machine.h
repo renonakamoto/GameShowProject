@@ -39,9 +39,9 @@ template<typename... KeyList>
 inline VendingMachine::VendingMachine(std::vector<MapObjectData>* mapObjcectList_, const KeyList&... keyList_):
 	MapObject(mapObjcectList_, keyList_...)
 {
-	m_Width = 20.0f;
+	m_Width  = 20.0f;
 	m_Height = 100.0f;
-	m_Depth = 30.0f;
+	m_Depth  = 30.0f;
 
 
 	D3DXVECTOR3 scale;	// x = width // y = height // z = depth

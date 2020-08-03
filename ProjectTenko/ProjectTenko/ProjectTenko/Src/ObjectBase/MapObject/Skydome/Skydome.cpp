@@ -22,6 +22,9 @@ Skydome::Skydome(std::vector<MapObjectData>* mapObjcectList_, const std::string&
 
 void Skydome::Update()
 {
+#ifdef MAP_DEBUG
+	CoordinateUpdate(MapData::MapObjectList::Skydome);
+#endif
 }
 
 void Skydome::Draw()

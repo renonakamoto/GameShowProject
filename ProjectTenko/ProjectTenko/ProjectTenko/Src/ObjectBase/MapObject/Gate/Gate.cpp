@@ -55,7 +55,9 @@ Gate::Gate(std::vector<MapObjectData>* mapObjcectList_, const std::string& key_)
 
 void Gate::Update()
 {
+#ifdef MAP_DEBUG
 	CoordinateUpdate(MapData::MapObjectList::Gate);
+#endif
 }
 
 void Gate::Draw()

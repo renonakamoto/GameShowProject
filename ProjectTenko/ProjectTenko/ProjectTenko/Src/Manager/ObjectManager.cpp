@@ -22,6 +22,7 @@
 #include "../ObjectBase/MapObject/Shrimp_Statue/ShrimpStatue.h"
 #include "../Collision/Shape/Ray.h"
 #include "../Collision/Shape/AABB.h"
+#include "../ObjectBase/MapObject/StreetLamp/StreetLamp.h"
 
 
 Objectmanager::Objectmanager()
@@ -65,17 +66,14 @@ void Objectmanager::Update()
 		itr->Update();
 	}
 
-	if (THE_INPUTMANAGER->GetKeyDown(KeyInfo::Key_R))
+	for (const auto& itr : m_MapObjectGroup)
 	{
-		for (const auto& itr : m_MapObjectGroup)
-		{
-			itr->Update();
-		}
+		itr->Update();
+	}
 
-		for (const auto& itr : m_Object)
-		{
-			itr->Update();
-		}
+	for (const auto& itr : m_Object)
+	{
+		itr->Update();
 	}
 
 	if (m_Camera) m_Camera->Update();
@@ -263,19 +261,20 @@ void Objectmanager::CreateEnemies()
 {
 	if (!m_EnemyGroup.empty()) return;
 
-	//m_Object.push_back(new Ebiten(D3DXVECTOR3(0.0f, 0.0f, 0.0f),	 m_Player, "Ebiten"));
-	//m_Object.push_back(new Ikaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f),	 m_Player, "Ikaten"));
-	//m_Object.push_back(new Kabochaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f), m_Player, "Kabochaten"));
-	//m_Object.push_back(new Sitaketen(D3DXVECTOR3(0.0f, 0.0f, 0.0f),  m_Player, "Sitaketen"));
-	//m_Object.push_back(new Tikuwaten(D3DXVECTOR3(0.0f, 0.0f, 0.0f),  m_Player, "Tikuwaten"));
-}
+	//m_Object.push_back(new Ebiten(		D3DXVECTOR3(-178.0f, 0.0f, 265.0f),		m_Player, "Ebiten"		));
+	//m_Object.push_back(new Ikaten(		D3DXVECTOR3(155.0f, 0.0f, -5.0f),		m_Player, "Ikaten"		));
+	//m_Object.push_back(new Kabochaten(	D3DXVECTOR3(-310.0f, 0.0f, -390.0f),	m_Player, "Kabochaten"	));
+	//m_Object.push_back(new Sitaketen(	D3DXVECTOR3(-126.0f, 0.0f, -40.0f),		m_Player, "Sitaketen"	));
+	//m_Object.push_back(new Tikuwaten(	D3DXVECTOR3(599.0f, 0.0f, -326.0f),		m_Player, "Tikuwaten"	));
+}	
 
 void Objectmanager::CreateMap()
 {
 	if (!m_MapObjectGroup.empty() || !m_Object.empty()) return;
+
 	m_MapDataBank = std::make_unique<MapDataBank>();
 	m_MapDataBank->Load();
-	m_MapObjectGroup.push_back(new Barrel(			m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Barrel),				"Barrel"			));
+	m_MapObjectGroup.push_back(new Barrel(			m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Barrel),			"Barrel"			));
 	m_MapObjectGroup.push_back(new Tent(			m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Tent),				"Tent"				));
 	m_MapObjectGroup.push_back(new VendingMachine(	m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Vending_Machine),	"VendingMachineBlue"));
 	m_MapObjectGroup.push_back(new Wall(			m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Wall),				"Wall"				));
@@ -284,8 +283,9 @@ void Objectmanager::CreateMap()
 	m_MapObjectGroup.push_back(new SaplingSmall(	m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Sapling_Small),		"SaplingSmall"		));
 	m_MapObjectGroup.push_back(new FerrisWheel(		m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Ferris_Wheel),		"FerrisWheel1", "FerrisWheel2" ));
 	m_MapObjectGroup.push_back(new ShrimpStatue(	m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Shrimp_Statue),		"ShrimpStatue"		));
-	m_MapObjectGroup.push_back(new Merrygoland(		m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Merrygoland),		"Merrygoland1", "Merrygoland1", "Merrygoland_Shrinp1", "Merrygoland_Shrinp2", "Merrygoland_Shrinp3", "Merrygoland_Shrinp4"));
+	m_MapObjectGroup.push_back(new Merrygoland(		m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Merrygoland),		"Merrygoland1", "Merrygoland2", "Merrygoland_Shrinp1", "Merrygoland_Shrinp2", "Merrygoland_Shrinp3", "Merrygoland_Shrinp4"));
 	m_MapObjectGroup.push_back(new Gate(			m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Gate),				"Gate"				));
+	m_MapObjectGroup.push_back(new StreetLamp(		m_MapDataBank->GetMapObjectData(MapData::MapObjectList::StreetLamp),		"StreetLamp"		));
 																																	
 	m_Object.push_back(new Floor(	m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Floor),		"Floor"   ));								
 	m_Object.push_back(new Mountain(m_MapDataBank->GetMapObjectData(MapData::MapObjectList::Mountain),	"Mountain"));

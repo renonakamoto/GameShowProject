@@ -91,6 +91,7 @@
     <ClCompile Include="Src\NavigationAI\Node.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\StateManager.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Thinking.cpp" />
+    <ClCompile Include="Src\ObjectBase\MapObject\StreetLamp\StreetLamp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
@@ -208,6 +209,7 @@
     <ClInclude Include="Src\NavigationAI\Node.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\StateManager.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Thinking.h" />
+    <ClInclude Include="Src\ObjectBase\MapObject\StreetLamp\StreetLamp.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

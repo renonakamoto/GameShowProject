@@ -46,7 +46,9 @@ Wall::Wall(std::vector<MapObjectData>* mapObjcectList_, const std::string& key_)
 
 void Wall::Update()
 {
+#ifdef MAP_DEBUG
 	CoordinateUpdate(MapData::MapObjectList::Wall);
+#endif
 }
 
 void Wall::Draw()

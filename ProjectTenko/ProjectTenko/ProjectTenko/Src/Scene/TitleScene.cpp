@@ -80,6 +80,8 @@ DWORD WINAPI TitleScene::LoadResources(LPVOID lpParam_)
 	THE_FBXMANAGER->LoadFBXMesh("VendingMachineBlue", "assets/objects/vending_machine/Vending_machine_blue.fbx");
 	// THE_FBXMANAGER->LoadFBXMesh("VendingMachineRed", "assets/objects/vending_machine/Vending_machine_Red.fbx");
 	THE_FBXMANAGER->LoadFBXMesh("Wall",			"assets/objects/wall/wall.fbx");
+	THE_FBXMANAGER->LoadFBXMesh("StreetLamp",	"assets/objects/street_lamp/torch02.fbx");
+
 
     return 0;
 }
