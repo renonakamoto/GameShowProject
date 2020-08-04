@@ -1,22 +1,22 @@
-#include "Vending_Machine_Blue.h"
-#include "../../../Collision/Shape/AABB.h"
+#include "StreetLamp.h"
 #include "../../../Utility/SimpleCalculation.h"
+#include "../../../Collision/Shape/AABB.h"
 
-VendingMachineBlue::VendingMachineBlue(D3DXVECTOR3 pos_, std::string key_, std::vector<MapObjectData> mapObjcectList_) :
-	MapObject(pos_, key_, mapObjcectList_)
+StreetLamp::StreetLamp(std::vector<MapObjectData>* mapObjcectList_, const std::string& key_):
+	MapObject(mapObjcectList_, key_)
 {
-	m_Width  = 20.0f;
-	m_Height = 100.0f;
-	m_Depth  = 30.0f;
-
+	m_Width  = 2.0f;
+	m_Height = 65.0f;
+	m_Depth  = 2.0f;
 
 	D3DXVECTOR3 scale;	// x = width // y = height // z = depth
+
 	int shape_num = 0;
-	for (const auto& itr : m_MapObjectDataList)
+	for (const auto& itr : *m_MapObjectDataList)
 	{
-		scale.x = m_Width  * itr.m_Scale.x;
+		scale.x = m_Width * itr.m_Scale.x;
 		scale.y = m_Height * itr.m_Scale.y;
-		scale.z = m_Depth  * itr.m_Scale.z;
+		scale.z = m_Depth * itr.m_Scale.z;
 
 		SimpleCalculation::D3DXVec3RotationX(&scale, itr.m_Rot.x);
 		SimpleCalculation::D3DXVec3RotationY(&scale, itr.m_Rot.y);
@@ -26,20 +26,12 @@ VendingMachineBlue::VendingMachineBlue(D3DXVECTOR3 pos_, std::string key_, std::
 		m_Shape[shape_num]->Update(itr.m_Pos);
 		shape_num++;
 	}
-}
 
-void VendingMachineBlue::Update()
-{
-	CoordinateUpdate(MapData::MapObjectList::Vending_Machine);
-}
-
-void VendingMachineBlue::Draw()
-{
 	D3DXMATRIX mat_trans;
 	D3DXMATRIX mat_scale;
 	D3DXMATRIX mat_rot, mat_rot_x, mat_rot_y, mat_rot_z;
 
-	for (const auto& itr : m_MapObjectDataList)
+	for (const auto& itr : *m_MapObjectDataList)
 	{
 		D3DXMatrixTranslation(&mat_trans, itr.m_Pos.x, itr.m_Pos.y, itr.m_Pos.z);
 		D3DXMatrixScaling(&mat_scale, itr.m_Scale.x, itr.m_Scale.y, itr.m_Scale.z);
@@ -48,7 +40,24 @@ void VendingMachineBlue::Draw()
 		D3DXMatrixRotationZ(&mat_rot_z, D3DXToRadian(itr.m_Rot.z));
 		mat_rot = mat_rot_x * mat_rot_y * mat_rot_z;
 
-		m_Mat_World = mat_scale * mat_rot * mat_trans;
-		THE_FBXMANAGER->Draw(m_FbxKey, m_Mat_World);
+		m_MatWorld.push_back(mat_scale * mat_rot * mat_trans);
+	}
+}
+
+void StreetLamp::Update()
+{
+#ifdef MAP_DEBUG
+	CoordinateUpdate(MapData::MapObjectList::StreetLamp);
+#endif
+}
+
+void StreetLamp::Draw()
+{
+	for (const auto& mat_world : m_MatWorld)
+	{
+		for (size_t i = 0; i < m_FbxKeys.size(); ++i)
+		{
+			THE_FBXMANAGER->Draw(m_FbxKeys[i], mat_world);
+		}
 	}
 }

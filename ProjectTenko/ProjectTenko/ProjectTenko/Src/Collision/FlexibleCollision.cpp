@@ -1,5 +1,37 @@
 #include "FlexibleCollision.h"
 
+FlexibleCollision::FlexibleCollision()
+{
+	int shape_aabb = static_cast<int>(SHAPE_TYPE::Shape_AABB);
+	int shape_cylinder = static_cast<int>(SHAPE_TYPE::Shape_Cylinder);
+	int shape_ray = static_cast<int>(SHAPE_TYPE::Shape_Ray);
+	// “–‚½‚è”»’èƒe[ƒuƒ‹‚Ìì¬
+	m_CollisionTable[shape_aabb][shape_aabb] = new AABBAndAABB();
+	m_CollisionTable[shape_aabb][shape_cylinder] = new AABBAndCylinder();
+	m_CollisionTable[shape_aabb][shape_ray] = new AABBandRay();
+
+	m_CollisionTable[shape_cylinder][shape_cylinder] = nullptr;
+	m_CollisionTable[shape_cylinder][shape_aabb] = new AABBAndCylinder();
+	m_CollisionTable[shape_cylinder][shape_ray] = new CylinderAndRay();
+
+	m_CollisionTable[shape_ray][shape_ray] = nullptr;
+	m_CollisionTable[shape_ray][shape_aabb] = new AABBandRay();
+	m_CollisionTable[shape_ray][shape_cylinder] = new CylinderAndRay();
+}
+
+FlexibleCollision::~FlexibleCollision()
+{
+	int shape_num = (int)SHAPE_TYPE::Shape_Type_Num;
+
+	for (int i = 0; i < shape_num; ++i) {
+		for (int j = 0; j < shape_num; ++j) {
+			if (m_CollisionTable[i][j] != nullptr) {
+				delete m_CollisionTable[i][j];
+			}
+		}
+	}
+}
+
 bool FlexibleCollision::Test(const std::vector<Shape*>& s1_, const std::vector<Shape*>& s2_)
 {
 	for (int i = 0; i < s1_.size(); ++i)

@@ -2,95 +2,104 @@
 #include "../../ExternalFle/Csv/Csv.h"
 #include "../MapObject/MapObject.h"
 
+template<typename out, typename in> inline out scast(in value_) { return static_cast<out>(value_); }
+
 bool MapDataBank::Load()
 {
-	bool status = false;
+	using namespace MapData;
+
 	std::string file_name = "assets/Csv/MapData.csv";
 	std::vector < std::vector < std::string >> map_table;
+	bool status = false;
 
+	// 読み込んだデータをmap_tableに保存
 	status = Csv::Load(file_name, map_table);
+
+	// 読み込みに失敗
 	if (!status) { return false; }
+	
 
 	MapObjectData data;
+	// CSVの一行目は無視する
 	for (int i = 1; i < map_table.size(); i++)
 	{
-		if (map_table[i][MapData::MapObjectDataList::ObjectName] == "") { continue; }
-		data.m_Pos.x = std::stof(map_table[i][MapData::MapObjectDataList::PosX]);
-		data.m_Pos.y = std::stof(map_table[i][MapData::MapObjectDataList::PosY]);
-		data.m_Pos.z = std::stof(map_table[i][MapData::MapObjectDataList::PosZ]);
-		data.m_Rot.x = std::stof(map_table[i][MapData::MapObjectDataList::RotX]);
-		data.m_Rot.y = std::stof(map_table[i][MapData::MapObjectDataList::RotY]);
-		data.m_Rot.z = std::stof(map_table[i][MapData::MapObjectDataList::RotZ]);
-		data.m_Scale.x = std::stof(map_table[i][MapData::MapObjectDataList::ScalX]);
-		data.m_Scale.y = std::stof(map_table[i][MapData::MapObjectDataList::ScalY]);
-		data.m_Scale.z = std::stof(map_table[i][MapData::MapObjectDataList::ScalZ]);
-		data.m_Width   = std::stof(map_table[i][MapData::MapObjectDataList::Width]);
-		data.m_Height  = std::stof(map_table[i][MapData::MapObjectDataList::Height]);
-		data.m_Depth   = std::stof(map_table[i][MapData::MapObjectDataList::Depth]);
+		// 空白の場合
+		if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "") { continue; }
+		
+		// 文字列を数値に変換し格納する
+		data.m_Pos.x   = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::PosX)]);
+		data.m_Pos.y   = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::PosY)]);
+		data.m_Pos.z   = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::PosZ)]);
+		data.m_Rot.x   = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::RotX)]);
+		data.m_Rot.y   = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::RotY)]);
+		data.m_Rot.z   = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::RotZ)]);
+		data.m_Scale.x = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ScalX)]);
+		data.m_Scale.y = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ScalY)]);
+		data.m_Scale.z = std::stof(map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ScalZ)]);
 
-		if (map_table[i][MapData::MapObjectDataList::ObjectName] == "Barrel")
+		// データごとに振り分ける
+		if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "Barrel")
 		{
-			m_MapObjectDataList[MapData::MapObjectList::Barrel].push_back(data);
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Barrel)].push_back(data);
 		}
-		else if (map_table[i][MapData::MapObjectDataList::ObjectName] == "Floor")
+		else if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "Floor")
 		{
-			m_MapObjectDataList[MapData::MapObjectList::Floor].push_back(data);
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Floor)].push_back(data);
 		}
-		else if (map_table[i][MapData::MapObjectDataList::ObjectName] == "Gate")
+		else if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "Gate")
 		{
-			m_MapObjectDataList[MapData::MapObjectList::Gate].push_back(data);
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Gate)].push_back(data);
 		}
-		else if (map_table[i][MapData::MapObjectDataList::ObjectName] == "MerryGoland")
+		else if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "MerryGoland")
 		{
-			m_MapObjectDataList[MapData::MapObjectList::Merrygoland].push_back(data);
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Merrygoland)].push_back(data);
 		}
-		else if (map_table[i][MapData::MapObjectDataList::ObjectName] == "Mountain")
+		else if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "Mountain")
 		{
-			m_MapObjectDataList[MapData::MapObjectList::Mountain].push_back(data);
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Mountain)].push_back(data);
 		}
-		else if (map_table[i][MapData::MapObjectDataList::ObjectName] == "Skydome")
+		else if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "Skydome")
 		{
-			m_MapObjectDataList[MapData::MapObjectList::Skydome].push_back(data);
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Skydome)].push_back(data);
 		}
-		else if (map_table[i][MapData::MapObjectDataList::ObjectName] == "Tent")
+		else if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "Tent")
 		{
-			m_MapObjectDataList[MapData::MapObjectList::Tent].push_back(data);
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Tent)].push_back(data);
 		}
-		else if (map_table[i][MapData::MapObjectDataList::ObjectName] == "Vending_Machine")
+		else if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "Vending_Machine")
 		{
-			m_MapObjectDataList[MapData::MapObjectList::Vending_Machine].push_back(data);
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Vending_Machine)].push_back(data);
 		}
-		else if (map_table[i][MapData::MapObjectDataList::ObjectName] == "Wall")
+		else if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "Wall")
 		{
-			m_MapObjectDataList[MapData::MapObjectList::Wall].push_back(data);
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Wall)].push_back(data);
 		}
-		else if (map_table[i][MapData::MapObjectDataList::ObjectName] == "Tree")
+		else if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "Tree")
 		{
-			m_MapObjectDataList[MapData::MapObjectList::Tree].push_back(data);
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Tree)].push_back(data);
 		}
-		else if (map_table[i][MapData::MapObjectDataList::ObjectName] == "Sapling_Small")
+		else if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "Sapling_Small")
 		{
-			m_MapObjectDataList[MapData::MapObjectList::Sapling_Small].push_back(data);
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Sapling_Small)].push_back(data);
 		}
-		else if (map_table[i][MapData::MapObjectDataList::ObjectName] == "Sapling_Big")
+		else if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "Sapling_Big")
 		{
-			m_MapObjectDataList[MapData::MapObjectList::Sapling_Big].push_back(data);
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Sapling_Big)].push_back(data);
 		}
-		else if (map_table[i][MapData::MapObjectDataList::ObjectName] == "Ferris_Wheel")
+		else if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "Ferris_Wheel")
 		{
-			m_MapObjectDataList[MapData::MapObjectList::Ferris_Wheel].push_back(data);
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Ferris_Wheel)].push_back(data);
 		}
-		else if (map_table[i][MapData::MapObjectDataList::ObjectName] == "Shrimp_Statue")
+		else if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "Shrimp_Statue")
 		{
-			m_MapObjectDataList[MapData::MapObjectList::Shrimp_Statue].push_back(data);
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::Shrimp_Statue)].push_back(data);
+		}
+		else if (map_table[i][scast<int, MapObjectDataList>(MapObjectDataList::ObjectName)] == "StreetLamp")
+		{
+			m_MapObjectDataList[scast<int, MapObjectList>(MapObjectList::StreetLamp)].push_back(data);
 		}
 
 	}
 
 	return true;
-}
-
-std::vector<MapObjectData>* MapDataBank::GetMapObjectData(MapData::MapObjectList objectId_)
-{
-	return &m_MapObjectDataList[objectId_];
 }

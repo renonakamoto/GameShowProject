@@ -4,6 +4,10 @@
 
 GameScene::GameScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
+    THE_OBJECTMANAGER->EntryObject(Objectmanager::ObjectType::Player);
+    THE_OBJECTMANAGER->EntryObject(Objectmanager::ObjectType::Enemy);
+    THE_OBJECTMANAGER->EntryObject(Objectmanager::ObjectType::Camera);
+
 	ObjectManager::Create();
 
     m_ThreadHandle = CreateThread(
@@ -19,6 +23,9 @@ GameScene::GameScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 
 GameScene::~GameScene()
 {
+    THE_OBJECTMANAGER->ExitObject(Objectmanager::ObjectType::Player);
+    THE_OBJECTMANAGER->ExitObject(Objectmanager::ObjectType::Enemy);
+    THE_OBJECTMANAGER->ExitObject(Objectmanager::ObjectType::Camera);
 }
 
 void GameScene::Load()
@@ -40,10 +47,10 @@ void GameScene::Main()
 	THE_OBJECTMANAGER->Update();
 
 
-    if (THE_OBJECTMANAGER->HitPlayerAndClearTrigger() == true)
-    {
-        m_SceneChanger->ChangeScene(SceneID::Clear);
-    }
+   if (THE_OBJECTMANAGER->HitPlayerAndClearTrigger() == true)
+   {
+       m_SceneChanger->ChangeScene(SceneID::Clear);
+   }
 
     if (THE_OBJECTMANAGER->HitPlayerAndEnemy() == true)
     {
@@ -73,7 +80,7 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
-    	static int   load_time = 0;
+    static int   load_time  = 0;
 	static float load_ui_tu = 0.f;
 	if (m_CurrentState == SceneState::Load) {
 		THE_TEXTUREMANAGER->DrawTexture(0.f, 0.f, load_ui_tu, 0.f, "assets/UI/load.png");

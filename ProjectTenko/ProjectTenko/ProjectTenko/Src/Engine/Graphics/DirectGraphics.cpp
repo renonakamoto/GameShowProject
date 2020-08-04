@@ -6,6 +6,8 @@ bool MyDirectGraphics::DirectGraphics::Init(HWND windowHandle_, int width_, int 
 	if (CreateGraphicsDevice(windowHandle_, width_, height_, isFullScreen_) == false) { return false; }
 	if (SetViewPort() == false) { return false; }
 
+	m_pD3DDevice->SetRenderState(D3DRS_SPECULARENABLE, true);
+
 	return true;
 }
 
@@ -16,10 +18,12 @@ void MyDirectGraphics::DirectGraphics::StartDraw()
 		D3DCOLOR_XRGB(0, 0, 255),
 		1.0f,
 		0);
-
-	m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
+	
+	m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
+	m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
 
 	m_pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 
@@ -55,17 +59,17 @@ bool MyDirectGraphics::DirectGraphics::CreateGraphicsDevice(HWND windowHandle_, 
 	}
 	ZeroMemory(m_pD3DPresentParam, sizeof(D3DPRESENT_PARAMETERS));
 
-	m_pD3DPresentParam->Windowed = !isFullScreen_;
-	m_pD3DPresentParam->hDeviceWindow = windowHandle_;
-	m_pD3DPresentParam->BackBufferCount  = 1;
-	m_pD3DPresentParam->BackBufferFormat = D3DFMT_A8R8G8B8;
-	m_pD3DPresentParam->SwapEffect = D3DSWAPEFFECT_DISCARD;
-	m_pD3DPresentParam->MultiSampleType = D3DMULTISAMPLE_NONE;
-	m_pD3DPresentParam->MultiSampleQuality = 0;
+	m_pD3DPresentParam->Windowed			= !isFullScreen_;
+	m_pD3DPresentParam->hDeviceWindow		= windowHandle_;
+	m_pD3DPresentParam->BackBufferCount		= 1;
+	m_pD3DPresentParam->BackBufferFormat	= D3DFMT_A8R8G8B8;
+	m_pD3DPresentParam->SwapEffect			= D3DSWAPEFFECT_DISCARD;
+	m_pD3DPresentParam->MultiSampleType		= D3DMULTISAMPLE_NONE;
+	m_pD3DPresentParam->MultiSampleQuality	= 0;
 	m_pD3DPresentParam->AutoDepthStencilFormat = D3DFMT_D24S8;
 	m_pD3DPresentParam->EnableAutoDepthStencil = true;
-	m_pD3DPresentParam->BackBufferWidth = width_;
-	m_pD3DPresentParam->BackBufferHeight = height_;
+	m_pD3DPresentParam->BackBufferWidth		= width_;
+	m_pD3DPresentParam->BackBufferHeight	= height_;
 
 
 	if (isFullScreen_)
@@ -80,7 +84,6 @@ bool MyDirectGraphics::DirectGraphics::CreateGraphicsDevice(HWND windowHandle_, 
 		m_pD3DPresentParam,
 		&m_pD3DDevice)))
 	{
-
 		m_pD3DInterface->Release();
 		m_pD3DInterface = nullptr;
 		return false;

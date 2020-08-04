@@ -48,13 +48,12 @@ struct MeshData
 	UINT					indexNum;		// インデックス数
 	UINT					materialIndex;	// マテリアル番号
 
-	MeshVertex* pVertices;		// 頂点データ
+	MeshVertex*				pVertices;		// 頂点データ
 	IDirect3DVertexBuffer9* pVertexBuffer;	// 頂点バッファ
-	IDirect3DIndexBuffer9* pIndexBuffer;	// インデックスバッファ
+	IDirect3DIndexBuffer9*	pIndexBuffer;	// インデックスバッファ
 };
 
 static const int BONE_MAX = 256;
-
 
 //	アニメーション
 struct Motion
@@ -75,11 +74,11 @@ struct Model
 	UINT							materialNum;	// マテリアル数
 	UINT							boneNum;		// ボーン数
 
-	MeshData* pMesh;			// メッシュ情報
-	MaterialData* pMaterial;		// マテリアル情報
+	MeshData*						pMesh;			// メッシュ情報
+	MaterialData*					pMaterial;		// マテリアル情報
 	Bone							bone[BONE_MAX];	// ボーン情報
 	int								startFrame;		// 開始フレーム
-	std::map<std::string, Motion>* pMotion;		// モーション
+	std::map<std::string, Motion>*	pMotion;		// モーション
 
 	D3DXMATRIX						world;			// ワールドマトリックス
 };

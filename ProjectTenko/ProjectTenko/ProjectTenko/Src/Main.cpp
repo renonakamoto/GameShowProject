@@ -7,12 +7,15 @@
 #include "Engine/Font/Font.h"
 #include "Scene/SceneManager.h"
 #include "Manager/ConfigManager.h"
+#include <crtdbg.h>
 
 int APIENTRY WinMain(HINSTANCE hInstance_,
 	HINSTANCE hPrevInstance_,
 	LPSTR     lpCmpLine_,
 	INT       nCmdShow_)
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	
 	//! エンジンインスタンス生成
 	Window::Create();
 	DirectGraphics::Create();
@@ -40,7 +43,7 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 		return -3;
 	}
 
-	if (THE_INPUTMANAGER->Init(hInstance_, THE_WINDOW->GetWindowHandle()))
+	if (THE_INPUTMANAGER->Init(hInstance_, THE_WINDOW->GetWindowHandle()) == false)
 	{
 		return -4;
 	}
@@ -80,6 +83,23 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 			light.Ambient.r = 0.5f;
 			light.Ambient.g = 0.5f;
 			light.Ambient.b = 0.5f;
+			
+			light.Specular.a = 1.0f;
+			light.Specular.r = 0.3f;
+			light.Specular.g = 0.3f;
+			light.Specular.b = 0.3f;
+			//light.Type = D3DLIGHT_DIRECTIONAL;
+			//light.Direction.x = 0.0f;
+			//light.Direction.y = -0.5f;
+			//light.Direction.z = 0.2f;
+			//light.Diffuse.a = 1.0f;
+			//light.Diffuse.r = 1.0f;
+			//light.Diffuse.g = 1.0f;
+			//light.Diffuse.b = 1.0f;
+			//light.Specular.a = 1.0f;
+			//light.Specular.r = 1.0f;
+			//light.Specular.g = 1.0f;
+			//light.Specular.b = 1.0f;
 
 			THE_GRAPHICS->GetD3DDevice()->LightEnable(0, TRUE);
 			THE_GRAPHICS->GetD3DDevice()->SetLight(0, &light);
@@ -88,12 +108,13 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 		}
 	}
 
+	
 	Window::Destory();
 	DirectGraphics::Destory();
-	InputMA::Destory();
 	FbxMeshManager::Destory();
 	FontDevice::Destory();
 	ObjectManager::Destory();
 	TextureManager::Destory();
+	InputMA::Destory();
 	return 1;
 }

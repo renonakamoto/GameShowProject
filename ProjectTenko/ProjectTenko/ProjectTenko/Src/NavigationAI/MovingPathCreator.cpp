@@ -35,10 +35,11 @@ bool MovingPathCreator::CreateMovingPath(D3DXVECTOR3 originPos_, float xzPlaneX_
 	// CSVに送るためにstringをvectorで作る
 	std::vector<std::vector <std::string>> csvdata;
 
-	// 一段目にフィールドのサイズを入力
+	// 一段目にフィールドのサイズとセルのサイズを入力
 	std::vector<std::string> data;
 	data.push_back(std::to_string(xz_x));
 	data.push_back(std::to_string(xz_z));
+	data.push_back(std::to_string(cellsize_));
 	csvdata.push_back(data);
 
 	data.clear();
@@ -50,8 +51,8 @@ bool MovingPathCreator::CreateMovingPath(D3DXVECTOR3 originPos_, float xzPlaneX_
 		{
 			// 情報入力処理
 			// マスの位置情報入力
-			data.push_back(std::to_string(j));
-			data.push_back(std::to_string(i));
+			data.push_back(std::to_string(pos.x));
+			data.push_back(std::to_string(pos.z));
 
 			// 8方向へのベクトルの生成
 			D3DXVECTOR3 vec[8];
@@ -63,6 +64,7 @@ bool MovingPathCreator::CreateMovingPath(D3DXVECTOR3 originPos_, float xzPlaneX_
 			}
 
 			csvdata.push_back(data);
+			data.clear();
 			pos.x += cellsize_;
 		}
 		pos.x = originPos_.x + (cellsize_ / 2);

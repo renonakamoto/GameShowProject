@@ -6,6 +6,7 @@ LPDIRECTINPUT8 InputManager::m_Interface = nullptr;
 
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
+#pragma comment(lib, "xinput.lib")
 
 struct GamePadEnumParam
 {
@@ -26,7 +27,7 @@ InputManager::InputManager() : m_KeyDevice(nullptr), m_MouseDevice(nullptr), m_G
 		m_MouseState[i] = InputState::Not_Push;
 	}
 
-	for (int i = 0; i < static_cast<int>(GamePadButton::MAX_INFO); i++)
+	for (int i = 0; i < static_cast<int>(XInput_Button::MAX_INFO); i++)
 	{
 		m_GamePadState[i] = InputState::Not_Push;
 	}
@@ -49,17 +50,19 @@ bool InputManager::Init(HINSTANCE hInstance_, HWND hWindow_)
 		return false;
 	}
 
-	if (CreateKeyDevice(hWindow_) == false)
-	{
-		return false;
-	}
+	bool key = false;
+	bool pad = false;
+
+	key = CreateKeyDevice(hWindow_);
 
 	if (CreateMouseDevice(hWindow_) == false)
 	{
 		return false;
 	}
 
-	if (CreateGamePadDevice(hWindow_) == false)
+	// pad = CreateGamePadDevice(hWindow_);
+
+	if (key == false && pad == false)
 	{
 		return false;
 	}
@@ -271,7 +274,7 @@ bool InputManager::RestartGamePad(LPDIRECTINPUTDEVICE8 device)
 {
 	if (FAILED(device->Acquire()))
 	{
-		for (int i = 0; i < static_cast<int>(GamePadButton::MAX_INFO); i++)
+		for (int i = 0; i < static_cast<int>(XInput_Button::MAX_INFO); i++)
 		{
 			m_GamePadState[i] = InputState::Not_Push;
 		}
@@ -314,7 +317,8 @@ void InputManager::Update()
 {
 	UpdateKeyState();
 	UpdateMouseState();
-	UpdateGamePadState();
+	// UpdateGamePadState();
+	UpdateXInput();
 }
 
 void InputManager::UpdateKeyState()
@@ -405,109 +409,208 @@ void InputManager::UpdateMouseState()
 
 void InputManager::UpdateGamePadState()
 {
-	DIJOYSTATE joy;
-	bool isPush[static_cast<int>(GamePadButton::MAX_INFO)] = {  };
+//	DIJOYSTATE joy;
+//	bool isPush[static_cast<int>(XInput_Button::MAX_INFO)] = {  };
+//
+//	if (m_GamePadDevice == nullptr)
+//	{
+//			return;
+//	}
+//	
+//	HRESULT hr = m_GamePadDevice->GetDeviceState(sizeof(DIJOYSTATE), &joy);
+//	if (FAILED(hr))
+//	{
+//		RestartGamePad(m_GamePadDevice);
+//	}
+//	
+//	// 左スティックの入力確認
+//	if (joy.lX < -m_Unresponsive_Range)
+//	{
+//		isPush[static_cast<int>(XInput_Button::Stc_lLeft)] = true;
+//	}
+//	else if (joy.lX > m_Unresponsive_Range)
+//	{
+//		isPush[static_cast<int>(XInput_Button::Stc_lRight)] = true;
+//	}
+//	if (joy.lY > m_Unresponsive_Range)
+//	{
+//		isPush[static_cast<int>(XInput_Button::Stc_lDown)] = true;
+//	}
+//	else if (joy.lY < -m_Unresponsive_Range)
+//	{
+//		isPush[static_cast<int>(XInput_Button::Stc_lUp)] = true;
+//	}
+//
+//	m_InputState[static_cast<int>(InputInfo::Pad_lX)] = joy.lX;
+//	m_InputState[static_cast<int>(InputInfo::Pad_lY)] = joy.lY;
+//
+//
+//	// 右スティックの入力確認
+//	if (joy.lRx < -m_Unresponsive_Range)
+//	{
+//		isPush[static_cast<int>(XInput_Button::Stc_rLeft)] = true;
+//	}
+//	else if (joy.lRx > m_Unresponsive_Range)
+//	{
+//		isPush[static_cast<int>(XInput_Button::Stc_rRight)] = true;
+//	}
+//	if (joy.lRy > m_Unresponsive_Range)
+//	{
+//		isPush[static_cast<int>(XInput_Button::Stc_rDown)] = true;
+//	}
+//	else if (joy.lRy < -m_Unresponsive_Range)
+//	{
+//		isPush[static_cast<int>(XInput_Button::Stc_rUp)] = true;
+//	}
+//
+//	m_InputState[static_cast<int>(InputInfo::Pad_rX)] = joy.lRx;
+//	m_InputState[static_cast<int>(InputInfo::Pad_rY)] = joy.lRy;
+//
+//
+//	// 十字キーの入力確認
+//	if (joy.rgdwPOV[0] != 0xFFFFFFFF)
+//	{
+//		float rad = D3DXToRadian((joy.rgdwPOV[0] / 100.0f));
+//		float x = sinf(rad);
+//		float y = cosf(rad);
+//		if (x < -0.01f)
+//		{
+//			isPush[static_cast<int>(XInput_Button::Arw_Left)] = true;
+//		}
+//		else if (x > 0.01f)
+//		{
+//			isPush[static_cast<int>(XInput_Button::Arw_Right)] = true;
+//		}
+//
+//		if (y < -0.01f)
+//		{
+//			isPush[static_cast<int>(XInput_Button::Arw_Down)] = true;
+//		}
+//		else if (y > 0.01f)
+//		{
+//			isPush[static_cast<int>(XInput_Button::Arw_Up)] = true;
+//		}
+//	}
+//
+//	m_InputState[static_cast<int>(InputInfo::Pad_POV)] = static_cast<int>(joy.rgdwPOV[0]);
+//
+//
+//	// ボタンの入力確認
+//	for (int j = 0; j < 10; j++)
+//	{
+//		if (joy.rgbButtons[j] == 0x80)
+//		{
+//			isPush[j] = true;
+//		}
+//	}
+//	
+//	for (int j = 0; j < static_cast<int>(XInput_Button::MAX_INFO); j++)
+//	{
+//		if (isPush[j] == true)
+//		{
+//			if (m_GamePadState[j] == InputState::Not_Push || m_GamePadState[j] == InputState::Release)
+//			{
+//				m_GamePadState[j] = InputState::PushDown;
+//			}
+//				else
+//				{
+//					m_GamePadState[j] = InputState::Push;
+//				}
+//			}
+//			else
+//			{
+//				if (m_GamePadState[j] == InputState::Push || m_GamePadState[j] == InputState::PushDown)
+//				{
+//					m_GamePadState[j] = InputState::Release;
+//				}
+//				else
+//				{
+//					m_GamePadState[j] = InputState::Not_Push;
+//				}
+//
+//			}
+//		}
+//
+//	for (int i = 0; i < static_cast<int>(XInput_Button::MAX_INFO); i++)
+//	{
+//		m_InputState[i + static_cast<int>(KeyInfo::Max_Key_Info) + static_cast<int>(MouseButton::Max_Mouse_Btn)] = static_cast<int>(m_GamePadState[i]);
+//	}
+}
 
-	if (m_GamePadDevice == nullptr)
-	{
-			return;
-	}
-	
-	HRESULT hr = m_GamePadDevice->GetDeviceState(sizeof(DIJOYSTATE), &joy);
-	if (FAILED(hr))
-	{
-		RestartGamePad(m_GamePadDevice);
-	}
-	
-	// 左スティックの入力確認
-	if (joy.lX < -m_Unresponsive_Range)
-	{
-		isPush[static_cast<int>(GamePadButton::Stc_lLeft)] = true;
-	}
-	else if (joy.lX > m_Unresponsive_Range)
-	{
-		isPush[static_cast<int>(GamePadButton::Stc_lRight)] = true;
-	}
-	if (joy.lY > m_Unresponsive_Range)
-	{
-		isPush[static_cast<int>(GamePadButton::Stc_lDown)] = true;
-	}
-	else if (joy.lY < -m_Unresponsive_Range)
-	{
-		isPush[static_cast<int>(GamePadButton::Stc_lUp)] = false;
-	}
+void InputManager::UpdateXInput()
+{
+	bool isPush[static_cast<int>(XInput_Button::MAX_INFO)] = {  };
 
-	m_InputState[static_cast<int>(InputInfo::Pad_lX)] = joy.lX;
-	m_InputState[static_cast<int>(InputInfo::Pad_lY)] = joy.lY;
-
-
-	// 右スティックの入力確認
-	if (joy.lRx < -m_Unresponsive_Range)
+	XINPUT_STATE state;
+	if (XInputGetState(0, &state) == ERROR_SUCCESS)
 	{
-		isPush[static_cast<int>(GamePadButton::Stc_rLeft)] = true;
-	}
-	else if (joy.lRx > m_Unresponsive_Range)
-	{
-		isPush[static_cast<int>(GamePadButton::Stc_rRight)] = true;
-	}
-	if (joy.lRy > m_Unresponsive_Range)
-	{
-		isPush[static_cast<int>(GamePadButton::Stc_rDown)] = true;
-	}
-	else if (joy.lRy < -m_Unresponsive_Range)
-	{
-		isPush[static_cast<int>(GamePadButton::Stc_rUp)] = true;
-	}
-
-	m_InputState[static_cast<int>(InputInfo::Pad_rX)] = joy.lRx;
-	m_InputState[static_cast<int>(InputInfo::Pad_rY)] = joy.lRy;
-
-
-	// 十字キーの入力確認
-	if (joy.rgdwPOV[0] != 0xFFFFFFFF)
-	{
-		float rad = D3DXToRadian((joy.rgdwPOV[0] / 100.0f));
-		float x = sinf(rad);
-		float y = cosf(rad);
-		if (x < -0.01f)
+		if (state.Gamepad.sThumbLX > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
 		{
-			isPush[static_cast<int>(GamePadButton::Arw_Left)] = true;
+			isPush[static_cast<int>(XInput_Button::L_Up)] = true;
 		}
-		else if (x > 0.01f)
+		else if (state.Gamepad.sThumbLX < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
 		{
-			isPush[static_cast<int>(GamePadButton::Arw_Right)] = true;
+			isPush[static_cast<int>(XInput_Button::L_Down)] = true;
+		}
+		
+		if (state.Gamepad.sThumbLY > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+		{
+			isPush[static_cast<int>(XInput_Button::L_Right)] = true;
+		}
+		else if (state.Gamepad.sThumbLY < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+		{
+			isPush[static_cast<int>(XInput_Button::L_Left)] = true;
 		}
 
-		if (y < -0.01f)
+		if (state.Gamepad.sThumbRX > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
 		{
-			isPush[static_cast<int>(GamePadButton::Arw_Down)] = true;
+			isPush[static_cast<int>(XInput_Button::R_Up)] = true;
 		}
-		else if (y > 0.01f)
+		else if (state.Gamepad.sThumbRX < -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
 		{
-			isPush[static_cast<int>(GamePadButton::Arw_Up)] = true;
+			isPush[static_cast<int>(XInput_Button::R_Down)] = true;
 		}
-	}
 
-	m_InputState[static_cast<int>(InputInfo::Pad_POV)] = static_cast<int>(joy.rgdwPOV[0]);
-
-
-	// ボタンの入力確認
-	for (int j = 0; j < 10; j++)
-	{
-		if (joy.rgbButtons[j] == 0x80)
+		if (state.Gamepad.sThumbRY > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
 		{
-			isPush[j] = true;
+			isPush[static_cast<int>(XInput_Button::R_Right)] = true;
 		}
-	}
-	
-	for (int j = 0; j < static_cast<int>(GamePadButton::MAX_INFO); j++)
-	{
-		if (isPush[j] == true)
+		else if (state.Gamepad.sThumbRY < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
 		{
-			if (m_GamePadState[j] == InputState::Not_Push || m_GamePadState[j] == InputState::Release)
+			isPush[static_cast<int>(XInput_Button::R_Left)] = true;
+		}
+		
+		m_InputState[static_cast<int>(InputInfo::L_Up)] = state.Gamepad.sThumbLX;
+		m_InputState[static_cast<int>(InputInfo::L_Left)] = state.Gamepad.sThumbLY;
+		m_InputState[static_cast<int>(InputInfo::R_Up)] = state.Gamepad.sThumbRX;
+		m_InputState[static_cast<int>(InputInfo::R_Left)] = state.Gamepad.sThumbRY;
+
+		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP)		isPush[static_cast<int>(XInput_Button::DPad_Up)] = true;
+		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)		isPush[static_cast<int>(XInput_Button::DPad_Down)] = true;
+		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)		isPush[static_cast<int>(XInput_Button::DPad_Left)] = true;
+		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)		isPush[static_cast<int>(XInput_Button::DPad_Right)] = true;
+		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_START)			isPush[static_cast<int>(XInput_Button::Start)] = true;
+		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_BACK)			isPush[static_cast<int>(XInput_Button::Back)] = true;
+		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB)		isPush[static_cast<int>(XInput_Button::Left_Thumb)] = true;
+		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB)	isPush[static_cast<int>(XInput_Button::Right_Thumb)] = true;
+		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER)	isPush[static_cast<int>(XInput_Button::Left_Shoulder)] = true;
+		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) isPush[static_cast<int>(XInput_Button::Right_Shoulder)] = true;
+		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A)				isPush[static_cast<int>(XInput_Button::A)] = true;
+		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_B)				isPush[static_cast<int>(XInput_Button::B)] = true;
+		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_X)				isPush[static_cast<int>(XInput_Button::X)] = true;
+		if (state.Gamepad.wButtons & XINPUT_GAMEPAD_Y)				isPush[static_cast<int>(XInput_Button::Y)] = true;
+
+		if (state.Gamepad.bLeftTrigger > 0)		isPush[static_cast<int>(XInput_Button::Left_Trigger)] = true;
+		if (state.Gamepad.bRightTrigger > 0)	isPush[static_cast<int>(XInput_Button::Right_Trigger)] = true;
+
+		for (int j = 0; j < static_cast<int>(XInput_Button::MAX_INFO); j++)
+		{
+			if (isPush[j] == true)
 			{
-				m_GamePadState[j] = InputState::PushDown;
-			}
+				if (m_GamePadState[j] == InputState::Not_Push || m_GamePadState[j] == InputState::Release)
+				{
+					m_GamePadState[j] = InputState::PushDown;
+				}
 				else
 				{
 					m_GamePadState[j] = InputState::Push;
@@ -523,13 +626,13 @@ void InputManager::UpdateGamePadState()
 				{
 					m_GamePadState[j] = InputState::Not_Push;
 				}
-
 			}
 		}
 
-	for (int i = 0; i < static_cast<int>(GamePadButton::MAX_INFO); i++)
-	{
-		m_InputState[i + static_cast<int>(KeyInfo::Max_Key_Info) + static_cast<int>(MouseButton::Max_Mouse_Btn)] = static_cast<int>(m_GamePadState[i]);
+		for (int i = 0; i < static_cast<int>(XInput_Button::MAX_INFO); i++)
+		{
+			m_InputState[i + static_cast<int>(KeyInfo::Max_Key_Info) + static_cast<int>(MouseButton::Max_Mouse_Btn)] = static_cast<int>(m_GamePadState[i]);
+		}
 	}
 }
 
@@ -605,7 +708,7 @@ bool InputManager::GetKeyUp(KeyInfo key_) const
 	return false;
 }
 
-bool InputManager::GetButton(GamePadButton btn_) const
+bool InputManager::GetButton(XInput_Button btn_) const
 {
 	if (m_GamePadState[static_cast<int>(btn_)] == InputState::Push)
 	{
@@ -614,7 +717,7 @@ bool InputManager::GetButton(GamePadButton btn_) const
 	return false;
 }
 
-bool InputManager::GetButtonDown(GamePadButton btn_) const
+bool InputManager::GetButtonDown(XInput_Button btn_) const
 {
 	if (m_GamePadState[static_cast<int>(btn_)] == InputState::PushDown)
 	{
@@ -623,7 +726,7 @@ bool InputManager::GetButtonDown(GamePadButton btn_) const
 	return false;
 }
 
-bool InputManager::GetButtonUp(GamePadButton btn_) const
+bool InputManager::GetButtonUp(XInput_Button btn_) const
 {
 	if (m_GamePadState[static_cast<int>(btn_)] == InputState::Release)
 	{
