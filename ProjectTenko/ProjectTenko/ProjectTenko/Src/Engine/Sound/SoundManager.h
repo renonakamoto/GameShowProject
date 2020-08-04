@@ -5,6 +5,18 @@
 #include <unordered_map>
 #include <string>
 
+struct SoundData
+{
+	SoundData(LPDIRECTSOUNDBUFFER8 buff_) : m_SoundData(buff_)
+	{}
+
+	SoundData() : m_SoundData(nullptr)
+	{}
+
+	LPDIRECTSOUNDBUFFER8 m_SoundData;
+	std::vector<LPDIRECTSOUNDBUFFER8> m_CopyData;
+};
+
 class SoundManager
 {
 public:
@@ -23,27 +35,42 @@ public:
 
 	/**
 	* @brief waveデータの読み込み関数
-	* 指定したパスのwaveデータをセカンダリ・バッファに読み込みます
+	* 指定したパスのwaveデータをセカンダリ・バッファに読み込みます。重複して再生する必要のない音源にのみ使用してください。
 	* @return 成功した場合はtrue、そうでないならfalse
 	* @param[in] file_name 読み込むパスを含むファイル名
 	* @param[in] key_name 読み込むデータを管理するキー
 	*/
-	bool LoadSound(std::string filename_, std::string keyname_);
+	bool LoadBGMData(std::string filename_, std::string keyname_);
+
+	/**
+	* @brief waveデータの読み込み関数
+	* 指定したパスのwaveデータをセカンダリ・バッファに読み込みます。重複して再生する必要のある音源にのみ使用してください。
+	* @return 成功した場合はtrue、そうでないならfalse
+	* @param[in] file_name 読み込むパスを含むファイル名
+	* @param[in] key_name 読み込むデータを管理するキー
+	*/
+	bool LoadSEData(std::string filename_, std::string keynama_);
 
 	/**
 	* @brief サウンド再生関数
-	* 指定したセカンダリ・バッファのサウンドを再生します
+	* 指定したSEData内のサウンドを再生します
 	* @param[in] key_ 再生したいサウンドのキー
 	*/
-	void Play(std::string key_, bool isLoop_);
+	void PlaySE(std::string key_, bool isLoop_);
+
+	/**
+	* @brief BGM再生関数
+	* 指定したBGMData内のサウンドを再生します
+	* @param[in] key_ 再生したいサウンドのキー
+	*/
+	void PlayBGM(std::string key_);
 
 	/**
 	* @brief サウンド停止関数
 	* 指定したセカンダリ・バッファのサウンドを停止します
 	* @param[in] key_ 停止したいサウンドのキー
 	*/
-	void Stop(std::string key_);
-
+	void StopBGM(std::string key_);
 private:
 	/**
 	* @biref コンストラクタ
@@ -61,11 +88,20 @@ private:
 	* @return 登録済みの場合はtrue、未登録はfalse
 	* @param[in] key_ 確認するキー
 	*/
-	bool HasKey(std::string key_);
+	bool HasKeyBGM(std::string key_);
+
+	/**
+	* @biref キーチェック関数
+	* 引数のキーが既に登録されているか確認する関数です
+	* @return 登録済みの場合はtrue、未登録はfalse
+	* @param[in] key_ 確認するキー
+	*/
+	bool HasKeySE(std::string key_);
 
 private:
 	LPDIRECTSOUND8 m_Interface;
-	std::unordered_map<std::string, LPDIRECTSOUNDBUFFER8> m_SoundData;
+	std::unordered_map<std::string, LPDIRECTSOUNDBUFFER8> m_BGMData;
+	std::unordered_map<std::string, SoundData> m_SEData;
 };
 
 #endif // !SOUNDMANAGER_H_
