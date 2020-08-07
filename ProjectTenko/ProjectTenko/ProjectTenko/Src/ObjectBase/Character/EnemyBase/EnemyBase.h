@@ -38,6 +38,7 @@ public:
 	virtual void Chase(){}
 	virtual void Return(){}
 	virtual void Thinking(){}
+	virtual void Attack(){}
 
 	void DecideReturnPoint();
 

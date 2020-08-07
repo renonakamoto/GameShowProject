@@ -1,8 +1,10 @@
 #include "Tikuwaten.h"
-#include "..//EnemyAI/StateManager.h"
-#include "..//..//..//..//NavigationAI/NavigationAI.h"
+
 #include <math.h>
 #include <process.h>
+
+#include "..//EnemyAI/StateManager.h"
+#include "..//..//..//..//NavigationAI/NavigationAI.h"
 
 Tikuwaten::Tikuwaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string key_) :
 	Enemybase(pos_, player_, key_), m_CrrentMotion(ChikuwaMotionList::Wait)
@@ -25,10 +27,15 @@ void Tikuwaten::Update()
 
 void Tikuwaten::Draw()
 {
-	D3DXMATRIX mat_trans;
+	D3DXMATRIX mat_trans, mat_rot;
+	D3DXMatrixIdentity(&mat_rot);
+	D3DXMatrixIdentity(&mat_trans);
+	D3DXMatrixIdentity(&m_Mat_World);
+
+	D3DXMatrixRotationY(&mat_rot, m_Angle);
 	D3DXMatrixTranslation(&mat_trans, m_Pos.x, m_Pos.y, m_Pos.z);
 
-	m_Mat_World = mat_trans;
+	m_Mat_World = mat_rot * mat_trans;
 	THE_FBXMANAGER->Draw(m_FbxKey, m_Mat_World);
 }
 

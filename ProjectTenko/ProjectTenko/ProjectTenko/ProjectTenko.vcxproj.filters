@@ -210,6 +210,7 @@
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\StateManager.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Thinking.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\StreetLamp\StreetLamp.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Attack.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

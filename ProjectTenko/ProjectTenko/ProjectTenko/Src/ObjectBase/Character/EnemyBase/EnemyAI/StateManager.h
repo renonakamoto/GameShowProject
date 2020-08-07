@@ -12,7 +12,8 @@ enum class StateType
 	Turn,
 	Chase,
 	Return,
-	Thinking
+	Thinking,
+	Attack
 };
 
 class StateManager
