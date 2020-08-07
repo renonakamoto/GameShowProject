@@ -14,7 +14,7 @@ struct SoundData
 	{}
 
 	LPDIRECTSOUNDBUFFER8 m_SoundData;
-	std::vector<LPDIRECTSOUNDBUFFER8> m_CopyData;
+	std::vector<LPDIRECTSOUNDBUFFER> m_CopyData;
 };
 
 class SoundManager

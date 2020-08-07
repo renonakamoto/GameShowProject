@@ -33,6 +33,20 @@ void SoundManager::Release()
 
 	m_BGMData.clear();
 
+	for (auto& sound : m_SEData)
+	{
+		for (auto copy : sound.second.m_CopyData)
+		{
+			copy->Stop();
+			copy->Release();
+		}
+		sound.second.m_CopyData.clear();
+
+		sound.second.m_SoundData->Stop();
+		sound.second.m_SoundData->Release();
+	}
+	m_SEData.clear();
+
 	m_Interface->Release();
 	m_Interface = nullptr;
 }
