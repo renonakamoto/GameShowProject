@@ -92,7 +92,6 @@
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\StateManager.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Thinking.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\StreetLamp\StreetLamp.cpp" />
-    <ClCompile Include="Src\Engine\Sound\SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
@@ -211,7 +210,7 @@
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\StateManager.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Thinking.h" />
     <ClInclude Include="Src\ObjectBase\MapObject\StreetLamp\StreetLamp.h" />
-    <ClInclude Include="Src\Engine\Sound\SoundManager.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Attack.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

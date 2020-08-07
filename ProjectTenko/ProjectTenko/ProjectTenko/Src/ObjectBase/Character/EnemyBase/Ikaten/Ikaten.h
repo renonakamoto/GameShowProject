@@ -16,7 +16,18 @@ public:
 protected:
 
 private:
+	void Patrol() override;
+	void Move() override;
+	void Turn() override;
+	void Chase() override;
+	void Return() override;
+	void Thinking() override;
+	void Attack() override;
 
+	bool IsPlayerRanged();
+
+private:
+	float m_AttackRange;
 };
 
 #endif

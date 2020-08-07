@@ -25,7 +25,8 @@ public:
 		m_NextAngle(0.0f),
 		m_Speed(0.35f),
 		m_IsThinking(false),
-		m_Handle(nullptr)
+		m_Handle(nullptr),
+		m_IsClockwise(false)
 	{}
 
 	virtual ~Enemybase() {}
@@ -37,6 +38,7 @@ public:
 	virtual void Chase(){}
 	virtual void Return(){}
 	virtual void Thinking(){}
+	virtual void Attack(){}
 
 	void DecideReturnPoint();
 

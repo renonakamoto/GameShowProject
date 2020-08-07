@@ -126,6 +126,7 @@
     <ClInclude Include="Src\NavigationAI\Node.h" />
     <ClInclude Include="Src\ObjectBase\Character\Character.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Attack.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Chase.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Move.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Patrol.h" />
