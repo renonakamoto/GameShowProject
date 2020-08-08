@@ -1,4 +1,4 @@
-#ifndef D3DHELPER_H_
+ï»¿#ifndef D3DHELPER_H_
 #define D3DHELPER_H_
 
 #include "../Engine/Texture/Texture.h"
@@ -18,18 +18,18 @@ struct MeshVertex
 	DWORD color;
 	float u, v;
 
-	// ƒXƒLƒ“ƒƒbƒVƒ…—p
+	// ã‚¹ã‚­ãƒ³ãƒ¡ãƒƒã‚·ãƒ¥ç”¨
 	BYTE index[4];
 	float weight[4];
 };
 
 struct MaterialData
 {
-	TextureData		textureData;	// ƒeƒNƒXƒ`ƒƒ\
-	D3DMATERIAL9	material;		// ƒ}ƒeƒŠƒAƒ‹
+	TextureData		textureData;	// ãƒ†ã‚¯ã‚¹ãƒãƒ£â€•
+	D3DMATERIAL9	material;		// ãƒãƒ†ãƒªã‚¢ãƒ«
 };
 
-// ƒ{[ƒ“î•ñ
+// ãƒœãƒ¼ãƒ³æƒ…å ±
 struct Bone
 {
 	char		name[64];
@@ -37,25 +37,25 @@ struct Bone
 	D3DXMATRIX	transform;
 };
 
-// ƒ‚ƒfƒ‹î•ñ
+// ãƒ¢ãƒ‡ãƒ«æƒ…å ±
 struct MeshData
 {
-	UINT					fvf;			// ƒtƒH[ƒ}ƒbƒg
-	D3DPRIMITIVETYPE		primType;		// ƒvƒŠƒ~ƒeƒBƒu‚Ì•`‰æ•û–@
-	UINT					primNum;		// ƒvƒŠƒ~ƒeƒBƒu”
-	UINT					vertexNum;		// ’¸“_”
-	UINT					vertexStride;	// 1’¸“_•Ó‚è‚ÌƒTƒCƒY
-	UINT					indexNum;		// ƒCƒ“ƒfƒbƒNƒX”
-	UINT					materialIndex;	// ƒ}ƒeƒŠƒAƒ‹”Ô†
+	UINT					fvf;			// ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+	D3DPRIMITIVETYPE		primType;		// ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ã®æç”»æ–¹æ³•
+	UINT					primNum;		// ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–æ•°
+	UINT					vertexNum;		// é ‚ç‚¹æ•°
+	UINT					vertexStride;	// 1é ‚ç‚¹è¾ºã‚Šã®ã‚µã‚¤ã‚º
+	UINT					indexNum;		// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹æ•°
+	UINT					materialIndex;	// ãƒãƒ†ãƒªã‚¢ãƒ«ç•ªå·
 
-	MeshVertex*				pVertices;		// ’¸“_ƒf[ƒ^
-	IDirect3DVertexBuffer9* pVertexBuffer;	// ’¸“_ƒoƒbƒtƒ@
-	IDirect3DIndexBuffer9*	pIndexBuffer;	// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@
+	MeshVertex*				pVertices;		// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿
+	IDirect3DVertexBuffer9* pVertexBuffer;	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡
+	IDirect3DIndexBuffer9*	pIndexBuffer;	// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡
 };
 
 static const int BONE_MAX = 256;
 
-//	ƒAƒjƒ[ƒVƒ‡ƒ“
+//	ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 struct Motion
 {
 	Motion()
@@ -63,48 +63,48 @@ struct Motion
 		ZeroMemory(pKey, sizeof(pKey));
 	}
 
-	UINT		numFrame;		// ƒtƒŒ[ƒ€”	
-	D3DXMATRIX* pKey[BONE_MAX];	// ƒL[ƒtƒŒ[ƒ€
+	UINT		numFrame;		// ãƒ•ãƒ¬ãƒ¼ãƒ æ•°	
+	D3DXMATRIX* pKey[BONE_MAX];	// ã‚­ãƒ¼ãƒ•ãƒ¬ãƒ¼ãƒ 
 };
 
-// ƒ‚ƒfƒ‹î•ñ
+// ãƒ¢ãƒ‡ãƒ«æƒ…å ±
 struct Model
 {
-	UINT							meshNum;		// ƒƒbƒVƒ…”
-	UINT							materialNum;	// ƒ}ƒeƒŠƒAƒ‹”
-	UINT							boneNum;		// ƒ{[ƒ“”
+	UINT							meshNum;		// ãƒ¡ãƒƒã‚·ãƒ¥æ•°
+	UINT							materialNum;	// ãƒãƒ†ãƒªã‚¢ãƒ«æ•°
+	UINT							boneNum;		// ãƒœãƒ¼ãƒ³æ•°
 
-	MeshData*						pMesh;			// ƒƒbƒVƒ…î•ñ
-	MaterialData*					pMaterial;		// ƒ}ƒeƒŠƒAƒ‹î•ñ
-	Bone							bone[BONE_MAX];	// ƒ{[ƒ“î•ñ
-	int								startFrame;		// ŠJnƒtƒŒ[ƒ€
-	std::map<std::string, Motion>*	pMotion;		// ƒ‚[ƒVƒ‡ƒ“
+	MeshData*						pMesh;			// ãƒ¡ãƒƒã‚·ãƒ¥æƒ…å ±
+	MaterialData*					pMaterial;		// ãƒãƒ†ãƒªã‚¢ãƒ«æƒ…å ±
+	Bone							bone[BONE_MAX];	// ãƒœãƒ¼ãƒ³æƒ…å ±
+	int								startFrame;		// é–‹å§‹ãƒ•ãƒ¬ãƒ¼ãƒ 
+	std::map<std::string, Motion>*	pMotion;		// ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
 
-	D3DXMATRIX						world;			// ƒ[ƒ‹ƒhƒ}ƒgƒŠƒbƒNƒX
+	D3DXMATRIX						world;			// ãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒãƒˆãƒªãƒƒã‚¯ã‚¹
 };
 
 
-// FBXƒƒbƒVƒ…(DX9—p)
-// ¡‚¾‚¯
+// FBXãƒ¡ãƒƒã‚·ãƒ¥(DX9ç”¨)
+// ä»Šã ã‘
 struct FBXMeshData
 {
-	Model	Model;		// ƒƒbƒVƒ…ƒf[ƒ^
-	char	motion[64];	// ƒ‚[ƒVƒ‡ƒ“–¼
-	float	frame;		// ƒtƒŒ[ƒ€
+	Model	Model;		// ãƒ¡ãƒƒã‚·ãƒ¥ãƒ‡ãƒ¼ã‚¿
+	char	motion[64];	// ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³å
+	float	frame;		// ãƒ•ãƒ¬ãƒ¼ãƒ 
 };
 
-// ƒ}ƒeƒŠƒAƒ‹î•ñ‚Ì‰Šú‰»
+// ãƒãƒ†ãƒªã‚¢ãƒ«æƒ…å ±ã®åˆæœŸåŒ–
 void InitMaterial(MaterialData* pMaterial, int materialNum);
 
-// ƒ‚ƒfƒ‹•`‰æ
+// ãƒ¢ãƒ‡ãƒ«æç”»
 void RenderModel(Model* pModel);
 
-// ƒ‚ƒfƒ‹‚Ì‰ğ•ú
+// ãƒ¢ãƒ‡ãƒ«ã®è§£æ”¾
 void ReleaseModel(Model* pModel);
 
-// ’¸“_ƒoƒbƒtƒ@‚Ì¶¬
+// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
 IDirect3DVertexBuffer9* CreateVertexBuffer(const void* pVertices, UINT size);
-// ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚Ì¶¬
+// ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
 IDirect3DIndexBuffer9* CreateIndexBuffer(const UINT16* pIndeces, UINT size);
 
 

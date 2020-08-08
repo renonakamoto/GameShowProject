@@ -7,7 +7,7 @@
 Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 	Character(pos_, key_)
 {
-	m_State			= new PlayerWait();
+	m_State	= new PlayerWait();
 
 	m_Motion.AddMotion(PlayerMotionList::Wait,			1,	 200);
 	m_Motion.AddMotion(PlayerMotionList::Walk,			211, 270);

@@ -12,14 +12,28 @@ class AABBShape : public Shape
 {
 public:
 	/**
+	* @brief AABBの情報をまとめた構造体
+	*/
+	struct AABBData
+	{
+		D3DXVECTOR3 m_Min;		//! 各軸の最小値
+		D3DXVECTOR3 m_Max;		//! 各軸の最大値
+		float		Width;		//! 横幅 
+		float		Height;		//! 高さ
+		float		Depth;		//!	奥
+	};
+
+public:
+	/**
 	* @brief コンストラクタ
 	*/
-	AABBShape():
+	AABBShape() :
 		m_Width(0.0f),
 		m_Height(0.0f),
 		m_Depth(0.0f),
 		m_Min(D3DXVECTOR3()),
-		m_Max(D3DXVECTOR3())
+		m_Max(D3DXVECTOR3()),
+		m_AABB{ D3DXVECTOR3(), D3DXVECTOR3(),2.0f,2.0f,2.0f }
 	{}
 
 	/**
@@ -81,16 +95,17 @@ public:
 	* @brief 自身の座標の最小値を返す
 	* @return D3DXVECTOR3
 	*/
-	D3DXVECTOR3 GetMin() const override { return m_Min; }
+	D3DXVECTOR3 GetMin() const  { return m_Min; }
 
 	/**
 	* @brief 自身の座標の最大値を返す関数
 	* @return D3DXVECTOR3
 	*/
-	D3DXVECTOR3 GetMax() const override { return m_Max; }
+	const D3DXVECTOR3 GetMax() const  { return m_Max; }
 
 private:
-	
+	AABBData m_AABB;
+
 	D3DXVECTOR3 m_Min;	//! XYZ軸の最小値
 	D3DXVECTOR3 m_Max;	//! XYZ軸の最大値
 

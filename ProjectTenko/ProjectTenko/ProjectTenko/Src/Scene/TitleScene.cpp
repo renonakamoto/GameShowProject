@@ -90,6 +90,7 @@ DWORD WINAPI TitleScene::LoadResources(LPVOID lpParam_)
 void TitleScene::Main()
 {
 	if (m_TitleUI != nullptr) m_TitleUI->Update();
+	THE_OBJECTMANAGER->Update();
 
 	if (THE_INPUTMANAGER->GetMouseDown(MouseButton::Left) == false) { return; }
 	
