@@ -49,13 +49,13 @@ public:
 	* @brief ”¼Œa‚ğ•Ô‚·ŠÖ”
 	* @return float 
 	*/
-	float GetRadius() const			 override { return m_Radius; }
+	float GetRadius() const			  { return m_Radius; }
 
 	/**
 	* @brief ‚‚³‚ğ•Ô‚·ŠÖ”
 	* @return float
 	*/
-	float GetHeight() const			 override { return m_Height; }
+	float GetHeight() const			  { return m_Height; }
 
 private:
 	D3DXVECTOR3 m_CenterPos;	//! ’†S“_

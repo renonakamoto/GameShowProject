@@ -63,13 +63,13 @@ public:
 	* @brief Œõü‚ÌŒ´“_‚ğ•Ô‚·ŠÖ”
 	* @return D3DXVECTOR3
 	*/
-	D3DXVECTOR3 GetOrigin()const override { return m_Origin; }
+	D3DXVECTOR3 GetOrigin()const  { return m_Origin; }
 
 	/**
 	* @brief Œõü‚Ì’·‚³‚ÆŒü‚«‚ğ•Ô‚·ŠÖ”
 	* @return D3DXVECTOR3
 	*/
-	D3DXVECTOR3 GetDelta()const override  { return m_Delta;  }
+	D3DXVECTOR3 GetDelta()const   { return m_Delta;  }
 
 private:
 	D3DXVECTOR3 m_Origin;	//! Œõü‚ÌŒ´“_

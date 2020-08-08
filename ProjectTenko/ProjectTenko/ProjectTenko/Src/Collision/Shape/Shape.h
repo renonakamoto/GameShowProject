@@ -39,22 +39,22 @@ public:
 	* @brief 判定用オブジェクトの座標を返す
 	*/
 	virtual D3DXVECTOR3 GetPos()const = 0;
-
-public:
-
-	virtual D3DXVECTOR3 GetMin() const { return D3DXVECTOR3(); }
-	virtual D3DXVECTOR3 GetMax() const { return D3DXVECTOR3(); }
-
-public:
-	
-	virtual D3DXVECTOR3 GetCenterPos() const { return D3DXVECTOR3(); }
-	virtual float GetRadius() const { return 0.f; }
-	virtual float GetHeight() const { return 0.f; }
+//
+//public:
+//
+//	virtual D3DXVECTOR3 GetMin() const { return D3DXVECTOR3(); }
+//	virtual D3DXVECTOR3 GetMax() const { return D3DXVECTOR3(); }
+//
+//public:
+//	
+//	virtual D3DXVECTOR3 GetCenterPos() const { return D3DXVECTOR3(); }
+//	virtual float GetRadius() const { return 0.f; }
+//	virtual float GetHeight() const { return 0.f; }
 	virtual void  SetRay(D3DXVECTOR3 origin_, D3DXVECTOR3 delta_){}
-
-public:
-	virtual D3DXVECTOR3 GetOrigin()const { return D3DXVECTOR3(); }
-	virtual D3DXVECTOR3 GetDelta()const  { return D3DXVECTOR3(); }
+//
+//public:
+//	virtual D3DXVECTOR3 GetOrigin()const { return D3DXVECTOR3(); }
+//	virtual D3DXVECTOR3 GetDelta()const  { return D3DXVECTOR3(); }
 };
 
 #endif

@@ -14,7 +14,7 @@ class Collision
 public:
 	virtual ~Collision() {}
 
-	virtual bool Test(const Shape& s1, const Shape& s2) = 0;
+	virtual bool Test(const Shape* s1_, const Shape* s2_) = 0;
 };
 
 /**
@@ -27,7 +27,7 @@ public:
 	AABBAndAABB() {}
 	virtual ~AABBAndAABB() {}
 
-	bool Test(const Shape& s1, const Shape& s2) override;
+	bool Test(const Shape* s1_, const Shape* s2_) override;
 
 };
 
@@ -41,7 +41,7 @@ public:
 	AABBAndCylinder() {}
 	virtual ~AABBAndCylinder() {}
 
-	bool Test(const Shape& s1, const Shape& s2);
+	bool Test(const Shape* s1_, const Shape* s2_) override;
 };
 
 /**
@@ -54,8 +54,7 @@ public:
 	AABBandRay(){}
 	virtual ~AABBandRay() {}
 
-	bool Test(const Shape& s1, const Shape& s2);
-
+	bool Test(const Shape* s1_, const Shape* s2_) override;
 };
 
 /**
@@ -68,8 +67,7 @@ public:
 	CylinderAndRay(){}
 	virtual ~CylinderAndRay(){}
 
-	bool Test(const Shape& s1, const Shape& s2);
-
+	bool Test(const Shape* s1_, const Shape* s2_) override;
 };
 
 #endif

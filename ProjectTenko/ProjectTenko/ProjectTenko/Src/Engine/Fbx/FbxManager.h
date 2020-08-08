@@ -60,6 +60,11 @@ namespace MyFbx
 		*/
 		void ResetAnimation(std::string key_);
 
+		FBXMeshData* GetMeshData(std::string key_)
+		{
+			return m_ObjectMeshData[key_];
+		}
+
 	private:
 		/**
 		* @brief コンストラクタ
@@ -78,6 +83,7 @@ namespace MyFbx
 		*/
 		bool HasKey(std::string key_);
 
+	private:
 		//! オブジェクトを保存する変数
 		std::map<std::string, FBXMeshData*> m_ObjectMeshData;
 
