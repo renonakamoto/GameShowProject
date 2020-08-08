@@ -31,6 +31,18 @@ public:
 		TypeNum,			//! タイプの数
 	};
 
+	/**
+	* @brief エネミーの種類列挙
+	*/
+	enum class EnemyType
+	{
+		Enemy_Ebiten,		//! えび天
+		Enemy_Ikaten,		//! いか天
+		Enemy_Kabochaten,	//! かぼちゃ天
+		Enemy_Sitaketen,	//! しいたけ天
+		Enemy_Tikuwaten,	//! ちくわ天
+	};
+
 public:
 	
 	/**
@@ -39,7 +51,7 @@ public:
 	void Update();
 
 	/**
-	* @brief オブジェクトの描画関数）
+	* @brief オブジェクトの描画関数
 	*/
 	void Draw();
 	
@@ -54,6 +66,12 @@ public:
 	* @return bool 当たった:true 当たっていない:false
 	*/
 	bool HitPlayerAndMapObject();
+
+	/**
+	* @brief カメラとマップ障害物との当たり判定関数
+	* @return bool 当たった:true 当たっていない:false
+	*/
+	bool HitEnemyAndObject(EnemyType enemyType_);
 
 	/**
 	* @brief プレイヤーとエネミーとの当たり判定関数

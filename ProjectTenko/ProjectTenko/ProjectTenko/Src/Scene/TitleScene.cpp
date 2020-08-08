@@ -46,9 +46,6 @@ void TitleScene::Load()
 	THE_TEXTUREMANAGER->Load("assets/UI/title/title04.png");
 	THE_TEXTUREMANAGER->Load("assets/UI/title/title05.png");
 
-	THE_TEXTUREMANAGER->Load("assets/UI/load.png");
-
-
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
         m_CurrentState = SceneState::Main;

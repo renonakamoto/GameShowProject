@@ -48,6 +48,8 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 		return -4;
 	}
 
+	THE_TEXTUREMANAGER->Load("assets/UI/load.png");
+
 	//! ゲームループ開始
 	while (!THE_SCENEMANAGER->IsQuit())
 	{
