@@ -21,7 +21,7 @@ bool Navigator::GetEnemyRoute(std::string name_, std::vector<D3DXVECTOR3>& route
 	{
 		if (name_ == e.at(0))
 		{
-			for (int i = 1; i < e.size(); i + 3)
+			for (int i = 1; i < e.size(); i = i + 3)
 			{
 				D3DXVECTOR3 vec3 = { std::stof(e.at(i)), std::stof(e.at(i + 1)), std::stof(e.at(i + 2)) };
 				route_.push_back(vec3);
@@ -81,8 +81,8 @@ unsigned __stdcall Navigator::GetReturnRoute(void* data_)
 bool Navigator::LoadResouces()
 {
 	Csv csv;
-	std::string route("assets\Csv\EnemyMovementPoint.csv");
-	std::string path("assets\Csv\MovingPath.csv");
+	std::string route("assets/Csv/EnemyMovementPoint.csv");
+	std::string path("assets/Csv/MovingPath.csv");
 
 	if (csv.Load(route, m_Route) && csv.Load(path, m_MovingPath))
 	{
