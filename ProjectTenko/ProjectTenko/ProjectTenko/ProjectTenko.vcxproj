@@ -35,6 +35,7 @@
     <ClCompile Include="Src\Engine\Window\Window.cpp" />
     <ClCompile Include="Src\ExternalFle\Csv\Csv.cpp" />
     <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\Manager\DebugManager.cpp" />
     <ClCompile Include="Src\Manager\ObjectManager.cpp" />
     <ClCompile Include="Src\NavigationAI\MovingPathCreator.cpp" />
     <ClCompile Include="Src\NavigationAI\NavigationAI.cpp" />
@@ -119,6 +120,7 @@
     <ClInclude Include="Src\Engine\Window\Window.h" />
     <ClInclude Include="Src\ExternalFle\Csv\Csv.h" />
     <ClInclude Include="Src\Manager\ConfigManager.h" />
+    <ClInclude Include="Src\Manager\DebugManager.h" />
     <ClInclude Include="Src\Manager\ObjectManager.h" />
     <ClInclude Include="Src\NavigationAI\MovingPathCreater.h" />
     <ClInclude Include="Src\NavigationAI\MovingPathCreator.h" />

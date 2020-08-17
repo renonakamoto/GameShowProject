@@ -40,6 +40,22 @@ Player::~Player()
 
 void Player::Update()
 {
+	if (THE_INPUTMANAGER->GetKey(KeyInfo::Key_Z))
+	{
+		if (THE_INPUTMANAGER->GetKeyDown(KeyInfo::Key_Up))
+		{
+			m_WalkSpeed *= 3.0f;
+			m_SquatWalkSpeed *= 3.0f;
+		}
+
+		if (THE_INPUTMANAGER->GetKeyDown(KeyInfo::Key_Down))
+		{
+			m_WalkSpeed /= 3.0f;
+			m_SquatWalkSpeed /= 3.0f;
+		}
+	}
+
+
 	if (m_RefCamera == nullptr)
 	{
 		m_RefCamera = THE_OBJECTMANAGER->GetCameraInstance();

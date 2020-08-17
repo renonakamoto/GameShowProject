@@ -5,6 +5,7 @@
 #include "../Collision/Shape/Ray.h"
 #include "../Manager/ObjectManager.h"
 #include "../Manager/ConfigManager.h"
+#include "../Manager/DebugManager.h"
 #include <math.h>
 
 
@@ -19,8 +20,8 @@ Camera::Camera()
 
 	m_Distance = 0.0f;
 
-	m_Sensitivity.x = 50.0f;
-	m_Sensitivity.y = 50.0f;
+	m_Sensitivity.x = DebugManager::GetInstance().GetMouseSensivity();
+	m_Sensitivity.y = DebugManager::GetInstance().GetMouseSensivity();
 
 	m_Shape = new Ray();
 }
@@ -74,13 +75,13 @@ void Camera::Rotate()
 	// クライアントの真ん中からマウス座標へのベクトルを算出
 	if (THE_CONFIGMANAGER->IsMouseFlip())
 	{
-		m_Yaw   += (mouse_x - half_gclient_width) / 1920.0f * 20.0f;
-		m_Pitch += (mouse_y - 432.0f) / 1080.0f * 20.0f;
+		m_Yaw   += (mouse_x - half_gclient_width) / 1920.0f * m_Sensitivity.x;
+		m_Pitch += (mouse_y - 432.0f) / 1080.0f * m_Sensitivity.y;
 	}
 	else
 	{
-		m_Yaw   -= (mouse_x - half_gclient_width) / 1920.0f * 20.0f;
-		m_Pitch -= (mouse_y - 432.0f) / 1080.0f * 20.0f;
+		m_Yaw   -= (mouse_x - half_gclient_width) / 1920.0f * m_Sensitivity.x;
+		m_Pitch -= (mouse_y - 432.0f) / 1080.0f * m_Sensitivity.y;
 	}
 
 	// マウスをクライアントの真ん中にもってくる
