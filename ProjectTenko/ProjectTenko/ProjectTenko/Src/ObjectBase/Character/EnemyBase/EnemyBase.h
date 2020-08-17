@@ -6,8 +6,9 @@
 #include <vector>
 #include <d3dx9.h>
 #include "EnemyAI/State.h"
+#include "..//..//..//NavigationAI/NavigationAI.h"
 
-#define ENEMY_VIEW 20.0f
+#define ENEMY_VIEW 500.0f
 #define ENEMY_VIEW_ANGLE 45.0f
 #define ENEMY_ROTATE 0.026f
 
@@ -55,7 +56,7 @@ protected:
 	D3DXVECTOR3 m_MovingVector;
 	bool m_IsClockwise;
 
-	std::vector<D3DXVECTOR3> m_ReturnRoute;
+	NavData m_NavData;
 	bool m_IsThinking;
 
 	const ObjectBase* m_RefPlayer;		//!< プレイヤーの参照用変数

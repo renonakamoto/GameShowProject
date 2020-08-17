@@ -10,9 +10,9 @@
 
 struct NavData
 {
-	std::vector<D3DXVECTOR3> &Route;
-	D3DXVECTOR3& Pos;
-	D3DXVECTOR3& Goal;
+	std::vector<D3DXVECTOR3> Route;
+	D3DXVECTOR3 Pos;
+	D3DXVECTOR3 Goal;
 };
 
 class Navigator : public Singleton<Navigator>

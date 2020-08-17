@@ -11,7 +11,7 @@ void Enemybase::DecideReturnPoint()
 		if (length > tmp)
 		{
 			length = tmp;
-			m_NextRoute = e;
+			m_NavData.Goal = e;
 		}
 	}
 }
@@ -30,7 +30,7 @@ bool Enemybase::CanDetectPC()
 		return false;
 	}
 
-	float rotate_rad = D3DXToRadian(ENEMY_VIEW_ANGLE);
+	float rotate_rad = m_Angle;
 
 	float arc_dirX = cosf(rotate_rad);
 	float arc_dirZ = sinf(rotate_rad);

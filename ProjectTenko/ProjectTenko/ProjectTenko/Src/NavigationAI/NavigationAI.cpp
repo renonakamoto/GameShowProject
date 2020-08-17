@@ -1,6 +1,7 @@
 #include "NavigationAI.h"
 #include "..//ExternalFle/Csv/Csv.h"
 #include <list>
+#include <math.h>
 
 std::vector<std::vector<std::string>> Navigator::m_MovingPath;
 std::vector<std::vector<Node>> Navigator::m_Graph;
@@ -44,9 +45,9 @@ unsigned __stdcall Navigator::GetReturnRoute(void* data_)
 	float cellsize = std::stof(m_MovingPath[0][2]);
 
 	Route start(
-		&m_Graph[static_cast<int>(data->Pos.x / cellsize)][static_cast<int>(data->Pos.z / cellsize)],
+		&m_Graph[static_cast<int>(fabsf(data->Pos.x / cellsize))][static_cast<int>(fabsf(data->Pos.z / cellsize))],
 		0.0f);
-	Cell goal_cell(static_cast<int>(data->Goal.x / cellsize), static_cast<int>(data->Goal.z / cellsize));
+	Cell goal_cell(static_cast<int>(fabsf(data->Goal.x / cellsize)), static_cast<int>(fabsf(data->Goal.z / cellsize)));
 
 	open_list.push_back(start);
 
