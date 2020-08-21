@@ -2,6 +2,8 @@
 #include <math.h>
 #include <d3dx9.h>
 
+#include "..//..//..//Engine/Input/InputManager.h"
+
 void Enemybase::DecideReturnPoint()
 {
 	float length = INFINITY;
@@ -18,6 +20,11 @@ void Enemybase::DecideReturnPoint()
 
 bool Enemybase::CanDetectPC()
 {
+	if (THE_INPUTMANAGER->GetKey(KeyInfo::Key_R))
+	{
+		return false;
+	}
+
 	D3DXVECTOR3 pl_Pos = m_RefPlayer->GetPos();
 
 	float vecX = pl_Pos.x - m_Pos.x;
@@ -32,8 +39,8 @@ bool Enemybase::CanDetectPC()
 
 	float rotate_rad = m_Angle;
 
-	float arc_dirX = cosf(rotate_rad);
-	float arc_dirZ = sinf(rotate_rad);
+	float arc_dirX = sinf(rotate_rad);
+	float arc_dirZ = cosf(rotate_rad);
 
 	vecX /= distance;
 	vecZ /= distance;

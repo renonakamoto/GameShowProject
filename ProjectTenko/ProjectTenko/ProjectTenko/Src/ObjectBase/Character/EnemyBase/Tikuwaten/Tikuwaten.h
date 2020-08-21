@@ -33,6 +33,7 @@ private:
 	ChikuwaMotionList		     m_CrrentMotion;
 	FbxMotion<ChikuwaMotionList> m_Motion;
 
+	bool IsRanged;
 };
 
 #endif

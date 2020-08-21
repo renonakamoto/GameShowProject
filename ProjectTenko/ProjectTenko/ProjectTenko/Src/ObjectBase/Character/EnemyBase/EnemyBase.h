@@ -9,7 +9,7 @@
 #include "..//..//..//NavigationAI/NavigationAI.h"
 
 #define ENEMY_VIEW 500.0f
-#define ENEMY_VIEW_ANGLE 45.0f
+#define ENEMY_VIEW_ANGLE 100.0f
 #define ENEMY_ROTATE 0.026f
 
 class State;

@@ -6,10 +6,12 @@
 #include "..//EnemyAI/StateManager.h"
 #include "..//..//..//..//NavigationAI/NavigationAI.h"
 
+#include "..//..//..//..//Engine/Font/Font.h"
+
 Tikuwaten::Tikuwaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string key_) :
 	Enemybase(pos_, player_, key_), m_CrrentMotion(ChikuwaMotionList::Wait)
 {
-	THE_FBXMANAGER->LoadFBXMesh(key_, "assets/models/enemies/tikuwaten/chikuwa_animation.fbx");
+	// THE_FBXMANAGER->LoadFBXMesh(key_, "assets/models/enemies/tikuwaten/chikuwa_animation.fbx");
 
 	m_Motion.AddMotion(ChikuwaMotionList::Wait,			   0,   60);
 	m_Motion.AddMotion(ChikuwaMotionList::Walk,			   70,  130);
@@ -19,6 +21,7 @@ Tikuwaten::Tikuwaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string ke
 	Navigator::GetInstance().GetEnemyRoute("Chikuwa", m_PatrolRoute);
 	m_NextRoute = m_PatrolRoute.front();
 	m_State = StateManager::GetInstance()->GetState(StateType::Move);
+	IsRanged = false;
 }
 
 void Tikuwaten::Update()
@@ -38,15 +41,28 @@ void Tikuwaten::Draw()
 
 	m_Mat_World = mat_rot * mat_trans;
 	THE_FBXMANAGER->Draw(m_FbxKey, m_Mat_World);
+
+	if (IsRanged)
+	{
+		std::string str = "Œ©‚¦‚Ä‚¢‚é‚¼I";
+		THE_FONT->DrawFont(100, 100, str);
+	}
+	else
+	{
+		std::string str = "‚Ç‚±‚âIH";
+		THE_FONT->DrawFont(100, 100, str);
+	}
 }
 
 void Tikuwaten::Patrol()
 {
 	if (CanDetectPC() == true)
 	{
-		m_State = StateManager::GetInstance()->GetState(StateType::Chase);
+		IsRanged = true;
+		// m_State = StateManager::GetInstance()->GetState(StateType::Chase);
 		return;
 	}
+	IsRanged = false;
 }
 
 void Tikuwaten::Move()
@@ -152,9 +168,13 @@ void Tikuwaten::Chase()
 {
 	if (CanDetectPC() == false)
 	{
+		IsRanged = false;
+
 		m_State = StateManager::GetInstance()->GetState(StateType::Thinking);
 		return;
 	}
+
+	IsRanged = true;
 
 	D3DXVECTOR3 pl_pos = m_RefPlayer->GetPos();
 
@@ -184,7 +204,7 @@ void Tikuwaten::Return()
 
 		if (m_NavData.Route.empty())
 		{
-			m_State = StateManager::GetInstance()->GetState(StateType::Patrol);
+			m_State = StateManager::GetInstance()->GetState(StateType::Move);
 			return;
 		}
 
@@ -228,6 +248,11 @@ void Tikuwaten::Thinking()
 		{
 			m_Handle = nullptr;
 			m_State = StateManager::GetInstance()->GetState(StateType::Return);
+
+			m_NextRoute = m_NavData.Route.back();
+			double distance = sqrtf(powf(m_NextRoute.x - m_Pos.x, 2) + powf(m_NextRoute.y - m_Pos.y, 2) + powf(m_NextRoute.z - m_Pos.z, 2));
+			m_MovingVector = (m_NextRoute - m_Pos) / distance;
+			m_Angle = atan2f(m_MovingVector.x, m_MovingVector.z);
 		}
 	}
 

@@ -6,6 +6,9 @@
 std::vector<std::vector<std::string>> Navigator::m_MovingPath;
 std::vector<std::vector<Node>> Navigator::m_Graph;
 
+#define MAP_SIZE_X 1700
+#define MAP_SIZE_Z 500
+
 Navigator::Navigator()
 {
 	LoadResouces();
@@ -45,9 +48,9 @@ unsigned __stdcall Navigator::GetReturnRoute(void* data_)
 	float cellsize = std::stof(m_MovingPath[0][2]);
 
 	Route start(
-		&m_Graph[static_cast<int>(fabsf(data->Pos.x / cellsize))][static_cast<int>(fabsf(data->Pos.z / cellsize))],
+		&m_Graph[static_cast<int>(fabsf((data->Pos.z + (MAP_SIZE_Z / 2)) / cellsize))][static_cast<int>(fabsf((data->Pos.x + (MAP_SIZE_X / 2)) / cellsize))],
 		0.0f);
-	Cell goal_cell(static_cast<int>(fabsf(data->Goal.x / cellsize)), static_cast<int>(fabsf(data->Goal.z / cellsize)));
+	Cell goal_cell(static_cast<int>(fabsf((data->Goal.z + (MAP_SIZE_Z / 2)) / cellsize)), static_cast<int>(fabsf((data->Goal.x + (MAP_SIZE_X / 2)) / cellsize)));
 
 	open_list.push_back(start);
 
@@ -97,7 +100,7 @@ void Navigator::CreateGraph()
 	int column = std::stoi(m_MovingPath[0][0]);
 	int row = std::stoi(m_MovingPath[0][1]);
 
-	int pos = 1;
+	int array_subscript_A = 1;
 
 	for (int i = 0; i < row; i++)
 	{
@@ -106,9 +109,14 @@ void Navigator::CreateGraph()
 		for (int j = 0; j < column; j++)
 		{
 			line.push_back(Node(j, i));
+			D3DXVECTOR3 pos(std::stof(m_MovingPath[array_subscript_A][0]), 0.0f, std::stof(m_MovingPath[array_subscript_A][1]));
+			line.back().m_Pos = pos;
+			array_subscript_A++;
 		}
 		m_Graph.push_back(line);
 	}
+
+	array_subscript_A = 1;
 
 	for (int i = 0; i < row; i++)
 	{
@@ -116,35 +124,35 @@ void Navigator::CreateGraph()
 		{
 			Cell surround[] =
 			{
-				Cell(column, row - 1),
-				Cell(column + 1, row - 1),
-				Cell(column + 1, row),
-				Cell(column + 1, row + 1),
-				Cell(column, row + 1),
-				Cell(column - 1, row + 1),
-				Cell(column - 1, row),
-				Cell(column - 1, row - 1)
+				Cell(j, i - 1),
+				Cell(j + 1, i - 1),
+				Cell(j + 1, i),
+				Cell(j + 1, i + 1),
+				Cell(j, i + 1),
+				Cell(j - 1, i + 1),
+				Cell(j - 1, i),
+				Cell(j - 1, i - 1)
 			};
 
-			int counter = 3;
+			int array_subscript_B = 2;
 
 			for (const Cell& cell : surround)
 			{
 				if (IsCellInRange(cell.m_Row, cell.m_Column, row, column) &&
-					std::stoi(m_MovingPath[pos][counter]) == 1)
+					std::stoi(m_MovingPath[array_subscript_A][array_subscript_B]) == 1)
 				{
-					m_Graph[i][j].m_Edges.push_back(&m_Graph[cell.m_Row][cell.m_Column]);
+					m_Graph[i][j].m_Edges.push_back(&m_Graph[cell.m_Column][cell.m_Row]);
 				}
-				pos++;
-				counter++;
+				array_subscript_B++;
 			}
+			array_subscript_A++;
 		}
 	}
 }
 
 bool Navigator::IsCellInRange(int row_, int column_, int width_, int height_)
 {
-	if (row_ >= 0 && row_ < width_ && column_ >= 0 && column_ < height_)
+	if (row_ >= 0 && row_ < height_ && column_ >= 0 && column_ < width_)
 	{
 		return true;
 	}

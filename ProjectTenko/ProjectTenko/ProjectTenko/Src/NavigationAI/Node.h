@@ -28,12 +28,20 @@ struct Node
 	{
 	}
 
+	Node(int row, int column, float x_, float y_, float z_) : m_Cell(row, column), m_Pos(x_, y_, z_)
+	{
+	}
+
 	Node(Cell cell_) : m_Cell(cell_)
 	{
 	}
 
+	Node(Cell cell_, D3DXVECTOR3 pos_) : m_Cell(cell_), m_Pos(pos_)
+	{
+	}
 
 	Cell m_Cell;						//!< ノードの位置
+	D3DXVECTOR3 m_Pos;					//!< ノードの中心座標
 	std::vector<Node*> m_Edges;			//!< 隣接ノード
 };
 
