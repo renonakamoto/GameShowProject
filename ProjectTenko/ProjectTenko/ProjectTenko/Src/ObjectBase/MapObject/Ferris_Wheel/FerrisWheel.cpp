@@ -6,18 +6,17 @@ void FerrisWheel::Update()
 	CoordinateUpdate(MapData::MapObjectList::Ferris_Wheel);
 #endif
 
+	D3DXMATRIX mat_world;
+	D3DXMATRIX mat_trans;
 	D3DXMATRIX mat_rot_z;
 
-	// Y軸回転を行う
+	// Z軸回転を行う
 	D3DXMatrixRotationZ(&mat_rot_z, D3DXToRadian(m_Angle));
-
-	// Y軸回転行列を既存のワールド行列のY軸回転部分に代入する
+	D3DXMatrixTranslation(&mat_trans, m_Pos.x, 240.f, m_Pos.z);
+	mat_world = mat_rot_z * mat_trans;
 	for (auto& v : m_WorldRotatingParts)
 	{
-		v._11 = mat_rot_z._11;
-		v._12 = mat_rot_z._12;
-		v._21 = mat_rot_z._21;
-		v._22 = mat_rot_z._22;
+		v = mat_world;
 	}
 
 	m_Angle++;

@@ -15,7 +15,7 @@ TitleScene::TitleScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
 	m_TitleUI = new TitleUI();
 	m_Camera  = new Camera(D3DXVECTOR3(-1000, 250.0f, 4.0f), D3DXVECTOR3(-716.0f, 100.0f, 0.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f), 0.0f);
-	THE_OBJECTMANAGER->EntryObject(Objectmanager::ObjectType::MapObject);
+	THE_OBJECTMANAGER->Entry(Objectmanager::ObjectType::MapObject);
     m_ThreadHandle = CreateThread(
         nullptr,                    // セキュリティ属性
         0,                          // スタックサイズ

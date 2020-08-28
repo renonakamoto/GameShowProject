@@ -155,12 +155,12 @@ void Camera::SetProjectionMatrix()
 	//! アスペクト比を算出
 	D3DVIEWPORT9 vp;
 	THE_GRAPHICS->GetD3DDevice()->GetViewport(&vp);
-	float aspect = 1.f;
+	float aspect = static_cast<float>(vp.Width) / static_cast<float>(vp.Height);
 
 	//! 視錐台の作成
-	D3DXMatrixPerspectiveLH(
+	D3DXMatrixPerspectiveFovLH(
 		&mat_proj,
-		D3DXToRadian(80.0f),	//! 画角
+		D3DXToRadian(60.f),	//! 画角
 		aspect,					//! アスペクト比
 		1.1f,					//! near
 		FLT_MAX);				//! far

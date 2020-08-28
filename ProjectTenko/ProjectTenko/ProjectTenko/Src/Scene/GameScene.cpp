@@ -4,9 +4,9 @@
 
 GameScene::GameScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
-    THE_OBJECTMANAGER->EntryObject(Objectmanager::ObjectType::Player);
-    THE_OBJECTMANAGER->EntryObject(Objectmanager::ObjectType::Enemy);
-    THE_OBJECTMANAGER->EntryObject(Objectmanager::ObjectType::Camera);
+    THE_OBJECTMANAGER->Entry(Objectmanager::ObjectType::Player);
+    THE_OBJECTMANAGER->Entry(Objectmanager::ObjectType::Enemy);
+    THE_OBJECTMANAGER->Entry(Objectmanager::ObjectType::Camera);
 
 	ObjectManager::Create();
 
@@ -23,9 +23,9 @@ GameScene::GameScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 
 GameScene::~GameScene()
 {
-    THE_OBJECTMANAGER->ExitObject(Objectmanager::ObjectType::Player);
-    THE_OBJECTMANAGER->ExitObject(Objectmanager::ObjectType::Enemy);
-    THE_OBJECTMANAGER->ExitObject(Objectmanager::ObjectType::Camera);
+    THE_OBJECTMANAGER->Release(Objectmanager::ObjectType::Player);
+    THE_OBJECTMANAGER->Release(Objectmanager::ObjectType::Enemy);
+    THE_OBJECTMANAGER->Release(Objectmanager::ObjectType::Camera);
 }
 
 void GameScene::Load()

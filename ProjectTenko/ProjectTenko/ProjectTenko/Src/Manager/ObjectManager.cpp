@@ -100,7 +100,7 @@ void Objectmanager::Draw()
 
 }
 
-void Objectmanager::EntryObject(ObjectType type_)
+void Objectmanager::Entry(ObjectType type_)
 {
 	switch (type_)
 	{
@@ -126,7 +126,7 @@ void Objectmanager::EntryObject(ObjectType type_)
 
 }
 
-void Objectmanager::ExitObject(ObjectType type_)
+void Objectmanager::Release(ObjectType type_)
 {
 	switch (type_)
 	{
@@ -260,7 +260,7 @@ void Objectmanager::AllRelease()
 {
 	for(size_t i = static_cast<int>(ObjectType::Player); i <= static_cast<int>(ObjectType::MapObject); ++i)
 	{ 
-		ExitObject(static_cast<ObjectType>(i));
+		Release(static_cast<ObjectType>(i));
 	}
 	delete m_Camera;
 	m_Camera = nullptr;
