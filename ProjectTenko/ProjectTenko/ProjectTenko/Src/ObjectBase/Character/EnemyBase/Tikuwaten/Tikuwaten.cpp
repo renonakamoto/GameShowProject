@@ -170,8 +170,13 @@ void Tikuwaten::Chase()
 	{
 		IsRanged = false;
 
-		m_State = StateManager::GetInstance()->GetState(StateType::Thinking);
-		return;
+		if (m_Handle == nullptr || WaitForSingleObject(m_Handle, 0) == WAIT_OBJECT_0)
+		{
+			CloseHandle(m_Handle);
+			m_Handle = nullptr;
+			m_State = StateManager::GetInstance()->GetState(StateType::Thinking);
+			return;
+		}
 	}
 
 	IsRanged = true;
@@ -183,7 +188,7 @@ void Tikuwaten::Chase()
 	float distance = sqrtf((vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z));
 	vec /= distance;
 
-	m_Pos += vec * m_Speed;
+	m_Pos += vec * m_Speed * 2;
 	m_Angle = atan2f(vec.x, vec.z);
 
 	m_Motion.Motion(ChikuwaMotionList::Sprint, m_FbxKey, true);
@@ -216,7 +221,7 @@ void Tikuwaten::Return()
 	else
 	{
 		D3DXVECTOR3 nextpos = m_Pos + (m_MovingVector * m_Speed);
-		if (fabsf(nextpos.x - m_Pos.x) > fabsf(m_NextRoute.x - m_Pos.x)&& fabsf(nextpos.z - m_Pos.z) >= fabsf(m_NextRoute.z - m_Pos.z))
+		if (fabsf(nextpos.x - m_Pos.x) >= fabsf(m_NextRoute.x - m_Pos.x)&& fabsf(nextpos.z - m_Pos.z) >= fabsf(m_NextRoute.z - m_Pos.z))
 		{
 			m_Pos = m_NextRoute;
 		}
@@ -238,6 +243,7 @@ void Tikuwaten::Thinking()
 
 	if (m_Handle == nullptr)
 	{
+		m_NavData.Route.clear();
 		DecideReturnPoint();
 		m_NavData.Pos = m_Pos;
 		m_Handle = (HANDLE)_beginthreadex(NULL, 0, &Navigator::GetReturnRoute, static_cast<void*>(&m_NavData), 0, NULL);
@@ -246,6 +252,7 @@ void Tikuwaten::Thinking()
 	{
 		if (WaitForSingleObject(m_Handle, 0) == WAIT_OBJECT_0)
 		{
+			CloseHandle(m_Handle);
 			m_Handle = nullptr;
 			m_State = StateManager::GetInstance()->GetState(StateType::Return);
 

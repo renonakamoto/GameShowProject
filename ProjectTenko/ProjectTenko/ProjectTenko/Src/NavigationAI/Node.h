@@ -2,6 +2,7 @@
 #define NODE_H_
 
 #include <vector>
+#include <memory>
 #include <d3dx9.h>
 
 struct Cell
@@ -39,6 +40,8 @@ struct Node
 	Node(Cell cell_, D3DXVECTOR3 pos_) : m_Cell(cell_), m_Pos(pos_)
 	{
 	}
+
+	void AddPos(std::vector<D3DXVECTOR3>& route_) const;
 
 	Cell m_Cell;						//!< ノードの位置
 	D3DXVECTOR3 m_Pos;					//!< ノードの中心座標

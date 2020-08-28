@@ -1,13 +1,15 @@
 #include "NavigationAI.h"
 #include "..//ExternalFle/Csv/Csv.h"
-#include <list>
+
 #include <math.h>
+
+#include <list>
 
 std::vector<std::vector<std::string>> Navigator::m_MovingPath;
 std::vector<std::vector<Node>> Navigator::m_Graph;
 
 #define MAP_SIZE_X 1700
-#define MAP_SIZE_Z 500
+#define MAP_SIZE_Z 1000
 
 Navigator::Navigator()
 {
@@ -42,8 +44,8 @@ unsigned __stdcall Navigator::GetReturnRoute(void* data_)
 {
 	NavData* data = static_cast<NavData*>(data_);
 
-	std::list<Route> open_list;
-	std::list<Route> close_list;
+	std::list<std::unique_ptr<Route>> open_list;
+	std::list<std::unique_ptr<Route>> close_list;
 
 	float cellsize = std::stof(m_MovingPath[0][2]);
 
@@ -52,32 +54,31 @@ unsigned __stdcall Navigator::GetReturnRoute(void* data_)
 		0.0f);
 	Cell goal_cell(static_cast<int>(fabsf((data->Goal.z + (MAP_SIZE_Z / 2)) / cellsize)), static_cast<int>(fabsf((data->Goal.x + (MAP_SIZE_X / 2)) / cellsize)));
 
-	open_list.push_back(start);
+	open_list.push_back(std::make_unique<Route>(start));
 
 	while (open_list.empty() == false)
 	{
 		auto route = open_list.begin();
 
-		if (IsEqualCell(route->m_Node->m_Cell, m_Graph[goal_cell.m_Row][goal_cell.m_Column].m_Cell))
+		if (IsEqualCell(route->get()->m_Node->m_Cell, m_Graph[goal_cell.m_Row][goal_cell.m_Column].m_Cell))
 		{
-			close_list.push_back(*route);
+			close_list.push_back(std::move(*route));
 			break;
 		}
 
-		for (Node* node : route->m_Node->m_Edges)
+		for (Node* node : route->get()->m_Node->m_Edges)
 		{
 			float hcost = CalculateHeruristicCost(node, &m_Graph[goal_cell.m_Row][goal_cell.m_Column]);
-			float cost = hcost + route->m_Cost;
+			float cost = hcost + route->get()->m_Cost;
 
 			AddRoute(open_list, close_list, *route, node, cost);
 		}
 
-		close_list.push_back(*route);
-
+		close_list.push_back(std::move(*route));
 		open_list.erase(route);
 	}
 
-	close_list.back().AddPos(data->Route, cellsize);
+	close_list.back().get()->AddPos(data->Route, cellsize);
 
 	return 0;
 }
@@ -139,7 +140,7 @@ void Navigator::CreateGraph()
 			for (const Cell& cell : surround)
 			{
 				if (IsCellInRange(cell.m_Row, cell.m_Column, row, column) &&
-					std::stoi(m_MovingPath[array_subscript_A][array_subscript_B]) == 1)
+					std::stoi(m_MovingPath[array_subscript_A][array_subscript_B]) == 0)
 				{
 					m_Graph[i][j].m_Edges.push_back(&m_Graph[cell.m_Column][cell.m_Row]);
 				}
@@ -177,21 +178,23 @@ float Navigator::CalculateHeruristicCost(const Node* node_, const Node* goal_)
 	return sqrtf(column * column + row * row);
 }
 
-void Navigator::AddRoute(std::list<Route>& open_, std::list<Route>& close_, Route& current_, Node* add_, float cost_)
+void Navigator::AddRoute(std::list<std::unique_ptr<Route>>& open_, std::list<std::unique_ptr<Route>>& close_, std::unique_ptr<Route>& current_, Node* add_, float cost_)
 {
 	bool is_same_route_open = false;
 	bool is_same_route_close = false;
 
 	for (auto itr = close_.begin(); itr != close_.end(); itr++)
 	{
-		if (IsEqualCell(add_->m_Cell, itr->m_Node->m_Cell))
+		if (IsEqualCell(add_->m_Cell, itr->get()->m_Node->m_Cell))
 		{
 			is_same_route_close = true;
 
-			if (cost_ < itr->m_Cost)
+			if (cost_ < itr->get()->m_Cost)
 			{
-				close_.erase(itr);
-				open_.push_back(Route(add_, cost_, &current_));
+				itr->get()->m_Cost = cost_;
+				itr->get()->m_Parent = current_.get();
+				open_.push_back(std::move(*itr));
+				itr = close_.erase(itr);
 
 				open_.sort();
 				return;
@@ -201,14 +204,14 @@ void Navigator::AddRoute(std::list<Route>& open_, std::list<Route>& close_, Rout
 
 	for (auto itr = open_.begin(); itr != open_.end(); itr++)
 	{
-		if (IsEqualCell(add_->m_Cell, itr->m_Node->m_Cell))
+		if (IsEqualCell(add_->m_Cell, itr->get()->m_Node->m_Cell))
 		{
 			is_same_route_open = true;
 
-			if (cost_ < itr->m_Cost)
+			if (cost_ < itr->get()->m_Cost)
 			{
-				open_.erase(itr);
-				open_.push_back(Route(add_, cost_, &current_));
+				itr->get()->m_Cost = cost_;
+				itr->get()->m_Parent = current_.get();
 
 				open_.sort();
 				return;
@@ -218,7 +221,7 @@ void Navigator::AddRoute(std::list<Route>& open_, std::list<Route>& close_, Rout
 
 	if (is_same_route_close == false && is_same_route_open == false)
 	{
-		open_.push_back(Route(add_, cost_, &current_));
+		open_.push_back(std::make_unique<Route>(add_, cost_, current_.get()));
 		open_.sort();
 	}
 }

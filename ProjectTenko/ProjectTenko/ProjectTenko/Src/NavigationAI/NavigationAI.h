@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <memory>
 #include <d3dx9.h>
 
 struct NavData
@@ -57,7 +58,7 @@ private:
 
 	static float CalculateHeruristicCost(const Node* node_, const Node* goal_);
 
-	static void AddRoute(std::list<Route>& open_, std::list<Route>& close_, Route& current_, Node* add_, float cost);
+	static void AddRoute(std::list<std::unique_ptr<Route>>& open_, std::list<std::unique_ptr<Route>>& close_, std::unique_ptr<Route>& current_, Node* add_, float cost_);
 
 private:
 	std::vector<std::vector<std::string>> m_Route;
