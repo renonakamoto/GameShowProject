@@ -53,6 +53,8 @@ inline FerrisWheel::FerrisWheel(std::vector<MapObjectData>* mapObjcectList_, con
 		m_Shape.push_back(new AABBShape(340.0f, 340.0f, 210.0f));
 		m_Shape[shape_num]->Update(itr.m_Pos);
 		shape_num++;
+		m_Pos = itr.m_Pos;
+
 	}
 
 	D3DXMATRIX mat_world;

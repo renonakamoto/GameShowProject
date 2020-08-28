@@ -55,9 +55,9 @@ public:
 	*/
 	void Draw();
 	
-	void EntryObject(ObjectType type_);
+	void Entry(ObjectType type_);
 
-	void ExitObject(ObjectType type_);
+	void Release(ObjectType type_);
 
 	void AllRelease();
 
