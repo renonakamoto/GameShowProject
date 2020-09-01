@@ -62,6 +62,14 @@ public:
 	*/
 	void SetIsSquad(bool isSquad_) { m_IsSquat = isSquad_; }
 
+	D3DXVECTOR3 GetPos() const override 
+	{
+		D3DXVECTOR3 player_head_pos = m_CenterPos;
+		player_head_pos.y += 20;
+		return player_head_pos;
+	}
+
+
 private:
 	/**
 	* @brief ˆÚ“®ˆ—
