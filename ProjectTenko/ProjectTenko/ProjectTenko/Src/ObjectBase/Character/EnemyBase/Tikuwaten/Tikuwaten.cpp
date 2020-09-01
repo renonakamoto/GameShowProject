@@ -78,48 +78,48 @@ void Tikuwaten::Move()
 	{
 		D3DXVECTOR3 curr_vec = m_MovingVector;
 
-		// 次の移動ベクトルの算出
-		m_NextRouteNum++;
+// 次の移動ベクトルの算出
+m_NextRouteNum++;
 
-		if (m_PatrolRoute.size() - 1 < m_NextRouteNum)
-		{
-			m_NextRouteNum = 0;
-		}
+if (m_PatrolRoute.size() - 1 < m_NextRouteNum)
+{
+	m_NextRouteNum = 0;
+}
 
-		m_NextRoute = m_PatrolRoute[m_NextRouteNum];
-		float distance = sqrtf(powf(m_NextRoute.x - m_Pos.x, 2) + powf(m_NextRoute.y - m_Pos.y, 2) + powf(m_NextRoute.z - m_Pos.z, 2));
-		m_MovingVector = (m_NextRoute - m_Pos) / distance;
+m_NextRoute = m_PatrolRoute[m_NextRouteNum];
+float distance = sqrtf(powf(m_NextRoute.x - m_Pos.x, 2) + powf(m_NextRoute.y - m_Pos.y, 2) + powf(m_NextRoute.z - m_Pos.z, 2));
+m_MovingVector = (m_NextRoute - m_Pos) / distance;
 
-		// 向きの算出
-		m_NextAngle = atan2f(m_MovingVector.x, m_MovingVector.z);
+// 向きの算出
+m_NextAngle = atan2f(m_MovingVector.x, m_MovingVector.z);
 
-		// 外積で右回りか左回りか判定
-		float cross = (curr_vec.x * m_MovingVector.z) - (m_MovingVector.x * curr_vec.z);
+// 外積で右回りか左回りか判定
+float cross = (curr_vec.x * m_MovingVector.z) - (m_MovingVector.x * curr_vec.z);
 
-		if (cross > 0)
-		{
-			m_IsClockwise = false;
-		}
-		else
-		{
-			m_IsClockwise = true;
-		}
+if (cross > 0)
+{
+	m_IsClockwise = false;
+}
+else
+{
+	m_IsClockwise = true;
+}
 
-		m_State = StateManager::GetInstance()->GetState(StateType::Turn);
+m_State = StateManager::GetInstance()->GetState(StateType::Turn);
 	}
 	else
 	{
-		D3DXVECTOR3 nextpos = m_Pos + m_MovingVector * m_Speed;
-		if (fabsf(nextpos.x - m_Pos.x) >= fabsf(m_NextRoute.x - m_Pos.x) && fabsf(nextpos.z - m_Pos.z) >= fabsf(m_NextRoute.z - m_Pos.z))
-		{
-			m_Pos = m_NextRoute;
-			m_Angle = atan2f(m_MovingVector.x, m_MovingVector.z);
-		}
-		else
-		{
-			m_Pos = nextpos;
-			m_Angle = atan2f(m_MovingVector.x, m_MovingVector.z);
-		}
+	D3DXVECTOR3 nextpos = m_Pos + m_MovingVector * m_Speed;
+	if (fabsf(nextpos.x - m_Pos.x) >= fabsf(m_NextRoute.x - m_Pos.x) && fabsf(nextpos.z - m_Pos.z) >= fabsf(m_NextRoute.z - m_Pos.z))
+	{
+		m_Pos = m_NextRoute;
+		m_Angle = atan2f(m_MovingVector.x, m_MovingVector.z);
+	}
+	else
+	{
+		m_Pos = nextpos;
+		m_Angle = atan2f(m_MovingVector.x, m_MovingVector.z);
+	}
 	}
 	m_Motion.Motion(ChikuwaMotionList::Walk, m_FbxKey, true);
 }
@@ -170,7 +170,12 @@ void Tikuwaten::Chase()
 	{
 		IsRanged = false;
 
-		if (m_Handle == nullptr || WaitForSingleObject(m_Handle, 0) == WAIT_OBJECT_0)
+		if (m_Handle == nullptr)
+		{
+			m_State = StateManager::GetInstance()->GetState(StateType::Thinking);
+			return;
+		}
+		else if (WaitForSingleObject(m_Handle, 0) == WAIT_OBJECT_0)
 		{
 			CloseHandle(m_Handle);
 			m_Handle = nullptr;
@@ -182,6 +187,7 @@ void Tikuwaten::Chase()
 	IsRanged = true;
 
 	D3DXVECTOR3 pl_pos = m_RefPlayer->GetPos();
+	pl_pos.y = 0;
 
 	D3DXVECTOR3 vec = pl_pos - m_Pos;
 
