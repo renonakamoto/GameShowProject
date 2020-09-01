@@ -72,7 +72,7 @@ public:
 	/**
 	* @brief À•W‚ğ•Ô‚·ŠÖ”
 	*/
-	D3DXVECTOR3 GetPos() const{ return m_Pos; }
+	virtual D3DXVECTOR3 GetPos() const{ return m_Pos; }
 
 	/**
 	* @brief “–‚½‚è”»’è‚ÌŒ`ó‚ğ•Ô‚·ŠÖ”
