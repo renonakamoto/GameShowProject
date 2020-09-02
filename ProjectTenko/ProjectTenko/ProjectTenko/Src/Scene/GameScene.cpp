@@ -6,7 +6,6 @@ GameScene::GameScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
     THE_OBJECTMANAGER->Entry(Objectmanager::ObjectType::Player);
     THE_OBJECTMANAGER->Entry(Objectmanager::ObjectType::Enemy);
-    THE_OBJECTMANAGER->Entry(Objectmanager::ObjectType::Camera);
 
 	ObjectManager::Create();
 
@@ -25,7 +24,6 @@ GameScene::~GameScene()
 {
     THE_OBJECTMANAGER->Release(Objectmanager::ObjectType::Player);
     THE_OBJECTMANAGER->Release(Objectmanager::ObjectType::Enemy);
-    THE_OBJECTMANAGER->Release(Objectmanager::ObjectType::Camera);
 }
 
 void GameScene::Load()

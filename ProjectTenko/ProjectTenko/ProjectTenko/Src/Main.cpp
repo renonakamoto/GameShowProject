@@ -23,30 +23,37 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 	FontDevice::Create();
 	FbxMeshManager::Create();
 	TextureManager::Create();
-	SingletonSceneManager::Create();
 	ObjectManager::Create();
 	ConfigManager::Create();
 
-	//! エンジン初期化
+#pragma region デバイス初期化
+	//! ウィンドウの初期化
 	if (THE_WINDOW->Init(hInstance_, "Tenko In Tempurand", GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)) == false)
 	{
 		return -1;
 	}
 
+	// グラフィックスの初期化
 	if (THE_GRAPHICS->Init(THE_WINDOW->GetWindowHandle(), 1920, 1080, false) == false)
 	{
 		return -2;
 	}
 
+	// フォントの初期化
 	if (THE_FONT->Init() == false)
 	{
 		return -3;
 	}
 
+	// インプットの初期化
 	if (THE_INPUTMANAGER->Init(hInstance_, THE_WINDOW->GetWindowHandle()) == false)
 	{
 		return -4;
 	}
+#pragma endregion
+
+	SingletonSceneManager::Create();
+
 
 	THE_TEXTUREMANAGER->Load("assets/UI/load.png");
 
@@ -71,6 +78,7 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 
 			THE_SCENEMANAGER->Update();
 			
+#pragma region ライト設定
 			D3DLIGHT9 light;
 			ZeroMemory(&light, sizeof(light));
 			light.Type = D3DLIGHT_DIRECTIONAL;
@@ -85,26 +93,11 @@ int APIENTRY WinMain(HINSTANCE hInstance_,
 			light.Ambient.r = 0.5f;
 			light.Ambient.g = 0.5f;
 			light.Ambient.b = 0.5f;
-			
-			light.Specular.a = 1.0f;
-			light.Specular.r = 0.3f;
-			light.Specular.g = 0.3f;
-			light.Specular.b = 0.3f;
-			//light.Type = D3DLIGHT_DIRECTIONAL;
-			//light.Direction.x = 0.0f;
-			//light.Direction.y = -0.5f;
-			//light.Direction.z = 0.2f;
-			//light.Diffuse.a = 1.0f;
-			//light.Diffuse.r = 1.0f;
-			//light.Diffuse.g = 1.0f;
-			//light.Diffuse.b = 1.0f;
-			//light.Specular.a = 1.0f;
-			//light.Specular.r = 1.0f;
-			//light.Specular.g = 1.0f;
-			//light.Specular.b = 1.0f;
 
-			THE_GRAPHICS->GetD3DDevice()->LightEnable(0, TRUE);
 			THE_GRAPHICS->GetD3DDevice()->SetLight(0, &light);
+			THE_GRAPHICS->GetD3DDevice()->LightEnable(0, TRUE);
+			THE_GRAPHICS->GetD3DDevice()->SetRenderState(D3DRS_LIGHTING, FALSE);
+#pragma endregion
 
 			THE_SCENEMANAGER->Draw();
 		}

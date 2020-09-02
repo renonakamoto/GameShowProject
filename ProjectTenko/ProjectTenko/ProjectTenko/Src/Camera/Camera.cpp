@@ -5,7 +5,6 @@
 #include "../Collision/Shape/Ray.h"
 #include "../Manager/ObjectManager.h"
 #include "../Manager/ConfigManager.h"
-#include "../Manager/DebugManager.h"
 #include <math.h>
 
 
@@ -20,8 +19,8 @@ Camera::Camera()
 
 	m_Distance = 0.0f;
 
-	m_Sensitivity.x = DebugManager::GetInstance().GetMouseSensivity();
-	m_Sensitivity.y = DebugManager::GetInstance().GetMouseSensivity();
+	m_Sensitivity.x = 30.f;
+	m_Sensitivity.y = 30.f;
 
 	m_Shape = new Ray();
 }

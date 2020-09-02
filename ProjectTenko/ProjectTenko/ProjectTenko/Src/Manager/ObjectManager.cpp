@@ -75,8 +75,6 @@ void Objectmanager::Update()
 	{
 		itr->Update();
 	}
-
-	if (m_Camera) m_Camera->Update();
 }
 
 void Objectmanager::Draw()
@@ -112,10 +110,6 @@ void Objectmanager::Entry(ObjectType type_)
 		this->CreateEnemies();
 		break;
 
-	case Objectmanager::ObjectType::Camera:
-		if (m_Camera)return;
-		m_Camera = new Camera();
-
 	case Objectmanager::ObjectType::MapObject:
 		this->CreateMap();
 		break;
@@ -144,12 +138,6 @@ void Objectmanager::Release(ObjectType type_)
 			*itr = nullptr;
 		}
 		m_EnemyGroup.clear();
-		break;
-
-	case Objectmanager::ObjectType::Camera:
-		if (!m_Camera) return;
-		delete m_Camera;
-		m_Camera = nullptr;
 		break;
 
 	case Objectmanager::ObjectType::MapObject:
@@ -217,14 +205,14 @@ bool Objectmanager::HitPlayerAndEnemy()
 
 bool Objectmanager::HitCameraAndObject()
 {
-	std::vector<Shape*> tmp_camera_shape;
-	tmp_camera_shape.push_back(m_Camera->GetShape());
-	for (auto& itr : m_MapObjectGroup) {
-		if (m_Collision.Test(tmp_camera_shape, itr->GetShape()) == true)
-		{
-			return true;
-		}
-	}
+	//std::vector<Shape*> tmp_camera_shape;
+	//tmp_camera_shape.push_back(m_Camera->GetShape());
+	//for (auto& itr : m_MapObjectGroup) {
+	//	if (m_Collision.Test(tmp_camera_shape, itr->GetShape()) == true)
+	//	{
+	//		return true;
+	//	}
+	//}
 
 	return false;
 }
@@ -262,8 +250,6 @@ void Objectmanager::AllRelease()
 	{ 
 		Release(static_cast<ObjectType>(i));
 	}
-	delete m_Camera;
-	m_Camera = nullptr;
 }
 
 void Objectmanager::CreatePlayer()

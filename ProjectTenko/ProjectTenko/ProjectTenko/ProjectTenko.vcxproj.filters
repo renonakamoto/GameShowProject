@@ -23,7 +23,6 @@
     <ClCompile Include="Src\ObjectBase\MapObject\Barrel\Barrel.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Floor\Floor.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Gate\Gate.cpp" />
-    <ClCompile Include="Src\ObjectBase\MapObject\MapObject.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Merrygoland\Merrygoland.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Mountain\Mountain.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Skydome\Skydome.cpp" />
@@ -93,7 +92,6 @@
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Thinking.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\StreetLamp\StreetLamp.cpp" />
     <ClCompile Include="Src\Engine\Sound\SoundManager.cpp" />
-    <ClCompile Include="Src\Manager\DebugManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
@@ -214,7 +212,6 @@
     <ClInclude Include="Src\ObjectBase\MapObject\StreetLamp\StreetLamp.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Attack.h" />
     <ClInclude Include="Src\Engine\Sound\SoundManager.h" />
-    <ClInclude Include="Src\Manager\DebugManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

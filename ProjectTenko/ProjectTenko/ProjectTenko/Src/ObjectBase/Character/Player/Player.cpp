@@ -26,11 +26,11 @@ Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 	m_CenterPos			= m_Pos;
 	m_Shape.push_back(new AABBShape(4.0f, 20.f, 4.0f));
 
-	m_RefCamera = nullptr;
 	m_Speed		= D3DXVECTOR3(0.0f,0.0f,0.0f);
 	m_Resist	= 0.3f;
 	m_Force		= 0.5f;
 	m_Weight	= 1.2f;
+
 }
 
 Player::~Player()
@@ -40,6 +40,7 @@ Player::~Player()
 
 void Player::Update()
 {
+#pragma region  デバック用
 	if (THE_INPUTMANAGER->GetKey(KeyInfo::Key_Z))
 	{
 		if (THE_INPUTMANAGER->GetKeyDown(KeyInfo::Key_Up))
@@ -54,12 +55,7 @@ void Player::Update()
 			m_SquatWalkSpeed /= 3.0f;
 		}
 	}
-
-
-	if (m_RefCamera == nullptr)
-	{
-		m_RefCamera = THE_OBJECTMANAGER->GetCameraInstance();
-	}
+#pragma endregion
 
 	Move();
 
@@ -69,11 +65,11 @@ void Player::Update()
 	// しゃがんでいたら
 	if (m_IsSquat == true)
 	{
-		if (m_CenterPos.y >= -10.0f)m_CenterPos.y -= 10.0f / 60.0f;
+		if (m_CenterPos.y >= -10.0f)m_CenterPos.y -= 10.0f /20.0f;
 	}
 	else
 	{
-		if (m_CenterPos.y <= 0.0f)m_CenterPos.y += 10.0f / 60.0f;
+		if (m_CenterPos.y <= 0.0f)m_CenterPos.y += 10.0f / 20.0f;
 	}
 
 	// Y情報は含めたくない
@@ -81,7 +77,8 @@ void Player::Update()
 	m_CenterPos.z = m_Pos.z;
 
 	//	カメラを移動させる
-	m_RefCamera->SetCamera(m_CenterPos, 30);
+	m_Camera.SetCamera(m_CenterPos, 30);
+	m_Camera.Update();
 
 	// ワールド行列作成
 	D3DXMATRIX mat_rot, mat_trans;
@@ -102,8 +99,8 @@ void Player::Draw()
 
 void Player::Move()
 {
-	D3DXVECTOR3 camera_forward  = m_RefCamera->GetForwardVec();
-	D3DXVECTOR3 camera_left		= m_RefCamera->GetLeftVec();
+	D3DXVECTOR3 camera_forward  = m_Camera.GetForwardVec();
+	D3DXVECTOR3 camera_left		= m_Camera.GetLeftVec();
 	D3DXVECTOR3 result_move_vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	float	    speed			= m_IsSquat ? m_SquatWalkSpeed : m_WalkSpeed;
 

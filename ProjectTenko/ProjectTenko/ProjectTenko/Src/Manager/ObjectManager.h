@@ -25,7 +25,6 @@ public:
 	{
 		Player,				//! プレイヤー
 		Enemy,				//! エネミー
-		Camera,				//! カメラ
 		MapObject,			//!	マップオブジェクト
 
 		TypeNum,			//! タイプの数
@@ -61,10 +60,11 @@ public:
 
 	void AllRelease();
 
+#pragma region 当たり判定
 	/**
-	* @brief プレイヤーとマップ障害物との当たり判定関数
-	* @return bool 当たった:true 当たっていない:false
-	*/
+* @brief プレイヤーとマップ障害物との当たり判定関数
+* @return bool 当たった:true 当たっていない:false
+*/
 	bool HitPlayerAndMapObject();
 
 	/**
@@ -98,14 +98,7 @@ public:
 	* @return bool 成功:true 失敗:false
 	*/
 	bool HitRayAndObject(const D3DXVECTOR3& origin_, const D3DXVECTOR3& delta_);
-
-	Camera* GetCameraInstance()const {
-		if (m_Camera == nullptr)
-		{
-			new Camera();
-		}
-		return m_Camera;
-	}
+#pragma endregion
 
 private:
 	/**
@@ -145,8 +138,6 @@ private:
 	std::vector<ObjectBase*> m_EnemyGroup;			//! エネミーグループ
 	std::vector<ObjectBase*> m_Object;				//! 当たり判定のないオブジェクトグループ
 	std::vector<ObjectBase*> m_MapObjectGroup;		//! 当たり判定のあるオブジェクトグループ
-
-	Camera* m_Camera;	
 
 	FlexibleCollision m_Collision;
 	std::unique_ptr<MapDataBank> m_MapDataBank;

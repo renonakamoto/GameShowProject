@@ -51,15 +51,6 @@ public:
 	*/
 	virtual ~MapObject() {}
 
-	// 再読み込み
-	void CoordinateUpdate(MapData::MapObjectList mapObjId_)
-	{
-		//TODO MapDataBankをシングルトン
-		MapDataBank hoge;
-		hoge.Load();
-		m_MapObjectDataList = hoge.GetMapObjectData(mapObjId_);
-	}
-
 protected:
 	std::vector<MapObjectData>* m_MapObjectDataList;
 	//! ワールド行列

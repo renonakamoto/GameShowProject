@@ -75,9 +75,6 @@ private:
 	* @brief 移動処理
 	*/
 	void Move();
-	
-
-	Camera* m_RefCamera;					//! カメラの参照用変数
 
 	float m_WalkSpeed;						//! 立ってる状態でのスピード
 	float m_SquatWalkSpeed;					//! しゃがんでる状態でのスピード
@@ -87,14 +84,13 @@ private:
 	float m_Weight;							//! 重さ
 
 	bool m_IsSquat;							//! しゃがんでいるかどうか保存する変数
-	bool m_IsMove;							//! 動いているかどうかを保存そる変数
-
+	bool m_IsMove;							//! 動いているかどうかを保存する変数
 	D3DXVECTOR3 m_CenterPos;				//! プレイヤーの中心点(しゃがんだ時にカメラを下げるために追加)
 
-
-	FbxMotion<PlayerMotionList>		             m_Motion;			//! モーションクラス
-	PlayerStateBase*							 m_State;			//! プレイヤー状態管理クラス
-	PlayerEffect								 m_PlayerEffect;	//! エフェクトクラス
+	Camera							 m_Camera;			//! プレイヤーを追いかけるカメラクラス
+	FbxMotion<PlayerMotionList>		 m_Motion;			//! モーションクラス
+	PlayerStateBase*				 m_State;			//! プレイヤー状態管理クラス
+	PlayerEffect					 m_PlayerEffect;	//! エフェクトクラス
 	
 };
 

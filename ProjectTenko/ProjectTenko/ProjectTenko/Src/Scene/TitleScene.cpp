@@ -6,7 +6,6 @@
 #include "../Engine/Texture/Texture.h"
 #include "../Engine/Font/Font.h"
 #include "../Camera/Camera.h"
-#include "../Manager/DebugManager.h"
 #include <thread>
 
 #include <sstream>
@@ -55,38 +54,24 @@ void TitleScene::Load()
 
 DWORD WINAPI TitleScene::LoadResources(LPVOID lpParam_)
 {
-	if (DebugManager::GetInstance().IsSimpleMap() == false)
-	{
-		THE_FBXMANAGER->LoadFBXMesh("Merrygoland1", "assets/objects/merrygoland/merrygoland_Foundation.fbx");
-		THE_FBXMANAGER->LoadFBXMesh("Merrygoland2", "assets/objects/merrygoland/merrygoland_Paul.fbx");
-		THE_FBXMANAGER->LoadFBXMesh("Merrygoland_Shrinp1", "assets/objects/merrygoland/merrygoland_shrimp1.fbx");
-		THE_FBXMANAGER->LoadFBXMesh("Merrygoland_Shrinp2", "assets/objects/merrygoland/merrygoland_shrimp2.fbx");
-		THE_FBXMANAGER->LoadFBXMesh("Merrygoland_Shrinp3", "assets/objects/merrygoland/merrygoland_shrimp3.fbx");
-		THE_FBXMANAGER->LoadFBXMesh("Merrygoland_Shrinp4", "assets/objects/merrygoland/merrygoland_shrimp4.fbx");
-
-		THE_FBXMANAGER->LoadFBXMesh("Mountain", "assets/objects/mountain/mountain.fbx");
-		THE_FBXMANAGER->LoadFBXMesh("SkyDome", "assets/objects/skydome/sky_dome4.fbx");
-		THE_FBXMANAGER->LoadFBXMesh("ShrimpStatue", "assets/objects/shrimp_statue/statue01.fbx");
-		THE_FBXMANAGER->LoadFBXMesh("Gate", "assets/objects/gate/gate2.fbx");
-	}
 	THE_FBXMANAGER->LoadFBXMesh("Barrel",		"assets/objects/barrel/Barrel.fbx");
 	THE_FBXMANAGER->LoadFBXMesh("FerrisWheel1",	"assets/objects/ferris_wheel/dodai.fbx");
 	THE_FBXMANAGER->LoadFBXMesh("FerrisWheel2",	"assets/objects/ferris_wheel/mawaru.fbx");
 	THE_FBXMANAGER->LoadFBXMesh("Floor",		"assets/objects/floor/floor.fbx");
-	//THE_FBXMANAGER->LoadFBXMesh("Gate",			"assets/objects/gate/gate2.fbx");
+	THE_FBXMANAGER->LoadFBXMesh("Gate",			"assets/objects/gate/gate2.fbx");
 
-	//THE_FBXMANAGER->LoadFBXMesh("Merrygoland1",	"assets/objects/merrygoland/merrygoland_Foundation.fbx");
-	//THE_FBXMANAGER->LoadFBXMesh("Merrygoland2",  "assets/objects/merrygoland/merrygoland_Paul.fbx");
-	//THE_FBXMANAGER->LoadFBXMesh("Merrygoland_Shrinp1",  "assets/objects/merrygoland/merrygoland_shrimp1.fbx");
-	//THE_FBXMANAGER->LoadFBXMesh("Merrygoland_Shrinp2",  "assets/objects/merrygoland/merrygoland_shrimp2.fbx");
-	//THE_FBXMANAGER->LoadFBXMesh("Merrygoland_Shrinp3",  "assets/objects/merrygoland/merrygoland_shrimp3.fbx");
-	//THE_FBXMANAGER->LoadFBXMesh("Merrygoland_Shrinp4",  "assets/objects/merrygoland/merrygoland_shrimp4.fbx");
+	THE_FBXMANAGER->LoadFBXMesh("Merrygoland1",	"assets/objects/merrygoland/merrygoland_Foundation.fbx");
+	THE_FBXMANAGER->LoadFBXMesh("Merrygoland2",  "assets/objects/merrygoland/merrygoland_Paul.fbx");
+	THE_FBXMANAGER->LoadFBXMesh("Merrygoland_Shrinp1",  "assets/objects/merrygoland/merrygoland_shrimp1.fbx");
+	THE_FBXMANAGER->LoadFBXMesh("Merrygoland_Shrinp2",  "assets/objects/merrygoland/merrygoland_shrimp2.fbx");
+	THE_FBXMANAGER->LoadFBXMesh("Merrygoland_Shrinp3",  "assets/objects/merrygoland/merrygoland_shrimp3.fbx");
+	THE_FBXMANAGER->LoadFBXMesh("Merrygoland_Shrinp4",  "assets/objects/merrygoland/merrygoland_shrimp4.fbx");
 
-	//THE_FBXMANAGER->LoadFBXMesh("Mountain",		"assets/objects/mountain/mountain.fbx");
+	THE_FBXMANAGER->LoadFBXMesh("Mountain",		"assets/objects/mountain/mountain.fbx");
 	THE_FBXMANAGER->LoadFBXMesh("SaplingBig",	"assets/objects/sapling/NAEGI_02.fbx");
 	THE_FBXMANAGER->LoadFBXMesh("SaplingSmall", "assets/objects/sapling/NAEGI_01.fbx");
-	//THE_FBXMANAGER->LoadFBXMesh("ShrimpStatue", "assets/objects/shrimp_statue/statue01.fbx");
-	//THE_FBXMANAGER->LoadFBXMesh("SkyDome",		"assets/objects/skydome/sky_dome4.fbx");
+	THE_FBXMANAGER->LoadFBXMesh("ShrimpStatue", "assets/objects/shrimp_statue/statue01.fbx");
+	THE_FBXMANAGER->LoadFBXMesh("SkyDome",		"assets/objects/skydome/sky_dome4.fbx");
 	THE_FBXMANAGER->LoadFBXMesh("Tent",			"assets/objects/tent/tent.fbx");
 	THE_FBXMANAGER->LoadFBXMesh("Tree",			"assets/objects/tree/wood_01.fbx");
 	THE_FBXMANAGER->LoadFBXMesh("VendingMachineBlue", "assets/objects/vending_machine/Vending_machine_blue.fbx");
@@ -150,15 +135,6 @@ void TitleScene::Draw()
 		}
 		return;
 	}
-
-	int mouse_x = THE_INPUTMANAGER->GetMousePos().x;
-	int mouse_y = THE_INPUTMANAGER->GetMousePos().y;
-
-	std::ostringstream oss;
-	oss << "X= " << mouse_x << " Y= " << mouse_y;
-	
-
-	THE_FONT->DrawFont(mouse_x, mouse_y, oss.str());
 
 	THE_OBJECTMANAGER->Draw();
 	if (m_TitleUI != nullptr) m_TitleUI->Draw();

@@ -35,7 +35,6 @@
     <ClCompile Include="Src\Engine\Window\Window.cpp" />
     <ClCompile Include="Src\ExternalFle\Csv\Csv.cpp" />
     <ClCompile Include="Src\Main.cpp" />
-    <ClCompile Include="Src\Manager\DebugManager.cpp" />
     <ClCompile Include="Src\Manager\ObjectManager.cpp" />
     <ClCompile Include="Src\NavigationAI\MovingPathCreator.cpp" />
     <ClCompile Include="Src\NavigationAI\NavigationAI.cpp" />
@@ -68,7 +67,6 @@
     <ClCompile Include="Src\ObjectBase\MapObject\Floor\Floor.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Gate\Gate.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\MapDataBank.cpp" />
-    <ClCompile Include="Src\ObjectBase\MapObject\MapObject.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Merrygoland\Merrygoland.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Mountain\Mountain.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\Sapling_Big\SaplingBig.cpp" />
@@ -120,7 +118,6 @@
     <ClInclude Include="Src\Engine\Window\Window.h" />
     <ClInclude Include="Src\ExternalFle\Csv\Csv.h" />
     <ClInclude Include="Src\Manager\ConfigManager.h" />
-    <ClInclude Include="Src\Manager\DebugManager.h" />
     <ClInclude Include="Src\Manager\ObjectManager.h" />
     <ClInclude Include="Src\NavigationAI\MovingPathCreater.h" />
     <ClInclude Include="Src\NavigationAI\MovingPathCreator.h" />

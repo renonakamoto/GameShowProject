@@ -7,7 +7,6 @@
 #include "ClearScene.h"
 #include "GameoverScene.h"
 #include "SceneManager.h"
-#include "../Manager/DebugManager.h"
 
 #include "..//Engine/Input/InputManager.h"
 #include "..//Engine/Font/Font.h"
@@ -70,8 +69,6 @@ void DebugScene::Update()
     {
         m_SceneList.top()->Update();
     }
-
-    DebugManager::GetInstance().Update();
 }
 
 void DebugScene::Draw()
@@ -106,8 +103,6 @@ void DebugScene::Draw()
     {
         m_SceneList.top()->Draw();
     }
-
-    DebugManager::GetInstance().Draw();
 }
 
 void DebugScene::ChangeScene(SceneID id_)
