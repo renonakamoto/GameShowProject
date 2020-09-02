@@ -25,7 +25,8 @@
 #include "../ObjectBase/MapObject/StreetLamp/StreetLamp.h"
 
 
-Objectmanager::Objectmanager()
+Objectmanager::Objectmanager():
+	m_Player(nullptr)
 {
 }
 
@@ -205,14 +206,18 @@ bool Objectmanager::HitPlayerAndEnemy()
 
 bool Objectmanager::HitCameraAndObject()
 {
-	//std::vector<Shape*> tmp_camera_shape;
-	//tmp_camera_shape.push_back(m_Camera->GetShape());
-	//for (auto& itr : m_MapObjectGroup) {
-	//	if (m_Collision.Test(tmp_camera_shape, itr->GetShape()) == true)
-	//	{
-	//		return true;
-	//	}
-	//}
+	Player* ref_player = dynamic_cast<Player*>(m_Player);
+	if (ref_player == nullptr) return false;
+
+	std::vector<Shape*> tmp_camera_shape;
+	tmp_camera_shape.push_back(ref_player->GetCamera()->GetShape());
+
+	for (auto& itr : m_MapObjectGroup) {
+		if (m_Collision.Test(tmp_camera_shape, itr->GetShape()) == true)
+		{
+			return true;
+		}
+	}
 
 	return false;
 }

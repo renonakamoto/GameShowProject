@@ -62,6 +62,10 @@ public:
 	*/
 	void SetIsSquad(bool isSquad_) { m_IsSquat = isSquad_; }
 
+	/**
+	* @brief  プレイヤーの座標(頭)を返す
+	* @return D3DXVECTOR3
+	*/
 	D3DXVECTOR3 GetPos() const override 
 	{
 		D3DXVECTOR3 player_head_pos = m_CenterPos;
@@ -69,6 +73,11 @@ public:
 		return player_head_pos;
 	}
 
+	/**
+	* @brief　カメラのポインタを返す(コンスト付き)
+	* @return const Camera*
+	*/
+	const Camera* GetCamera()const { return &m_Camera; }
 
 private:
 	/**

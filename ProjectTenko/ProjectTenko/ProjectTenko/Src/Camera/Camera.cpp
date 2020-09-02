@@ -64,8 +64,8 @@ void Camera::Rotate()
 	GetClientRect(THE_WINDOW->GetWindowHandle(), &client_rect);
 
 	// クライアントサイズの取得
-	float half_gclient_width  = client_rect.right  / 2;
-	float half_client_height  = client_rect.bottom / 2;
+	float half_gclient_width  = static_cast<float>(client_rect.right)  / 2.f;
+	float half_client_height  = static_cast<float>(client_rect.bottom) / 2.f;
 
 	int mouse_x = THE_INPUTMANAGER->GetMousePos().x * 0.8f;
 	int mouse_y = THE_INPUTMANAGER->GetMousePos().y * 0.8f;

@@ -19,7 +19,7 @@ void FerrisWheel::Update()
 		v = mat_world;
 	}
 
-	m_Angle++;
+	m_Angle += 1.f / 10.f;
 	if (m_Angle > 360.0f)
 	{
 		m_Angle = 0;

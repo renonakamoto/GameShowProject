@@ -9,7 +9,7 @@
 
 #include "../Engine/Graphics/DirectGraphics.h"
 
-#define _DEBUG_ON
+//#define _DEBUG_ON
 
 using namespace std;
 

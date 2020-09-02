@@ -27,6 +27,7 @@ Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 	m_Shape.push_back(new AABBShape(4.0f, 20.f, 4.0f));
 
 	m_Speed		= D3DXVECTOR3(0.0f,0.0f,0.0f);
+	m_Angle     = D3DXToRadian(90.0f);
 	m_Resist	= 0.3f;
 	m_Force		= 0.5f;
 	m_Weight	= 1.2f;
