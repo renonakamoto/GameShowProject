@@ -70,11 +70,16 @@ struct Route
 		return m_Cost < route.m_Cost;
 	};
 
-	void AddPos(std::vector<D3DXVECTOR3>& route_, float size_) const;
+	/**
+	* @biref 座標追加関数
+	* 自身のノードの座標をコンテナに追加する関数です
+	* @param[out] route_ 座標を追加するコンテナ
+	*/
+	void AddPos(std::vector<D3DXVECTOR3>& route_) const;
 
-	Node* m_Node;
-	float m_Cost;
-	Route* m_Parent;
+	Node* m_Node;		//!< ノードのポインタ
+	float m_Cost;		//!< ヒューリスティックコスト
+	Route* m_Parent;	//!< 経路の親となるRouteのポインタ
 };
 
 #endif // !NODE_H_

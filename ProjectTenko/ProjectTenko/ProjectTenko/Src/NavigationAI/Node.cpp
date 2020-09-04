@@ -1,6 +1,6 @@
 #include "Node.h"
 
-void Route::AddPos(std::vector<D3DXVECTOR3>& route_, float size_) const
+void Route::AddPos(std::vector<D3DXVECTOR3>& route_) const
 {
 	D3DXVECTOR3 vec(m_Node->m_Pos.x, m_Node->m_Pos.y, m_Node->m_Pos.z);
 	route_.push_back(vec);
@@ -10,11 +10,5 @@ void Route::AddPos(std::vector<D3DXVECTOR3>& route_, float size_) const
 		return;
 	}
 
-	m_Parent->AddPos(route_, size_);
-}
-
-void Node::AddPos(std::vector<D3DXVECTOR3>& route_) const
-{
-	D3DXVECTOR3 vec(m_Pos.x, m_Pos.y, m_Pos.z);
-	route_.push_back(vec);
+	m_Parent->AddPos(route_);
 }

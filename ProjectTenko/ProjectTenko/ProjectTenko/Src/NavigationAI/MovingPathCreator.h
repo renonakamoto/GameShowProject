@@ -14,11 +14,24 @@ struct PathInfo
 class MovingPathCreator
 {
 public:
+	/**
+	* @biref コンストラクタ
+	*/
 	MovingPathCreator();
+
+	/**
+	* @biref デストラクタ
+	*/
 	~MovingPathCreator();
 
 	/**
 	* @biref マップの移動可能経路情報を作成します
+	* @param[in] lefttop_		マップ左上の座標
+	* @param[in] fieldwidth_	マップの横幅
+	* @param[in] fieldheight_	マップの縦幅
+	* @param[in] cellsize_		マップを区切るサイズ
+	* @param[in] objectsize_	オブジェクトのサイズ
+	* @param[in] raylength_		レイの長さ
 	*/
 	bool CreateMovingPath(D3DXVECTOR3 lefttop_, float fieldwidth_, float fieldheight_, float cellsize_, float objectsize_, float raylength_);
 
