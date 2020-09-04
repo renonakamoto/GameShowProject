@@ -5,6 +5,7 @@
 
 #include "..//EnemyAI/StateManager.h"
 #include "..//..//..//..//NavigationAI/NavigationAI.h"
+#include "..//..//..//..//Manager/ObjectManager.h"
 
 #include "..//..//..//..//Engine/Font/Font.h"
 
@@ -78,48 +79,55 @@ void Tikuwaten::Move()
 	{
 		D3DXVECTOR3 curr_vec = m_MovingVector;
 
-// 次の移動ベクトルの算出
-m_NextRouteNum++;
+		// 次の移動ベクトルの算出
+		m_NextRouteNum++;
 
-if (m_PatrolRoute.size() - 1 < m_NextRouteNum)
-{
-	m_NextRouteNum = 0;
-}
+		if (m_PatrolRoute.size() - 1 < m_NextRouteNum)
+		{
+			m_NextRouteNum = 0;
+		}
 
-m_NextRoute = m_PatrolRoute[m_NextRouteNum];
-float distance = sqrtf(powf(m_NextRoute.x - m_Pos.x, 2) + powf(m_NextRoute.y - m_Pos.y, 2) + powf(m_NextRoute.z - m_Pos.z, 2));
-m_MovingVector = (m_NextRoute - m_Pos) / distance;
+		m_NextRoute = m_PatrolRoute[m_NextRouteNum];
+		float distance = sqrtf(powf(m_NextRoute.x - m_Pos.x, 2) + powf(m_NextRoute.y - m_Pos.y, 2) + powf(m_NextRoute.z - m_Pos.z, 2));
+		m_MovingVector = (m_NextRoute - m_Pos) / distance;
 
-// 向きの算出
-m_NextAngle = atan2f(m_MovingVector.x, m_MovingVector.z);
+		// 向きの算出
+		m_NextAngle = atan2f(m_MovingVector.x, m_MovingVector.z);
 
-// 外積で右回りか左回りか判定
-float cross = (curr_vec.x * m_MovingVector.z) - (m_MovingVector.x * curr_vec.z);
+		// 外積で右回りか左回りか判定
+		float cross = (curr_vec.x * m_MovingVector.z) - (m_MovingVector.x * curr_vec.z);
 
-if (cross > 0)
-{
-	m_IsClockwise = false;
-}
-else
-{
-	m_IsClockwise = true;
-}
+		if (cross > 0)
+		{
+			m_IsClockwise = false;
+		}
+		else
+		{
+			m_IsClockwise = true;
+		}
 
-m_State = StateManager::GetInstance()->GetState(StateType::Turn);
+		m_State = StateManager::GetInstance()->GetState(StateType::Turn);
 	}
 	else
 	{
-	D3DXVECTOR3 nextpos = m_Pos + m_MovingVector * m_Speed;
-	if (fabsf(nextpos.x - m_Pos.x) >= fabsf(m_NextRoute.x - m_Pos.x) && fabsf(nextpos.z - m_Pos.z) >= fabsf(m_NextRoute.z - m_Pos.z))
-	{
-		m_Pos = m_NextRoute;
-		m_Angle = atan2f(m_MovingVector.x, m_MovingVector.z);
-	}
-	else
-	{
-		m_Pos = nextpos;
-		m_Angle = atan2f(m_MovingVector.x, m_MovingVector.z);
-	}
+		D3DXVECTOR3 old_pos = m_Pos;
+		m_Pos += m_MovingVector * m_Speed;
+
+		if (THE_OBJECTMANAGER->HitEnemyAndObject(Objectmanager::EnemyType::Enemy_Tikuwaten) == true)
+		{
+			m_Pos = old_pos;
+			return;
+		}
+
+		if (fabsf(m_Pos.x - old_pos.x) >= fabsf(m_NextRoute.x - old_pos.x) && fabsf(m_Pos.z - old_pos.z) >= fabsf(m_NextRoute.z - old_pos.z))
+		{
+			m_Pos = m_NextRoute;
+			m_Angle = atan2f(m_MovingVector.x, m_MovingVector.z);
+		}
+		else
+		{
+			m_Angle = atan2f(m_MovingVector.x, m_MovingVector.z);
+		}
 	}
 	m_Motion.Motion(ChikuwaMotionList::Walk, m_FbxKey, true);
 }
@@ -194,7 +202,12 @@ void Tikuwaten::Chase()
 	float distance = sqrtf((vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z));
 	vec /= distance;
 
+	D3DXVECTOR3 old_pos = m_Pos;
 	m_Pos += vec * m_Speed * 2;
+	if (THE_OBJECTMANAGER->HitEnemyAndObject(Objectmanager::EnemyType::Enemy_Tikuwaten) == true)
+	{
+		m_Pos = old_pos;
+	}
 	m_Angle = atan2f(vec.x, vec.z);
 
 	m_Motion.Motion(ChikuwaMotionList::Sprint, m_FbxKey, true);
@@ -226,14 +239,12 @@ void Tikuwaten::Return()
 	}
 	else
 	{
-		D3DXVECTOR3 nextpos = m_Pos + (m_MovingVector * m_Speed);
-		if (fabsf(nextpos.x - m_Pos.x) >= fabsf(m_NextRoute.x - m_Pos.x)&& fabsf(nextpos.z - m_Pos.z) >= fabsf(m_NextRoute.z - m_Pos.z))
+		D3DXVECTOR3 old_pos = m_Pos;
+		m_Pos += m_MovingVector * m_Speed;
+	
+		if (fabsf(m_Pos.x - old_pos.x) >= fabsf(m_NextRoute.x - old_pos.x)&& fabsf(m_Pos.z - old_pos.z) >= fabsf(m_NextRoute.z - old_pos.z))
 		{
 			m_Pos = m_NextRoute;
-		}
-		else
-		{
-			m_Pos = nextpos;
 		}
 	}
 	m_Motion.Motion(ChikuwaMotionList::Walk, m_FbxKey, true);
