@@ -1,5 +1,5 @@
-#ifndef PATROL_H_
-#define PATROL_H_
+#ifndef MOVE_H_
+#define MOVE_H_
 
 #include "..//..//EnemyBase.h"
 #include "..//State.h"
@@ -7,10 +7,10 @@
 class Patrol : public State
 {
 public:
-	Patrol() { }
-	virtual ~Patrol() override { }
+	Patrol() {}
+	virtual ~Patrol() {}
 
 	virtual void Update(Enemybase* enemy_) override;
 };
 
-#endif // !PATROL_H_
+#endif // !MOVE_H_

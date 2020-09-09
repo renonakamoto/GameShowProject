@@ -7,7 +7,6 @@
 
 enum class StateType
 {
-	Move,
 	Patrol,
 	Turn,
 	Chase,

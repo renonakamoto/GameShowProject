@@ -36,7 +36,6 @@ Player::Player(D3DXVECTOR3 pos_, std::string key_) :
 
 Player::~Player()
 {
-
 }
 
 void Player::Update()

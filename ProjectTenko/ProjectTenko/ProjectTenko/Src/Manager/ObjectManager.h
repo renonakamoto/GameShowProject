@@ -35,11 +35,11 @@ public:
 	*/
 	enum class EnemyType
 	{
+		Enemy_Tikuwaten,	//! ちくわ天
 		Enemy_Ebiten,		//! えび天
 		Enemy_Ikaten,		//! いか天
 		Enemy_Kabochaten,	//! かぼちゃ天
 		Enemy_Sitaketen,	//! しいたけ天
-		Enemy_Tikuwaten,	//! ちくわ天
 	};
 
 public:

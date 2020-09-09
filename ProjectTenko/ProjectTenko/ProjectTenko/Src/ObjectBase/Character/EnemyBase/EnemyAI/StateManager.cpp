@@ -1,6 +1,5 @@
 #include "StateManager.h"
 
-#include "Patrol/Move.h"
 #include "Patrol/Patrol.h"
 #include "Patrol/Turn.h"
 #include "Chase.h"
@@ -10,7 +9,6 @@
 
 StateManager::StateManager()
 {
-	m_StateList.push_back(std::make_unique<Move>());
 	m_StateList.push_back(std::make_unique<Patrol>());
 	m_StateList.push_back(std::make_unique<Turn>());
 	m_StateList.push_back(std::make_unique<Chase>());
@@ -21,6 +19,7 @@ StateManager::StateManager()
 
 StateManager::~StateManager()
 {
+	m_StateList.clear();
 }
 
 State* StateManager::GetState(StateType type_) const

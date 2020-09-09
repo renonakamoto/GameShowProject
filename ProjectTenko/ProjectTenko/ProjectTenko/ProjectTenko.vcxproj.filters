@@ -72,11 +72,9 @@
     <ClCompile Include="Src\NavigationAI\NavigationAI.cpp" />
     <ClCompile Include="Src\Utility\SimpleCalculation.cpp" />
     <ClCompile Include="Src\UI\GameClearUI\GameClearUI.cpp" />
-    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Patrol.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Turn.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Chase.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Return.cpp" />
-    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Move.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\Player\PlayerEffect.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerWait.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\Player\State\PlayerSprint.cpp" />
@@ -92,6 +90,7 @@
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Thinking.cpp" />
     <ClCompile Include="Src\ObjectBase\MapObject\StreetLamp\StreetLamp.cpp" />
     <ClCompile Include="Src\Engine\Sound\SoundManager.cpp" />
+    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Patrol.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
@@ -189,8 +188,6 @@
     <ClInclude Include="Src\Manager\ConfigManager.h" />
     <ClInclude Include="Src\UI\GameClearUI\GameClearUI.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\State.h" />
-    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Patrol.h" />
-    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Move.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Turn.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Chase.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Return.h" />
@@ -212,6 +209,7 @@
     <ClInclude Include="Src\ObjectBase\MapObject\StreetLamp\StreetLamp.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Attack.h" />
     <ClInclude Include="Src\Engine\Sound\SoundManager.h" />
+    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Patrol.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

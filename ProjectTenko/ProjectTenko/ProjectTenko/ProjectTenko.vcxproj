@@ -41,7 +41,6 @@
     <ClCompile Include="Src\NavigationAI\Node.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Chase.cpp" />
-    <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Move.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Patrol.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Turn.cpp" />
     <ClCompile Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Return.cpp" />
@@ -127,7 +126,6 @@
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\Ebiten\Ebiten.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Attack.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Chase.h" />
-    <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Move.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Patrol.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Patrol\Turn.h" />
     <ClInclude Include="Src\ObjectBase\Character\EnemyBase\EnemyAI\Return.h" />

@@ -23,10 +23,6 @@ void Ikaten::Patrol()
 {
 }
 
-void Ikaten::Move()
-{
-}
-
 void Ikaten::Turn()
 {
 }

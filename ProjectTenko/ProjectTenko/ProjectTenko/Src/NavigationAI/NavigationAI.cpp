@@ -78,7 +78,7 @@ unsigned __stdcall Navigator::GetReturnRoute(void* data_)
 		open_list.erase(route);
 	}
 
-	close_list.back().get()->AddPos(data->Route, cellsize);
+	close_list.back().get()->AddPos(data->Route);
 
 	return 0;
 }

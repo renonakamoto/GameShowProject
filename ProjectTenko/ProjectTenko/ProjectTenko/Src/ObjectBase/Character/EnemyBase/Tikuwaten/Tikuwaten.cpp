@@ -4,22 +4,23 @@
 #include <process.h>
 
 #include "..//EnemyAI/StateManager.h"
+#include "..//..//..//..//Collision/Shape/AABB.h"
 #include "..//..//..//..//NavigationAI/NavigationAI.h"
 #include "..//..//..//..//Manager/ObjectManager.h"
 
 Tikuwaten::Tikuwaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string key_) :
 	Enemybase(pos_, player_, key_), m_CrrentMotion(ChikuwaMotionList::Wait)
 {
-	// THE_FBXMANAGER->LoadFBXMesh(key_, "assets/models/enemies/tikuwaten/chikuwa_animation.fbx");
-
 	m_Motion.AddMotion(ChikuwaMotionList::Wait,			   0,   60);
 	m_Motion.AddMotion(ChikuwaMotionList::Walk,			   70,  130);
 	m_Motion.AddMotion(ChikuwaMotionList::Sprint,		   140, 200);
 	m_Motion.AddMotion(ChikuwaMotionList::ChangeDirection, 210, 270);
 
+	m_Shape.push_back(new AABBShape(m_Pos ,14.0f ,40.0f, 14.0f));
+
 	Navigator::GetInstance().GetEnemyRoute("Chikuwa", m_PatrolRoute);
 	m_NextRoute = m_PatrolRoute.front();
-	m_State = StateManager::GetInstance()->GetState(StateType::Move);
+	m_State = StateManager::GetInstance()->GetState(StateType::Patrol);
 }
 
 void Tikuwaten::Update()
@@ -41,7 +42,7 @@ void Tikuwaten::Draw()
 	THE_FBXMANAGER->Draw(m_FbxKey, m_Mat_World);
 }
 
-void Tikuwaten::Move()
+void Tikuwaten::Patrol()
 {
 	if (CanDetectPC() == true)
 	{
@@ -85,24 +86,7 @@ void Tikuwaten::Move()
 	}
 	else
 	{
-		D3DXVECTOR3 old_pos = m_Pos;
-		m_Pos += m_MovingVector * m_Speed;
-
-		if (THE_OBJECTMANAGER->HitEnemyAndObject(Objectmanager::EnemyType::Enemy_Tikuwaten) == true)
-		{
-			m_Pos = old_pos;
-			return;
-		}
-
-		if (fabsf(m_Pos.x - old_pos.x) >= fabsf(m_NextRoute.x - old_pos.x) && fabsf(m_Pos.z - old_pos.z) >= fabsf(m_NextRoute.z - old_pos.z))
-		{
-			m_Pos = m_NextRoute;
-			m_Angle = atan2f(m_MovingVector.x, m_MovingVector.z);
-		}
-		else
-		{
-			m_Angle = atan2f(m_MovingVector.x, m_MovingVector.z);
-		}
+		Move();
 	}
 	m_Motion.Motion(ChikuwaMotionList::Walk, m_FbxKey, true);
 }
@@ -117,33 +101,29 @@ void Tikuwaten::Turn()
 
 	if (m_Angle == m_NextAngle)
 	{
-		m_State = StateManager::GetInstance()->GetState(StateType::Move);
+		m_State = StateManager::GetInstance()->GetState(StateType::Patrol);
 	}
+
+	float new_angle = 0.0f;
 
 	if (m_IsClockwise)
 	{
-		float new_angle = m_Angle - ENEMY_ROTATE;
-		if (fabsf(new_angle - m_Angle) - fabsf(m_NextAngle - m_Angle))
-		{
-			m_Angle = m_NextAngle;
-		}
-		else
-		{
-			m_Angle = new_angle;
-		}
+		new_angle = m_Angle - ENEMY_ROTATE;
 	}
 	else
 	{
-		float new_angle = m_Angle + ENEMY_ROTATE;
-		if (fabsf(new_angle - m_Angle) - fabsf(m_NextAngle - m_Angle))
-		{
-			m_Angle = m_NextAngle;
-		}
-		else
-		{
-			m_Angle = new_angle;
-		}
+		new_angle = m_Angle + ENEMY_ROTATE;
 	}
+
+	if (fabsf(new_angle - m_Angle) - fabsf(m_NextAngle - m_Angle))
+	{
+		m_Angle = m_NextAngle;
+	}
+	else
+	{
+		m_Angle = new_angle;
+	}
+
 	m_Motion.Motion(ChikuwaMotionList::Wait, m_FbxKey, true);
 }
 
@@ -174,7 +154,13 @@ void Tikuwaten::Chase()
 	vec /= distance;
 
 	D3DXVECTOR3 old_pos = m_Pos;
-	m_Pos += vec * m_Speed * 2;
+	m_Pos += vec * m_Speed * 3;
+
+	for (auto e : m_Shape)
+	{
+		e->Update(m_Pos);
+	}
+
 	if (THE_OBJECTMANAGER->HitEnemyAndObject(Objectmanager::EnemyType::Enemy_Tikuwaten) == true)
 	{
 		m_Pos = old_pos;
@@ -199,7 +185,7 @@ void Tikuwaten::Return()
 
 		if (m_NavData.Route.empty())
 		{
-			m_State = StateManager::GetInstance()->GetState(StateType::Move);
+			m_State = StateManager::GetInstance()->GetState(StateType::Patrol);
 			return;
 		}
 
@@ -210,13 +196,7 @@ void Tikuwaten::Return()
 	}
 	else
 	{
-		D3DXVECTOR3 old_pos = m_Pos;
-		m_Pos += m_MovingVector * m_Speed;
-	
-		if (fabsf(m_Pos.x - old_pos.x) >= fabsf(m_NextRoute.x - old_pos.x)&& fabsf(m_Pos.z - old_pos.z) >= fabsf(m_NextRoute.z - old_pos.z))
-		{
-			m_Pos = m_NextRoute;
-		}
+		Move();
 	}
 	m_Motion.Motion(ChikuwaMotionList::Walk, m_FbxKey, true);
 }
@@ -252,4 +232,26 @@ void Tikuwaten::Thinking()
 	}
 
 	m_Motion.Motion(ChikuwaMotionList::Wait, m_FbxKey, true);
+}
+
+void Tikuwaten::Move()
+{
+	D3DXVECTOR3 old_pos = m_Pos;
+	m_Pos += m_MovingVector * m_Speed;
+
+	for (auto e : m_Shape)
+	{
+		e->Update(m_Pos);
+	}
+
+	if (THE_OBJECTMANAGER->HitEnemyAndObject(Objectmanager::EnemyType::Enemy_Tikuwaten) == true)
+	{
+		m_Pos = old_pos;
+		return;
+	}
+
+	if (fabsf(m_Pos.x - old_pos.x) >= fabsf(m_NextRoute.x - old_pos.x) && fabsf(m_Pos.z - old_pos.z) >= fabsf(m_NextRoute.z - old_pos.z))
+	{
+		m_Pos = m_NextRoute;
+	}
 }

@@ -42,7 +42,7 @@ private:
 	/**
 	* @biref 巡回状態の移動処理関数
 	*/
-	void Move() override;
+	void Patrol() override;
 
 	/**
 	* @biref 巡回中の方向転換処理関数
@@ -63,6 +63,11 @@ private:
 	* @biref 巡回経路に復帰するための経路探索関数
 	*/
 	void Thinking() override;
+
+	/**
+	* @biref 座標変更関数
+	*/
+	void Move() override;
 
 private:
 	ChikuwaMotionList		     m_CrrentMotion;	//!< 現在のモーション

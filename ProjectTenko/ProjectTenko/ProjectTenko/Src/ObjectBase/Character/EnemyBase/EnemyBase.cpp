@@ -3,6 +3,7 @@
 #include <d3dx9.h>
 
 #include "..//..//..//Engine/Input/InputManager.h"
+#include "..//..//..//Manager/ObjectManager.h"
 
 void Enemybase::DecideReturnPoint()
 {
@@ -48,7 +49,16 @@ bool Enemybase::CanDetectPC()
 	float dot = vecX * arc_dirX + vecZ * arc_dirZ;
 	float fan_cos = cosf(D3DXToRadian(ENEMY_VIEW_ANGLE / 2));
 
-	if (fan_cos < dot)
+	if (fan_cos > dot)
+	{
+		return false;
+	}
+
+	D3DXVECTOR3 enemy_eye_pos = m_Pos;
+	enemy_eye_pos.y = 20.0f;
+	D3DXVECTOR3 ray = pl_Pos - enemy_eye_pos;
+
+	if (THE_OBJECTMANAGER->HitRayAndObject(enemy_eye_pos, ray) == false)
 	{
 		return true;
 	}

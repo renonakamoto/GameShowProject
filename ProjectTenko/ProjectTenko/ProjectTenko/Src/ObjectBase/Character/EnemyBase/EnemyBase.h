@@ -1,14 +1,16 @@
 #ifndef ENEMYBASE_H_
 #define ENEMYBASE_H_
 
-#include "../Player/Player.h"
-#include "../Character.h"
 #include <vector>
 #include <d3dx9.h>
+
+#include "../Player/Player.h"
+#include "../Character.h"
 #include "EnemyAI/State.h"
 #include "..//..//..//NavigationAI/NavigationAI.h"
+#include "..//..//..//Manager/ObjectManager.h"
 
-#define ENEMY_VIEW 500.0f
+#define ENEMY_VIEW 300.0f
 #define ENEMY_VIEW_ANGLE 100.0f
 #define ENEMY_ROTATE 0.026f
 
@@ -44,7 +46,7 @@ public:
 	/**
 	* @biref 巡回状態の移動処理関数
 	*/
-	virtual void Move() {}
+	virtual void Patrol() {}
 	
 	/**
 	* @biref 巡回中の方向転換処理関数
@@ -67,6 +69,11 @@ public:
 	virtual void Thinking(){}
 	
 	virtual void Attack(){}
+
+	/**
+	* @biref 座標変更関数
+	*/
+	virtual void Move() {}
 
 	/**
 	* @biref 最短の巡回ルートを調べる関数
@@ -93,12 +100,11 @@ protected:
 	bool m_IsClockwise;	//!< 次の向きが時計回りか否か
 
 	NavData m_NavData;	//!< 経路探索用のデータ構造体
-	bool m_IsThinking;　//!< 経路探索中か否か
+	bool m_IsThinking;  //!< 経路探索中か否か
 
 	const ObjectBase* m_RefPlayer;		//!< プレイヤーの参照用変数
 
 	HANDLE m_Handle;	//!< 経路探索処理のスレッドハンドル
-
 private:
 };
 
