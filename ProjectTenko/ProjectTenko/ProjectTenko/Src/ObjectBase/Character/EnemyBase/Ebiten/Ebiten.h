@@ -3,6 +3,11 @@
 
 #include "../EnemyBase.h"
 
+enum class EbitenMotionList
+{
+	Wait,
+};
+
 class Ebiten : public Enemybase
 {
 public:
@@ -14,10 +19,19 @@ public:
 	virtual void Update() override;
 	virtual void Draw() override;
 
-protected:
+private:
+	/**
+	*@biref „‰ñó‘Ô‚ÌˆÚ“®ˆ—ŠÖ”
+	*/
+	void Patrol() override;
+
+	/**
+	* @biref „‰ñ’†‚Ì•ûŒü“]Š·ˆ—ŠÖ”
+	*/
+	void Turn() override;
 
 private:
-
+	FbxMotion<EbitenMotionList> m_Motion;
 };
 
 #endif

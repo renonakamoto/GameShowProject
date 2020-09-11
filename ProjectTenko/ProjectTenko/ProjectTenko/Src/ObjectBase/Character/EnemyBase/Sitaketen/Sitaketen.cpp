@@ -23,7 +23,7 @@ Sitaketen::Sitaketen(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string ke
 	Navigator::GetInstance().GetEnemyRoute("Sitake", m_PatrolRoute);
 	m_NextRoute = m_PatrolRoute.front();
 	m_State = StateManager::GetInstance()->GetState(StateType::Patrol);
-
+	m_Type = Objectmanager::EnemyType::Enemy_Sitaketen;
 }
 
 void Sitaketen::Update()
@@ -249,26 +249,4 @@ void Sitaketen::Thinking()
 		}
 	}
 	m_Motion.Motion(SitaketenMotionList::Wait, m_FbxKey, true);
-}
-
-void Sitaketen::Move()
-{
-	D3DXVECTOR3 old_pos = m_Pos;
-	m_Pos += m_MovingVector * m_Speed;
-
-	for (auto e : m_Shape)
-	{
-		e->Update(m_Pos);
-	}
-
-	if (THE_OBJECTMANAGER->HitEnemyAndObject(Objectmanager::EnemyType::Enemy_Sitaketen) == true)
-	{
-		m_Pos = old_pos;
-		return;
-	}
-
-	if (fabsf(m_Pos.x - old_pos.x) >= fabsf(m_NextRoute.x - old_pos.x) && fabsf(m_Pos.z - old_pos.z) >= fabsf(m_NextRoute.z - old_pos.z))
-	{
-		m_Pos = m_NextRoute;
-	}
 }

@@ -64,11 +64,6 @@ private:
 	*/
 	void Thinking() override;
 
-	/**
-	* @biref 座標変更関数
-	*/
-	void Move() override;
-
 private:
 	ChikuwaMotionList		     m_CrrentMotion;	//!< 現在のモーション
 	FbxMotion<ChikuwaMotionList> m_Motion;			//!< モーションリスト

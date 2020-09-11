@@ -5,6 +5,28 @@
 #include "..//..//..//Engine/Input/InputManager.h"
 #include "..//..//..//Manager/ObjectManager.h"
 
+void Enemybase::Move()
+{
+	D3DXVECTOR3 old_pos = m_Pos;
+	m_Pos += m_MovingVector * m_Speed;
+
+	for (auto e : m_Shape)
+	{
+		e->Update(m_Pos);
+	}
+
+	if (THE_OBJECTMANAGER->HitEnemyAndObject(m_Type) == true)
+	{
+		m_Pos = old_pos;
+		return;
+	}
+
+	if (fabsf(m_Pos.x - old_pos.x) >= fabsf(m_NextRoute.x - old_pos.x) && fabsf(m_Pos.z - old_pos.z) >= fabsf(m_NextRoute.z - old_pos.z))
+	{
+		m_Pos = m_NextRoute;
+	}
+}
+
 void Enemybase::DecideReturnPoint()
 {
 	float length = INFINITY;
@@ -21,11 +43,6 @@ void Enemybase::DecideReturnPoint()
 
 bool Enemybase::CanDetectPC()
 {
-	if (THE_INPUTMANAGER->GetKey(KeyInfo::Key_R))
-	{
-		return false;
-	}
-
 	D3DXVECTOR3 pl_Pos = m_RefPlayer->GetPos();
 
 	float vecX = pl_Pos.x - m_Pos.x;

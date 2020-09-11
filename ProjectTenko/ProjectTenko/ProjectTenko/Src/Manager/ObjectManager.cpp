@@ -267,11 +267,11 @@ void Objectmanager::CreateEnemies()
 {
 	if (!m_EnemyGroup.empty()) return;
 
-	m_EnemyGroup.push_back(new Tikuwaten(D3DXVECTOR3(599.0f, 0.0f, -326.0f), m_Player, "Tikuwaten"));
-	//m_EnemyGroup.push_back(new Ebiten(		D3DXVECTOR3(-178.0f, 0.0f, 265.0f),		m_Player, "Ebiten"		));
-	//m_EnemyGroup.push_back(new Ikaten(		D3DXVECTOR3(155.0f, 0.0f, -5.0f),		m_Player, "Ikaten"		));
-	//m_EnemyGroup.push_back(new Kabochaten(	D3DXVECTOR3(-310.0f, 0.0f, -390.0f),	m_Player, "Kabochaten"	));
-	//m_EnemyGroup.push_back(new Sitaketen(	D3DXVECTOR3(-126.0f, 0.0f, -40.0f),		m_Player, "Sitaketen"	));
+	m_EnemyGroup.push_back(new Ebiten(		D3DXVECTOR3(-178.0f, 0.0f, 265.0f),		m_Player, "Ebiten"		));
+	m_EnemyGroup.push_back(new Ikaten(		D3DXVECTOR3(155.0f, 0.0f, -5.0f),		m_Player, "Ikaten"		));
+	m_EnemyGroup.push_back(new Kabochaten(	D3DXVECTOR3(-310.0f, 0.0f, -390.0f),	m_Player, "Kabochaten"	));
+	m_EnemyGroup.push_back(new Sitaketen(	D3DXVECTOR3(-126.0f, 0.0f, -40.0f),		m_Player, "Sitaketen"	));
+	m_EnemyGroup.push_back(new Tikuwaten(	D3DXVECTOR3(599.0f, 0.0f, -326.0f),		m_Player, "Tikuwaten"));
 }
 
 void Objectmanager::CreateMap()

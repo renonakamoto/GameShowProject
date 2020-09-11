@@ -35,7 +35,8 @@ public:
 		m_Speed(0.35f),
 		m_IsThinking(false),
 		m_Handle(nullptr),
-		m_IsClockwise(false)
+		m_IsClockwise(false),
+		m_Type(Objectmanager::EnemyType::Enemy_Ebiten)
 	{}
 
 	/**
@@ -73,7 +74,7 @@ public:
 	/**
 	* @biref 座標変更関数
 	*/
-	virtual void Move() {}
+	void Move();
 
 	/**
 	* @biref 最短の巡回ルートを調べる関数
@@ -105,6 +106,7 @@ protected:
 	const ObjectBase* m_RefPlayer;		//!< プレイヤーの参照用変数
 
 	HANDLE m_Handle;	//!< 経路探索処理のスレッドハンドル
+	Objectmanager::EnemyType m_Type;
 private:
 };
 

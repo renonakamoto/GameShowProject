@@ -21,6 +21,7 @@ Tikuwaten::Tikuwaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string ke
 	Navigator::GetInstance().GetEnemyRoute("Chikuwa", m_PatrolRoute);
 	m_NextRoute = m_PatrolRoute.front();
 	m_State = StateManager::GetInstance()->GetState(StateType::Patrol);
+	m_Type = Objectmanager::EnemyType::Enemy_Tikuwaten;
 }
 
 void Tikuwaten::Update()
@@ -232,26 +233,4 @@ void Tikuwaten::Thinking()
 	}
 
 	m_Motion.Motion(ChikuwaMotionList::Wait, m_FbxKey, true);
-}
-
-void Tikuwaten::Move()
-{
-	D3DXVECTOR3 old_pos = m_Pos;
-	m_Pos += m_MovingVector * m_Speed;
-
-	for (auto e : m_Shape)
-	{
-		e->Update(m_Pos);
-	}
-
-	if (THE_OBJECTMANAGER->HitEnemyAndObject(Objectmanager::EnemyType::Enemy_Tikuwaten) == true)
-	{
-		m_Pos = old_pos;
-		return;
-	}
-
-	if (fabsf(m_Pos.x - old_pos.x) >= fabsf(m_NextRoute.x - old_pos.x) && fabsf(m_Pos.z - old_pos.z) >= fabsf(m_NextRoute.z - old_pos.z))
-	{
-		m_Pos = m_NextRoute;
-	}
 }

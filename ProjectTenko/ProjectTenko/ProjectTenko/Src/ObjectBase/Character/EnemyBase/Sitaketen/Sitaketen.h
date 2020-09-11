@@ -50,11 +50,6 @@ private:
 	*/
 	void Thinking() override;
 
-	/**
-	* @biref 座標変更関数
-	*/
-	void Move() override;
-
 private:
 	SitaketenMotionList m_CurrentMotion;		//!< 現在のモーション
 	FbxMotion<SitaketenMotionList> m_Motion;	//!< モーションリスト

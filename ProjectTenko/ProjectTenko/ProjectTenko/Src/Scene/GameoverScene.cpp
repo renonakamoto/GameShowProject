@@ -1,5 +1,7 @@
 #include "GameoverScene.h"
+
 #include "../Engine/Input/InputManager.h"
+#include "SceneManager.h"
 
 GameoverScene::GameoverScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
@@ -39,7 +41,14 @@ DWORD WINAPI GameoverScene::LoadResources(LPVOID lpParam_)
 
 void GameoverScene::Main()
 {
+    if (m_GameOverUI != nullptr) m_GameOverUI->Update();
+    
+    if (THE_INPUTMANAGER->GetMouseDown(MouseButton::Left) == false) { return; }
 
+    if (m_GameOverUI->IsSelect(GAMEOVER_UI_LIST::GAMEOVER_UI_RETURN))
+    {
+        m_SceneChanger->ChangeScene(SceneID::Tilte);
+    }
 }
 
 void GameoverScene::Update()
