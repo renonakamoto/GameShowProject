@@ -9,7 +9,7 @@
 #include "..//..//..//..//Manager/ObjectManager.h"
 
 Ikaten::Ikaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string key_) :
-	Enemybase(pos_, player_, key_), m_AttackRange(20.0f), m_FrameCounter(0)
+	Enemybase(pos_, player_, key_), m_AttackRange(100.0f), m_FrameCounter(0)
 {
 	m_Motion.AddMotion(IkatenMotionList::Attack,	0,		259);
 	m_Motion.AddMotion(IkatenMotionList::Wait,		260,	560);
@@ -20,16 +20,12 @@ Ikaten::Ikaten(D3DXVECTOR3 pos_, const ObjectBase* player_, std::string key_) :
 	m_NextRoute = m_PatrolRoute.front();
 	m_State = StateManager::GetInstance()->GetState(StateType::Patrol);
 	m_Type = Objectmanager::EnemyType::Enemy_Ikaten;
+	m_Angle = D3DXToRadian(-90);
 }
 
 void Ikaten::Update()
 {
 	m_State->Update(this);
-	
-	for (auto e : m_Shape)
-	{
-		e->Update(m_Pos);
-	}
 }
 
 void Ikaten::Draw()
@@ -72,7 +68,10 @@ void Ikaten::Attack()
 	}
 	else if (m_FrameCounter == 125)
 	{
-		m_Shape.push_back(new AABBShape(m_Pos, 5.0f, 5.0f, 5.0f));
+		D3DXVECTOR3 attack_pos = m_Pos;
+		attack_pos.x += sinf(m_Angle) * 50;
+		attack_pos.z += cosf(m_Angle) * 50;
+		m_Shape.push_back(new AABBShape(attack_pos, 30.0f, 10.0f, 30.0f));
 	}
 	m_Motion.Motion(IkatenMotionList::Attack, m_FbxKey, false);
 }
