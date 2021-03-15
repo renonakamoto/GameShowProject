@@ -1,7 +1,7 @@
-ï»¿// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«é€ã‚Œã‚‹ãƒœãƒ¼ãƒ³è¡Œåˆ—ã®æœ€å¤§æ•°
+// ƒVƒF[ƒ_[‚É‘—‚ê‚éƒ{[ƒ“s—ñ‚ÌÅ‘å”
 #define MAX_BONE_MATRIX 255
 
-// PixelShaderã«é€ã‚‰ã‚Œã¦ãã‚‹ãƒ‡ãƒ¼ã‚¿æ§‹é€ 
+// PixelShader‚É‘—‚ç‚ê‚Ä‚­‚éƒf[ƒ^\‘¢
 struct PS_IN
 {
     float4 pos : SV_POSITION;
@@ -30,28 +30,28 @@ cbuffer ConstantBuffer
     float4   MaterialSpecular;
 };
 
-Texture2D    Texture : register(t0[0]); // Textureã‚’ã‚¹ãƒ­ãƒƒãƒˆ0ã®0ç•ªç›®ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¬ã‚¸ã‚¹ã‚¿ã«è¨­å®š
+Texture2D    Texture : register(t0[0]); // Texture‚ğƒXƒƒbƒg0‚Ì0”Ô–Ú‚ÌƒeƒNƒXƒ`ƒƒƒŒƒWƒXƒ^‚Éİ’è
 Texture2D    TextureDepth : register(t1[0]);
-SamplerState Sampler : register(s0[0]); // Samplerã‚’ã‚¹ãƒ­ãƒƒãƒˆ0ã®0ç•ªç›®ã®ã‚µãƒ³ãƒ—ãƒ©ãƒ¬ã‚¸ã‚¹ã‚¿ã«è¨­å®š
+SamplerState Sampler : register(s0[0]); // Sampler‚ğƒXƒƒbƒg0‚Ì0”Ô–Ú‚ÌƒTƒ“ƒvƒ‰ƒŒƒWƒXƒ^‚Éİ’è
 SamplerState ShadowSampler : register(s1[0]);
 
 float4 ps_main(PS_IN input) : SV_Target
 {
-    // ç’°å¢ƒå…‰
+    // ŠÂ‹«Œõ
     float4 ambient = MaterialAmbient;
-    // æ‹¡æ•£å…‰
+    // ŠgUŒõ
     float NL = saturate(dot(input.norw, input.light));
     float4 diffuse = Texture.Sample(Sampler, input.texture_pos);
     //float4 diffuse = (MaterialDiffuse / 2 + Texture.Sample(Sampler, input.texture_pos) / 2) * NL;
-    // é¡é¢åå°„å…‰
+    // ‹¾–Ê”½ËŒõ
     float3 reflect = normalize(2 * NL * input.norw - input.light);
     float4 specular = pow(saturate(dot(reflect, input.eye_vec)), 4) * MaterialSpecular;
-    // ãƒ•ã‚©ãƒ³
+    // ƒtƒHƒ“
     float4 color = diffuse;
-    // ã‚¢ãƒ«ãƒ•ã‚¡ãƒ–ãƒ¬ãƒ³ãƒ‰
+    // ƒAƒ‹ƒtƒ@ƒuƒŒƒ“ƒh
     //color.a = MaterialDiffuse.a;
 
-    // å½±
+    // ‰e
     //input.light_tex_coord /= input.light_tex_coord.w;
     //float max_depth_slope = max(abs(ddx(input.light_tex_coord.z)), abs(ddy(input.light_tex_coord.z)));
     //float tex_value = TextureDepth.Sample(Sampler, input.light_tex_coord).r;

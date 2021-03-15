@@ -48,6 +48,85 @@ bool DirectGraphics::Init()
         return false;
     }
 
+    
+
+
+    //// ラスタライザ
+    //D3D11_RASTERIZER_DESC rasterizerDesc;
+    //ID3D11RasterizerState* state;
+    //ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
+    //rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+    //rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+    //rasterizerDesc.FrontCounterClockwise = TRUE;
+    //if (FAILED(m_Device->CreateRasterizerState(&rasterizerDesc, &state)))
+    //{
+    //    return false;
+    //}
+
+    //m_Context->RSSetState(state);
+
+
+
+
+
+    HWND window_handle = FindWindow(Window::ClassName, nullptr);
+    RECT rect;
+    GetClientRect(window_handle, &rect);
+
+    // View行列設定
+    DirectX::XMVECTOR eye = DirectX::XMVectorSet(0.0f, 50.0f, -300.0f, 0.0f);
+    DirectX::XMVECTOR focus = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+    DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+    DirectX::XMMATRIX view_matrix = DirectX::XMMatrixLookAtLH(eye, focus, up);
+
+    // プロジェクション行列設定
+    constexpr float fov = DirectX::XMConvertToRadians(45.0f);
+    float aspect = (float)(rect.right - rect.left) / (rect.bottom - rect.top);
+    float near_z = 0.1f;
+    float far_z = 500000.f;
+    DirectX::XMMATRIX proj_matrix = DirectX::XMMatrixPerspectiveFovLH(fov, aspect, near_z, far_z);
+
+    DirectX::XMStoreFloat4x4(&m_ConstantBufferData.View, DirectX::XMMatrixTranspose(view_matrix));
+    DirectX::XMStoreFloat4x4(&m_ConstantBufferData.Projection, DirectX::XMMatrixTranspose(proj_matrix));
+    DirectX::XMStoreFloat4(&m_ConstantBufferData.CameraPos, eye);
+
+
+    // ライトの設定
+    m_ConstantBufferData.Light = DirectX::XMFLOAT4(40.0f, 200.0f, 0.0f, 1.0f);
+    //DirectX::XMMATRIX mat_rot = DirectX::XMMatrixIdentity();
+    //
+    //DirectX::XMMATRIX mat   =  DirectX::XMMatrixRotationX(DirectX::XMConvertToRadians(90.f));
+    //DirectX::XMMATRIX trans =  DirectX::XMMatrixTranslation(m_ConstantBufferData.Light.x, m_ConstantBufferData.Light.y, m_ConstantBufferData.Light.z);
+    //mat = mat * trans;
+    //DirectX::XMMATRIX light_view = DirectX::XMMatrixInverse(nullptr, mat);
+    //DirectX::XMStoreFloat4x4(&m_ConstantBufferData.LightView, DirectX::XMMatrixTranspose(light_view));
+
+    DirectX::XMMATRIX light_view = DirectX::XMMatrixLookAtLH(
+        DirectX::XMVectorSet(m_ConstantBufferData.Light.x, m_ConstantBufferData.Light.y, m_ConstantBufferData.Light.z, 0.0f),
+        DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),
+        DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
+
+    DirectX::XMStoreFloat4x4(&m_ConstantBufferData.LightView, DirectX::XMMatrixTranspose(light_view));
+
+    m_ConstantBufferData.Attenuation = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
+
+
+    //テクスチャ行列の設定
+    ZeroMemory(&m_ConstantBufferData.ClipUV, sizeof(DirectX::XMFLOAT4X4));
+    m_ConstantBufferData.ClipUV._11 = 0.5f;
+    m_ConstantBufferData.ClipUV._22 = -0.5f;
+    m_ConstantBufferData.ClipUV._33 = 1.0f;
+    m_ConstantBufferData.ClipUV._41 = 0.5f;
+    m_ConstantBufferData.ClipUV._42 = 0.5f;
+    m_ConstantBufferData.ClipUV._44 = 1.0f;
+
+    DirectX::XMMATRIX tex_uv = DirectX::XMMatrixSet(
+        0.5f, 0, 0, 0,
+        0, -0.5f, 0, 0,
+        0, 0, 1.0f, 0,
+        0.5f, 0.5f, 0, 1.0f);
+
+    DirectX::XMStoreFloat4x4(&m_ConstantBufferData.ClipUV, DirectX::XMMatrixTranspose(tex_uv));
 
     // ラスタライザ
     D3D11_RASTERIZER_DESC rasterizerDesc;
@@ -62,6 +141,7 @@ bool DirectGraphics::Init()
     }
 
     m_Context->RSSetState(state);
+
 
     return true;
 }

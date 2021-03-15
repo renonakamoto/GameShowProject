@@ -2,8 +2,15 @@
 #include "Engine/DirectGraphics.h"
 #include "Engine/InputManager.h"
 #include "Engine/SoundManager.h"
+#include "Engine/MeshModel/FbxModel/FbxMesh.h"
 
 #pragma comment(lib, "winmm.lib")
+
+
+DirectX::XMFLOAT3 pos(0.f, -0.f, 0.f);
+DirectX::XMFLOAT3 scale(1.0f, 1.f, 1.f);
+DirectX::XMFLOAT3 degree(0.0f, 180.f, 0.0f);
+
 
 int APIENTRY WinMain(
 	HINSTANCE hInstance,
@@ -35,6 +42,17 @@ int APIENTRY WinMain(
 	}
 	SoundManager::GetInstance()->LoadSEData("Res/Sounds/button01a.wav", "button01a");
 
+	FbxModel* model;
+	model = new FbxModel();
+	if (model->Load(
+		"Res/Models/Ekard.fbx",
+		DirectGraphics::GetInstance()->GetDevice(),
+		DirectGraphics::GetInstance()->GetVertexShader()) == false)
+	{
+		return -3;
+	}
+	model->LoadMotion("Run", "Res/Models/Ekard_Run_01.fbx");
+	model->Play("Run");
 
 	while (true)
 	{
@@ -57,10 +75,18 @@ int APIENTRY WinMain(
 			// 入力の更新
 			InputManager::GetInstance()->Update();
 
+			static int anim_count = 0;
+			anim_count++;
+			if (anim_count % 30 == 0)
+			{
+				model->Animate();
+			}
+
 
 			// 描画開始
 			DirectGraphics::GetInstance()->StartRendering();
 
+			model->Render(DirectGraphics::GetInstance(), pos, scale, degree);
 
 			// 描画終了
 			DirectGraphics::GetInstance()->FinishRendering();

@@ -1,10 +1,10 @@
-ï»¿
+
 #define ENABLE_SKINMESH
 
-// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«é€ã‚Œã‚‹ãƒœãƒ¼ãƒ³è¡Œåˆ—ã®æœ€å¤§æ•°
+// ƒVƒF[ƒ_[‚É‘—‚ê‚éƒ{[ƒ“s—ñ‚ÌÅ‘å”
 #define MAX_BONE_MATRIX 255
 
-// VertexShaderã«é€ã‚‰ã‚Œã¦ãã‚‹ãƒ‡ãƒ¼ã‚¿æ§‹é€ 
+// VertexShader‚É‘—‚ç‚ê‚Ä‚­‚éƒf[ƒ^\‘¢
 struct VS_IN
 {
         float4 pos          : POSITION0;
@@ -15,7 +15,7 @@ struct VS_IN
         float4 weights      : BONE_WEIGHT;
 };
  
-// VertexShaderã‹ã‚‰å‡ºåŠ›ã™ã‚‹ãƒ‡ãƒ¼ã‚¿æ§‹é€ 
+// VertexShader‚©‚ço—Í‚·‚éƒf[ƒ^\‘¢
 struct VS_OUT
 {
         float4 pos : SV_POSITION;
@@ -59,28 +59,28 @@ Skin SkinVert(VS_IN input)
     float4 pos = input.pos;
     float3 nor = input.nor.xyz;
 
-    // ãƒœãƒ¼ãƒ³0
+    // ƒ{[ƒ“0
     uint bone    = input.bones.x;
     float weight = input.weights.x;
     matrix m     = BoneWorld[bone];
     output.pos  += weight * mul(pos, m);
     output.nor  += weight * mul(nor, (float3x3)m);
 
-    // ãƒœãƒ¼ãƒ³1
+    // ƒ{[ƒ“1
     bone        = input.bones.y;
     weight      = input.weights.y;
     m           = BoneWorld[bone];
     output.pos += weight * mul(pos, m);
     output.nor += weight * mul(nor, (float3x3)m);
 
-    // ãƒœãƒ¼ãƒ³2
+    // ƒ{[ƒ“2
     bone        = input.bones.z;
     weight      = input.weights.z;
     m           = BoneWorld[bone];
     output.pos += weight * mul(pos, m);
     output.nor += weight * mul(nor, (float3x3)m);
 
-    // ãƒœãƒ¼ãƒ³3
+    // ƒ{[ƒ“3
     bone        = input.bones.w;
     weight      = input.weights.w;
     m           = BoneWorld[bone];
@@ -101,19 +101,19 @@ VS_OUT vs_main( VS_IN input )
 #else
         output.posw = mul(input.pos, World);
 #endif
-        // ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ * ãƒ“ãƒ¥ãƒ¼åº§æ¨™å¤‰æ›è¡Œåˆ—
+        // ƒ[ƒ‹ƒhÀ•W * ƒrƒ…[À•W•ÏŠ·s—ñ
         output.pos = mul(output.posw, View);
-        // ãƒ“ãƒ¥ãƒ¼åº§æ¨™ * ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³åº§æ¨™å¤‰æ›è¡Œåˆ—
+        // ƒrƒ…[À•W * ƒvƒƒWƒFƒNƒVƒ‡ƒ“À•W•ÏŠ·s—ñ
         output.pos = mul(output.pos, Projection);
 
-        // ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™
+        // ƒeƒNƒXƒ`ƒƒÀ•W
         output.texture_pos = input.texture_pos;
         
 #ifdef ENABLE_SKINMESH
-        // æ³•ç·šãƒ™ã‚¯ãƒˆãƒ«
+        // –@üƒxƒNƒgƒ‹
         output.norw = mul(skinned.nor, (float3x3)World);
 #else
-        // æ³•ç·šãƒ™ã‚¯ãƒˆãƒ«
+        // –@üƒxƒNƒgƒ‹
         output.norw = mul(input.nor, (float3x3)World);
 #endif
         

@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Src\Engine\DirectGraphics.cpp" />
     <ClCompile Include="Src\Engine\InputManager.cpp" />
+    <ClCompile Include="Src\Engine\MeshModel\FbxModel\FbxMesh.cpp" />
     <ClCompile Include="Src\Engine\PixelShader.cpp" />
     <ClCompile Include="Src\Engine\ShaderBase.cpp" />
     <ClCompile Include="Src\Engine\SoundManager.cpp" />
@@ -32,6 +33,7 @@
   <ItemGroup>
     <ClInclude Include="Src\Engine\DirectGraphics.h" />
     <ClInclude Include="Src\Engine\InputManager.h" />
+    <ClInclude Include="Src\Engine\MeshModel\FbxModel\FbxMesh.h" />
     <ClInclude Include="Src\Engine\PixelShader.h" />
     <ClInclude Include="Src\Engine\ShaderBase.h" />
     <ClInclude Include="Src\Engine\SoundManager.h" />
@@ -44,8 +46,8 @@
     <FxCompile Include="Shader\PixelShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Shader\VertexShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -114,8 +116,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)include;$(FBXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x64;$(FBXSDK_DIR)lib\vs2019\x64\debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -158,6 +160,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\renob\Documents\SouceTrees\3DActionGame\3DActionGame\3DActionGame\Src\DirectXTex\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libfbxsdk-md.lib;libxml2-md.lib;zlib-md.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

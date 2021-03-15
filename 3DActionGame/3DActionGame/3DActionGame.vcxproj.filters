@@ -25,6 +25,12 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{499c75ef-600a-40d8-b1d2-ca35714c085e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Engine\FbxModel">
+      <UniqueIdentifier>{ea777420-ee77-4544-99f9-ab2691928e80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Engine\ObjModel">
+      <UniqueIdentifier>{caa2cb48-e79f-4f1f-a929-16095ee961f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -53,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="Src\Engine\SoundManager.cpp">
       <Filter>Src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\MeshModel\FbxModel\FbxMesh.cpp">
+      <Filter>Src\Engine\FbxModel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -83,12 +92,15 @@
     <ClInclude Include="Src\Engine\SoundManager.h">
       <Filter>Src\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Engine\MeshModel\FbxModel\FbxMesh.h">
+      <Filter>Src\Engine\FbxModel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shader\PixelShader.hlsl">
+    <FxCompile Include="Shader\VertexShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\VertexShader.hlsl">
+    <FxCompile Include="Shader\PixelShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

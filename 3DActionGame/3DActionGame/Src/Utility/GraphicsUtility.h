@@ -86,15 +86,11 @@ struct ObjMaterial
     float Ambient[4];
     float Diffuse[4];
     float Specular[4];
-    float Alpha;
-    std::string TextureKeyWord;
-    std::string TextureName;
 
-    ObjMaterial():
-        Ambient{1,1,1,1},
-        Diffuse{ 1,1,1,1 },
-        Specular{ 1,1,1,1 },
-        Alpha{1}
+    ObjMaterial() :
+        Ambient { 0,0,0,1 },
+        Diffuse { 0,0,0,1 },
+        Specular{ 0,0,0,1 }
     {
     }
 };
