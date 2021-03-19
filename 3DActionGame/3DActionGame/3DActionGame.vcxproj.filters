@@ -31,6 +31,15 @@
     <Filter Include="Src\Engine\ObjModel">
       <UniqueIdentifier>{caa2cb48-e79f-4f1f-a929-16095ee961f1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Model">
+      <UniqueIdentifier>{99845381-0a1c-42c0-bba7-09a699e6488c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Scene">
+      <UniqueIdentifier>{53f2f284-ea99-4273-bf92-e2ca2340ea86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\ObjectManager">
+      <UniqueIdentifier>{b7615539-7465-40f9-89ef-3c2bd1f8bc98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -60,8 +69,32 @@
     <ClCompile Include="Src\Engine\SoundManager.cpp">
       <Filter>Src\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Engine\MeshModel\FbxModel\FbxMesh.cpp">
+    <ClCompile Include="Src\Model\Model.cpp">
+      <Filter>Src\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\MeshModel\FbxModel\FbxModel.cpp">
       <Filter>Src\Engine\FbxModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\MeshModel\ObjModel\ObjModel.cpp">
+      <Filter>Src\Engine\ObjModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Scene\SceneManager.cpp">
+      <Filter>Src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Scene\TitleScene.cpp">
+      <Filter>Src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Scene\ClearScene.cpp">
+      <Filter>Src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Scene\GameoverScene.cpp">
+      <Filter>Src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Scene\GameScene.cpp">
+      <Filter>Src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Model\FbxStorage.cpp">
+      <Filter>Src\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,8 +125,44 @@
     <ClInclude Include="Src\Engine\SoundManager.h">
       <Filter>Src\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Engine\MeshModel\FbxModel\FbxMesh.h">
+    <ClInclude Include="Src\Model\Model.h">
+      <Filter>Src\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\MeshModel\FbxModel\FbxModel.h">
       <Filter>Src\Engine\FbxModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\MeshModel\ObjModel\ObjModel.h">
+      <Filter>Src\Engine\ObjModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scene\SceneChanger.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scene\SceneDefinition.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scene\SceneManager.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scene\TitleScene.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scene\ClearScene.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scene\GameoverScene.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scene\GameScene.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scene\Scene.h">
+      <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Model\FbxStorage.h">
+      <Filter>Src\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectManager\ObjectBase.h">
+      <Filter>Src\ObjectManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -101,6 +170,12 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\PixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\SimpleVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\SimplePixelShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

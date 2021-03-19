@@ -21,24 +21,44 @@
   <ItemGroup>
     <ClCompile Include="Src\Engine\DirectGraphics.cpp" />
     <ClCompile Include="Src\Engine\InputManager.cpp" />
-    <ClCompile Include="Src\Engine\MeshModel\FbxModel\FbxMesh.cpp" />
+    <ClCompile Include="Src\Engine\MeshModel\FbxModel\FbxModel.cpp" />
+    <ClCompile Include="Src\Engine\MeshModel\ObjModel\ObjModel.cpp" />
     <ClCompile Include="Src\Engine\PixelShader.cpp" />
     <ClCompile Include="Src\Engine\ShaderBase.cpp" />
     <ClCompile Include="Src\Engine\SoundManager.cpp" />
     <ClCompile Include="Src\Engine\VertexShader.cpp" />
     <ClCompile Include="Src\Engine\Window.cpp" />
     <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\Model\FbxStorage.cpp" />
+    <ClCompile Include="Src\Model\Model.cpp" />
+    <ClCompile Include="Src\Scene\ClearScene.cpp" />
+    <ClCompile Include="Src\Scene\GameoverScene.cpp" />
+    <ClCompile Include="Src\Scene\GameScene.cpp" />
+    <ClCompile Include="Src\Scene\SceneManager.cpp" />
+    <ClCompile Include="Src\Scene\TitleScene.cpp" />
     <ClCompile Include="Src\Utility\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Engine\DirectGraphics.h" />
     <ClInclude Include="Src\Engine\InputManager.h" />
-    <ClInclude Include="Src\Engine\MeshModel\FbxModel\FbxMesh.h" />
+    <ClInclude Include="Src\Engine\MeshModel\FbxModel\FbxModel.h" />
+    <ClInclude Include="Src\Engine\MeshModel\ObjModel\ObjModel.h" />
     <ClInclude Include="Src\Engine\PixelShader.h" />
     <ClInclude Include="Src\Engine\ShaderBase.h" />
     <ClInclude Include="Src\Engine\SoundManager.h" />
     <ClInclude Include="Src\Engine\VertexShader.h" />
     <ClInclude Include="Src\Engine\Window.h" />
+    <ClInclude Include="Src\Model\FbxStorage.h" />
+    <ClInclude Include="Src\Model\Model.h" />
+    <ClInclude Include="Src\ObjectManager\ObjectBase.h" />
+    <ClInclude Include="Src\Scene\ClearScene.h" />
+    <ClInclude Include="Src\Scene\GameoverScene.h" />
+    <ClInclude Include="Src\Scene\GameScene.h" />
+    <ClInclude Include="Src\Scene\Scene.h" />
+    <ClInclude Include="Src\Scene\SceneChanger.h" />
+    <ClInclude Include="Src\Scene\SceneDefinition.h" />
+    <ClInclude Include="Src\Scene\SceneManager.h" />
+    <ClInclude Include="Src\Scene\TitleScene.h" />
     <ClInclude Include="Src\Utility\GraphicsUtility.h" />
     <ClInclude Include="Src\Utility\Utility.h" />
   </ItemGroup>
@@ -48,6 +68,18 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shader\SimplePixelShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\SimpleVertexShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Shader\VertexShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

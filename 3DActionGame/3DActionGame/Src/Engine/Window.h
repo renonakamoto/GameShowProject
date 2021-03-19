@@ -9,7 +9,7 @@
 class Window
 {
 public:
-	// ウィンドウのクラス名
+	//! ウィンドウのクラス名
 	static const char* ClassName;
 	
 public:

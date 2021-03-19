@@ -1,6 +1,6 @@
 ﻿#include <codecvt>
 #include "../../../DirectXTex/DirectXTex.h"
-#include "FbxMesh.h"
+#include "FbxModel.h"
 #include "../../../Utility/Utility.h"
 
 
@@ -11,7 +11,7 @@
 #endif
 
 
-bool FbxModel::Load(const char* fileName_, ID3D11Device* device_, VertexShader* vertexShader_)
+bool FbxModel::LoadModel(const char* fileName_)
 {
 #pragma region Fbxオブジェクトの作成
 
@@ -124,20 +124,23 @@ bool FbxModel::Load(const char* fileName_, ID3D11Device* device_, VertexShader* 
 		manager->Destroy();
 	}
 
+	ID3D11Device* device	    = DirectGraphics::GetInstance()->GetDevice();
+	VertexShader* vertex_shader = DirectGraphics::GetInstance()->GetVertexShader();
+
 	// バーテックスバッファの作成
-	if (CreateVertexBuffer(device_) == false)
+	if (CreateVertexBuffer(device) == false)
 	{
 		return false;
 	}
 
 	// インデックスバッファの作成
-	if (CreateIndexBuffer(device_) == false)
+	if (CreateIndexBuffer(device) == false)
 	{
 		return false;
 	}
 
 	// 入力レイアウトの作成
-	if (CreateInputLayout(device_, vertexShader_) == false)
+	if (CreateInputLayout(device, vertex_shader) == false)
 	{
 		return false;
 	}
@@ -160,8 +163,6 @@ bool FbxModel::LoadMotion(std::string keyword_, const char* fileName_)
 	manager->SetIOSettings(ios);
 
 	// fbxファイルの読み込み、解析をしてくれるクラスの生成
-	// 第一 : マネージャー
-	// 第二 : オブジェクトにつける名前(空でも可)
 	FbxImporter* importer = FbxImporter::Create(manager, "");
 	if (importer == nullptr) {
 		// Importerの作成失敗
@@ -190,20 +191,20 @@ bool FbxModel::LoadMotion(std::string keyword_, const char* fileName_)
 	if (importer->Import(fbx_scene) == false) {
 		// インポート失敗
 		manager->Destroy();
-		importer->Destroy();
-		fbx_scene->Destroy();
-
 		return false;
 	}
 	importer->Destroy();
-
 
 	// モーション情報取得
 	FbxArray<FbxString*> names;
 	fbx_scene->FillAnimStackNameArray(names);
 
 	// モーションが存在しないとき
-	if (names == nullptr) return false;
+	if (names == nullptr)
+	{
+		manager->Destroy();
+		return false;
+	}
 
 	// モーション情報を取得
 	FbxTakeInfo* take_info = fbx_scene->GetTakeInfo(names[0]->Buffer());
@@ -229,18 +230,16 @@ bool FbxModel::LoadMotion(std::string keyword_, const char* fileName_)
 		// キーフレーム読み込み
 		LoadKeyFrame(keyword_, b, bone);
 	}
-
-	fbx_scene->Destroy();
+	
 	manager->Destroy();
 
+	// 読み込み成功
 	return true;
 }
 
 
 void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_)
 {
-	using namespace DirectX;
-
 	UINT strides = sizeof(CVertex);
 	UINT offsets = 0;
 	ID3D11DeviceContext* context = graphics_->GetContext();
@@ -262,15 +261,15 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 
 		// ワールド行列の作成
 		DirectX::XMMATRIX mat_world, mat_trans, mat_rot_x, mat_rot_y, mat_rot_z, mat_scale;
-		mat_trans = XMMatrixTranslation(pos_.x, pos_.y, pos_.z);
-		mat_rot_x = XMMatrixRotationX(XMConvertToRadians(degree_.x));
-		mat_rot_y = XMMatrixRotationY(XMConvertToRadians(degree_.y));
-		mat_rot_z = XMMatrixRotationZ(XMConvertToRadians(degree_.z));
-		mat_scale = XMMatrixScaling(scale_.x, scale_.y, scale_.z);
+		mat_trans = DirectX::XMMatrixTranslation(pos_.x, pos_.y, pos_.z);
+		mat_rot_x = DirectX::XMMatrixRotationX(DirectX::XMConvertToRadians(degree_.x));
+		mat_rot_y = DirectX::XMMatrixRotationY(DirectX::XMConvertToRadians(degree_.y));
+		mat_rot_z = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(degree_.z));
+		mat_scale = DirectX::XMMatrixScaling(scale_.x, scale_.y, scale_.z);
 		mat_world = mat_scale * mat_rot_x * mat_rot_y * mat_rot_z * mat_trans;
 
 		// ワールド行列をコンスタントバッファに設定
-		XMStoreFloat4x4(&graphics_->GetConstantBufferData()->World, XMMatrixTranspose(mat_world));
+		DirectX::XMStoreFloat4x4(&graphics_->GetConstantBufferData()->World, DirectX::XMMatrixTranspose(mat_world));
 
 
 		// コンスタントバッファにマテリアル情報を保存する
@@ -287,10 +286,7 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 
 				for (UINT b = 0; b < m_BoneNum; ++b)
 				{
-					if (motion->Key[b].empty()) {
-						//graphics_->GetConstantBufferData()->Bone[b] = DirectX::XMMatrixIdentity();
-						continue;
-					}
+					if (motion->Key[b].empty()) { continue; }
 
 					m_Bone[b].Transform = motion->Key[b][f] * (1.0f - (frame - static_cast<int>(frame))) + motion->Key[b][(size_t)f + 1] * (frame - static_cast<int>(frame));
 					DirectX::XMMATRIX mat = m_Bone[b].Offset * m_Bone[b].Transform;
@@ -347,7 +343,7 @@ bool FbxModel::AddMesh(const char* fileName_, DirectX::XMFLOAT3 pos_, DirectX::X
 	int after_mesh_num = 0;
 
 	// メッシュの読み込み
-	if (Load(fileName_, DirectGraphics::GetInstance()->GetDevice(), DirectGraphics::GetInstance()->GetVertexShader()) == false) return false;
+	if (LoadModel(fileName_) == false) return false;
 	// メッシュを追加した後のメッシュの数を保存
 	after_mesh_num = m_MeshList.size();
 
@@ -398,6 +394,8 @@ bool FbxModel::AddMesh(const char* fileName_, DirectX::XMFLOAT3 pos_, DirectX::X
 
 void FbxModel::LoadMaterial(FbxSurfaceMaterial* material_)
 {
+	if (!material_)return;
+
 	enum class MaterialList
 	{
 		Ambient,
@@ -521,6 +519,8 @@ void FbxModel::LoadMaterial(FbxSurfaceMaterial* material_)
 
 void FbxModel::LoadIndices(MeshData& meshData_, FbxMesh* mesh_)
 {
+	if (!mesh_) return;
+	
 	// ポリゴン数の取得
 	int polygon_count = mesh_->GetPolygonCount();
 	// 時計周りに頂点を作りたいので、頂点番号の最初と最後を入れ替えて保存する
@@ -534,6 +534,8 @@ void FbxModel::LoadIndices(MeshData& meshData_, FbxMesh* mesh_)
 
 void FbxModel::LoadVertices(MeshData& meshData_, FbxMesh* mesh_)
 {
+	if (!mesh_) return;
+
 	// 頂点座標配列を取得
 	FbxVector4* vertices = mesh_->GetControlPoints();
 	// 頂点番号配列を取得
@@ -541,8 +543,8 @@ void FbxModel::LoadVertices(MeshData& meshData_, FbxMesh* mesh_)
 	// ポリゴン頂点インデックス数
 	int polygon_vertex_count = mesh_->GetPolygonVertexCount();
 
+	// 原点から移動している
 	FbxAMatrix gm = mesh_->GetNode()->EvaluateGlobalTransform();
-
 	std::vector<FbxVector4> list;
 
 	// 頂点変換
@@ -560,7 +562,7 @@ void FbxModel::LoadVertices(MeshData& meshData_, FbxMesh* mesh_)
 		// インデックスバッファ
 		int index = indices[i];
 
-		//
+		// 左手系に変換
 		vertex.Pos.x = (float)-list[index][0];
 		vertex.Pos.y = (float)list[index][1];
 		vertex.Pos.z = (float)list[index][2];
@@ -570,6 +572,8 @@ void FbxModel::LoadVertices(MeshData& meshData_, FbxMesh* mesh_)
 
 void FbxModel::LoadNormals(MeshData& meshData_, FbxMesh* mesh_)
 {
+	if (!mesh_) return;
+	
 	FbxArray<FbxVector4> normals;
 	// 法線リストを取得
 	mesh_->GetPolygonVertexNormals(normals);
@@ -577,6 +581,7 @@ void FbxModel::LoadNormals(MeshData& meshData_, FbxMesh* mesh_)
 	// 法線設定
 	for (int i = 0; i < normals.Size(); ++i)
 	{
+		// 左手系に変換
 		meshData_.m_Vertices[i].Normal.x = (float)-normals[i][0];
 		meshData_.m_Vertices[i].Normal.y = (float)normals[i][1];
 		meshData_.m_Vertices[i].Normal.z = (float)normals[i][2];
@@ -585,6 +590,8 @@ void FbxModel::LoadNormals(MeshData& meshData_, FbxMesh* mesh_)
 
 void FbxModel::LoadVertexColors(MeshData& meshData_, FbxMesh* mesh_)
 {
+	if (!mesh_) return;
+
 	// 頂点colorの取得
 	// Meshが持っている頂点colorの数を返す
 	int color_count = mesh_->GetElementVertexColorCount();
@@ -628,6 +635,8 @@ void FbxModel::LoadVertexColors(MeshData& meshData_, FbxMesh* mesh_)
 
 void FbxModel::LoadMaterialNames(MeshData& meshData_, FbxMesh* mesh_)
 {
+	if (!mesh_) return;
+
 	// マテリアルが存在するか調べる
 	if (mesh_->GetElementMaterialCount() == 0)
 	{
@@ -652,6 +661,8 @@ void FbxModel::LoadMaterialNames(MeshData& meshData_, FbxMesh* mesh_)
 
 void FbxModel::LoadUV(MeshData& meshData_, FbxMesh* mesh_)
 {
+	if (!mesh_) return;
+
 	FbxStringList uvset_names;
 	mesh_->GetUVSetNames(uvset_names);
 
@@ -685,6 +696,7 @@ void FbxModel::LoadBones(MeshData& meshData_, FbxMesh* mesh_)
 		FbxCluster* cluster = skin->GetCluster(b);
 		FbxAMatrix trans;
 		cluster->GetTransformMatrix(trans);
+		// 左手系に変換
 		trans.mData[0][1] *= -1;
 		trans.mData[0][2] *= -1;
 		trans.mData[1][0] *= -1;
@@ -789,32 +801,32 @@ void FbxModel::LoadKeyFrame(std::string keyword_, int bone_, FbxNode* boneNode_)
 	motion->Key[bone_].resize(motion->FrameNum);
 
 	double time = static_cast<double>(m_StartFrame * (1.0 / 60.0));
-	FbxTime T;
-	FbxVector4 trans;
+	FbxTime t;
 	for (UINT f = 0; f < motion->FrameNum; ++f)
 	{
-		T.SetSecondDouble(time);
+		t.SetSecondDouble(time);
 
-		FbxAMatrix m = boneNode_->EvaluateGlobalTransform(T);
+		// フレーム時姿勢行列を取得
+		FbxAMatrix m = boneNode_->EvaluateGlobalTransform(t);
+		// 左手系に変換
 		m.mData[0][1] *= -1; // _12
 		m.mData[0][2] *= -1; // _13
 		m.mData[1][0] *= -1; // _21
 		m.mData[2][0] *= -1; // _31
 		m.mData[3][0] *= -1; // _41
 
+		// わ
 		FbxDouble* mat = static_cast<FbxDouble*>(m);
 		motion->Key[bone_][f] = DirectX::XMMatrixSet(
-			mat[0], mat[1], mat[2], mat[3],
-			mat[4], mat[5], mat[6], mat[7],
-			mat[8], mat[9], mat[10], mat[11],
+			mat[0],  mat[1],  mat[2],  mat[3],
+			mat[4],  mat[5],  mat[6],  mat[7],
+			mat[8],  mat[9],  mat[10], mat[11],
 			mat[12], mat[13], mat[14], mat[15]
 		);
+
+		// フレームを進める
 		time += 1.0 / 60.0;
-
-
-		trans += m.GetT();
 	}
-	trans /= motion->FrameNum;
 }
 
 bool FbxModel::LoadTexute(ID3D11Device* device_, FbxFileTexture* texture_, std::string& keyword_)
@@ -907,21 +919,23 @@ int FbxModel::FindBoone(const char* boneName_)
 
 bool FbxModel::CreateVertexBuffer(ID3D11Device* device_)
 {
+	if (!device_) return false;
+
 	for (auto& mesh : m_MeshList)
 	{
 		//頂点バッファ作成
 		D3D11_BUFFER_DESC buffer_desc;
 		buffer_desc.ByteWidth = sizeof(CVertex) * mesh.m_Vertices.size();	// バッファのサイズ
-		buffer_desc.Usage = D3D11_USAGE_DEFAULT;				// 使用方法
-		buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;		// BIND設定
-		buffer_desc.CPUAccessFlags = 0;							// リソースへのCPUのアクセス権限についての設定
-		buffer_desc.MiscFlags = 0;								// リソースオプションのフラグ
-		buffer_desc.StructureByteStride = 0;					// 構造体のサイズ
+		buffer_desc.Usage				= D3D11_USAGE_DEFAULT;				// 使用方法
+		buffer_desc.BindFlags			= D3D11_BIND_VERTEX_BUFFER;			// BIND設定
+		buffer_desc.CPUAccessFlags		= 0;								// リソースへのCPUのアクセス権限についての設定
+		buffer_desc.MiscFlags			= 0;								// リソースオプションのフラグ
+		buffer_desc.StructureByteStride = 0;								// 構造体のサイズ
 
 		D3D11_SUBRESOURCE_DATA sub_resource;
-		sub_resource.pSysMem          = &mesh.m_Vertices[0];	// バッファの中身の設定
-		sub_resource.SysMemPitch      = 0;						// textureデータを使用する際に使用するメンバ
-		sub_resource.SysMemSlicePitch = 0;						// textureデータを使用する際に使用するメンバ
+		sub_resource.pSysMem			= &mesh.m_Vertices[0];		// バッファの中身の設定
+		sub_resource.SysMemPitch		= 0;						// textureデータを使用する際に使用するメンバ
+		sub_resource.SysMemSlicePitch	= 0;						// textureデータを使用する際に使用するメンバ
 
 		// バッファ作成
 		if (FAILED(device_->CreateBuffer(
@@ -938,27 +952,29 @@ bool FbxModel::CreateVertexBuffer(ID3D11Device* device_)
 
 bool FbxModel::CreateIndexBuffer(ID3D11Device* device_)
 {
+	if (!device_) return false;
+
 	for (auto& mesh : m_MeshList)
 	{
 		//頂点バッファ作成
 		D3D11_BUFFER_DESC buffer_desc;
 		buffer_desc.ByteWidth = (UINT)sizeof(UINT) * mesh.m_Indices.size();	// バッファのサイズ
-		buffer_desc.Usage = D3D11_USAGE_DEFAULT;							// 使用方法
-		buffer_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;					// BIND設定
-		buffer_desc.CPUAccessFlags = 0;										// リソースへのCPUのアクセス権限についての設定
-		buffer_desc.MiscFlags = 0;											// リソースオプションのフラグ
+		buffer_desc.Usage				= D3D11_USAGE_DEFAULT;				// 使用方法
+		buffer_desc.BindFlags			= D3D11_BIND_INDEX_BUFFER;			// BIND設定
+		buffer_desc.CPUAccessFlags		= 0;								// リソースへのCPUのアクセス権限についての設定
+		buffer_desc.MiscFlags			= 0;								// リソースオプションのフラグ
 		buffer_desc.StructureByteStride = 0;								// 構造体のサイズ
 
 		D3D11_SUBRESOURCE_DATA sub_resource;
-		sub_resource.pSysMem = &mesh.m_Indices[0];							// バッファの中身の設定
-		sub_resource.SysMemPitch = 0;										// textureデータを使用する際に使用するメンバ
-		sub_resource.SysMemSlicePitch = 0;									// textureデータを使用する際に使用するメンバ
+		sub_resource.pSysMem		  = &mesh.m_Indices[0];	// バッファの中身の設定
+		sub_resource.SysMemPitch	  = 0;					// textureデータを使用する際に使用するメンバ
+		sub_resource.SysMemSlicePitch = 0;					// textureデータを使用する際に使用するメンバ
 
 		// バッファ作成
 		if (FAILED(device_->CreateBuffer(
-			&buffer_desc,													// バッファ情報
-			&sub_resource,													// リソース情報
-			&mesh.m_IndexBuffer)))											// 作成されたバッファの格納先
+			&buffer_desc,			// バッファ情報
+			&sub_resource,			// リソース情報
+			&mesh.m_IndexBuffer)))	// 作成されたバッファの格納先
 		{
 			return false;
 		}

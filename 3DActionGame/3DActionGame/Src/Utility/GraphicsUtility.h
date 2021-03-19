@@ -4,7 +4,27 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include <string>
+#include <vector>
 
+/**
+* @brief スタティックメッシュ用のシェーダに送る定数バッファ
+*/
+struct SimpleConstantBuffer
+{
+    DirectX::XMFLOAT4X4 World;
+    DirectX::XMFLOAT4X4 View;
+    DirectX::XMFLOAT4X4 Projection;
+    DirectX::XMFLOAT4   CameraPos;
+    DirectX::XMFLOAT4   LightVector;
+    DirectX::XMFLOAT4   LightColor;
+    DirectX::XMFLOAT4   MaterialAmbient;
+    DirectX::XMFLOAT4   MaterialDiffuse;
+    DirectX::XMFLOAT4   MaterialSpecular;
+};
+
+/**
+* @brief スキンメッシュ用のシェーダに送る定数バッファ
+*/
 struct ConstantBuffer
 {
     DirectX::XMFLOAT4X4 World;
@@ -49,18 +69,6 @@ struct ConstantBuffer2D
     }
 };
 
-
-struct CustomVertex {
-    float pos[3];
-    float col[4];
-
-    CustomVertex()
-    {
-        ZeroMemory(this, sizeof(CustomVertex));
-    }
-};
-
-
 struct Vertex2D {
     DirectX::XMFLOAT3 Pos;
     DirectX::XMFLOAT2 TexturePos;
@@ -86,6 +94,8 @@ struct ObjMaterial
     float Ambient[4];
     float Diffuse[4];
     float Specular[4];
+    std::string TextureKeyWord;
+    std::string TextureName;
 
     ObjMaterial() :
         Ambient { 0,0,0,1 },
@@ -93,6 +103,20 @@ struct ObjMaterial
         Specular{ 0,0,0,1 }
     {
     }
+};
+
+struct MeshData
+{
+    ID3D11Buffer*        m_VertexBuffer;
+    ID3D11Buffer*        m_IndexBuffer;
+    std::vector<CVertex> m_Vertices;
+    std::vector<UINT>	 m_Indices;
+    std::string			 m_MaterialName;
+
+    MeshData() :
+        m_VertexBuffer(nullptr),
+        m_IndexBuffer(nullptr)
+    {}
 };
 
 #endif

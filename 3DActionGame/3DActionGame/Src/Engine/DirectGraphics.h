@@ -33,17 +33,23 @@ public:
 
 	void SetTexture(ID3D11ShaderResourceView* texture_);	
 
+	void SetMaterial(ObjMaterial* material_);
+
 public:
 
-	ID3D11Device* GetDevice() { return m_Device; }
+	ID3D11Device* GetDevice() const { return m_Device; }
 
-	ID3D11DeviceContext* GetContext() { return m_Context; }
+	ID3D11DeviceContext* GetContext() const { return m_Context; }
 
-	VertexShader* GetVertexShader() { return m_VertexShader; }
+	VertexShader* GetVertexShader()	const { return m_VertexShader; }
+	VertexShader* GetSimpleVertexShader()const { return m_SimpleVertexShader; }
+	PixelShader* GetSimplePixelShader()const { return m_SimplePixelShader; }
 
-	ID3D11Buffer* GetConstantBuffer() { return m_ConstantBuffer; }
+	ID3D11Buffer* GetConstantBuffer() const { return m_ConstantBuffer; }
+	ConstantBuffer* GetConstantBufferData(){ return &m_ConstantBufferData; }
 
-	ConstantBuffer* GetConstantBufferData() { return &m_ConstantBufferData; }
+	ID3D11Buffer* GetSimpleConstantBuffer() const { return m_SimpleConstantBuffer; }
+	SimpleConstantBuffer* GetSimpleConstantBufferData() { return &m_SimpleConstantBufferData; }
 
 private:
 	
@@ -71,14 +77,19 @@ private:
 	ID3D11RenderTargetView* m_RenderTargetView;		//! レンダーターゲットビュー
 	ID3D11Texture2D*		m_DepthStencilTexture;	//! 
 	ID3D11DepthStencilView* m_DepthStencilView;		//!
-	ID3D11Buffer*			m_ConstantBuffer;		//!
-	ConstantBuffer			m_ConstantBufferData;	//!
 	ID3D11SamplerState*		m_SamplerState;			//!
 	ID3D11SamplerState*		m_ShadowSamplerState;	//!
 	DXGI_SAMPLE_DESC		m_SampleDesc;			//!
 	
-	VertexShader*			m_VertexShader;			//!
-	PixelShader*			m_PixelShader;			//!
+	ID3D11Buffer*			m_ConstantBuffer;		//! 
+	ConstantBuffer			m_ConstantBufferData;	//!
+	VertexShader*			m_VertexShader;			//! スキンメッシュ用の頂点シェーダ
+	PixelShader*			m_PixelShader;			//! スキンメッシュ用のピクセルシェーダ
+
+	ID3D11Buffer*			m_SimpleConstantBuffer;		//! 
+	SimpleConstantBuffer	m_SimpleConstantBufferData;
+	VertexShader*			m_SimpleVertexShader;	//!	スタティックメッシュ用の頂点シェーダ
+	PixelShader*			m_SimplePixelShader;	//! スタティックメッシュ用のぷくセルシェーダ
 
 };
 

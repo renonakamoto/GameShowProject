@@ -90,6 +90,15 @@ bool DirectGraphics::Init()
     DirectX::XMStoreFloat4x4(&m_ConstantBufferData.Projection, DirectX::XMMatrixTranspose(proj_matrix));
     DirectX::XMStoreFloat4(&m_ConstantBufferData.CameraPos, eye);
 
+    DirectX::XMStoreFloat4x4(&m_SimpleConstantBufferData.View, DirectX::XMMatrixTranspose(view_matrix));
+    DirectX::XMStoreFloat4x4(&m_SimpleConstantBufferData.Projection, DirectX::XMMatrixTranspose(proj_matrix));
+    DirectX::XMStoreFloat4(&m_SimpleConstantBufferData.CameraPos, eye);
+    // ライト設定
+    DirectX::XMVECTOR light = DirectX::XMVector3Normalize(DirectX::XMVectorSet(0.0f, 0.5f, -1.0f, 0.0f));
+    DirectX::XMStoreFloat4(&m_SimpleConstantBufferData.LightVector, light);
+
+    // ライトのカラー設定
+    m_SimpleConstantBufferData.LightColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
     // ライトの設定
     m_ConstantBufferData.Light = DirectX::XMFLOAT4(40.0f, 200.0f, 0.0f, 1.0f);
@@ -244,7 +253,7 @@ void DirectGraphics::StartRendering()
 void DirectGraphics::FinishRendering()
 {
     // バックバッファをフロントバッファに送信する   
-    m_SwapChain->Present(0, 0);
+    m_SwapChain->Present(1, 0);
 }
 
 void DirectGraphics::SetUpContext()
@@ -282,6 +291,15 @@ void DirectGraphics::SetTexture(ID3D11ShaderResourceView* texture_)
         1,
         &texture_);
     
+}
+
+void DirectGraphics::SetMaterial(ObjMaterial* material_)
+{
+    m_SimpleConstantBufferData.MaterialAmbient = DirectX::XMFLOAT4(material_->Ambient[0],
+        material_->Ambient[1],
+        material_->Ambient[2], 1);
+    m_SimpleConstantBufferData.MaterialDiffuse = DirectX::XMFLOAT4(material_->Diffuse[0], material_->Diffuse[1], material_->Diffuse[2], 1);
+    m_SimpleConstantBufferData.MaterialSpecular = DirectX::XMFLOAT4(material_->Specular[0], material_->Specular[1], material_->Specular[2], 1);
 }
 
 void DirectGraphics::SetUpDxgiSwapChanDesc(DXGI_SWAP_CHAIN_DESC* dxgi)
@@ -612,6 +630,18 @@ bool DirectGraphics::CreateShader()
         return false;
     }
 
+    m_SimpleVertexShader = new VertexShader();
+    if (m_SimpleVertexShader->Create(m_Device, "Res/Shader/SimpleVertexShader.cso") == false)
+    {
+        return false;
+    }
+
+    m_SimplePixelShader = new PixelShader();
+    if (m_SimplePixelShader->Create(m_Device, "Res/Shader/SimplePixelShader.cso") == false)
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -626,6 +656,12 @@ bool DirectGraphics::CreateConstantBuffer()
     buffer_desc.StructureByteStride = 0;
 
     if (FAILED(m_Device->CreateBuffer(&buffer_desc, nullptr, &m_ConstantBuffer)))
+    {
+        return false;
+    }
+    
+    buffer_desc.ByteWidth = sizeof(SimpleConstantBuffer);
+    if (FAILED(m_Device->CreateBuffer(&buffer_desc, nullptr, &m_SimpleConstantBuffer)))
     {
         return false;
     }
