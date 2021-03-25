@@ -3,7 +3,7 @@
 #include "TitleScene.h"
 #include "SceneManager.h"
 #include "../Engine/InputManager.h"
-
+#include "../Engine/Texture/Texture.h"
 
 TitleScene::TitleScene(SceneChanger* sceneChanger_) : 
     Scene(sceneChanger_)
@@ -33,7 +33,7 @@ void TitleScene::Load()
 
 DWORD WINAPI TitleScene::LoadResources(LPVOID lpParam_)
 {
-
+    TextureManager::GetInstance()->Load("Res/Textures/title_bg.png", "bg");
     return 0;
 }
 
@@ -63,5 +63,16 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-    
+    switch (m_CurrentState)
+    {
+    case SceneState::Load:
+        break;
+    case SceneState::Main:
+        TextureManager::GetInstance()->Render("bg", DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
+        break;
+    default:
+        break;
+    }
+
+   
 }

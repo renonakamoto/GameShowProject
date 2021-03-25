@@ -5,6 +5,7 @@
 #include "Engine/MeshModel/FbxModel/FbxModel.h"
 #include "Engine/MeshModel/ObjModel/ObjModel.h"
 #include "Scene/SceneManager.h"
+#include "Engine/Texture/Texture.h"
 
 #pragma comment(lib, "winmm.lib")
 
@@ -37,6 +38,12 @@ int APIENTRY WinMain(
 	{
 		return -4;
 	}
+
+	if (TextureManager::GetInstance()->Init(DirectGraphics::GetInstance()->GetDevice()) == false)
+	{
+		return -5;
+	}
+
 	SoundManager::GetInstance()->LoadSEData("Res/Sounds/button01a.wav", "button01a");
 	
 	while (true)

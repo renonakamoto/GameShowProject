@@ -1,21 +1,21 @@
-﻿#ifndef OBJECT_BASE_H_
-#define OBJECT_BASE_H_
+﻿#ifndef OBJECT2D_H_
+#define OBJECT2D_H_
 
-class ObjectBase
+#include <d3d11.h>
+#include "GameObject.h"
+
+class Object2D : public GameObject
 {
 public:
-	ObjectBase(){}
-
-	~ObjectBase(){}
-
-	
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
 protected:
-	
 	virtual void Init() = 0;
 	virtual void Release() = 0;
+
+private:
+	
 	
 };
 

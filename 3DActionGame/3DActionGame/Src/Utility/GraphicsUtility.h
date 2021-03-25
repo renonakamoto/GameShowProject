@@ -61,7 +61,8 @@ struct ConstLightBuffer
 
 struct ConstantBuffer2D
 {
-    DirectX::XMMATRIX m_WP;
+    DirectX::XMMATRIX World;
+    DirectX::XMMATRIX Projection;
 
     ConstantBuffer2D()
     {
@@ -117,6 +118,16 @@ struct MeshData
         m_VertexBuffer(nullptr),
         m_IndexBuffer(nullptr)
     {}
+};
+
+
+struct TextureData
+{
+    ID3D11Buffer*             VertexBuffer;
+    ID3D11Buffer*             IndexBuffer;
+    ID3D11ShaderResourceView* Texture;
+    UINT                      Width;
+    UINT                      Height;
 };
 
 #endif

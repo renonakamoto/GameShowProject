@@ -40,6 +40,27 @@
     <Filter Include="Src\ObjectManager">
       <UniqueIdentifier>{b7615539-7465-40f9-89ef-3c2bd1f8bc98}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Image">
+      <UniqueIdentifier>{39234c34-56c2-4ce6-b296-1e7decb55f37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Engine\Texure">
+      <UniqueIdentifier>{a8ffd892-c2dc-48c4-9e3d-83e69492933e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Objects">
+      <UniqueIdentifier>{b3bceb11-2b4d-486a-ab7c-238523a955b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Objects\Player">
+      <UniqueIdentifier>{fc6c36c8-1ac1-49a3-84f8-0acaecec936b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\2DObject">
+      <UniqueIdentifier>{4cd5025e-842b-4d00-88b9-b03e5e3b2bbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\2DObject\Title">
+      <UniqueIdentifier>{78cd9830-7e17-426c-8b01-3ae26a9abde8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\2DObject\Game">
+      <UniqueIdentifier>{4b49f84e-2b80-45b9-a6a0-18331fab46e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -95,6 +116,27 @@
     </ClCompile>
     <ClCompile Include="Src\Model\FbxStorage.cpp">
       <Filter>Src\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Sprite\Image.cpp">
+      <Filter>Src\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Texture\Texture.cpp">
+      <Filter>Src\Engine\Texure</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectManager\Object2D.cpp">
+      <Filter>Src\ObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectManager\Object3D.cpp">
+      <Filter>Src\ObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectManager\GameObject.cpp">
+      <Filter>Src\ObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\Player\Player.cpp">
+      <Filter>Src\Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\2DObject\Title\TitleBackGround.cpp">
+      <Filter>Src\2DObject\Title</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +206,27 @@
     <ClInclude Include="Src\ObjectManager\ObjectBase.h">
       <Filter>Src\ObjectManager</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Sprite\Image.h">
+      <Filter>Src\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Texture\Texture.h">
+      <Filter>Src\Engine\Texure</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectManager\Object2D.h">
+      <Filter>Src\ObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectManager\Object3D.h">
+      <Filter>Src\ObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectManager\GameObject.h">
+      <Filter>Src\ObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Player\Player.h">
+      <Filter>Src\Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\2DObject\Title\TitleBackGround.h">
+      <Filter>Src\2DObject\Title</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\VertexShader.hlsl">
@@ -176,6 +239,12 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\SimplePixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\Tex2DPixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\Tex2DVertexShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

@@ -30,7 +30,9 @@ public:
 	
 private:
 	// コンストラクタ
-	FbxStorage() {}
+	FbxStorage() {
+		m_ModelData.clear();
+	}
 	// デストラクタ
 	~FbxStorage() {}
 

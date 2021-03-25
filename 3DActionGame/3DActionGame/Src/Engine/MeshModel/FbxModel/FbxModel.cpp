@@ -932,15 +932,15 @@ bool FbxModel::CreateVertexBuffer(ID3D11Device* device_)
 		buffer_desc.MiscFlags			= 0;								// リソースオプションのフラグ
 		buffer_desc.StructureByteStride = 0;								// 構造体のサイズ
 
-		D3D11_SUBRESOURCE_DATA sub_resource;
-		sub_resource.pSysMem			= &mesh.m_Vertices[0];		// バッファの中身の設定
-		sub_resource.SysMemPitch		= 0;						// textureデータを使用する際に使用するメンバ
-		sub_resource.SysMemSlicePitch	= 0;						// textureデータを使用する際に使用するメンバ
+		D3D11_SUBRESOURCE_DATA init_data;
+		init_data.pSysMem			= &mesh.m_Vertices[0];		// バッファの中身の設定
+		init_data.SysMemPitch		= 0;						// textureデータを使用する際に使用するメンバ
+		init_data.SysMemSlicePitch	= 0;						// textureデータを使用する際に使用するメンバ
 
 		// バッファ作成
 		if (FAILED(device_->CreateBuffer(
 			&buffer_desc,										// バッファ情報
-			&sub_resource,										// リソース情報
+			&init_data,										    // リソース情報
 			&mesh.m_VertexBuffer)))								// 作成されたバッファの格納先
 		{
 			return false;
@@ -967,8 +967,6 @@ bool FbxModel::CreateIndexBuffer(ID3D11Device* device_)
 
 		D3D11_SUBRESOURCE_DATA sub_resource;
 		sub_resource.pSysMem		  = &mesh.m_Indices[0];	// バッファの中身の設定
-		sub_resource.SysMemPitch	  = 0;					// textureデータを使用する際に使用するメンバ
-		sub_resource.SysMemSlicePitch = 0;					// textureデータを使用する際に使用するメンバ
 
 		// バッファ作成
 		if (FAILED(device_->CreateBuffer(

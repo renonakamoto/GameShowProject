@@ -4,10 +4,6 @@
 #include "../Model/FbxStorage.h"
 #include "../Engine/DirectGraphics.h"
 
-DirectX::XMFLOAT3 g_pos(0.f, 0.f, 0.f);
-DirectX::XMFLOAT3 g_scale(1.f, 1.f, 1.f);
-DirectX::XMFLOAT3 g_degree(0.f, 0.f, 0.f);
-
 
 GameScene::GameScene(SceneChanger* sceneChanger_) : 
     Scene(sceneChanger_)
@@ -21,6 +17,7 @@ GameScene::GameScene(SceneChanger* sceneChanger_) :
         &m_dwThreadID);             // ƒXƒŒƒbƒhID
 
     m_CurrentState = SceneState::Load;
+    p = nullptr;
 }
 
 GameScene::~GameScene()
@@ -32,8 +29,7 @@ void GameScene::Load()
 {
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
-        FbxModel* model = FbxStorage::GetInstance()->GetModel("Ekard");
-        model->Play("Run");
+        p = new Player();
 
         m_CurrentState = SceneState::Main;
     }
@@ -49,9 +45,7 @@ DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 
 void GameScene::Main()
 {
-    FbxModel* model = FbxStorage::GetInstance()->GetModel("Ekard");
-    model->Animate();
-    
+    if (p)p->Update();
 }
 
 void GameScene::Update()
@@ -71,5 +65,14 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
-    FbxStorage::GetInstance()->GetModel("Ekard")->Render(DirectGraphics::GetInstance(), g_pos, g_scale, g_degree);
+    switch (m_CurrentState)
+    {
+    case SceneState::Load:
+        break;
+    case SceneState::Main:
+        if (p) p->Draw();
+        break;
+    default:
+        break;
+    }
 }

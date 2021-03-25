@@ -16,7 +16,7 @@ public:
 	const MeshData* GetMeshData(UINT idx_) const {
 		// 配列の要素数以上なら存在しないのでnullptrを返す
 		if (idx_ >= m_MeshList.size()) return nullptr;
-		&m_MeshList[idx_];
+		return &m_MeshList[idx_];
 	}
 
 protected:
