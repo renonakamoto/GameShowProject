@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "../Model/FbxStorage.h"
 #include "../Engine/DirectGraphics.h"
+#include "../Engine/Texture/Texture.h"
 
 
 GameScene::GameScene(SceneChanger* sceneChanger_) : 
@@ -17,19 +18,21 @@ GameScene::GameScene(SceneChanger* sceneChanger_) :
         &m_dwThreadID);             // ƒXƒŒƒbƒhID
 
     m_CurrentState = SceneState::Load;
-    p = nullptr;
+    m_ObjectManager = new ObjectManager();
 }
 
 GameScene::~GameScene()
 {
-    
+    m_ObjectManager->Release();
+    delete m_ObjectManager;
 }
 
 void GameScene::Load()
 {
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
-        p = new Player();
+        m_ObjectManager->Register(new Player());
+        
 
         m_CurrentState = SceneState::Main;
     }
@@ -38,14 +41,19 @@ void GameScene::Load()
 DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 {
     FbxStorage::GetInstance()->LoadModel("Res/Models/Ekard.fbx", "Ekard");
-    FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Run_01.fbx", "Ekard", "Run");
+    FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Run_01.fbx",          "Ekard", "Run");
+    FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Attack_01.fbx",       "Ekard", "Attack01");
+    FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Attack_02.fbx",       "Ekard", "Attack02");
+    FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_BattleIdle_01_h.fbx", "Ekard", "Idle");
     
+    
+
     return 0;
 }
 
 void GameScene::Main()
 {
-    if (p)p->Update();
+    m_ObjectManager->Update();
 }
 
 void GameScene::Update()
@@ -70,7 +78,7 @@ void GameScene::Draw()
     case SceneState::Load:
         break;
     case SceneState::Main:
-        if (p) p->Draw();
+        m_ObjectManager->Draw();
         break;
     default:
         break;

@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include "SceneDefinition.h"
 #include "SceneChanger.h"
+#include "../ObjectManager/ObjectManager.h"
 
 class SceneChanger;
 
@@ -18,7 +19,8 @@ public:
 		m_SceneChanger(sceneChanger_),
 		m_CurrentState(SceneState::Init),
 		m_ThreadHandle(nullptr),
-		m_dwThreadID(0)
+		m_dwThreadID(0),
+		m_ObjectManager(nullptr)
 	{	}
 
 	/**
@@ -53,6 +55,8 @@ protected:
 	SceneState m_CurrentState;			//!< 現在のシーンの状態
 	HANDLE m_ThreadHandle;				//!< マルチスレッド用のハンドル保存変数
 	DWORD m_dwThreadID;					//!< マルチスレッド用のスレッドID
+
+	ObjectManager* m_ObjectManager;		//! オブジェクト管理
 };
 
 #endif // !SCENE_H_

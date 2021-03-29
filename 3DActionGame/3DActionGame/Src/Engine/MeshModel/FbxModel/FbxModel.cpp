@@ -323,6 +323,7 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 
 void FbxModel::Play(std::string animName_)
 {
+	if (m_PlayMotion == animName_) return;
 	m_PlayMotion = animName_;
 	m_Frame = 0.0f;
 }

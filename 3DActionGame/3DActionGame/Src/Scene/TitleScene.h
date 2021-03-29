@@ -17,9 +17,6 @@ private:
 	void Main() override;
 	void Load() override;
 
-private:
-	
-
 };
 
 #endif // !TITLESCENE_H_

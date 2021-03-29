@@ -20,6 +20,11 @@ struct SimpleConstantBuffer
     DirectX::XMFLOAT4   MaterialAmbient;
     DirectX::XMFLOAT4   MaterialDiffuse;
     DirectX::XMFLOAT4   MaterialSpecular;
+
+    SimpleConstantBuffer()
+    {
+        ZeroMemory(this, sizeof(SimpleConstantBuffer));
+    }
 };
 
 /**
@@ -73,6 +78,15 @@ struct ConstantBuffer2D
 struct Vertex2D {
     DirectX::XMFLOAT3 Pos;
     DirectX::XMFLOAT2 TexturePos;
+
+    Vertex2D() :
+        Vertex2D({ 0.f,0.f,0.f }, { 0.f,0.f })
+    {}
+    
+    Vertex2D(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT2 texPos_):
+        Pos(pos_),
+        TexturePos(texPos_)
+    {}
 };
 
 struct CVertex {

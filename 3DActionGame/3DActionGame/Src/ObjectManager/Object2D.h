@@ -7,6 +7,18 @@
 class Object2D : public GameObject
 {
 public:
+	Object2D()
+	{}
+
+	Object2D(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 rot_, DirectX::XMFLOAT3 scale_) :
+		GameObject(pos_, rot_, scale_)
+	{}
+
+	Object2D(DirectX::XMFLOAT3 pos_) :
+		GameObject(pos_)
+	{}
+
+
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 

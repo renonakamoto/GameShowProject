@@ -143,8 +143,8 @@ void TextureManager::Render(std::string keyword_, DirectX::XMFLOAT3 pos_)
 	// プリミティブタイプの設定
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	m_ConstantBufferData.World		= DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.f - (0.f / 640.f), 1.f - (0.f / 360.f), pos_.z));
-	m_ConstantBufferData.Projection = DirectX::XMMatrixTranspose(DirectX::XMMatrixOrthographicOffCenterLH(0.0f, 1280, 720, 0.0f, 0.0f, 1.0f));
+	m_ConstantBufferData.World		= DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.f - (pos_.x / 640.f), 1.f - (pos_.y / 360.f), pos_.z));
+	m_ConstantBufferData.Projection = DirectX::XMMatrixTranspose(DirectX::XMMatrixOrthographicOffCenterLH(0.0f, 1280, 720, 0.0f, -1.0f, 1.0f));
 	context->UpdateSubresource(m_ConstantBuffer, 0, nullptr, &m_ConstantBufferData, 0, 0);
 	
 	// GPUにバッファをセット

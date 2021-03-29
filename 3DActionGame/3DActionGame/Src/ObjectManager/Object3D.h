@@ -6,7 +6,12 @@
 class Object3D : public GameObject
 {
 public:
-	
+	Object3D()
+	{}
+
+	~Object3D()
+	{}
+
 	void Update() = 0;
 	void Draw() = 0;
 	

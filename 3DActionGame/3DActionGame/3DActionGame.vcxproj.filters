@@ -61,6 +61,15 @@
     <Filter Include="Src\2DObject\Game">
       <UniqueIdentifier>{4b49f84e-2b80-45b9-a6a0-18331fab46e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\ObjectManager\UI">
+      <UniqueIdentifier>{ff2a9297-7187-4bec-a747-7b1eca4ee68f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Shape">
+      <UniqueIdentifier>{0c00453c-5d03-4eb1-b169-6c88e25cb9bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Objects\Player\PlayerMotion">
+      <UniqueIdentifier>{cd09f7ed-5e65-4dc9-b293-c3852116fe65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -137,6 +146,33 @@
     </ClCompile>
     <ClCompile Include="Src\2DObject\Title\TitleBackGround.cpp">
       <Filter>Src\2DObject\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectManager\ObjectManager.cpp">
+      <Filter>Src\ObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ObjectManager\UI\Button.cpp">
+      <Filter>Src\ObjectManager\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Utility\Calculation.cpp">
+      <Filter>Src\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Shape\Shape.cpp">
+      <Filter>Src\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Shape\Rect.cpp">
+      <Filter>Src\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\Player\PlayerMotion\IdleState.cpp">
+      <Filter>Src\Objects\Player\PlayerMotion</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\Player\PlayerMotion\Attack01State.cpp">
+      <Filter>Src\Objects\Player\PlayerMotion</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\Player\PlayerMotion\Attack02State.cpp">
+      <Filter>Src\Objects\Player\PlayerMotion</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\Player\PlayerMotion\RunState.cpp">
+      <Filter>Src\Objects\Player\PlayerMotion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +262,36 @@
     </ClInclude>
     <ClInclude Include="Src\2DObject\Title\TitleBackGround.h">
       <Filter>Src\2DObject\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectManager\ObjectManager.h">
+      <Filter>Src\ObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ObjectManager\UI\Button.h">
+      <Filter>Src\ObjectManager\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Utility\Calculation.h">
+      <Filter>Src\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Shape\Shape.h">
+      <Filter>Src\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Shape\Rect.h">
+      <Filter>Src\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Player\PlayerMotion\PlayerState.h">
+      <Filter>Src\Objects\Player\PlayerMotion</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Player\PlayerMotion\IdleState.h">
+      <Filter>Src\Objects\Player\PlayerMotion</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Player\PlayerMotion\Attack01State.h">
+      <Filter>Src\Objects\Player\PlayerMotion</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Player\PlayerMotion\Attack02State.h">
+      <Filter>Src\Objects\Player\PlayerMotion</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Player\PlayerMotion\RunState.h">
+      <Filter>Src\Objects\Player\PlayerMotion</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

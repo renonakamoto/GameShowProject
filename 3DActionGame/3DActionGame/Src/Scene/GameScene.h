@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "../Engine/MeshModel/FbxModel/FbxModel.h"
 #include "../Objects/Player/Player.h"
+#include "../ObjectManager/ObjectManager.h"
 
 class GameScene : public Scene
 {
@@ -20,7 +21,6 @@ private:
 	static DWORD WINAPI LoadResources(LPVOID lpParam_);
 
 private:
-	Player* p;
 
 };
 
