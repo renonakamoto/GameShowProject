@@ -19,9 +19,11 @@ cbuffer ConstantBuffer
     float4x4 World;
     float4x4 View;
     float4x4 Projection;
+    float4x4 LightView;
+    float4x4 ClipUV;
     float4   CameraPos;
-    float4   LightVector;
-    float4   LightColor;
+    float4   Light;
+    float4   Attenuation;
     float4   MaterialAmbient;
     float4   MaterialDiffuse;
     float4   MaterialSpecular;
@@ -45,7 +47,7 @@ VS_OUT vs_main( VS_IN input )
         normal = mul(input.nor, World).xyzw;
         normal = normalize(normal);
 
-        output.nor = saturate(dot(normal, LightVector));
+        output.nor = saturate(dot(normal, Light));
 
         return output;
 }

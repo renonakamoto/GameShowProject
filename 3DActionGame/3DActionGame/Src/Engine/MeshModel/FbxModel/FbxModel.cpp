@@ -114,7 +114,7 @@ bool FbxModel::LoadModel(const char* fileName_)
 		LoadBones(mesh_data, mesh);
 
 		// メッシュデータを追加
-		m_MeshList.emplace_back(mesh_data);
+		m_MeshList.push_back(mesh_data);
 	}
 
 	// マネージャーの破棄
@@ -245,17 +245,26 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 	ID3D11DeviceContext* context = graphics_->GetContext();
 	context->IASetInputLayout(m_InputLayout);
 
+	/*
+		頂点シェーダの設定
+	*/
+	context->VSSetShader(graphics_->GetVertexShader()->GetShaderInterface(), NULL, 0);
+	/*
+		ピクセルシェーダの設定
+	*/
+	context->PSSetShader(graphics_->GetPixelShader()->GetShaderInterface(), NULL, 0);
+
 	for (auto& mesh : m_MeshList)
 	{
 		context->IASetVertexBuffers(
 			0,
 			1,
-			&mesh.m_VertexBuffer,
+			&mesh.VertexBuffer,
 			&strides,
 			&offsets);
 
 		context->IASetIndexBuffer(
-			mesh.m_IndexBuffer,
+			mesh.IndexBuffer,
 			DXGI_FORMAT_R32_UINT,
 			0);
 
@@ -290,7 +299,7 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 
 					m_Bone[b].Transform = motion->Key[b][f] * (1.0f - (frame - static_cast<int>(frame))) + motion->Key[b][(size_t)f + 1] * (frame - static_cast<int>(frame));
 					DirectX::XMMATRIX mat = m_Bone[b].Offset * m_Bone[b].Transform;
-					graphics_->GetConstantBufferData()->Bone[b] = DirectX::XMMatrixTranspose(mat);
+					graphics_->GetConstBoneBufferData()->Bone[b] = DirectX::XMMatrixTranspose(mat);
 				}
 			}
 		}
@@ -298,16 +307,20 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 
 		// コンスタントバッファの更新
 		graphics_->GetContext()->UpdateSubresource(graphics_->GetConstantBuffer(), 0, NULL, graphics_->GetConstantBufferData(), 0, 0);
+		graphics_->GetContext()->UpdateSubresource(graphics_->GetConstBoneBuffer(), 0, NULL, graphics_->GetConstBoneBufferData(), 0, 0);
 
 		// シェーダーにコンスタントバッファの情報を送る
 		ID3D11Buffer* constant_buffer = graphics_->GetConstantBuffer();
 		context->VSSetConstantBuffers(0, 1, &constant_buffer);
 		context->PSSetConstantBuffers(0, 1, &constant_buffer);
+		
+		constant_buffer = graphics_->GetConstBoneBuffer();
+		context->VSSetConstantBuffers(1, 1, &constant_buffer);
 
 
-		if (m_MaterialLinks.count(mesh.m_MaterialName) > 0)
+		if (m_MaterialLinks.count(mesh.MaterialName) > 0)
 		{
-			graphics_->SetTexture(m_MaterialLinks[mesh.m_MaterialName]);
+			graphics_->SetTexture(m_MaterialLinks[mesh.MaterialName]);
 		}
 		else
 		{
@@ -316,7 +329,7 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 
 
 		// 描画
-		context->DrawIndexed(mesh.m_Indices.size(), 0, 0);
+		context->DrawIndexed(mesh.Indices.size(), 0, 0);
 	}
 
 }
@@ -358,25 +371,23 @@ bool FbxModel::AddMesh(const char* fileName_, DirectX::XMFLOAT3 pos_, DirectX::X
 
 	FbxAMatrix trans;
 	trans.SetT(FbxVector4(pos_.x, pos_.y, pos_.z, 1));
-	//trans.SetS(FbxVector4(2, 2, 2, 1));
-	//trans.SetR(FbxVector4(90, 0, 0, 1));
 
 	for (int i = before_mesh_num; i < after_mesh_num; ++i)
 	{
-		for (int v = 0; v < m_MeshList[i].m_Vertices.size(); ++v)
+		for (int v = 0; v < m_MeshList[i].Vertices.size(); ++v)
 		{
-			FbxVector4 vertex = FbxVector4(m_MeshList[i].m_Vertices[v].Pos.x,
-				m_MeshList[i].m_Vertices[v].Pos.y,
-				m_MeshList[i].m_Vertices[v].Pos.z, 1);
+			FbxVector4 vertex = FbxVector4(m_MeshList[i].Vertices[v].Pos.x,
+				m_MeshList[i].Vertices[v].Pos.y,
+				m_MeshList[i].Vertices[v].Pos.z, 1);
 			vertex = trans.MultT(vertex);
-			m_MeshList[i].m_Vertices[v].Pos.x = vertex[0];	// X
-			m_MeshList[i].m_Vertices[v].Pos.y = vertex[1];	// Y
-			m_MeshList[i].m_Vertices[v].Pos.z = vertex[2];	// Z
+			m_MeshList[i].Vertices[v].Pos.x = vertex[0];	// X
+			m_MeshList[i].Vertices[v].Pos.y = vertex[1];	// Y
+			m_MeshList[i].Vertices[v].Pos.z = vertex[2];	// Z
 
 			if (bone_idx != 0)
 			{
-				m_MeshList[i].m_Vertices[v].Index[0] = bone_idx;
-				m_MeshList[i].m_Vertices[v].Weight[0] = 1.0f;
+				m_MeshList[i].Vertices[v].Index[0] = bone_idx;
+				m_MeshList[i].Vertices[v].Weight[0] = 1.0f;
 			}
 		}
 	}
@@ -527,9 +538,9 @@ void FbxModel::LoadIndices(MeshData& meshData_, FbxMesh* mesh_)
 	// 時計周りに頂点を作りたいので、頂点番号の最初と最後を入れ替えて保存する
 	for (int i = 0; i < polygon_count; ++i)
 	{
-		meshData_.m_Indices.push_back(i * 3 + 2);
-		meshData_.m_Indices.push_back(i * 3 + 1);
-		meshData_.m_Indices.push_back(i * 3);
+		meshData_.Indices.push_back(i * 3 + 2);
+		meshData_.Indices.push_back(i * 3 + 1);
+		meshData_.Indices.push_back(i * 3);
 	}
 }
 
@@ -567,7 +578,7 @@ void FbxModel::LoadVertices(MeshData& meshData_, FbxMesh* mesh_)
 		vertex.Pos.x = (float)-list[index][0];
 		vertex.Pos.y = (float)list[index][1];
 		vertex.Pos.z = (float)list[index][2];
-		meshData_.m_Vertices.emplace_back(vertex);
+		meshData_.Vertices.emplace_back(vertex);
 	}
 }
 
@@ -583,9 +594,9 @@ void FbxModel::LoadNormals(MeshData& meshData_, FbxMesh* mesh_)
 	for (int i = 0; i < normals.Size(); ++i)
 	{
 		// 左手系に変換
-		meshData_.m_Vertices[i].Normal.x = (float)-normals[i][0];
-		meshData_.m_Vertices[i].Normal.y = (float)normals[i][1];
-		meshData_.m_Vertices[i].Normal.z = (float)normals[i][2];
+		meshData_.Vertices[i].Normal.x = (float)-normals[i][0];
+		meshData_.Vertices[i].Normal.y = (float)normals[i][1];
+		meshData_.Vertices[i].Normal.z = (float)normals[i][2];
 	}
 }
 
@@ -625,10 +636,10 @@ void FbxModel::LoadVertexColors(MeshData& meshData_, FbxMesh* mesh_)
 			{
 				int id = indeces.GetAt(i);
 				FbxColor color = colors.GetAt(id);
-				meshData_.m_Vertices[i].Color.x = color.mRed;
-				meshData_.m_Vertices[i].Color.y = color.mGreen;
-				meshData_.m_Vertices[i].Color.z = color.mBlue;
-				meshData_.m_Vertices[i].Color.w = color.mAlpha;
+				meshData_.Vertices[i].Color.x = color.mRed;
+				meshData_.Vertices[i].Color.y = color.mGreen;
+				meshData_.Vertices[i].Color.z = color.mBlue;
+				meshData_.Vertices[i].Color.w = color.mAlpha;
 			}
 		}
 	}
@@ -641,7 +652,7 @@ void FbxModel::LoadMaterialNames(MeshData& meshData_, FbxMesh* mesh_)
 	// マテリアルが存在するか調べる
 	if (mesh_->GetElementMaterialCount() == 0)
 	{
-		meshData_.m_MaterialName = "";
+		meshData_.MaterialName = "";
 		return;
 	}
 
@@ -652,11 +663,11 @@ void FbxModel::LoadMaterialNames(MeshData& meshData_, FbxMesh* mesh_)
 
 	if (surface_material != nullptr)
 	{
-		meshData_.m_MaterialName = surface_material->GetName();
+		meshData_.MaterialName = surface_material->GetName();
 	}
 	else
 	{
-		meshData_.m_MaterialName = "";
+		meshData_.MaterialName = "";
 	}
 }
 
@@ -676,8 +687,8 @@ void FbxModel::LoadUV(MeshData& meshData_, FbxMesh* mesh_)
 		FbxVector2& uv = uv_buffer[i];
 
 		// 左下原点になっているので、左上原点にする
-		meshData_.m_Vertices[i].TexturePos.x = static_cast<float>(uv[0]);
-		meshData_.m_Vertices[i].TexturePos.y = static_cast<float>(1.0 - uv[1]);
+		meshData_.Vertices[i].TexturePos.x = static_cast<float>(uv[0]);
+		meshData_.Vertices[i].TexturePos.y = static_cast<float>(1.0 - uv[1]);
 	}
 }
 
@@ -686,7 +697,7 @@ void FbxModel::LoadBones(MeshData& meshData_, FbxMesh* mesh_)
 	int skin_num = mesh_->GetDeformerCount(FbxDeformer::eSkin);
 	if (skin_num <= 0) return;
 
-	int vertex_num = meshData_.m_Vertices.size();
+	int vertex_num = meshData_.Vertices.size();
 	FbxSkin* skin = static_cast<FbxSkin*>(mesh_->GetDeformer(0, FbxDeformer::eSkin));
 
 	// ボーン数を取得
@@ -759,7 +770,7 @@ void FbxModel::LoadBones(MeshData& meshData_, FbxMesh* mesh_)
 				int weight_count;
 				for (weight_count = 0; weight_count < 4; ++weight_count)
 				{
-					if (meshData_.m_Vertices[vtx_i].Weight[weight_count] <= 0.0f) break;
+					if (meshData_.Vertices[vtx_i].Weight[weight_count] <= 0.0f) break;
 				}
 				if (4 <= weight_count) continue;
 
@@ -767,10 +778,10 @@ void FbxModel::LoadBones(MeshData& meshData_, FbxMesh* mesh_)
 				//meshData_.m_Vertices[vtx_i].Weight[weight_count] = static_cast<float>(weight[i]);
 
 				// ボーンの影響度が大きいものを4つ選ぶ
-				if (meshData_.m_Vertices[vtx_i].Weight[weight_count] < static_cast<float>(weight[i]))
+				if (meshData_.Vertices[vtx_i].Weight[weight_count] < static_cast<float>(weight[i]))
 				{
-					meshData_.m_Vertices[vtx_i].Index[weight_count] = bone_no;
-					meshData_.m_Vertices[vtx_i].Weight[weight_count] = static_cast<float>(weight[i]);
+					meshData_.Vertices[vtx_i].Index[weight_count] = bone_no;
+					meshData_.Vertices[vtx_i].Weight[weight_count] = static_cast<float>(weight[i]);
 				}
 			}
 		}
@@ -784,14 +795,14 @@ void FbxModel::LoadBones(MeshData& meshData_, FbxMesh* mesh_)
 		int weight_count;
 		for (weight_count = 0; weight_count < 4; weight_count++)
 		{
-			if (meshData_.m_Vertices[vtx_i].Weight[weight_count] <= 0.0f) break;
+			if (meshData_.Vertices[vtx_i].Weight[weight_count] <= 0.0f) break;
 
-			n += meshData_.m_Vertices[vtx_i].Weight[weight_count];
+			n += meshData_.Vertices[vtx_i].Weight[weight_count];
 		}
 
 		for (weight_count = 0; weight_count < 4; weight_count++)
 		{
-			meshData_.m_Vertices[vtx_i].Weight[weight_count] /= n;
+			meshData_.Vertices[vtx_i].Weight[weight_count] /= n;
 		}
 	}
 }
@@ -926,7 +937,7 @@ bool FbxModel::CreateVertexBuffer(ID3D11Device* device_)
 	{
 		//頂点バッファ作成
 		D3D11_BUFFER_DESC buffer_desc;
-		buffer_desc.ByteWidth = sizeof(CVertex) * mesh.m_Vertices.size();	// バッファのサイズ
+		buffer_desc.ByteWidth = sizeof(CVertex) * mesh.Vertices.size();	// バッファのサイズ
 		buffer_desc.Usage				= D3D11_USAGE_DEFAULT;				// 使用方法
 		buffer_desc.BindFlags			= D3D11_BIND_VERTEX_BUFFER;			// BIND設定
 		buffer_desc.CPUAccessFlags		= 0;								// リソースへのCPUのアクセス権限についての設定
@@ -934,7 +945,7 @@ bool FbxModel::CreateVertexBuffer(ID3D11Device* device_)
 		buffer_desc.StructureByteStride = 0;								// 構造体のサイズ
 
 		D3D11_SUBRESOURCE_DATA init_data;
-		init_data.pSysMem			= &mesh.m_Vertices[0];		// バッファの中身の設定
+		init_data.pSysMem			= &mesh.Vertices[0];		// バッファの中身の設定
 		init_data.SysMemPitch		= 0;						// textureデータを使用する際に使用するメンバ
 		init_data.SysMemSlicePitch	= 0;						// textureデータを使用する際に使用するメンバ
 
@@ -942,7 +953,7 @@ bool FbxModel::CreateVertexBuffer(ID3D11Device* device_)
 		if (FAILED(device_->CreateBuffer(
 			&buffer_desc,										// バッファ情報
 			&init_data,										    // リソース情報
-			&mesh.m_VertexBuffer)))								// 作成されたバッファの格納先
+			&mesh.VertexBuffer)))								// 作成されたバッファの格納先
 		{
 			return false;
 		}
@@ -959,7 +970,7 @@ bool FbxModel::CreateIndexBuffer(ID3D11Device* device_)
 	{
 		//頂点バッファ作成
 		D3D11_BUFFER_DESC buffer_desc;
-		buffer_desc.ByteWidth = (UINT)sizeof(UINT) * mesh.m_Indices.size();	// バッファのサイズ
+		buffer_desc.ByteWidth = (UINT)sizeof(UINT) * mesh.Indices.size();	// バッファのサイズ
 		buffer_desc.Usage				= D3D11_USAGE_DEFAULT;				// 使用方法
 		buffer_desc.BindFlags			= D3D11_BIND_INDEX_BUFFER;			// BIND設定
 		buffer_desc.CPUAccessFlags		= 0;								// リソースへのCPUのアクセス権限についての設定
@@ -967,13 +978,13 @@ bool FbxModel::CreateIndexBuffer(ID3D11Device* device_)
 		buffer_desc.StructureByteStride = 0;								// 構造体のサイズ
 
 		D3D11_SUBRESOURCE_DATA sub_resource;
-		sub_resource.pSysMem		  = &mesh.m_Indices[0];	// バッファの中身の設定
+		sub_resource.pSysMem		  = &mesh.Indices[0];	// バッファの中身の設定
 
 		// バッファ作成
 		if (FAILED(device_->CreateBuffer(
 			&buffer_desc,			// バッファ情報
 			&sub_resource,			// リソース情報
-			&mesh.m_IndexBuffer)))	// 作成されたバッファの格納先
+			&mesh.IndexBuffer)))	// 作成されたバッファの格納先
 		{
 			return false;
 		}

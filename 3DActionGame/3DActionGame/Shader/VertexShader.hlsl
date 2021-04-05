@@ -28,14 +28,13 @@ struct VS_OUT
         float4 light_view_pos : TEXCOORD4;
 };
  
-cbuffer ConstantBuffer
+cbuffer ConstantBuffer : register(b0)
 {
     float4x4 World;
     float4x4 View;
     float4x4 Projection;
     float4x4 LightView;
     float4x4 ClipUV;
-    matrix   BoneWorld[MAX_BONE_MATRIX];
     float4   CameraPos;
     float4   Light;
     float4   Attenuation;
@@ -44,6 +43,10 @@ cbuffer ConstantBuffer
     float4   MaterialSpecular;
 };
 
+cbuffer BoneBuffer : register(b1)
+{
+    matrix   BoneWorld[MAX_BONE_MATRIX];
+};
 
 struct Skin
 {

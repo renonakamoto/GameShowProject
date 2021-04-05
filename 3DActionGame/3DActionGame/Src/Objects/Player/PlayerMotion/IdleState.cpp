@@ -6,14 +6,14 @@
 
 PlayerState* IdleState::CheckState(Player* player_)
 {
-	if (InputManager::GetInstance()->GetKeyDown(KeyInfo::Key_W) ||
-		InputManager::GetInstance()->GetKeyDown(KeyInfo::Key_A) ||
-		InputManager::GetInstance()->GetKeyDown(KeyInfo::Key_S) ||
-		InputManager::GetInstance()->GetKeyDown(KeyInfo::Key_D))
+	if (InputManager::GetInstance()->GetKey(KeyInfo::Key_W) ||
+		InputManager::GetInstance()->GetKey(KeyInfo::Key_A) ||
+		InputManager::GetInstance()->GetKey(KeyInfo::Key_S) ||
+		InputManager::GetInstance()->GetKey(KeyInfo::Key_D))
 	{
 		return RunState::GetInstance();
 	}
-	else if (InputManager::GetInstance()->GetMouse(MouseButton::Left))
+	else if (InputManager::GetInstance()->GetMouseDown(MouseButton::Left))
 	{
 		return Attack01State::GetInstance();
 	}

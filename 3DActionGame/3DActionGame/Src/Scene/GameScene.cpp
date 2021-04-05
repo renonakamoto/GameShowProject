@@ -2,8 +2,13 @@
 #include "GameScene.h"
 #include "SceneManager.h"
 #include "../Model/FbxStorage.h"
+#include "../Model/ObjFileStrage.h"
 #include "../Engine/DirectGraphics.h"
 #include "../Engine/Texture/Texture.h"
+#include "../Objects/Player/Player.h"
+#include "../Objects/Stage/Stage.h"
+#include "../Objects/Camera/FollowCamera.h"
+#include "../Engine/InputManager.h"
 
 
 GameScene::GameScene(SceneChanger* sceneChanger_) : 
@@ -23,7 +28,7 @@ GameScene::GameScene(SceneChanger* sceneChanger_) :
 
 GameScene::~GameScene()
 {
-    m_ObjectManager->Release();
+    ObjectManager::GetInstance()->Release();
     delete m_ObjectManager;
 }
 
@@ -31,8 +36,13 @@ void GameScene::Load()
 {
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
-        m_ObjectManager->Register(new Player());
+        InputManager::GetInstance()->SetInputMode(InputMode::MODE_GAME);
+
+        ObjectManager::GetInstance()->Register(new Stage());
+        ObjectManager::GetInstance()->Register(new FollowCamera());
         
+        ObjectManager::GetInstance()->Register(new Player(DirectX::XMFLOAT3(0.f, 100.f, 0.f)));
+
 
         m_CurrentState = SceneState::Main;
     }
@@ -40,20 +50,33 @@ void GameScene::Load()
 
 DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 {
-    FbxStorage::GetInstance()->LoadModel("Res/Models/Ekard.fbx", "Ekard");
+    FbxStorage::GetInstance()->LoadModel("Res/Models/Ekard_h.fbx", "Ekard");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Run_01.fbx",          "Ekard", "Run");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Attack_01.fbx",       "Ekard", "Attack01");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Attack_02.fbx",       "Ekard", "Attack02");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_BattleIdle_01_h.fbx", "Ekard", "Idle");
-    
-    
+ 
+    ObjFileStrage::GetInstance()->LoadModel("Res/Models/Ground.obj", "Stage");
 
     return 0;
 }
 
 void GameScene::Main()
 {
-    m_ObjectManager->Update();
+    ObjectManager::GetInstance()->Update();
+
+    if (InputManager::GetInstance()->GetKeyDown(KeyInfo::Key_ESC))
+    {
+        if (InputManager::GetInstance()->GetInputMode() == InputMode::MODE_GAME)
+        {
+            InputManager::GetInstance()->SetInputMode(InputMode::MODE_UI);
+        }
+        else
+        {
+            InputManager::GetInstance()->SetInputMode(InputMode::MODE_GAME);
+        }
+        
+    }
 }
 
 void GameScene::Update()
@@ -78,7 +101,7 @@ void GameScene::Draw()
     case SceneState::Load:
         break;
     case SceneState::Main:
-        m_ObjectManager->Draw();
+        ObjectManager::GetInstance()->Draw();
         break;
     default:
         break;

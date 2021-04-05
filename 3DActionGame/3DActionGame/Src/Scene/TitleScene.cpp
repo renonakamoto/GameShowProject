@@ -30,7 +30,7 @@ TitleScene::TitleScene(SceneChanger* sceneChanger_) :
 
 TitleScene::~TitleScene()
 {
-    m_ObjectManager->Release();
+    ObjectManager::GetInstance()->Release();
     delete m_ObjectManager;
 }
 
@@ -38,9 +38,11 @@ void TitleScene::Load()
 {
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
-        m_ObjectManager->Register(new TitleBackground("bg", DirectX::XMFLOAT3(0.f, 0.f, 1.f)));
-        m_ObjectManager->Register(new Button("start_ui", "quit_ui", NextScene, DirectX::XMFLOAT3(200.f, 360.f, 0.f)));
-        m_ObjectManager->Register(new Button("quit_ui", "start_ui", NextScene, DirectX::XMFLOAT3(800.f, 360.f, 0.f)));
+        InputManager::GetInstance()->SetInputMode(InputMode::MODE_UI);
+
+        ObjectManager::GetInstance()->Register(new TitleBackground("bg", DirectX::XMFLOAT3(0.f, 0.f, 1.f)));
+        ObjectManager::GetInstance()->Register(new Button("start_ui", "quit_ui", NextScene, DirectX::XMFLOAT3(200.f, 360.f, 0.f)));
+        ObjectManager::GetInstance()->Register(new Button("quit_ui", "start_ui", NextScene, DirectX::XMFLOAT3(800.f, 360.f, 0.f)));
 
         m_CurrentState = SceneState::Main;
     }
@@ -58,12 +60,7 @@ DWORD WINAPI TitleScene::LoadResources(LPVOID lpParam_)
 
 void TitleScene::Main()
 {
-    if (InputManager::GetInstance()->GetKeyDown(KeyInfo::Key_A))
-    {
-        SceneManager::GetInstance()->ChangeScene(SceneID::Game);
-    }
-
-    m_ObjectManager->Update();
+    ObjectManager::GetInstance()->Update();
 }
 
 void TitleScene::Update()
@@ -88,7 +85,7 @@ void TitleScene::Draw()
     case SceneState::Load:
         break;
     case SceneState::Main:
-        m_ObjectManager->Draw();
+        ObjectManager::GetInstance()->Draw();
         break;
     default:
         break;

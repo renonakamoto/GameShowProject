@@ -8,15 +8,17 @@ struct PS_IN
  
 cbuffer ConstantBuffer
 {
-    float4x4 World;
-    float4x4 View;
-    float4x4 Projection;
+	float4x4 World;
+	float4x4 View;
+	float4x4 Projection;
+	float4x4 LightView;
+	float4x4 ClipUV;
 	float4   CameraPos;
-    float4   LightVector;
-    float4   LightColor;
-    float4   MaterialAmbient;
-    float4   MaterialDiffuse;
-    float4   MaterialSpecular;
+	float4   Light;
+	float4   Attenuation;
+	float4   MaterialAmbient;
+	float4   MaterialDiffuse;
+	float4   MaterialSpecular;
 };
 
 Texture2D    Texture : register(s0[0]); // Textureをスロット0の0番目のテクスチャレジスタに設定
@@ -37,7 +39,7 @@ float4 ps_main(PS_IN input) : SV_Target
 	//float diffuse_power = material_diffuse_power / total_power;
 	//
 	//float4 ambient_color = MaterialAmbient * ambient_power;
-	float4 diffuse_color = (LightColor * MaterialDiffuse * input.nor);
+	float4 diffuse_color = (MaterialDiffuse * input.nor);
 
 	// アンビエントカラー + ディフューズカラー
 	float4 out_color = diffuse_color;

@@ -161,6 +161,12 @@ enum class InputInfo
 	Max_ID,
 };
 
+enum class InputMode
+{
+	MODE_GAME,
+	MODE_UI,
+};
+
 class InputManager
 {
 public:
@@ -216,7 +222,6 @@ public:
 	*/
 	POINT GetMousePos()const;
 
-
 //!< 以下キーボード関連の関数
 	/***
 	* @biref キーが押されているかの情報取得関数
@@ -260,6 +265,17 @@ public:
 
 //!< 以下仮想コントローラー用
 	int GetInputState(InputInfo id_)const;
+
+	void SetMousePos(int x, int y);
+
+	void SetInputMode(InputMode mode);
+	InputMode GetInputMode() { return m_InputMode; };
+
+	int GetMouseMovementX() { return m_MovementX; }
+	int GetMouseMovementY() { return m_MovementY; }
+
+	void SetMousemSensitivity(float sensitivity) { m_MouseSensitivity = sensitivity; }
+	float GetMousemSensitivity() { return m_MouseSensitivity; }
 
 private:
 	/**
@@ -383,6 +399,12 @@ private:
 	InputState m_GamePadState[static_cast<int>(XInput_Button::MAX_INFO)];		//!< ゲームパッド入力情報
 
 	int m_InputState[static_cast<int>(InputInfo::Max_ID)];				//!< 入力情報
+
+	InputMode m_InputMode;
+
+	int m_MovementX;
+	int m_MovementY;
+	float m_MouseSensitivity;
 };
 
 #endif INPUT_MANAGER

@@ -101,7 +101,7 @@ bool DirectGraphics::Init()
     m_SimpleConstantBufferData.LightColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
     // ƒ‰ƒCƒg‚ÌÝ’è
-    m_ConstantBufferData.Light = DirectX::XMFLOAT4(40.0f, 200.0f, 0.0f, 1.0f);
+    DirectX::XMStoreFloat4(&m_ConstantBufferData.Light, DirectX::XMVector3Normalize(DirectX::XMVectorSet(0.0f, 0.5f, -1.0f, 0.0f)));
     //DirectX::XMMATRIX mat_rot = DirectX::XMMatrixIdentity();
     //
     //DirectX::XMMATRIX mat   =  DirectX::XMMatrixRotationX(DirectX::XMConvertToRadians(90.f));
@@ -295,11 +295,11 @@ void DirectGraphics::SetTexture(ID3D11ShaderResourceView* texture_)
 
 void DirectGraphics::SetMaterial(ObjMaterial* material_)
 {
-    m_SimpleConstantBufferData.MaterialAmbient = DirectX::XMFLOAT4(material_->Ambient[0],
+    m_ConstantBufferData.MaterialAmbient = DirectX::XMFLOAT4(material_->Ambient[0],
         material_->Ambient[1],
         material_->Ambient[2], 1);
-    m_SimpleConstantBufferData.MaterialDiffuse = DirectX::XMFLOAT4(material_->Diffuse[0], material_->Diffuse[1], material_->Diffuse[2], 1);
-    m_SimpleConstantBufferData.MaterialSpecular = DirectX::XMFLOAT4(material_->Specular[0], material_->Specular[1], material_->Specular[2], 1);
+    m_ConstantBufferData.MaterialDiffuse = DirectX::XMFLOAT4(material_->Diffuse[0], material_->Diffuse[1], material_->Diffuse[2], 1);
+    m_ConstantBufferData.MaterialSpecular = DirectX::XMFLOAT4(material_->Specular[0], material_->Specular[1], material_->Specular[2], 1);
 }
 
 void DirectGraphics::SetUpDxgiSwapChanDesc(DXGI_SWAP_CHAIN_DESC* dxgi)
@@ -665,6 +665,12 @@ bool DirectGraphics::CreateConstantBuffer()
     {
         return false;
     }
+
+    buffer_desc.ByteWidth = sizeof(ConstBoneBuffer);
+    if (FAILED(m_Device->CreateBuffer(&buffer_desc, nullptr, &m_ConstBoneBuffer)))
+    {
+        return false;
+    }    
 
     return true;
 }

@@ -8,12 +8,20 @@
 class ObjectManager
 {
 public:
+	static ObjectManager* GetInstance()
+	{
+		static ObjectManager instance;
+		return &instance;
+	}
 
 	void Update();
 	void Draw();
 
 	void Register(ObjectBase* object_);
+
 	void Release();
+
+	ObjectBase* GetObj(std::string tag_);
 
 private:
 	std::vector<ObjectBase*> m_Objects;

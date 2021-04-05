@@ -32,6 +32,7 @@ bool ObjModel::Load(const char* fileName_, ID3D11Device* device_, VertexShader* 
     std::vector<DirectX::XMFLOAT3> normals;
     std::string current_mat_name;
     std::vector<std::string> material_list;
+    std::map<std::string, MeshData> mesh_data;
 
     const int line_buffer_length = 1024;
     char line_buffer[line_buffer_length];
@@ -87,7 +88,8 @@ bool ObjModel::Load(const char* fileName_, ID3D11Device* device_, VertexShader* 
         else if (line_buffer[0] == 'f')
         {
             Replace('\n', '\0', line_buffer);
-            ParseFKeywordTag(m_Vertices, current_mat_name, vertices, textures, normals, &parse_point[1]);
+            //ParseFKeywordTag(m_Vertices, current_mat_name, vertices, textures, normals, &parse_point[1]);
+            ParseFKeywordTag(mesh_data[current_mat_name], current_mat_name, vertices, textures, normals, &parse_point[1]);
         }
         // もし「mtllib」ならマテリアル名なので保存する
         else if (strstr(line_buffer, "mtllib") == line_buffer)
@@ -100,7 +102,13 @@ bool ObjModel::Load(const char* fileName_, ID3D11Device* device_, VertexShader* 
         {
             Replace('\n', '\0', line_buffer);
             current_mat_name = &line_buffer[strlen("usemtl") + 1];
+            mesh_data[current_mat_name].MaterialName = current_mat_name;
         }
+    }
+
+    for (auto& mesh : mesh_data)
+    {
+        m_MeshList.push_back(mesh.second);            
     }
 
     fclose(fp);
@@ -141,14 +149,12 @@ void ObjModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
     */
     context->PSSetShader(DirectGraphics::GetInstance()->GetSimplePixelShader()->GetShaderInterface(), NULL, 0);
 
-    int  count   = 0;
     UINT strides = sizeof(CVertex);
     UINT offsets = 0;
-
-    for (auto& index : m_Indices)
+    for (MeshData& mesh : m_MeshList)
     {
-        graphics_->GetContext()->IASetVertexBuffers(0, 1, &m_VertexBuffer, &strides, &offsets);
-        graphics_->GetContext()->IASetIndexBuffer(m_IndexBuffers[count], DXGI_FORMAT_R32_UINT, 0);
+        graphics_->GetContext()->IASetVertexBuffers(0, 1, &mesh.VertexBuffer, &strides, &offsets);
+        graphics_->GetContext()->IASetIndexBuffer(mesh.IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
         graphics_->GetContext()->IASetInputLayout(m_InputLayout);
 
@@ -160,22 +166,22 @@ void ObjModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
         DirectX::XMMATRIX world_matrix = scale * rotate_x * rotate_y * rotate_z * translate;
 
         // ワールド行列をコンスタントバッファに設定
-        DirectX::XMStoreFloat4x4(&graphics_->GetSimpleConstantBufferData()->World, DirectX::XMMatrixTranspose(world_matrix));
+        DirectX::XMStoreFloat4x4(&graphics_->GetConstantBufferData()->World, DirectX::XMMatrixTranspose(world_matrix));
 
         // マテリアル設定
-        graphics_->SetMaterial(&m_Materials[index.first]);
+        graphics_->SetMaterial(&m_Materials[mesh.MaterialName]);
 
         // コンスタントバッファの更新
-        graphics_->GetContext()->UpdateSubresource(graphics_->GetSimpleConstantBuffer(), 0, nullptr, graphics_->GetSimpleConstantBufferData(), 0, 0);
+        graphics_->GetContext()->UpdateSubresource(graphics_->GetConstantBuffer(), 0, nullptr, graphics_->GetConstantBufferData(), 0, 0);
 
         // コンスタントバッファを設定
-        ID3D11Buffer* constant_buffer = graphics_->GetSimpleConstantBuffer();
+        ID3D11Buffer* constant_buffer = graphics_->GetConstantBuffer();
         graphics_->GetContext()->VSSetConstantBuffers(0, 1, &constant_buffer);
         graphics_->GetContext()->PSSetConstantBuffers(0, 1, &constant_buffer);
 
-        if (m_Textures.count(m_Materials[index.first].TextureKeyWord) > 0)
+        if (m_Textures.count(m_Materials[mesh.MaterialName].TextureKeyWord) > 0)
         {
-            graphics_->SetTexture(m_Textures[m_Materials[index.first].TextureKeyWord]);
+            graphics_->SetTexture(m_Textures[m_Materials[mesh.MaterialName].TextureKeyWord]);
         }
         else
         {
@@ -183,11 +189,8 @@ void ObjModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
         }
 
         // 描画
-        graphics_->GetContext()->DrawIndexed(index.second.size(), 0, 0);
-
-        count++;
+        graphics_->GetContext()->DrawIndexed(mesh.Indices.size(), 0, 0);
     }
-
 }
 
 void ObjModel::ParseVertex(std::vector<DirectX::XMFLOAT3>& data_, char* buff_)
@@ -262,7 +265,7 @@ void ObjModel::ParseFKeywordTag(std::vector<CVertex>& outCustomVertices_, std::s
     }
 
 
-    int size = m_Indices[current_material_name_].size();
+    size_t size = m_Indices[current_material_name_].size();
 
     if (space_split.size() > 3)
     {
@@ -285,6 +288,85 @@ void ObjModel::ParseFKeywordTag(std::vector<CVertex>& outCustomVertices_, std::s
     m_Indices[current_material_name_][size - 1] = m_Indices[current_material_name_][size - 3];
     m_Indices[current_material_name_][size - 3] = temp;
 
+}
+
+void ObjModel::ParseFKeywordTag(MeshData& outMeshData_, std::string current_material_name_, std::vector<DirectX::XMFLOAT3>& vertices_, std::vector<DirectX::XMFLOAT3>& textures_, std::vector<DirectX::XMFLOAT3>& normals_, char* buffer_)
+{
+    const int info_num = 3;
+    int vertex_info[info_num] =
+    {
+        -1,// 頂点座標
+        -1,// テクスチャ座標
+        -1 // 法線ベクトル
+    };
+
+    // 面情報をスペース区切りで分ける
+    std::vector<std::string> space_split = Split(buffer_, ' ');
+
+    for (size_t i = 0; i < space_split.size(); ++i)
+    {
+        CVertex vertex;
+        // 「/」毎に分ける
+        ParseSlashKeywordTag(vertex_info, (char*)space_split[i].c_str());
+
+        for (int j = 0; j < info_num; ++j)
+        {
+            if (vertex_info[j] == -1) continue;
+
+            int id = vertex_info[j];
+
+            switch (j)
+            {
+                // 頂点座標
+            case 0:
+                vertex.Pos = vertices_[id];
+                break;
+
+                // テクスチャ座標
+            case 1:
+                vertex.TexturePos = DirectX::XMFLOAT2(textures_[id].x, textures_[id].y);
+                break;
+
+                // 法線ベクトル
+            case 2:
+                vertex.Normal = normals_[id];
+
+                break;
+            default:
+                break;
+            }
+        }
+
+        // 頂点リストに追加する
+        outMeshData_.Vertices.push_back(vertex);
+
+        // インデックスバッファに追加
+        outMeshData_.Indices.push_back(outMeshData_.Vertices.size() - 1);
+    }
+
+
+    size_t size = outMeshData_.Indices.size();
+
+    if (space_split.size() > 3)
+    {
+        int temp = outMeshData_.Indices[size - 1];
+        outMeshData_.Indices[size - 1] = outMeshData_.Indices[size - 4];
+        outMeshData_.Indices[size - 4] = temp;
+
+        temp = outMeshData_.Indices[size - 2];
+        outMeshData_.Indices[size - 2] = outMeshData_.Indices[size - 3];
+        outMeshData_.Indices[size - 3] = temp;
+
+        outMeshData_.Indices.push_back(outMeshData_.Indices[size - 4]);
+        outMeshData_.Indices.push_back(outMeshData_.Indices[size - 2]);
+
+        return;
+    }
+
+    //ポリゴンの作成の頂点順番を反転する
+    UINT temp = outMeshData_.Indices[size - 1];
+    outMeshData_.Indices[size - 1] = outMeshData_.Indices[size - 3];
+    outMeshData_.Indices[size - 3] = temp;
 }
 
 void ObjModel::ParseSlashKeywordTag(int* list_, char* buffer_)
@@ -453,51 +535,55 @@ bool ObjModel::LoadTexture(std::string keyWord_, std::string fileName_, ID3D11De
 
 bool ObjModel::CreateVertexBuffer(ID3D11Device* device_)
 {
-    // 頂点バッファの作成
-    D3D11_BUFFER_DESC buffer_desc;
-    // バッファの大きさ
-    buffer_desc.ByteWidth = sizeof(CVertex) * m_Vertices.size();
-    // バッファへの各項目でのアクセス許可を指定
-    // 基本的にD3D11_USAGE_DEFAULT
-    buffer_desc.Usage = D3D11_USAGE_DEFAULT;
-    // バインドの方法
-    // 頂点バッファやコンスタントバッファとして使用することを決める
-    buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    // リソースに対してのCPUアクセス方法
-    // 0を指定すればCPUアクセスが不要という設定
-    buffer_desc.CPUAccessFlags = 0;
-    // その他のオプション
-    // 不要なら0
-    buffer_desc.MiscFlags = 0;
-    // 構造体のサイズ
-    // バッファを構造体として確保する場合に使用
-    // 0を指定してもOK
-    buffer_desc.StructureByteStride = 0;
-
-    /*
-        リソースの情報を設定する構造体
-        上記のD3D11_BUFFER_DESCとセットになっていて、
-        作成したバッファの初期化データの指定方法として使われる
-    */
-    D3D11_SUBRESOURCE_DATA sub_resource_data;
-    // バッファを初期化するデータを指定
-    // 頂点バッファなら頂点構造体の配列
-    // インデックスバッファならインデックスを保存したデータの配列
-    // などなど
-    sub_resource_data.pSysMem = &m_Vertices[0];
-    // メモリのピッチ
-    // 2Dまたは3Dテクスチャの場合に使用する
-    sub_resource_data.SysMemPitch = 0;
-    // 深度レベル
-    // 2Dまたは3Dテクスチャの場合に使用する
-    sub_resource_data.SysMemSlicePitch = 0;
-
-    /*
-    * D3D11_BUFFER_DESCとD3D11_SUBRESOURCE_DATAの情報をもとにバッファを作成する
-    */
-    if (FAILED(device_->CreateBuffer(&buffer_desc, &sub_resource_data, &m_VertexBuffer)))
+    for (MeshData& mesh : m_MeshList)
     {
-        return false;
+        // 頂点バッファの作成
+        D3D11_BUFFER_DESC buffer_desc;
+        // バッファの大きさ
+        buffer_desc.ByteWidth = sizeof(CVertex) * mesh.Vertices.size();
+        // バッファへの各項目でのアクセス許可を指定
+        // 基本的にD3D11_USAGE_DEFAULT
+        buffer_desc.Usage = D3D11_USAGE_DEFAULT;
+        // バインドの方法
+        // 頂点バッファやコンスタントバッファとして使用することを決める
+        buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+        // リソースに対してのCPUアクセス方法
+        // 0を指定すればCPUアクセスが不要という設定
+        buffer_desc.CPUAccessFlags = 0;
+        // その他のオプション
+        // 不要なら0
+        buffer_desc.MiscFlags = 0;
+        // 構造体のサイズ
+        // バッファを構造体として確保する場合に使用
+        // 0を指定してもOK
+        buffer_desc.StructureByteStride = 0;
+
+        /*
+            リソースの情報を設定する構造体
+            上記のD3D11_BUFFER_DESCとセットになっていて、
+            作成したバッファの初期化データの指定方法として使われる
+        */
+        D3D11_SUBRESOURCE_DATA sub_resource_data;
+        // バッファを初期化するデータを指定
+        // 頂点バッファなら頂点構造体の配列
+        // インデックスバッファならインデックスを保存したデータの配列
+        // などなど
+        sub_resource_data.pSysMem = &mesh.Vertices[0];
+        // メモリのピッチ
+        // 2Dまたは3Dテクスチャの場合に使用する
+        sub_resource_data.SysMemPitch = 0;
+        // 深度レベル
+        // 2Dまたは3Dテクスチャの場合に使用する
+        sub_resource_data.SysMemSlicePitch = 0;
+
+
+        /*
+        * D3D11_BUFFER_DESCとD3D11_SUBRESOURCE_DATAの情報をもとにバッファを作成する
+        */
+        if (FAILED(device_->CreateBuffer(&buffer_desc, &sub_resource_data, &mesh.VertexBuffer)))
+        {
+            return false;
+        }
     }
 
     return true;
@@ -505,13 +591,10 @@ bool ObjModel::CreateVertexBuffer(ID3D11Device* device_)
 
 bool ObjModel::CreateIndexBuffer(ID3D11Device* device_)
 {
-    int count = 0;
-    for (auto index : m_Indices)
+    for (MeshData& mesh : m_MeshList)
     {
-        m_IndexBuffers.emplace_back();
-
         D3D11_BUFFER_DESC index_buffer_desc;
-        index_buffer_desc.ByteWidth = sizeof(UINT) * index.second.size();
+        index_buffer_desc.ByteWidth = sizeof(UINT) * mesh.Indices.size();
         index_buffer_desc.Usage = D3D11_USAGE_DEFAULT;
         index_buffer_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
         index_buffer_desc.CPUAccessFlags = 0;
@@ -519,17 +602,15 @@ bool ObjModel::CreateIndexBuffer(ID3D11Device* device_)
         index_buffer_desc.StructureByteStride = 0;
 
         D3D11_SUBRESOURCE_DATA index_init_data;
-        index_init_data.pSysMem = &index.second[0];
+        index_init_data.pSysMem = &mesh.Indices[0];
         index_init_data.SysMemPitch = 0;
         index_init_data.SysMemSlicePitch = 0;
 
 
-        if (FAILED(device_->CreateBuffer(&index_buffer_desc, &index_init_data, &m_IndexBuffers[count])))
+        if (FAILED(device_->CreateBuffer(&index_buffer_desc, &index_init_data, &mesh.IndexBuffer)))
         {
             return false;
         }
-
-        count++;
     }
 
     return true;

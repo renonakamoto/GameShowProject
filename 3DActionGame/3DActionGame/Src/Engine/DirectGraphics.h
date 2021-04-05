@@ -42,6 +42,7 @@ public:
 	ID3D11DeviceContext* GetContext() const { return m_Context; }
 
 	VertexShader* GetVertexShader()	const { return m_VertexShader; }
+	PixelShader* GetPixelShader()	const { return m_PixelShader; }
 	VertexShader* GetSimpleVertexShader()const { return m_SimpleVertexShader; }
 	PixelShader* GetSimplePixelShader()const { return m_SimplePixelShader; }
 
@@ -50,6 +51,9 @@ public:
 
 	ID3D11Buffer* GetSimpleConstantBuffer() const { return m_SimpleConstantBuffer; }
 	SimpleConstantBuffer* GetSimpleConstantBufferData() { return &m_SimpleConstantBufferData; }
+
+	ID3D11Buffer* GetConstBoneBuffer() const { return m_ConstBoneBuffer; }
+	ConstBoneBuffer* GetConstBoneBufferData() { return &m_ConstBoneBufferData; }
 
 private:
 	
@@ -83,6 +87,10 @@ private:
 	
 	ID3D11Buffer*			m_ConstantBuffer;		//! 
 	ConstantBuffer			m_ConstantBufferData;	//!
+
+	ID3D11Buffer*			m_ConstBoneBuffer;		//!
+	ConstBoneBuffer			m_ConstBoneBufferData;	//!
+	
 	VertexShader*			m_VertexShader;			//! スキンメッシュ用の頂点シェーダ
 	PixelShader*			m_PixelShader;			//! スキンメッシュ用のピクセルシェーダ
 

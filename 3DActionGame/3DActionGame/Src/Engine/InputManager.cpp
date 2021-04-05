@@ -15,7 +15,7 @@ struct GamePadEnumParam
 	HWND windowhandle;
 };
 
-InputManager::InputManager() : m_KeyDevice(nullptr), m_MouseDevice(nullptr), m_GamePadDevice(nullptr)
+InputManager::InputManager() : m_KeyDevice(nullptr), m_MouseDevice(nullptr), m_GamePadDevice(nullptr), m_InputMode(InputMode::MODE_UI), m_MouseSensitivity(0.1f)
 {
 	for (int i = 0; i < static_cast<int>(KeyInfo::Max_Key_Info); i++)
 	{
@@ -364,7 +364,19 @@ void InputManager::UpdateKeyState()
 }
 
 void InputManager::UpdateMouseState()
-{
+{	
+	if (m_InputMode == InputMode::MODE_GAME) {
+		HWND window_handle = FindWindow(Window::ClassName, nullptr);
+		RECT rect;
+		GetClientRect(window_handle, &rect);
+
+		POINT po;
+		GetCursorPos(&po);
+
+		m_MovementX = po.x - (rect.right  / 2);
+		m_MovementY = po.y - (rect.bottom / 2);
+	}
+
 	DIMOUSESTATE mouse;
 
 	if (FAILED(m_MouseDevice->GetDeviceState(sizeof(DIMOUSESTATE), &mouse)))
@@ -404,6 +416,15 @@ void InputManager::UpdateMouseState()
 	for (int i = 0; i < static_cast<int>(MouseButton::Max_Mouse_Btn); i++)
 	{
 		m_InputState[i + key] = static_cast<int>(m_MouseState[i]);
+	}
+
+
+	if (m_InputMode == InputMode::MODE_GAME) {
+		HWND window_handle = FindWindow(Window::ClassName, nullptr);
+		RECT rect;
+		GetClientRect(window_handle, &rect);
+
+		SetMousePos(rect.right / 2, rect.bottom / 2);
 	}
 }
 
@@ -671,6 +692,17 @@ POINT InputManager::GetMousePos() const
 	ScreenToClient(FindWindowA(Window::ClassName, nullptr), &pos);
 
 	return pos;
+}
+
+void InputManager::SetMousePos(int x, int y)
+{
+	SetCursorPos(x, y);
+}
+
+void InputManager::SetInputMode(InputMode mode)
+{
+	m_InputMode = mode;
+	ShowCursor(m_InputMode == InputMode::MODE_UI);
 }
 
 bool InputManager::GetKey(KeyInfo key_) const

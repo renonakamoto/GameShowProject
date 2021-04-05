@@ -19,11 +19,17 @@ public:
 	void Enter(Player* player_) override;
 
 private:
-	Attack02State()
+	Attack02State():
+		m_Count(0),
+		m_AttackFrame(56)
 	{}
 
 	~Attack02State()
 	{}
+
+private:
+	int m_Count;
+	const int m_AttackFrame;
 
 };
 

@@ -21,7 +21,6 @@ cbuffer ConstantBuffer
     float4x4 Projection;
     float4x4 LightView;
     float4x4 ClipUV;
-    matrix   BoneWorld[MAX_BONE_MATRIX];
     float4   CameraPos;
     float4   Light;
     float4   Attenuation;

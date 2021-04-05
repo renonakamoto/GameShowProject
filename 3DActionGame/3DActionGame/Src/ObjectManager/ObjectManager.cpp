@@ -21,11 +21,27 @@ void ObjectManager::Register(ObjectBase* object_)
 	m_Objects.push_back(object_);
 }
 
+ObjectBase* ObjectManager::GetObj(std::string tag_)
+{
+	for (auto* objects : m_Objects)
+	{
+		if (objects->GetTag() == tag_)
+		{
+			return objects;
+		}
+	}
+
+	return nullptr;
+}
+
 void ObjectManager::Release()
 {
-	for (auto object : m_Objects)
+	for (ObjectBase* object : m_Objects)
 	{
 		delete object;
 		object = nullptr;
 	}
+
+	m_Objects.clear();
+	m_Objects.shrink_to_fit();
 }

@@ -4,16 +4,28 @@
 #include "../../ObjectManager/Object3D.h"
 #include "../../Model/FbxStorage.h"
 #include "PlayerMotion/PlayerState.h"
+#include "PlayerMotion/RunState.h"
+#include "PlayerMotion/Attack01State.h"
+#include "PlayerMotion/Attack02State.h"
+#include "PlayerMotion/../../Stage/Stage.h"
+#include "../Camera/FollowCamera.h"
 
 class Player : public Object3D
 {
+	friend RunState;
+	friend Attack01State;
+	friend Attack02State;
 public:
-	Player() :
+	Player(DirectX::XMFLOAT3 pos_) :
+		Object3D(pos_),
 		m_Model(nullptr),
 		m_Speed(2.f),
 		m_IsMove(false),
 		m_OldPos(m_Pos),
-		m_Angle(0.f)
+		m_Angle(0.f),
+		m_State(nullptr),
+		m_Stage(nullptr),
+		m_Camera(nullptr)
 	{
 		Init();
 	}
@@ -31,7 +43,6 @@ private:
 
 	void Attack();
 	void Move(float x_, float z_);
-	void UpdateMotion();
 
 private:
 	
@@ -39,12 +50,11 @@ private:
 	float m_Speed;
 	DirectX::XMFLOAT3 m_OldPos;
 	float m_Angle;
-	
-	bool m_Attacking;
-	bool m_Attacking2;
-	int  m_AttackFlameCount;
-
+	PlayerState* m_State;
 	FbxModel* m_Model;
+
+	Stage* m_Stage;
+	FollowCamera* m_Camera;
 
 };
 

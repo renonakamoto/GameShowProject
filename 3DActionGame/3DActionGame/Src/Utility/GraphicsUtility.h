@@ -37,7 +37,6 @@ struct ConstantBuffer
     DirectX::XMFLOAT4X4 Projection;
     DirectX::XMFLOAT4X4 LightView;
     DirectX::XMFLOAT4X4 ClipUV;
-    DirectX::XMMATRIX   Bone[255];
     DirectX::XMFLOAT4   CameraPos;
     DirectX::XMFLOAT4   Light;
     DirectX::XMFLOAT4   Attenuation;
@@ -49,6 +48,11 @@ struct ConstantBuffer
     {
         ZeroMemory(this, sizeof(ConstantBuffer));
     }
+};
+
+struct ConstBoneBuffer
+{
+    DirectX::XMMATRIX Bone[255];
 };
 
 struct ConstLightBuffer
@@ -122,15 +126,15 @@ struct ObjMaterial
 
 struct MeshData
 {
-    ID3D11Buffer*        m_VertexBuffer;
-    ID3D11Buffer*        m_IndexBuffer;
-    std::vector<CVertex> m_Vertices;
-    std::vector<UINT>	 m_Indices;
-    std::string			 m_MaterialName;
+    ID3D11Buffer*        VertexBuffer;
+    ID3D11Buffer*        IndexBuffer;
+    std::vector<CVertex> Vertices;
+    std::vector<UINT>	 Indices;
+    std::string			 MaterialName;
 
     MeshData() :
-        m_VertexBuffer(nullptr),
-        m_IndexBuffer(nullptr)
+        VertexBuffer(nullptr),
+        IndexBuffer(nullptr)
     {}
 };
 

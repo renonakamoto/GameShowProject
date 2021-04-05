@@ -60,17 +60,17 @@ public:
 	{
 		for (auto mesh : m_MeshList)
 		{
-			if (mesh.m_VertexBuffer != nullptr)
+			if (mesh.VertexBuffer != nullptr)
 			{
-				mesh.m_VertexBuffer->Release();
+				mesh.VertexBuffer->Release();
 			}
 
-			if (mesh.m_IndexBuffer != nullptr)
+			if (mesh.IndexBuffer != nullptr)
 			{
-				mesh.m_IndexBuffer->Release();
+				mesh.IndexBuffer->Release();
 			}
-			mesh.m_Indices.clear();
-			mesh.m_Vertices.clear();
+			mesh.Indices.clear();
+			mesh.Vertices.clear();
 		}
 
 		if (m_InputLayout != nullptr)
@@ -137,6 +137,8 @@ public:
 	* @details 現在再生中のモーションのフレームを進める、秒数は指定しなくても60/1秒進む
 	*/
 	void Animate(float sec_ = 1.0f / 60.0f);
+
+	const Motion* GetMotionData(std::string motionKeyword_) { return &m_Motion[motionKeyword_]; }
 
 private:
 	/**

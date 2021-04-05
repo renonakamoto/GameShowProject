@@ -34,6 +34,7 @@ private:
 	void ParseVertex(std::vector<DirectX::XMFLOAT3>& data_, char* buff_);
 
 	void ParseFKeywordTag(std::vector<CVertex>& outCustomVertices_, std::string current_material_name_, std::vector<DirectX::XMFLOAT3>& vertices_, std::vector<DirectX::XMFLOAT3>& textures_, std::vector<DirectX::XMFLOAT3>& normals_, char* buffer_);
+	void ParseFKeywordTag(MeshData& outMeshData_, std::string current_material_name_, std::vector<DirectX::XMFLOAT3>& vertices_, std::vector<DirectX::XMFLOAT3>& textures_, std::vector<DirectX::XMFLOAT3>& normals_, char* buffer_);
 
 	void ParseSlashKeywordTag(int* list_, char* buffer_);
 

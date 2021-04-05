@@ -24,9 +24,13 @@ public:
 		m_Rot{ 0,0,0 },
 		m_Scale{ 1,1,1 }
 	{}
-	
+
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
+
+public:
+	void SetPos(DirectX::XMFLOAT3 pos_) { m_Pos = pos_; }
+	DirectX::XMFLOAT3 GetPos() { return m_Pos; }
 	
 protected:
 	virtual void Init() = 0;
