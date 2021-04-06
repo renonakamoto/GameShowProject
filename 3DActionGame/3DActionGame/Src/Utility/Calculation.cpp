@@ -22,6 +22,26 @@ DirectX::XMFLOAT3 Calculation::Sub(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_)
 	return DirectX::XMFLOAT3(a_.x - b_.x, a_.y - b_.y, a_.z - b_.z);
 }
 
+DirectX::XMFLOAT2 Calculation::Mult(DirectX::XMFLOAT2 a_, float b_)
+{
+	return DirectX::XMFLOAT2(a_.x * b_, a_.y * b_);
+}
+
+DirectX::XMFLOAT3 Calculation::Mult(DirectX::XMFLOAT3 a_, float b_)
+{
+	return DirectX::XMFLOAT3(a_.x * b_, a_.y * b_, a_.z * b_);
+}
+
+DirectX::XMFLOAT2 Calculation::Div(DirectX::XMFLOAT2 a_, float b_)
+{
+	return DirectX::XMFLOAT2(a_.x / b_, a_.y / b_);
+}
+
+DirectX::XMFLOAT3 Calculation::Div(DirectX::XMFLOAT3 a_, float b_)
+{
+	return DirectX::XMFLOAT3(a_.x / b_, a_.y / b_, a_.z / b_);
+}
+
 float Calculation::Cross2D(DirectX::XMFLOAT2 a_, DirectX::XMFLOAT2 b_)
 {
 	return (a_.x * b_.y) - (a_.y * b_.x);
@@ -97,6 +117,79 @@ float Calculation::Length(DirectX::XMFLOAT3 vec_)
 	return sqrtf(x_squared + y_squared + z_squared);
 }
 
+void Calculation::Clamp(float& value_, float min_, float max_)
+{
+	if (value_ > max_) {
+		value_ = max_;
+	}
+
+	if (value_ < min_) {
+		value_ = min_;
+	}
+}
+
+DirectX::XMFLOAT3 Calculation::Lerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, float t)
+{
+	//0 ～ 1に収める
+	Clamp(t, 0.f, 1.f);
+
+	DirectX::XMFLOAT3 ret;
+	
+	// 線形補間
+	ret.x = a_.x * (1.0f - t) + b_.x * t;
+	ret.y = a_.y * (1.0f - t) + b_.y * t;
+	ret.z = a_.z * (1.0f - t) + b_.z * t;
+
+	return ret;
+}
+
+DirectX::XMMATRIX Calculation::Lerp(DirectX::XMMATRIX a_, DirectX::XMMATRIX b_, float t)
+{
+	// 単位行列作成
+	DirectX::XMMATRIX ret = DirectX::XMMatrixIdentity();
+
+	DirectX::XMFLOAT3 vec_a, vec_b;
+	vec_a.x = DirectX::XMVectorGetX(a_.r[3]);
+	vec_a.y = DirectX::XMVectorGetY(a_.r[3]);
+	vec_a.z = DirectX::XMVectorGetZ(a_.r[3]);
+	vec_b.x = DirectX::XMVectorGetX(b_.r[3]);
+	vec_b.y = DirectX::XMVectorGetY(b_.r[3]);
+	vec_b.z = DirectX::XMVectorGetZ(b_.r[3]);
+
+	DirectX::XMFLOAT3 vec_r = Add(Mult(vec_a, 1.0f - t), Mult(vec_b, 1.0f));
+	ret = DirectX::XMMatrixSet(
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		vec_r.x, vec_r.y, vec_r.z, 1.0f);
+
+	return DirectX::XMMATRIX();
+}
+
+DirectX::XMFLOAT3 Calculation::SLerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, float t)
+{
+	DirectX::XMFLOAT3 a_n = Normalize(a_);
+	DirectX::XMFLOAT3 b_n = Normalize(b_);
+
+	// 2ベクトル間の角度を算出
+	float angle = acosf(Dot(a_n, b_n));
+
+	float s = sinf(angle);
+
+	float pa = sinf(angle * (1.f - t));
+	float pb = sinf(angle * t);
+
+	DirectX::XMFLOAT3 ret;
+
+	ret = Add(Mult(a_n, pa), Mult(b_n, pb));
+
+	ret = Div(ret, s);
+
+	ret = Normalize(ret);
+
+	return ret;
+}
+
 float Calculation::CalcPointToPlaneDistance(DirectX::XMFLOAT3 p_, DirectX::XMFLOAT3 pA_, DirectX::XMFLOAT3 pB_)
 {
 	// 面の法線を算出して正規化する
@@ -129,6 +222,34 @@ bool Calculation::HitTriangleAndPoint(DirectX::XMFLOAT2 a_, DirectX::XMFLOAT2 b_
 
 	// 外積の結果がすべて同じ符号なら三角形の中にある
 	return ( (c1 >= 0 && c2 >= 0 && c3 >= 0) || (c1 < 0 && c2 < 0 && c3 < 0) );
+}
+
+float Calculation::CalcPolygonHeight(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, DirectX::XMFLOAT3 c_, DirectX::XMFLOAT3 p_)
+{
+	DirectX::XMFLOAT3 vtx_a = a_;
+	DirectX::XMFLOAT3 vtx_b = b_;
+	DirectX::XMFLOAT3 vtx_c = c_;
+
+	// XZ平面で見た時に三角形のなかに入っているかを調べる
+	DirectX::XMFLOAT2 a(a_.x, a_.z);
+	DirectX::XMFLOAT2 b(b_.x, b_.z);
+	DirectX::XMFLOAT2 c(c_.x, c_.z);
+	DirectX::XMFLOAT2 p(p_.x, p_.z);
+	// 三角形に点が含まれているか
+	if (Calculation::HitTriangleAndPoint(a, b, c, p) == false)
+	{
+		return false;
+	}
+
+	// 含まれていた場合
+	// ポリゴンの法線を算出
+	DirectX::XMFLOAT3 a_to_b = Sub(vtx_b, vtx_a);
+	DirectX::XMFLOAT3 a_to_c = Sub(vtx_c, vtx_a);
+	DirectX::XMFLOAT3 n		 = Cross(a_to_b, a_to_c);
+	
+	// ポリゴンの高さを調べる
+	float height = (vtx_a.x * (1.f / n.y) * n.x) - (p_.x * (1.f / n.y) * n.x) + (n.z * vtx_a.z * (1.f / n.y)) - (n.z * p_.z * (1.f / n.y)) + vtx_a.y;
+	return height;
 }
 
 bool Calculation::HitRayAndPlane(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, DirectX::XMFLOAT3 pA_, DirectX::XMFLOAT3 pB_)
@@ -164,7 +285,7 @@ bool Calculation::HitRayAndPlane(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3
 	return true;
 }
 
-bool Calculation::IntersectRayAndTriangle(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, DirectX::XMFLOAT3 c_)
+bool Calculation::IntersectRayAndTriangle(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, DirectX::XMFLOAT3 c_, DirectX::XMFLOAT3& intersectPos_)
 {
 	// 三角形の辺の定義
 	DirectX::XMFLOAT3 a_to_b = Calculation::Sub(b_, a_);
@@ -212,10 +333,13 @@ bool Calculation::IntersectRayAndTriangle(DirectX::XMFLOAT3 rayOrigin_, DirectX:
 		DirectX::XMFLOAT2(a_.x, a_.z),
 		DirectX::XMFLOAT2(b_.x, b_.z),
 		DirectX::XMFLOAT2(c_.x, c_.z),
-		DirectX::XMFLOAT2(penetration_point.x, penetration_point.z)))
+		DirectX::XMFLOAT2(penetration_point.x, penetration_point.z)) == false)
 	{
 		// 交差していない
+		return false;
 	}
+
+	intersectPos_ = penetration_point;
 
 	// 交差している
 	return true;

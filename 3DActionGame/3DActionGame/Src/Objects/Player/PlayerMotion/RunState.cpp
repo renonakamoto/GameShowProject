@@ -3,6 +3,7 @@
 #include "../../../Engine/InputManager.h"
 #include "Attack01State.h"
 #include "IdleState.h"
+#include "../../../Utility/Calculation.h"
 
 PlayerState* RunState::CheckState(Player* player_)
 {
@@ -10,13 +11,18 @@ PlayerState* RunState::CheckState(Player* player_)
 	{
 		return Attack01State::GetInstance();
 	}
-	else if (InputManager::GetInstance()->GetKey(KeyInfo::Key_W) ||
-			 InputManager::GetInstance()->GetKey(KeyInfo::Key_A) ||
-			 InputManager::GetInstance()->GetKey(KeyInfo::Key_S) ||
-			 InputManager::GetInstance()->GetKey(KeyInfo::Key_D))
+	else if (Calculation::Length(player_->m_Velocity) > 0.1f)
 	{
 		return RunState::GetInstance();
 	}
+
+//else if (InputManager::GetInstance()->GetKey(KeyInfo::Key_W) ||
+//		 InputManager::GetInstance()->GetKey(KeyInfo::Key_A) ||
+//		 InputManager::GetInstance()->GetKey(KeyInfo::Key_S) ||
+//		 InputManager::GetInstance()->GetKey(KeyInfo::Key_D))
+//{
+//	
+//}
 
 	return IdleState::GetInstance();
 }

@@ -15,6 +15,7 @@ struct Vec2I
 	{}
 
 	bool operator == (Vec2I v) { return ((X == v.X) && (Y == v.Y)); }
+	bool operator != (Vec2I v) { return ((X != v.X) || (Y != v.Y)); }
 };
 
 #endif

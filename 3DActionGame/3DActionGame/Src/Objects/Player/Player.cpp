@@ -82,28 +82,36 @@ void Player::Release()
 
 void Player::Attack()
 {
-	
 }
 
 void Player::Move(float x_, float z_)
 {
-	if (x_ == 0.f && z_ == 0.f) {
-		m_IsMove = false;
-		return;
-	}
-	m_IsMove = true;
-
 	m_OldPos = m_Pos;
-	
+
 	// 移動ベクトルを正規化
-	DirectX::XMFLOAT2 normalized_move_vec = Calculation::Normalize(DirectX::XMFLOAT2(x_, z_));
+	m_Velocity = DirectX::XMFLOAT3(x_, 0.f, z_);
+	if (m_Velocity.x != 0.f || m_Velocity.z != 0.f)
+	{
+		m_Velocity = Calculation::Normalize(m_Velocity);
+	}
 	
-	m_Pos.x +=  normalized_move_vec.x;
-	m_Pos.z +=  normalized_move_vec.y;
+	m_Velocity = Calculation::Lerp(m_OldVelocity, m_Velocity, 5 * (1.0f / 60.0f));
+	m_OldVelocity = m_Velocity;
 
-	m_Angle = atan2f(normalized_move_vec.x, normalized_move_vec.y);
-	m_Rot.y = DirectX::XMConvertToDegrees(m_Angle);
+	m_Pos.x += m_Velocity.x;
+	m_Pos.z += m_Velocity.z;
 
-	float y = m_Stage->GetPolygonHeight(m_Pos);
-	m_Pos.y = y;
+	if (Calculation::Length(m_Velocity) > 0.1f)
+	{
+		float angle = atan2f(m_Velocity.x, m_Velocity.z);
+		m_Rot.y = DirectX::XMConvertToDegrees(angle);
+
+		float y = m_Stage->GetPolygonHeight(m_Pos);
+		m_Pos.y = y;
+
+		m_IsMove = true;
+	}
+	else {
+		m_IsMove = false;
+	}
 }

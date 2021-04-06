@@ -29,6 +29,9 @@ public:
 	float GetPolygonHeight(DirectX::XMFLOAT3 pos_) const;
 
 	std::vector<CVertex>* GetMapData() { return &m_MapData[0][1]; }
+
+	bool IntersectRayAndMap(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, DirectX::XMFLOAT3& intersectPos_);
+	
 private:
 	void Init() override;
 	void Release() override;

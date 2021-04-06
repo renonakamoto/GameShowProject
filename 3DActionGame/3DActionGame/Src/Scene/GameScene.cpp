@@ -50,7 +50,7 @@ void GameScene::Load()
 
 DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 {
-    FbxStorage::GetInstance()->LoadModel("Res/Models/Ekard_h.fbx", "Ekard");
+    FbxStorage::GetInstance()->LoadModel("Res/Models/human222.fbx", "Ekard");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Run_01.fbx",          "Ekard", "Run");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Attack_01.fbx",       "Ekard", "Attack01");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Attack_02.fbx",       "Ekard", "Attack02");

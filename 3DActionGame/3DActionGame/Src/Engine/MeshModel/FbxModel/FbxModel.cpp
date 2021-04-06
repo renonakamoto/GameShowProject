@@ -283,27 +283,26 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 
 		// コンスタントバッファにマテリアル情報を保存する
 		//graphics_->SetMaterial(&m_Materials[mesh.m_MaterialName]);
-
+		
 		// ボーン行列
 		Motion* motion = &m_Motion[m_PlayMotion];
 		if (motion != nullptr)
 		{
 			if (motion->FrameNum >= 0)
 			{
-				float frame = m_Frame;
-				int f = static_cast<int>(frame);
+				int f = static_cast<int>(m_Frame);
 
 				for (UINT b = 0; b < m_BoneNum; ++b)
 				{
 					if (motion->Key[b].empty()) { continue; }
 
-					m_Bone[b].Transform = motion->Key[b][f] * (1.0f - (frame - static_cast<int>(frame))) + motion->Key[b][(size_t)f + 1] * (frame - static_cast<int>(frame));
+					//m_Bone[b].Transform = motion->Key[b][f] * (1.0f - (frame - static_cast<int>(frame))) + motion->Key[b][(size_t)f + 1] * (frame - static_cast<int>(frame));
+					m_Bone[b].Transform = motion->Key[b][f];
 					DirectX::XMMATRIX mat = m_Bone[b].Offset * m_Bone[b].Transform;
 					graphics_->GetConstBoneBufferData()->Bone[b] = DirectX::XMMatrixTranspose(mat);
 				}
 			}
 		}
-
 
 		// コンスタントバッファの更新
 		graphics_->GetContext()->UpdateSubresource(graphics_->GetConstantBuffer(), 0, NULL, graphics_->GetConstantBufferData(), 0, 0);
@@ -859,7 +858,7 @@ bool FbxModel::LoadTexute(ID3D11Device* device_, FbxFileTexture* texture_, std::
 	// /で分解
 	std::vector<std::string> split_list = Split(buffer, '/');
 
-	std::string root_path = "Res/Texture/";
+	std::string root_path = "Res/Textures/";
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> cv;
 	std::wstring wstr_file_name = cv.from_bytes(root_path + split_list[split_list.size() - 1]);
 

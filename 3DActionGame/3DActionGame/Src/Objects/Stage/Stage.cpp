@@ -15,7 +15,7 @@ float Stage::GetPolygonHeight(DirectX::XMFLOAT3 pos_)const
 {
 	UINT idx_x = static_cast<UINT>((pos_.x + StageWieth  / 2) / m_CellSize);
 	UINT idx_y = static_cast<UINT>((pos_.z + StageHeight / 2) / m_CellSize);
-	float height = -100.f;
+	float height = -1.f;
 
 	for (size_t v = 0; v < m_MapData[idx_y][idx_x].size(); v+=3)
 	{
@@ -42,6 +42,44 @@ float Stage::GetPolygonHeight(DirectX::XMFLOAT3 pos_)const
 	}
 	
 	return height;
+}
+
+bool Stage::IntersectRayAndMap(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, DirectX::XMFLOAT3& intersectPos_)
+{
+	std::vector<Vec2I> indices;
+	
+	// レイの原点のインデックスを算出
+	Vec2I ro_idx;
+	ro_idx.X = static_cast<UINT>((rayOrigin_.x + StageWieth  / 2)  / m_CellSize);
+	ro_idx.Y = static_cast<UINT>((rayOrigin_.z + StageHeight / 2) / m_CellSize);
+	indices.push_back(ro_idx);
+	
+	// レイの終点のインデックスを算出
+	Vec2I re_idx;
+	DirectX::XMFLOAT3 ray_end = Calculation::Add(rayOrigin_, rayDistance_);
+	re_idx.X = static_cast<UINT>((ray_end.x + StageWieth  / 2) / m_CellSize);
+	re_idx.Y = static_cast<UINT>((ray_end.z + StageHeight / 2) / m_CellSize);
+	if (ro_idx != re_idx) {
+		indices.push_back(re_idx);
+	}
+
+	for (Vec2I index : indices)
+	{
+		for (size_t v = 0; v < m_MapData[index.Y][index.X].size(); v += 3)
+		{
+			DirectX::XMFLOAT3 vtx_a = m_MapData[index.Y][index.X][v].Pos;
+			DirectX::XMFLOAT3 vtx_b = m_MapData[index.Y][index.X][v + 1].Pos;
+			DirectX::XMFLOAT3 vtx_c = m_MapData[index.Y][index.X][v + 2].Pos;
+
+			DirectX::XMFLOAT3 intersect_pos;
+			if (Calculation::IntersectRayAndTriangle(rayOrigin_, rayDistance_, vtx_a, vtx_b, vtx_c, intersect_pos))
+			{
+				intersectPos_ = intersect_pos;
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 void Stage::Init()

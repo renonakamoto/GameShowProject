@@ -264,7 +264,7 @@ private:
 	std::map<std::string, ID3D11ShaderResourceView*> m_Textures;		//! テクスチャ
 	
 	std::map<std::string, Motion>					 m_Motion;			//! モーションを
-	Bone m_Bone[BONE_MAX];												//! ボーン情報を保存する変数
+	Bone m_Bone[BONE_MAX];												
 	UINT m_BoneNum;														//! ボーンの数
 	std::string m_PlayMotion;											//! 再生されているモーション名
 	int   m_StartFrame;	//! モーションの開始フレームを保存する変数

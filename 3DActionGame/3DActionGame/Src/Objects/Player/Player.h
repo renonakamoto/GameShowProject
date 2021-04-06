@@ -25,7 +25,9 @@ public:
 		m_Angle(0.f),
 		m_State(nullptr),
 		m_Stage(nullptr),
-		m_Camera(nullptr)
+		m_Camera(nullptr),
+		m_Velocity{ 0.f,0.f,0.f },
+		m_OldVelocity{ 0.f,0.f,0.f }
 	{
 		Init();
 	}
@@ -49,6 +51,8 @@ private:
 	bool m_IsMove;
 	float m_Speed;
 	DirectX::XMFLOAT3 m_OldPos;
+	DirectX::XMFLOAT3 m_Velocity;
+	DirectX::XMFLOAT3 m_OldVelocity;
 	float m_Angle;
 	PlayerState* m_State;
 	FbxModel* m_Model;
