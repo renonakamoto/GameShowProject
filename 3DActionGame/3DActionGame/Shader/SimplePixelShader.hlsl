@@ -3,7 +3,7 @@ struct PS_IN
 {
     float4 pos : SV_POSITION;
 	float4 nor : NORMAL;
-	float4 texture_pos : TEXTURE0;
+	float4 texture_pos : TEXCOORD0;
 };
  
 cbuffer ConstantBuffer
@@ -21,7 +21,7 @@ cbuffer ConstantBuffer
 	float4   MaterialSpecular;
 };
 
-Texture2D    Texture : register(s0[0]); // Textureをスロット0の0番目のテクスチャレジスタに設定
+Texture2D    Texture : register(t0[0]); // Textureをスロット0の0番目のテクスチャレジスタに設定
 SamplerState Sampler : register(s0[0]); // Samplerをスロット0の0番目のサンプラレジスタに設定
 
 float4 ps_main(PS_IN input) : SV_Target
@@ -40,8 +40,6 @@ float4 ps_main(PS_IN input) : SV_Target
 	//
 	//float4 ambient_color = MaterialAmbient * ambient_power;
 	float4 diffuse_color = (MaterialDiffuse * input.nor);
-
-	// アンビエントカラー + ディフューズカラー
 	float4 out_color = diffuse_color;
 
 	float4 tex_color = Texture.Sample(Sampler, input.texture_pos);

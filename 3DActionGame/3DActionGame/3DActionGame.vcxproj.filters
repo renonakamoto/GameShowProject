@@ -79,6 +79,24 @@
     <Filter Include="Src\Objects\Camera">
       <UniqueIdentifier>{2edfc950-cfec-4cdf-976e-78dfb87b47cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Shape\2D">
+      <UniqueIdentifier>{ab4687c5-1662-45dd-b33b-29a98ea1f167}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Shape\3D">
+      <UniqueIdentifier>{c9e05f7a-b6d2-474c-827e-f6bc7ac4a50e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Shape\3D\AABB">
+      <UniqueIdentifier>{eaa32ff0-f738-4b3a-aa20-da5949032c0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Shape\3D\OBB">
+      <UniqueIdentifier>{063464ea-a878-45ec-a5cb-5b4a205a5f56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Shape\3D\Ray">
+      <UniqueIdentifier>{368e28e1-7555-463a-ad48-579b437b2143}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Shape\3D\Capsule">
+      <UniqueIdentifier>{8bea86dc-7ffa-425d-97b7-6874d2c84654}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -194,6 +212,24 @@
     </ClCompile>
     <ClCompile Include="Src\Objects\Camera\FollowCamera.cpp">
       <Filter>Src\Objects\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Shape\3D\Capsule\ShapeCapsule.cpp">
+      <Filter>Src\Shape\3D\Capsule</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Shape\3D\AABB\ShapeAABB.cpp">
+      <Filter>Src\Shape\3D\AABB</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Shape\3D\Ray\ShapeRay.cpp">
+      <Filter>Src\Shape\3D\Ray</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Shape\3D\OBB\ShapeOBB.cpp">
+      <Filter>Src\Shape\3D\OBB</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\Enemy\Enemy.cpp">
+      <Filter>Src\Objects\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\Player\Sword.cpp">
+      <Filter>Src\Objects\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -328,6 +364,27 @@
     </ClInclude>
     <ClInclude Include="Src\Objects\Camera\FollowCamera.h">
       <Filter>Src\Objects\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Shape\Shape3D.h">
+      <Filter>Src\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Shape\3D\Capsule\ShapeCapsule.h">
+      <Filter>Src\Shape\3D\Capsule</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Shape\3D\AABB\ShapeAABB.h">
+      <Filter>Src\Shape\3D\AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Shape\3D\Ray\ShapeRay.h">
+      <Filter>Src\Shape\3D\Ray</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Shape\3D\OBB\ShapeOBB.h">
+      <Filter>Src\Shape\3D\OBB</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Enemy\Enemy.h">
+      <Filter>Src\Objects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Player\Sword.h">
+      <Filter>Src\Objects\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

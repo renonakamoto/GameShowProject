@@ -8,6 +8,7 @@ void Stage::Update()
 
 void Stage::Draw()
 {
+	DirectGraphics::GetInstance()->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	if (m_Model)m_Model->Render(DirectGraphics::GetInstance(), m_Pos, m_Scale, m_Rot);
 }
 
@@ -44,41 +45,43 @@ float Stage::GetPolygonHeight(DirectX::XMFLOAT3 pos_)const
 	return height;
 }
 
-bool Stage::IntersectRayAndMap(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, DirectX::XMFLOAT3& intersectPos_)
+bool Stage::IntersectRayAndMap(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, float& height_)
 {
-	std::vector<Vec2I> indices;
-	
-	// レイの原点のインデックスを算出
-	Vec2I ro_idx;
-	ro_idx.X = static_cast<UINT>((rayOrigin_.x + StageWieth  / 2)  / m_CellSize);
-	ro_idx.Y = static_cast<UINT>((rayOrigin_.z + StageHeight / 2) / m_CellSize);
-	indices.push_back(ro_idx);
-	
 	// レイの終点のインデックスを算出
 	Vec2I re_idx;
 	DirectX::XMFLOAT3 ray_end = Calculation::Add(rayOrigin_, rayDistance_);
 	re_idx.X = static_cast<UINT>((ray_end.x + StageWieth  / 2) / m_CellSize);
 	re_idx.Y = static_cast<UINT>((ray_end.z + StageHeight / 2) / m_CellSize);
-	if (ro_idx != re_idx) {
-		indices.push_back(re_idx);
-	}
 
-	for (Vec2I index : indices)
+	for (size_t v = 0; v < m_MapData[re_idx.Y][re_idx.X].size(); v += 3)
 	{
-		for (size_t v = 0; v < m_MapData[index.Y][index.X].size(); v += 3)
-		{
-			DirectX::XMFLOAT3 vtx_a = m_MapData[index.Y][index.X][v].Pos;
-			DirectX::XMFLOAT3 vtx_b = m_MapData[index.Y][index.X][v + 1].Pos;
-			DirectX::XMFLOAT3 vtx_c = m_MapData[index.Y][index.X][v + 2].Pos;
+		// ポリゴン
+		DirectX::XMFLOAT3 vtx_a = m_MapData[re_idx.Y][re_idx.X][v].Pos;
+		DirectX::XMFLOAT3 vtx_b = m_MapData[re_idx.Y][re_idx.X][v + 1].Pos;
+		DirectX::XMFLOAT3 vtx_c = m_MapData[re_idx.Y][re_idx.X][v + 2].Pos;
+		
+		// XZ平面で見た時に三角形のなかに入っているかを調べる
+		DirectX::XMFLOAT2 a(vtx_a.x, vtx_a.z);
+		DirectX::XMFLOAT2 b(vtx_b.x, vtx_b.z);
+		DirectX::XMFLOAT2 c(vtx_c.x, vtx_c.z);
+		DirectX::XMFLOAT2 p(ray_end.x, ray_end.z);
+		// 三角形に点が含まれているか
+		if (Calculation::HitTriangleAndPoint(a, b, c, p) == false) continue;
 
-			DirectX::XMFLOAT3 intersect_pos;
-			if (Calculation::IntersectRayAndTriangle(rayOrigin_, rayDistance_, vtx_a, vtx_b, vtx_c, intersect_pos))
-			{
-				intersectPos_ = intersect_pos;
-				return true;
-			}
+		// ポリゴンと線分の当たり判定
+		DirectX::XMFLOAT3 intersect_pos;
+		if (Calculation::IntersectRayAndTriangle(rayOrigin_, rayDistance_, vtx_a, vtx_b, vtx_c, intersect_pos) == true)
+		{
+			// ポリゴンの1頂点から法線を取得する
+			DirectX::XMFLOAT3 n = m_MapData[re_idx.Y][re_idx.X][v].Normal;
+			height_ = (vtx_a.x * (1.f / n.y) * n.x) - (ray_end.x * (1.f / n.y) * n.x) + (n.z * vtx_a.z * (1.f / n.y)) - (n.z * ray_end.z * (1.f / n.y)) + vtx_a.y;
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
+
 	return false;
 }
 

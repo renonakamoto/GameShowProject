@@ -11,7 +11,7 @@ struct VS_OUT
 {
         float4 pos : SV_POSITION;
         float4 nor : NORMAL;
-        float4 texture_pos : TEXTURE0;
+        float4 texture_pos : TEXCOORD0;
 };
  
 cbuffer ConstantBuffer
@@ -41,13 +41,12 @@ VS_OUT vs_main( VS_IN input )
         output.pos = mul(output.pos, Projection);
 
         float4 normal;
-        
         input.nor.w = 0.0;
-
         normal = mul(input.nor, World).xyzw;
         normal = normalize(normal);
-
         output.nor = saturate(dot(normal, Light));
+
+        output.texture_pos = input.texture_pos;
 
         return output;
 }

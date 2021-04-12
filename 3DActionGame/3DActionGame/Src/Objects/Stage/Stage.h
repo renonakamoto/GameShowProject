@@ -6,9 +6,9 @@
 
 class Stage : public Object3D
 {
-	static const int StageWieth = 5000;
-	static const int StageHeight = 5000;
-	static const int StageSplitNum = 4;
+	static const int StageWieth = 1200;
+	static const int StageHeight = 1200;
+	static const int StageSplitNum = 10;
 
 public:
 	Stage() :
@@ -30,7 +30,7 @@ public:
 
 	std::vector<CVertex>* GetMapData() { return &m_MapData[0][1]; }
 
-	bool IntersectRayAndMap(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, DirectX::XMFLOAT3& intersectPos_);
+	bool IntersectRayAndMap(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, float& height_);
 	
 private:
 	void Init() override;

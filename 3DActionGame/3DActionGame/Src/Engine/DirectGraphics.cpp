@@ -202,22 +202,6 @@ void DirectGraphics::StartRendering()
                 0                                        // ステンシルクリア値
                 );
 
-
-    /*
-    プリミティブの設定
-    描画するポリゴンの作成方法を設定する
-    */
-    m_Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-    /*
-        頂点シェーダの設定
-    */
-    m_Context->VSSetShader(m_VertexShader->GetShaderInterface(), NULL, 0);
-    /*
-        ピクセルシェーダの設定
-    */
-    m_Context->PSSetShader(m_PixelShader->GetShaderInterface(), NULL, 0);
-
     /*
         ビューポートの設定
     */
@@ -238,11 +222,6 @@ void DirectGraphics::StartRendering()
        出力先の設定
     */
     m_Context->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
-
-    m_Context->PSSetSamplers(
-        1,
-        1,
-        &m_ShadowSamplerState);
 
 }
 

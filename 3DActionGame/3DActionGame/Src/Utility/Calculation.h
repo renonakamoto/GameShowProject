@@ -20,8 +20,9 @@ public:
 	// XMFLOAT2同士の減算
 	static DirectX::XMFLOAT3 Sub(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_);
 	
-	static DirectX::XMFLOAT2 Mult(DirectX::XMFLOAT2 a_, float b_);
-	static DirectX::XMFLOAT3 Mult(DirectX::XMFLOAT3 a_, float b_);
+	static DirectX::XMFLOAT2 Mul(DirectX::XMFLOAT2 a_, float b_);
+	static DirectX::XMFLOAT3 Mul(DirectX::XMFLOAT3 a_, float b_);
+	static DirectX::XMFLOAT3 Mul(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_);
 
 	static DirectX::XMFLOAT2 Div(DirectX::XMFLOAT2 a_, float b_);
 	static DirectX::XMFLOAT3 Div(DirectX::XMFLOAT3 a_, float b_);

@@ -6,6 +6,7 @@
 #include "../Engine/DirectGraphics.h"
 #include "../Engine/Texture/Texture.h"
 #include "../Objects/Player/Player.h"
+#include "../Objects/Enemy/Enemy.h"
 #include "../Objects/Stage/Stage.h"
 #include "../Objects/Camera/FollowCamera.h"
 #include "../Engine/InputManager.h"
@@ -42,8 +43,9 @@ void GameScene::Load()
         ObjectManager::GetInstance()->Register(new FollowCamera());
         
         ObjectManager::GetInstance()->Register(new Player(DirectX::XMFLOAT3(0.f, 100.f, 0.f)));
+        ObjectManager::GetInstance()->Register(new Enemy(DirectX::XMFLOAT3(0.f, 0.f, 10.f)));
 
-
+        
         m_CurrentState = SceneState::Main;
     }
 }
@@ -55,9 +57,20 @@ DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Attack_01.fbx",       "Ekard", "Attack01");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Attack_02.fbx",       "Ekard", "Attack02");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_BattleIdle_01_h.fbx", "Ekard", "Idle");
- 
-    ObjFileStrage::GetInstance()->LoadModel("Res/Models/Ground.obj", "Stage");
+    FbxStorage::GetInstance()->GetModel("Ekard")->AddMesh("Res/Models/Sword_12.fbx",
+        DirectX::XMFLOAT3(22.9f, 0.0f, 40.0f),
+        DirectX::XMFLOAT3(0.1f, 0.1f, 0.1f),
+        DirectX::XMFLOAT3(90.f, 90.f, 0.0f), "Bip001 R Hand");
 
+    FbxStorage::GetInstance()->LoadModel("Res/Models/Enemy/Grenadier.fbx", "Enemy");
+    FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierWalk.fbx", "Enemy", "Walk");
+    FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierIdle.fbx", "Enemy", "Idle");
+    FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierMeleeAttack.fbx", "Enemy", "Attack");
+    FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierDeath.fbx", "Enemy", "Death");
+
+    ObjFileStrage::GetInstance()->LoadModel("Res/Models/Ground.obj", "Stage");
+    
+    ObjFileStrage::GetInstance()->LoadModel("Res/Models/Shape/Cube.obj", "Cube");
     return 0;
 }
 

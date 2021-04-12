@@ -18,8 +18,7 @@ void Player::Init()
 	if (stage) m_Stage = dynamic_cast<Stage*>(stage);
 	if (m_Stage)
 	{
-		float y = m_Stage->GetPolygonHeight(m_Pos);
-		m_Pos.y = y;
+		m_Pos.y = m_Stage->GetPolygonHeight(m_Pos);
 	}
 	
 	ObjectBase* camera = ObjectManager::GetInstance()->GetObj("FollowCamera");
@@ -51,6 +50,14 @@ void Player::Update()
 		m_Camera->SetOffset(offset);
 	}
 
+	m_AABB.m_Min.x = m_Pos.x - 1.3;
+	m_AABB.m_Min.y = (m_Pos.y + 4) - 2;
+	m_AABB.m_Min.z = m_Pos.z - 1;
+
+	m_AABB.m_Max.x = m_Pos.x + 1.3;
+	m_AABB.m_Max.y = (m_Pos.y + 4) + 2;
+	m_AABB.m_Max.z = m_Pos.z + 1;
+
 #endif
 	
 
@@ -73,7 +80,10 @@ void Player::Update()
 
 void Player::Draw()
 {
+	DirectGraphics::GetInstance()->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_Model->Render(DirectGraphics::GetInstance(), m_Pos, m_Scale, m_Rot);
+	
+	m_AABB.Draw();
 }
 
 void Player::Release()
@@ -98,20 +108,29 @@ void Player::Move(float x_, float z_)
 	m_Velocity = Calculation::Lerp(m_OldVelocity, m_Velocity, 5 * (1.0f / 60.0f));
 	m_OldVelocity = m_Velocity;
 
-	m_Pos.x += m_Velocity.x;
-	m_Pos.z += m_Velocity.z;
 
-	if (Calculation::Length(m_Velocity) > 0.1f)
+	if (Calculation::Length(m_Velocity) > 0.2f)
 	{
 		float angle = atan2f(m_Velocity.x, m_Velocity.z);
 		m_Rot.y = DirectX::XMConvertToDegrees(angle);
 
-		float y = m_Stage->GetPolygonHeight(m_Pos);
-		m_Pos.y = y;
-
-		m_IsMove = true;
-	}
-	else {
-		m_IsMove = false;
+		m_Pos.x += m_Velocity.x;
+		m_Pos.z += m_Velocity.z;
+		m_Pos.y = m_Stage->GetPolygonHeight(m_Pos);
+		
+		// レイの原点
+		//DirectX::XMFLOAT3 ray_origin = Calculation::Add(m_Pos, m_Velocity);
+		//ray_origin.y = m_Pos.y + m_RayHeight;
+		//
+		//// レイの方向と長さ
+		//DirectX::XMFLOAT3 ray_distance(0.0f, -30.0f, 0.0f);
+		//
+		//float height = 0.0f;
+		//if (m_Stage->IntersectRayAndMap(ray_origin, ray_distance, height) == true) {
+		//	m_Pos.x += m_Velocity.x;
+		//	m_Pos.z += m_Velocity.z;
+		//	m_Pos.y = height;
+		//}
+		
 	}
 }

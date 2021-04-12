@@ -12,26 +12,6 @@ void FollowCamera::Update()
     float sensi = InputManager::GetInstance()->GetMousemSensitivity();
 
     SetLookAtPos(m_FollowObject->GetPos());
-    
-    if (InputManager::GetInstance()->GetKeyDown(KeyInfo::Key_Up))
-    {
-        m_Height++;
-    }
-    
-    if (InputManager::GetInstance()->GetKeyDown(KeyInfo::Key_Down))
-    {
-        m_Height--;
-    }
-
-    if (InputManager::GetInstance()->GetKeyDown(KeyInfo::Key_Left))
-    {
-        m_Distance++;
-    }
-
-    if (InputManager::GetInstance()->GetKeyDown(KeyInfo::Key_Right))
-    {
-        m_Distance--;
-    }
 
     m_Pos.x = ((m_LookAt.x + m_Offset.x) + m_Distance *  sinf(DirectX::XMConvertToRadians(m_Yaw   * sensi)));
     m_Pos.y = ((m_LookAt.y + m_Offset.y));// +m_Distance * sinf(DirectX::XMConvertToRadians(m_Pitch * sensi)));

@@ -316,7 +316,6 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 		constant_buffer = graphics_->GetConstBoneBuffer();
 		context->VSSetConstantBuffers(1, 1, &constant_buffer);
 
-
 		if (m_MaterialLinks.count(mesh.MaterialName) > 0)
 		{
 			graphics_->SetTexture(m_MaterialLinks[mesh.MaterialName]);

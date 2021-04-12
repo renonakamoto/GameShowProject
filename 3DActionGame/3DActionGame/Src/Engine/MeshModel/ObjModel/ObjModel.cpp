@@ -143,20 +143,20 @@ void ObjModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
         頂点シェーダの設定
     */
     ID3D11DeviceContext* context = DirectGraphics::GetInstance()->GetContext();
-    context->VSSetShader(DirectGraphics::GetInstance()->GetSimpleVertexShader()->GetShaderInterface(), NULL, 0);
+    context->VSSetShader(graphics_->GetSimpleVertexShader()->GetShaderInterface(), NULL, 0);
     /*
         ピクセルシェーダの設定
     */
-    context->PSSetShader(DirectGraphics::GetInstance()->GetSimplePixelShader()->GetShaderInterface(), NULL, 0);
+    context->PSSetShader(graphics_->GetSimplePixelShader()->GetShaderInterface(), NULL, 0);
 
     UINT strides = sizeof(CVertex);
     UINT offsets = 0;
     for (MeshData& mesh : m_MeshList)
     {
-        graphics_->GetContext()->IASetVertexBuffers(0, 1, &mesh.VertexBuffer, &strides, &offsets);
-        graphics_->GetContext()->IASetIndexBuffer(mesh.IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+        context->IASetVertexBuffers(0, 1, &mesh.VertexBuffer, &strides, &offsets);
+        context->IASetIndexBuffer(mesh.IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-        graphics_->GetContext()->IASetInputLayout(m_InputLayout);
+        context->IASetInputLayout(m_InputLayout);
 
         DirectX::XMMATRIX translate = DirectX::XMMatrixTranslation(pos_.x, pos_.y, pos_.z);
         DirectX::XMMATRIX rotate_x = DirectX::XMMatrixRotationX(DirectX::XMConvertToRadians(degree.x));
@@ -172,12 +172,12 @@ void ObjModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
         graphics_->SetMaterial(&m_Materials[mesh.MaterialName]);
 
         // コンスタントバッファの更新
-        graphics_->GetContext()->UpdateSubresource(graphics_->GetConstantBuffer(), 0, nullptr, graphics_->GetConstantBufferData(), 0, 0);
+        context->UpdateSubresource(graphics_->GetConstantBuffer(), 0, nullptr, graphics_->GetConstantBufferData(), 0, 0);
 
         // コンスタントバッファを設定
         ID3D11Buffer* constant_buffer = graphics_->GetConstantBuffer();
-        graphics_->GetContext()->VSSetConstantBuffers(0, 1, &constant_buffer);
-        graphics_->GetContext()->PSSetConstantBuffers(0, 1, &constant_buffer);
+        context->VSSetConstantBuffers(0, 1, &constant_buffer);
+        context->PSSetConstantBuffers(0, 1, &constant_buffer);
 
         if (m_Textures.count(m_Materials[mesh.MaterialName].TextureKeyWord) > 0)
         {
@@ -189,7 +189,7 @@ void ObjModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
         }
 
         // 描画
-        graphics_->GetContext()->DrawIndexed(mesh.Indices.size(), 0, 0);
+        context->DrawIndexed(mesh.Indices.size(), 0, 0);
     }
 }
 
@@ -470,27 +470,36 @@ bool ObjModel::LoadMaterialFile(std::vector<std::string> fileList_, std::string 
 
 bool ObjModel::LoadTexture(std::string keyWord_, std::string fileName_, ID3D11Device* device_)
 {
+    // ファイル名を取得
+    std::string file_path = fileName_;
 
-    if (m_Textures.count(keyWord_) > 0 &&
-        m_Textures[keyWord_] != nullptr)
-    {
-        return true;
-    }
+    // ファイル分解
+    char buffer[256];
+    ZeroMemory(buffer, sizeof(char) * 256);
+    memcpy(buffer, file_path.c_str(), sizeof(char) * 256);
 
-    ID3D11ShaderResourceView* shader_res_view;
+    Replace('\\', '/', buffer);
+
+    // /で分解
+    std::vector<std::string> split_list = Split(buffer, '/');
+
+    std::string root_path = "Res/Textures/";
+    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> cv;
+    std::wstring wstr_file_name = cv.from_bytes(root_path + split_list[split_list.size() - 1]);
 
     const char* extension = "";
-    for (size_t i = strlen(fileName_.c_str()); i != 0; --i)
-    {
-        if (fileName_[i - 1] == '.') extension = &fileName_[i];
-    }
-
-    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> cv;
-    std::wstring wstr_file_name = cv.from_bytes(fileName_);
-
     DirectX::TexMetadata  metadata;
     DirectX::ScratchImage image;
     HRESULT hr;
+
+    const char* file_name = split_list[split_list.size() - 1].c_str();
+
+    for (size_t i = strlen(file_name); i != 0; --i)
+    {
+        if (file_name[i - 1] == '.') extension = &file_name[i];
+    }
+
+    ID3D11ShaderResourceView* shader_res_view;
     
     // DDSファイルの読み込み
     if (strcmp(extension, "dds") == 0)
