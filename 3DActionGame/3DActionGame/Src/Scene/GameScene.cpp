@@ -37,15 +37,14 @@ void GameScene::Load()
 {
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
-        InputManager::GetInstance()->SetInputMode(InputMode::MODE_GAME);
-
+        // リソースの読み込みが終了したら、各オブジェクトのインスタンスを作成
         ObjectManager::GetInstance()->Register(new Stage());
         ObjectManager::GetInstance()->Register(new FollowCamera());
-        
         ObjectManager::GetInstance()->Register(new Player(DirectX::XMFLOAT3(0.f, 100.f, 0.f)));
         ObjectManager::GetInstance()->Register(new Enemy(DirectX::XMFLOAT3(0.f, 0.f, 10.f)));
 
-        
+
+        InputManager::GetInstance()->SetInputMode(InputMode::MODE_GAME);
         m_CurrentState = SceneState::Main;
     }
 }
@@ -63,10 +62,10 @@ DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
         DirectX::XMFLOAT3(90.f, 90.f, 0.0f), "Bip001 R Hand");
 
     FbxStorage::GetInstance()->LoadModel("Res/Models/Enemy/Grenadier.fbx", "Enemy");
-    FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierWalk.fbx", "Enemy", "Walk");
+    //FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierWalk.fbx", "Enemy", "Walk");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierIdle.fbx", "Enemy", "Idle");
-    FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierMeleeAttack.fbx", "Enemy", "Attack");
-    FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierDeath.fbx", "Enemy", "Death");
+    //FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierMeleeAttack.fbx", "Enemy", "Attack");
+    //FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierDeath.fbx", "Enemy", "Death");
 
     ObjFileStrage::GetInstance()->LoadModel("Res/Models/Ground.obj", "Stage");
     

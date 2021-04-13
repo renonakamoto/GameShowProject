@@ -11,7 +11,8 @@ public:
 	Enemy(DirectX::XMFLOAT3 pos_) :
 		Object3D(pos_),
 		m_Model(nullptr),
-		m_Stage(nullptr)
+		m_Stage(nullptr),
+		m_Hp(10)
 	{
 		Init();
 	}
@@ -23,6 +24,9 @@ public:
 
 	void Update()override;
 	void Draw()override;
+
+	void Damage(int damageNum_);
+	
 private:
 	void Init() override;
 	void Release()override;
@@ -30,7 +34,8 @@ private:
 private:
 	FbxModel* m_Model;
 	Stage* m_Stage;
-
+	
+	int m_Hp;
 };
 
 #endif

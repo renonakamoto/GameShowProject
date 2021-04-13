@@ -3,6 +3,8 @@
 #include "../../Utility/Calculation.h"
 #include "PlayerMotion/IdleState.h"
 #include "../../ObjectManager/ObjectManager.h"
+#include "../../CollisionManager/CollisionManager.h"
+#include "../../Objects/Enemy/Enemy.h"
 
 void Player::Init()
 {
@@ -10,10 +12,14 @@ void Player::Init()
 	m_Scale.y = 0.1f;
 	m_Scale.z = 0.1f;
 
+	// モデル情報の取得
 	m_Model = FbxStorage::GetInstance()->GetModel("Ekard");
+	
+	// プレイヤーステートの初期化
 	m_State = IdleState::GetInstance();
 	m_State->Enter(this);
 
+	// 参照用オブジェクトの取得
 	ObjectBase* stage = ObjectManager::GetInstance()->GetObj("stage");
 	if (stage) m_Stage = dynamic_cast<Stage*>(stage);
 	if (m_Stage)
@@ -30,6 +36,13 @@ void Player::Init()
 		m_Camera->SetOffset(DirectX::XMFLOAT3(0.0f, 9.f, 0.0f));
 	}
 
+	DirectX::XMFLOAT3 shape_pos = m_Pos;
+	shape_pos.y = m_Pos.y + 4.f;
+	m_Shape = new ShapeOBB(shape_pos, 1.3f, 2.f, 1.f);
+	m_OBB = dynamic_cast<ShapeOBB*>(m_Shape);
+
+	// コリジョンマネージャーに登録
+	CollisionManager::GetInstance()->Register(this);
 }
 
 void Player::Update()
@@ -49,14 +62,6 @@ void Player::Update()
 		offset.y--;
 		m_Camera->SetOffset(offset);
 	}
-
-	m_AABB.m_Min.x = m_Pos.x - 1.3;
-	m_AABB.m_Min.y = (m_Pos.y + 4) - 2;
-	m_AABB.m_Min.z = m_Pos.z - 1;
-
-	m_AABB.m_Max.x = m_Pos.x + 1.3;
-	m_AABB.m_Max.y = (m_Pos.y + 4) + 2;
-	m_AABB.m_Max.z = m_Pos.z + 1;
 
 #endif
 	
@@ -83,7 +88,7 @@ void Player::Draw()
 	DirectGraphics::GetInstance()->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_Model->Render(DirectGraphics::GetInstance(), m_Pos, m_Scale, m_Rot);
 	
-	m_AABB.Draw();
+	m_Shape->Draw();
 }
 
 void Player::Release()
@@ -92,6 +97,26 @@ void Player::Release()
 
 void Player::Attack()
 {
+	DirectX::XMFLOAT3 shape_pos = m_Pos;
+	shape_pos = Calculation::Add(shape_pos, Calculation::Mul(m_DirectionVec, 3.5f));
+	shape_pos.y = m_Pos.y + 4.f;
+	ShapeOBB attack_volume(shape_pos, 1.5f, 2.5f, 2.f);
+
+	std::vector<Object3D*> hit_list;
+	CollisionManager::GetInstance()->CheckHitObjects(attack_volume, &hit_list);
+	
+	for (auto obj : hit_list) {
+		// 敵に当たっていたら
+		if (obj->GetTag() == "Enemy") {
+			// エネミーにダウンキャスト
+			Enemy* enemy = dynamic_cast<Enemy*>(obj);
+			if (enemy) {
+				// 敵にダメージを与える
+				enemy->Damage(3);
+			}
+		}
+	}
+
 }
 
 void Player::Move(float x_, float z_)
@@ -117,20 +142,13 @@ void Player::Move(float x_, float z_)
 		m_Pos.x += m_Velocity.x;
 		m_Pos.z += m_Velocity.z;
 		m_Pos.y = m_Stage->GetPolygonHeight(m_Pos);
-		
-		// レイの原点
-		//DirectX::XMFLOAT3 ray_origin = Calculation::Add(m_Pos, m_Velocity);
-		//ray_origin.y = m_Pos.y + m_RayHeight;
-		//
-		//// レイの方向と長さ
-		//DirectX::XMFLOAT3 ray_distance(0.0f, -30.0f, 0.0f);
-		//
-		//float height = 0.0f;
-		//if (m_Stage->IntersectRayAndMap(ray_origin, ray_distance, height) == true) {
-		//	m_Pos.x += m_Velocity.x;
-		//	m_Pos.z += m_Velocity.z;
-		//	m_Pos.y = height;
-		//}
-		
+
+		DirectX::XMFLOAT3 shape_pos = m_Pos;
+		shape_pos.y = m_Pos.y + 4.f;
+		m_OBB->m_Pos = shape_pos;
+		m_OBB->m_NormalDirect[0] = Calculation::Normalize(DirectX::XMFLOAT3(m_Velocity.z, m_Velocity.y, -m_Velocity.x));
+		m_OBB->m_NormalDirect[2] = Calculation::Normalize(m_Velocity);
+
+		m_DirectionVec = Calculation::Normalize(m_Velocity);
 	}
 }

@@ -17,7 +17,7 @@ public:
 	~ShapeAABB()
 	{}
 
-	void Draw();
+	void Draw()override;
 
 public:
 	bool HitTest(Shape3D& shape_)override;

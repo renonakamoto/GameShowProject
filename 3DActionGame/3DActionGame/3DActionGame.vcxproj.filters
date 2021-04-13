@@ -97,6 +97,9 @@
     <Filter Include="Src\Shape\3D\Capsule">
       <UniqueIdentifier>{8bea86dc-7ffa-425d-97b7-6874d2c84654}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\CollisionManager">
+      <UniqueIdentifier>{e9950e62-4478-4f0f-a016-c6e01c2f506b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -230,6 +233,9 @@
     </ClCompile>
     <ClCompile Include="Src\Objects\Player\Sword.cpp">
       <Filter>Src\Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionManager\CollisionManager.cpp">
+      <Filter>Src\CollisionManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -385,6 +391,9 @@
     </ClInclude>
     <ClInclude Include="Src\Objects\Player\Sword.h">
       <Filter>Src\Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionManager\CollisionManager.h">
+      <Filter>Src\CollisionManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
