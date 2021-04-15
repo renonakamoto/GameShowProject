@@ -17,9 +17,6 @@ public:
 
 	virtual void Enter(Player* player_) = 0;
 
-private:
-	
-
 };
 
 #endif

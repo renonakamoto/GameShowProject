@@ -21,6 +21,8 @@ public:
 	bool CheckHitObject(Shape3D& shape_, Object3D* hitObject_);
 	bool CheckHitObjects(Shape3D& shape_, std::vector<Object3D*>* hitObjects_);
 
+	void Release(Object3D* object_);
+
 	void AllRelease();
 
 private:

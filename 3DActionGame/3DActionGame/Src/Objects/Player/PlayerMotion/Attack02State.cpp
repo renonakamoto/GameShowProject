@@ -15,6 +15,10 @@ PlayerState* Attack02State::CheckState(Player* player_)
 void Attack02State::Update(Player* player_)
 {
 	m_Count++;
+
+	if (m_Count == 30) {
+		player_->Attack();
+	}
 }
 
 void Attack02State::Enter(Player* player_)

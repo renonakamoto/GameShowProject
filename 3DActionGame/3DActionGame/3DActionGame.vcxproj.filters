@@ -100,6 +100,9 @@
     <Filter Include="Src\CollisionManager">
       <UniqueIdentifier>{e9950e62-4478-4f0f-a016-c6e01c2f506b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Objects\Enemy\EnemyState">
+      <UniqueIdentifier>{346b8d20-d3ac-4023-9f5a-30ed69db64d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -236,6 +239,18 @@
     </ClCompile>
     <ClCompile Include="Src\CollisionManager\CollisionManager.cpp">
       <Filter>Src\CollisionManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\Enemy\EnemyState\EnemyHitState.cpp">
+      <Filter>Src\Objects\Enemy\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\Enemy\EnemyState\EnemyIdleState.cpp">
+      <Filter>Src\Objects\Enemy\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\Enemy\EnemyState\EnemyDeathState.cpp">
+      <Filter>Src\Objects\Enemy\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Model\SkeletalModel.cpp">
+      <Filter>Src\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -394,6 +409,24 @@
     </ClInclude>
     <ClInclude Include="Src\CollisionManager\CollisionManager.h">
       <Filter>Src\CollisionManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Enemy\EnemyState\EnemyState.h">
+      <Filter>Src\Objects\Enemy\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Enemy\EnemyState\EnemyIdleState.h">
+      <Filter>Src\Objects\Enemy\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Enemy\EnemyState\EnemyHitState.h">
+      <Filter>Src\Objects\Enemy\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Enemy\EnemyState\EnemyDeathState.h">
+      <Filter>Src\Objects\Enemy\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Model\StaticModel.h">
+      <Filter>Src\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Model\SkeletalModel.h">
+      <Filter>Src\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

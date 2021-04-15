@@ -30,8 +30,9 @@ TitleScene::TitleScene(SceneChanger* sceneChanger_) :
 
 TitleScene::~TitleScene()
 {
-    ObjectManager::GetInstance()->Release();
+    ObjectManager::GetInstance()->AllRelease();
     delete m_ObjectManager;
+    m_ObjectManager = nullptr;
 }
 
 void TitleScene::Load()

@@ -21,7 +21,10 @@ public:
 	{}
 
 	~Object3D()
-	{}
+	{
+		delete m_Shape;
+		m_Shape = nullptr;
+	}
 
 	void Update() = 0;
 	void Draw() = 0;

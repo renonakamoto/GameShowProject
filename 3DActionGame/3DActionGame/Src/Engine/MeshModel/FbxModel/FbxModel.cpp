@@ -238,7 +238,7 @@ bool FbxModel::LoadMotion(std::string keyword_, const char* fileName_)
 }
 
 
-void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_)
+void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_, std::string motionName_, float frameNum_)
 {
 	UINT strides = sizeof(CVertex);
 	UINT offsets = 0;
@@ -279,18 +279,14 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 
 		// ワールド行列をコンスタントバッファに設定
 		DirectX::XMStoreFloat4x4(&graphics_->GetConstantBufferData()->World, DirectX::XMMatrixTranspose(mat_world));
-
-
-		// コンスタントバッファにマテリアル情報を保存する
-		//graphics_->SetMaterial(&m_Materials[mesh.m_MaterialName]);
 		
 		// ボーン行列
-		Motion* motion = &m_Motion[m_PlayMotion];
+		Motion* motion = &m_Motion[motionName_];
 		if (motion != nullptr)
 		{
 			if (motion->FrameNum >= 0)
 			{
-				int f = static_cast<int>(m_Frame);
+				int f = static_cast<int>(frameNum_);
 
 				for (UINT b = 0; b < m_BoneNum; ++b)
 				{
@@ -304,6 +300,19 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 			}
 		}
 
+		if (m_MaterialLinks.count(mesh.MaterialName) > 0)
+		{
+			graphics_->SetTexture(m_MaterialLinks[mesh.MaterialName]);
+			// コンスタントバッファにマテリアル情報を保存する
+			graphics_->SetMaterial(nullptr);
+		}
+		else
+		{
+			// コンスタントバッファにマテリアル情報を保存する
+			graphics_->SetMaterial(&m_Materials[mesh.MaterialName]);
+			graphics_->SetTexture(nullptr);
+		}
+
 		// コンスタントバッファの更新
 		graphics_->GetContext()->UpdateSubresource(graphics_->GetConstantBuffer(), 0, NULL, graphics_->GetConstantBufferData(), 0, 0);
 		graphics_->GetContext()->UpdateSubresource(graphics_->GetConstBoneBuffer(), 0, NULL, graphics_->GetConstBoneBufferData(), 0, 0);
@@ -312,40 +321,14 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 		ID3D11Buffer* constant_buffer = graphics_->GetConstantBuffer();
 		context->VSSetConstantBuffers(0, 1, &constant_buffer);
 		context->PSSetConstantBuffers(0, 1, &constant_buffer);
-		
+
 		constant_buffer = graphics_->GetConstBoneBuffer();
 		context->VSSetConstantBuffers(1, 1, &constant_buffer);
-
-		if (m_MaterialLinks.count(mesh.MaterialName) > 0)
-		{
-			graphics_->SetTexture(m_MaterialLinks[mesh.MaterialName]);
-		}
-		else
-		{
-			graphics_->SetTexture(nullptr);
-		}
-
 
 		// 描画
 		context->DrawIndexed(mesh.Indices.size(), 0, 0);
 	}
 
-}
-
-void FbxModel::Play(std::string animName_)
-{
-	if (m_PlayMotion == animName_) return;
-	m_PlayMotion = animName_;
-	m_Frame = 0.0f;
-}
-
-void FbxModel::Animate(float sec_)
-{
-	m_Frame += sec_ * 60.0f;
-	if (m_Frame >= m_Motion[m_PlayMotion].FrameNum - 1)
-	{
-		m_Frame = 0.0f;
-	}
 }
 
 bool FbxModel::AddMesh(const char* fileName_, DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_, const char* boneName_)
@@ -583,6 +566,9 @@ void FbxModel::LoadVertices(MeshData& meshData_, FbxMesh* mesh_)
 void FbxModel::LoadNormals(MeshData& meshData_, FbxMesh* mesh_)
 {
 	if (!mesh_) return;
+
+	FbxAMatrix gm = mesh_->GetNode()->EvaluateGlobalTransform();
+	FbxAMatrix lm = mesh_->GetNode()->EvaluateLocalTransform();
 	
 	FbxArray<FbxVector4> normals;
 	// 法線リストを取得

@@ -13,7 +13,8 @@ void Player::Init()
 	m_Scale.z = 0.1f;
 
 	// モデル情報の取得
-	m_Model = FbxStorage::GetInstance()->GetModel("Ekard");
+	m_Model = new SkeletalModel();
+	m_Model->SetModel(FbxStorage::GetInstance()->GetModel("Ekard"));
 	
 	// プレイヤーステートの初期化
 	m_State = IdleState::GetInstance();
@@ -38,7 +39,7 @@ void Player::Init()
 
 	DirectX::XMFLOAT3 shape_pos = m_Pos;
 	shape_pos.y = m_Pos.y + 4.f;
-	m_Shape = new ShapeOBB(shape_pos, 1.3f, 2.f, 1.f);
+	m_Shape = new ShapeOBB(shape_pos, 1.4f, 4.f, 1.1f);
 	m_OBB = dynamic_cast<ShapeOBB*>(m_Shape);
 
 	// コリジョンマネージャーに登録
@@ -86,9 +87,13 @@ void Player::Update()
 void Player::Draw()
 {
 	DirectGraphics::GetInstance()->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	m_Model->Render(DirectGraphics::GetInstance(), m_Pos, m_Scale, m_Rot);
+	m_Model->Render(m_Pos, m_Scale, m_Rot);
 	
-	m_Shape->Draw();
+	if (m_Shape)m_Shape->Draw();
+	if (m_AttackVolume)m_AttackVolume->Draw();
+
+	delete m_AttackVolume;
+	m_AttackVolume = nullptr;
 }
 
 void Player::Release()
@@ -97,14 +102,15 @@ void Player::Release()
 
 void Player::Attack()
 {
-	DirectX::XMFLOAT3 shape_pos = m_Pos;
-	shape_pos = Calculation::Add(shape_pos, Calculation::Mul(m_DirectionVec, 3.5f));
+	// 当たり判定の更新
+	DirectX::XMFLOAT3 shape_pos = Calculation::Add(m_Pos, Calculation::Mul(m_DirectionVec, 3.f));
 	shape_pos.y = m_Pos.y + 4.f;
-	ShapeOBB attack_volume(shape_pos, 1.5f, 2.5f, 2.f);
-
-	std::vector<Object3D*> hit_list;
-	CollisionManager::GetInstance()->CheckHitObjects(attack_volume, &hit_list);
+	m_AttackVolume = new ShapeOBB(shape_pos, 3.f, 2.5f, 2.2f);
+	m_AttackVolume->m_NormalDirect[0] = DirectX::XMFLOAT3(m_DirectionVec.z, m_DirectionVec.y, -m_DirectionVec.x);
+	m_AttackVolume->m_NormalDirect[2] = m_DirectionVec;
 	
+	std::vector<Object3D*> hit_list;
+	CollisionManager::GetInstance()->CheckHitObjects(*m_AttackVolume, &hit_list);
 	for (auto obj : hit_list) {
 		// 敵に当たっていたら
 		if (obj->GetTag() == "Enemy") {
@@ -116,7 +122,6 @@ void Player::Attack()
 			}
 		}
 	}
-
 }
 
 void Player::Move(float x_, float z_)

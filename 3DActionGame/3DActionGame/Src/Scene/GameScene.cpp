@@ -29,8 +29,9 @@ GameScene::GameScene(SceneChanger* sceneChanger_) :
 
 GameScene::~GameScene()
 {
-    ObjectManager::GetInstance()->Release();
+    ObjectManager::GetInstance()->AllRelease();
     delete m_ObjectManager;
+    m_ObjectManager = nullptr;
 }
 
 void GameScene::Load()
@@ -41,7 +42,10 @@ void GameScene::Load()
         ObjectManager::GetInstance()->Register(new Stage());
         ObjectManager::GetInstance()->Register(new FollowCamera());
         ObjectManager::GetInstance()->Register(new Player(DirectX::XMFLOAT3(0.f, 100.f, 0.f)));
-        ObjectManager::GetInstance()->Register(new Enemy(DirectX::XMFLOAT3(0.f, 0.f, 10.f)));
+        ObjectManager::GetInstance()->Register(new Enemy(DirectX::XMFLOAT3(0.f, 0.f, 300.f)));
+        ObjectManager::GetInstance()->Register(new Enemy(DirectX::XMFLOAT3(259.f, 0.f, 184.f)));
+        ObjectManager::GetInstance()->Register(new Enemy(DirectX::XMFLOAT3(260.f, 0.f, -119.f)));
+        ObjectManager::GetInstance()->Register(new Enemy(DirectX::XMFLOAT3(-325.f, 0.f, 112.f)));
 
 
         InputManager::GetInstance()->SetInputMode(InputMode::MODE_GAME);
@@ -51,7 +55,7 @@ void GameScene::Load()
 
 DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 {
-    FbxStorage::GetInstance()->LoadModel("Res/Models/human222.fbx", "Ekard");
+    FbxStorage::GetInstance()->LoadModel("Res/Models/Ekard.fbx", "Ekard");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Run_01.fbx",          "Ekard", "Run");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Attack_01.fbx",       "Ekard", "Attack01");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Attack_02.fbx",       "Ekard", "Attack02");
@@ -62,13 +66,13 @@ DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
         DirectX::XMFLOAT3(90.f, 90.f, 0.0f), "Bip001 R Hand");
 
     FbxStorage::GetInstance()->LoadModel("Res/Models/Enemy/Grenadier.fbx", "Enemy");
-    //FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierWalk.fbx", "Enemy", "Walk");
+    FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierWalk.fbx", "Enemy", "Walk");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierIdle.fbx", "Enemy", "Idle");
-    //FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierMeleeAttack.fbx", "Enemy", "Attack");
-    //FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierDeath.fbx", "Enemy", "Death");
+    FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierMeleeAttack.fbx", "Enemy", "Attack");
+    FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierDeath.fbx", "Enemy", "Death");
+    FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierHit.fbx", "Enemy", "Hit");
 
     ObjFileStrage::GetInstance()->LoadModel("Res/Models/Ground.obj", "Stage");
-    
     ObjFileStrage::GetInstance()->LoadModel("Res/Models/Shape/Cube.obj", "Cube");
     return 0;
 }

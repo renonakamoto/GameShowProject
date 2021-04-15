@@ -49,9 +49,6 @@ public:
 	ID3D11Buffer* GetConstantBuffer() const { return m_ConstantBuffer; }
 	ConstantBuffer* GetConstantBufferData(){ return &m_ConstantBufferData; }
 
-	ID3D11Buffer* GetSimpleConstantBuffer() const { return m_SimpleConstantBuffer; }
-	SimpleConstantBuffer* GetSimpleConstantBufferData() { return &m_SimpleConstantBufferData; }
-
 	ID3D11Buffer* GetConstBoneBuffer() const { return m_ConstBoneBuffer; }
 	ConstBoneBuffer* GetConstBoneBufferData() { return &m_ConstBoneBufferData; }
 
@@ -94,8 +91,6 @@ private:
 	VertexShader*			m_VertexShader;			//! スキンメッシュ用の頂点シェーダ
 	PixelShader*			m_PixelShader;			//! スキンメッシュ用のピクセルシェーダ
 
-	ID3D11Buffer*			m_SimpleConstantBuffer;		//! 
-	SimpleConstantBuffer	m_SimpleConstantBufferData;
 	VertexShader*			m_SimpleVertexShader;	//!	スタティックメッシュ用の頂点シェーダ
 	PixelShader*			m_SimplePixelShader;	//! スタティックメッシュ用のぷくセルシェーダ
 

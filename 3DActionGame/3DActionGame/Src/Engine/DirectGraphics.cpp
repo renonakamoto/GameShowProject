@@ -48,58 +48,6 @@ bool DirectGraphics::Init()
         return false;
     }
 
-    
-
-
-    //// ラスタライザ
-    //D3D11_RASTERIZER_DESC rasterizerDesc;
-    //ID3D11RasterizerState* state;
-    //ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
-    //rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-    //rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
-    //rasterizerDesc.FrontCounterClockwise = TRUE;
-    //if (FAILED(m_Device->CreateRasterizerState(&rasterizerDesc, &state)))
-    //{
-    //    return false;
-    //}
-
-    //m_Context->RSSetState(state);
-
-
-
-
-
-    HWND window_handle = FindWindow(Window::ClassName, nullptr);
-    RECT rect;
-    GetClientRect(window_handle, &rect);
-
-    // View行列設定
-    DirectX::XMVECTOR eye = DirectX::XMVectorSet(0.0f, 50.0f, -300.0f, 0.0f);
-    DirectX::XMVECTOR focus = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-    DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-    DirectX::XMMATRIX view_matrix = DirectX::XMMatrixLookAtLH(eye, focus, up);
-
-    // プロジェクション行列設定
-    constexpr float fov = DirectX::XMConvertToRadians(45.0f);
-    float aspect = (float)(rect.right - rect.left) / (rect.bottom - rect.top);
-    float near_z = 0.1f;
-    float far_z = 500000.f;
-    DirectX::XMMATRIX proj_matrix = DirectX::XMMatrixPerspectiveFovLH(fov, aspect, near_z, far_z);
-
-    DirectX::XMStoreFloat4x4(&m_ConstantBufferData.View, DirectX::XMMatrixTranspose(view_matrix));
-    DirectX::XMStoreFloat4x4(&m_ConstantBufferData.Projection, DirectX::XMMatrixTranspose(proj_matrix));
-    DirectX::XMStoreFloat4(&m_ConstantBufferData.CameraPos, eye);
-
-    DirectX::XMStoreFloat4x4(&m_SimpleConstantBufferData.View, DirectX::XMMatrixTranspose(view_matrix));
-    DirectX::XMStoreFloat4x4(&m_SimpleConstantBufferData.Projection, DirectX::XMMatrixTranspose(proj_matrix));
-    DirectX::XMStoreFloat4(&m_SimpleConstantBufferData.CameraPos, eye);
-    // ライト設定
-    DirectX::XMVECTOR light = DirectX::XMVector3Normalize(DirectX::XMVectorSet(0.0f, 0.5f, -1.0f, 0.0f));
-    DirectX::XMStoreFloat4(&m_SimpleConstantBufferData.LightVector, light);
-
-    // ライトのカラー設定
-    m_SimpleConstantBufferData.LightColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-
     // ライトの設定
     DirectX::XMStoreFloat4(&m_ConstantBufferData.Light, DirectX::XMVector3Normalize(DirectX::XMVectorSet(0.0f, 0.5f, -1.0f, 0.0f)));
     //DirectX::XMMATRIX mat_rot = DirectX::XMMatrixIdentity();
@@ -274,11 +222,18 @@ void DirectGraphics::SetTexture(ID3D11ShaderResourceView* texture_)
 
 void DirectGraphics::SetMaterial(ObjMaterial* material_)
 {
+    if (!material_) {
+        m_ConstantBufferData.MaterialAmbient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+        m_ConstantBufferData.MaterialDiffuse  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+        m_ConstantBufferData.MaterialSpecular = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+        return;
+    }
+
     m_ConstantBufferData.MaterialAmbient = DirectX::XMFLOAT4(material_->Ambient[0],
         material_->Ambient[1],
-        material_->Ambient[2], 1);
-    m_ConstantBufferData.MaterialDiffuse = DirectX::XMFLOAT4(material_->Diffuse[0], material_->Diffuse[1], material_->Diffuse[2], 1);
-    m_ConstantBufferData.MaterialSpecular = DirectX::XMFLOAT4(material_->Specular[0], material_->Specular[1], material_->Specular[2], 1);
+        material_->Ambient[2], material_->Ambient[3]);
+    m_ConstantBufferData.MaterialDiffuse = DirectX::XMFLOAT4(material_->Diffuse[0], material_->Diffuse[1], material_->Diffuse[2], material_->Diffuse[3]);
+    m_ConstantBufferData.MaterialSpecular = DirectX::XMFLOAT4(material_->Specular[0], material_->Specular[1], material_->Specular[2], material_->Specular[3]);
 }
 
 void DirectGraphics::SetUpDxgiSwapChanDesc(DXGI_SWAP_CHAIN_DESC* dxgi)
@@ -635,12 +590,6 @@ bool DirectGraphics::CreateConstantBuffer()
     buffer_desc.StructureByteStride = 0;
 
     if (FAILED(m_Device->CreateBuffer(&buffer_desc, nullptr, &m_ConstantBuffer)))
-    {
-        return false;
-    }
-    
-    buffer_desc.ByteWidth = sizeof(SimpleConstantBuffer);
-    if (FAILED(m_Device->CreateBuffer(&buffer_desc, nullptr, &m_SimpleConstantBuffer)))
     {
         return false;
     }

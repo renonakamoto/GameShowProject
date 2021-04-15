@@ -46,8 +46,7 @@ public:
 	*/
 	FbxModel() :
 		m_InputLayout(nullptr),
-		m_BoneNum(0),
-		m_Frame(0)
+		m_BoneNum(0)
 	{
 		m_MeshList.clear();
 		m_Materials.clear();
@@ -121,22 +120,7 @@ public:
 	* @param[in] degree_ 回転(度数)
 	* @details ボーンのフレーム時行列、ワールド行列をシェーダに送る
 	*/
-	void Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_);
-	
-	/**
-	* @fn void Play(std::string animName_)
-	* @brief 再生するモーションを選択する関数
-	* @param[in] animName_ 再生するモーションの名前(モーションを読み込んだ際に設定したキーワード)
-	*/
-	void Play(std::string animName_);
-	
-	/**
-	* @fn void Animate(float sec_)
-	* @brief モーションを再生する関数
-	* @param[in] sec_ 進める時間
-	* @details 現在再生中のモーションのフレームを進める、秒数は指定しなくても60/1秒進む
-	*/
-	void Animate(float sec_ = 1.0f / 60.0f);
+	void Render(DirectGraphics* graphics_,  DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_, std::string motionName_ = "", float frameNum_ = 0.f);
 
 	const Motion* GetMotionData(std::string motionKeyword_) { return &m_Motion[motionKeyword_]; }
 
@@ -262,13 +246,11 @@ private:
 	std::map<std::string, ObjMaterial>				 m_Materials;		//! マテリアル
 	std::map<std::string, ID3D11ShaderResourceView*> m_MaterialLinks;	
 	std::map<std::string, ID3D11ShaderResourceView*> m_Textures;		//! テクスチャ
+	std::map<std::string, Motion>					 m_Motion;			//! モーション
 	
-	std::map<std::string, Motion>					 m_Motion;			//! モーションを
-	Bone m_Bone[BONE_MAX];												
+	Bone m_Bone[BONE_MAX];
 	UINT m_BoneNum;														//! ボーンの数
-	std::string m_PlayMotion;											//! 再生されているモーション名
-	int   m_StartFrame;	//! モーションの開始フレームを保存する変数
-	float m_Frame;		//! 現在のモーションのフレーム数を保持する変数
+	int   m_StartFrame;													//! モーションの開始フレームを保存する変数
 
 	ID3D11InputLayout* m_InputLayout;									//! 入力レイアウト
 };

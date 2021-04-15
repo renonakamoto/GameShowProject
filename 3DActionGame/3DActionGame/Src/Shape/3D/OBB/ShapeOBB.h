@@ -42,7 +42,7 @@ public:
 private:
 	float LenSegOnSeparateAxis(DirectX::XMFLOAT3& spe_, DirectX::XMFLOAT3& e1_, DirectX::XMFLOAT3& e2_, DirectX::XMFLOAT3* e3_ = nullptr);
 
-private:
+public:
 	void Draw()override;
 
 private:

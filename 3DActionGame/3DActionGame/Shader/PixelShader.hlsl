@@ -39,16 +39,14 @@ float4 ps_main(PS_IN input) : SV_Target
     // 環境光
     float4 ambient = MaterialAmbient;
     // 拡散光
-    float NL = saturate(dot(input.norw, input.light));
+    //float NL = saturate(dot(input.norw, input.light));
     float4 diffuse = Texture.Sample(Sampler, input.texture_pos);
     //float4 diffuse = (MaterialDiffuse / 2 + Texture.Sample(Sampler, input.texture_pos) / 2) * NL;
     // 鏡面反射光
-    float3 reflect = normalize(2 * NL * input.norw - input.light);
-    float4 specular = pow(saturate(dot(reflect, input.eye_vec)), 4) * MaterialSpecular;
+    //float3 reflect = normalize(2 * NL * input.norw - input.light);
+    //float4 specular = pow(saturate(dot(reflect, input.eye_vec)), 4) * MaterialSpecular;
     // フォン
-    float4 color = diffuse;
-    // アルファブレンド
-    //color.a = MaterialDiffuse.a;
+    float4 color = (diffuse * diffuse.a) + (MaterialDiffuse * MaterialDiffuse.a);
 
     // 影
     //input.light_tex_coord /= input.light_tex_coord.w;

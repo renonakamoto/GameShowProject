@@ -19,7 +19,9 @@ public:
 
 	void Register(ObjectBase* object_);
 
-	void Release();
+	void Release(ObjectBase* object_);
+
+	void AllRelease();
 
 	ObjectBase* GetObj(std::string tag_);
 
