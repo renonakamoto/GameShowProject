@@ -218,7 +218,7 @@ bool FbxModel::LoadMotion(std::string keyword_, const char* fileName_)
 
 	FbxNode* root = fbx_scene->GetRootNode();
 
-	for (int b = 0; b < m_BoneNum; ++b)
+	for (UINT b = 0; b < m_BoneNum; ++b)
 	{
 		// ボーンノードを検索
 		FbxNode* bone = root->FindChild(m_Bone[b].Name);
@@ -326,7 +326,7 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 		context->VSSetConstantBuffers(1, 1, &constant_buffer);
 
 		// 描画
-		context->DrawIndexed(mesh.Indices.size(), 0, 0);
+		context->DrawIndexed(static_cast<UINT>(mesh.Indices.size()), 0, 0);
 	}
 
 }
@@ -334,8 +334,8 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 bool FbxModel::AddMesh(const char* fileName_, DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_, const char* boneName_)
 {
 	// メッシュ追加前のメッシュの数を保存
-	int before_mesh_num = m_MeshList.size();
-	int after_mesh_num = 0;
+	size_t before_mesh_num = m_MeshList.size();
+	size_t after_mesh_num = 0;
 
 	// メッシュの読み込み
 	if (LoadModel(fileName_) == false) return false;
@@ -353,7 +353,7 @@ bool FbxModel::AddMesh(const char* fileName_, DirectX::XMFLOAT3 pos_, DirectX::X
 	FbxAMatrix trans;
 	trans.SetT(FbxVector4(pos_.x, pos_.y, pos_.z, 1));
 
-	for (int i = before_mesh_num; i < after_mesh_num; ++i)
+	for (size_t i = before_mesh_num; i < after_mesh_num; ++i)
 	{
 		for (int v = 0; v < m_MeshList[i].Vertices.size(); ++v)
 		{
@@ -361,13 +361,13 @@ bool FbxModel::AddMesh(const char* fileName_, DirectX::XMFLOAT3 pos_, DirectX::X
 				m_MeshList[i].Vertices[v].Pos.y,
 				m_MeshList[i].Vertices[v].Pos.z, 1);
 			vertex = trans.MultT(vertex);
-			m_MeshList[i].Vertices[v].Pos.x = vertex[0];	// X
-			m_MeshList[i].Vertices[v].Pos.y = vertex[1];	// Y
-			m_MeshList[i].Vertices[v].Pos.z = vertex[2];	// Z
+			m_MeshList[i].Vertices[v].Pos.x = static_cast<float>(vertex[0]); // X
+			m_MeshList[i].Vertices[v].Pos.y = static_cast<float>(vertex[1]); // Y
+			m_MeshList[i].Vertices[v].Pos.z = static_cast<float>(vertex[2]); // Z
 
-			if (bone_idx != 0)
+			if (bone_idx != -1)
 			{
-				m_MeshList[i].Vertices[v].Index[0] = bone_idx;
+				m_MeshList[i].Vertices[v].Index[0]  = static_cast<UINT>(bone_idx);
 				m_MeshList[i].Vertices[v].Weight[0] = 1.0f;
 			}
 		}
@@ -449,9 +449,9 @@ void FbxModel::LoadMaterial(FbxSurfaceMaterial* material_)
 	// 各プロパティのカラー情報を保存
 	for (int i = 0; i < 3; ++i)
 	{
-		entry_material.Ambient[i]  = colors[static_cast<int>(MaterialList::Ambient)].mData[i];
-		entry_material.Diffuse[i]  = colors[static_cast<int>(MaterialList::Diffuse)].mData[i];
-		entry_material.Specular[i] = colors[static_cast<int>(MaterialList::Specular)].mData[i];
+		entry_material.Ambient[i]  = static_cast<float>(colors[static_cast<int>(MaterialList::Ambient)].mData[i]);
+		entry_material.Diffuse[i]  = static_cast<float>(colors[static_cast<int>(MaterialList::Diffuse)].mData[i]);
+		entry_material.Specular[i] = static_cast<float>(colors[static_cast<int>(MaterialList::Specular)].mData[i]);
 	}
 	// 各プロパティのファクター情報を取得
 	entry_material.Ambient[3]  = static_cast<float>(factors[static_cast<int>(MaterialList::Ambient)]);
@@ -620,10 +620,10 @@ void FbxModel::LoadVertexColors(MeshData& meshData_, FbxMesh* mesh_)
 			{
 				int id = indeces.GetAt(i);
 				FbxColor color = colors.GetAt(id);
-				meshData_.Vertices[i].Color.x = color.mRed;
-				meshData_.Vertices[i].Color.y = color.mGreen;
-				meshData_.Vertices[i].Color.z = color.mBlue;
-				meshData_.Vertices[i].Color.w = color.mAlpha;
+				meshData_.Vertices[i].Color.x = static_cast<float>(color.mRed  );
+				meshData_.Vertices[i].Color.y = static_cast<float>(color.mGreen);
+				meshData_.Vertices[i].Color.z = static_cast<float>(color.mBlue );
+				meshData_.Vertices[i].Color.w = static_cast<float>(color.mAlpha);
 			}
 		}
 	}
@@ -681,7 +681,7 @@ void FbxModel::LoadBones(MeshData& meshData_, FbxMesh* mesh_)
 	int skin_num = mesh_->GetDeformerCount(FbxDeformer::eSkin);
 	if (skin_num <= 0) return;
 
-	int vertex_num = meshData_.Vertices.size();
+	size_t vertex_num = meshData_.Vertices.size();
 	FbxSkin* skin = static_cast<FbxSkin*>(mesh_->GetDeformer(0, FbxDeformer::eSkin));
 
 	// ボーン数を取得
@@ -728,11 +728,14 @@ void FbxModel::LoadBones(MeshData& meshData_, FbxMesh* mesh_)
 			FbxAMatrix offset = link_mat.Inverse() * trans;
 			FbxDouble* offset_mat = (FbxDouble*)offset;
 
+			// FbxDoubleからfloatにキャストする関数オブジェクト
+			auto ToFloat = [](FbxDouble d_)->float {return static_cast<float>(d_); };
+
 			bone->Offset = DirectX::XMMatrixSet(
-				offset_mat[0], offset_mat[1], offset_mat[2], offset_mat[3],
-				offset_mat[4], offset_mat[5], offset_mat[6], offset_mat[7],
-				offset_mat[8], offset_mat[9], offset_mat[10], offset_mat[11],
-				offset_mat[12], offset_mat[13], offset_mat[14], offset_mat[15]);
+				ToFloat(offset_mat[0]),  ToFloat(offset_mat[1]),  ToFloat(offset_mat[2]),  ToFloat(offset_mat[3]),
+				ToFloat(offset_mat[4]),  ToFloat(offset_mat[5]),  ToFloat(offset_mat[6]),  ToFloat(offset_mat[7]),
+				ToFloat(offset_mat[8]),  ToFloat(offset_mat[9]),  ToFloat(offset_mat[10]), ToFloat(offset_mat[11]),
+				ToFloat(offset_mat[12]), ToFloat(offset_mat[13]), ToFloat(offset_mat[14]), ToFloat(offset_mat[15]));
 		}
 
 		// ウェイトの読み込み
@@ -745,7 +748,7 @@ void FbxModel::LoadBones(MeshData& meshData_, FbxMesh* mesh_)
 		for (int i = 0; i < weight_num; ++i)
 		{
 			int weight_id = weight_indices[i];
-			for (int vtx_i = 0; vtx_i < vertex_num; ++vtx_i)
+			for (size_t vtx_i = 0; vtx_i < vertex_num; ++vtx_i)
 			{
 				// 頂点番号が一致しなければコンテニュー
 				if (index[vtx_i] != weight_id) continue;
@@ -764,7 +767,7 @@ void FbxModel::LoadBones(MeshData& meshData_, FbxMesh* mesh_)
 				// ボーンの影響度が大きいものを4つ選ぶ
 				if (meshData_.Vertices[vtx_i].Weight[weight_count] < static_cast<float>(weight[i]))
 				{
-					meshData_.Vertices[vtx_i].Index[weight_count] = bone_no;
+					meshData_.Vertices[vtx_i].Index[weight_count]  = static_cast<UINT>(bone_no);
 					meshData_.Vertices[vtx_i].Weight[weight_count] = static_cast<float>(weight[i]);
 				}
 			}
@@ -791,7 +794,7 @@ void FbxModel::LoadBones(MeshData& meshData_, FbxMesh* mesh_)
 	}
 }
 
-void FbxModel::LoadKeyFrame(std::string keyword_, int bone_, FbxNode* boneNode_)
+void FbxModel::LoadKeyFrame(std::string keyword_, UINT bone_, FbxNode* boneNode_)
 {
 	Motion* motion = &m_Motion[keyword_];
 	motion->Key[bone_].resize(motion->FrameNum);
@@ -811,14 +814,16 @@ void FbxModel::LoadKeyFrame(std::string keyword_, int bone_, FbxNode* boneNode_)
 		m.mData[2][0] *= -1; // _31
 		m.mData[3][0] *= -1; // _41
 
-		// わ
+		// FbxDoubleからfloatにキャストする関数オブジェクト
+		auto ToFloat = [](FbxDouble d_)->float {return static_cast<float>(d_); };
+		
+		// キーフレームをマトリックスに保存
 		FbxDouble* mat = static_cast<FbxDouble*>(m);
 		motion->Key[bone_][f] = DirectX::XMMatrixSet(
-			mat[0],  mat[1],  mat[2],  mat[3],
-			mat[4],  mat[5],  mat[6],  mat[7],
-			mat[8],  mat[9],  mat[10], mat[11],
-			mat[12], mat[13], mat[14], mat[15]
-		);
+			ToFloat(mat[0]),  ToFloat(mat[1]),  ToFloat(mat[2]),  ToFloat(mat[3]),
+			ToFloat(mat[4]),  ToFloat(mat[5]),  ToFloat(mat[6]),  ToFloat(mat[7]),
+			ToFloat(mat[8]),  ToFloat(mat[9]),  ToFloat(mat[10]), ToFloat(mat[11]),
+			ToFloat(mat[12]), ToFloat(mat[13]), ToFloat(mat[14]), ToFloat(mat[15]));
 
 		// フレームを進める
 		time += 1.0 / 60.0;
@@ -921,12 +926,12 @@ bool FbxModel::CreateVertexBuffer(ID3D11Device* device_)
 	{
 		//頂点バッファ作成
 		D3D11_BUFFER_DESC buffer_desc;
-		buffer_desc.ByteWidth = sizeof(CVertex) * mesh.Vertices.size();	// バッファのサイズ
-		buffer_desc.Usage				= D3D11_USAGE_DEFAULT;				// 使用方法
-		buffer_desc.BindFlags			= D3D11_BIND_VERTEX_BUFFER;			// BIND設定
-		buffer_desc.CPUAccessFlags		= 0;								// リソースへのCPUのアクセス権限についての設定
-		buffer_desc.MiscFlags			= 0;								// リソースオプションのフラグ
-		buffer_desc.StructureByteStride = 0;								// 構造体のサイズ
+		buffer_desc.ByteWidth = static_cast<UINT>(sizeof(CVertex) * mesh.Vertices.size());// バッファのサイズ
+		buffer_desc.Usage				= D3D11_USAGE_DEFAULT;						      // 使用方法
+		buffer_desc.BindFlags			= D3D11_BIND_VERTEX_BUFFER;					      // BIND設定
+		buffer_desc.CPUAccessFlags		= 0;										      // リソースへのCPUのアクセス権限についての設定
+		buffer_desc.MiscFlags			= 0;										      // リソースオプションのフラグ
+		buffer_desc.StructureByteStride = 0;										      // 構造体のサイズ
 
 		D3D11_SUBRESOURCE_DATA init_data;
 		init_data.pSysMem			= &mesh.Vertices[0];		// バッファの中身の設定
@@ -954,7 +959,7 @@ bool FbxModel::CreateIndexBuffer(ID3D11Device* device_)
 	{
 		//頂点バッファ作成
 		D3D11_BUFFER_DESC buffer_desc;
-		buffer_desc.ByteWidth = (UINT)sizeof(UINT) * mesh.Indices.size();	// バッファのサイズ
+		buffer_desc.ByteWidth = (UINT)(sizeof(UINT) * mesh.Indices.size());	// バッファのサイズ
 		buffer_desc.Usage				= D3D11_USAGE_DEFAULT;				// 使用方法
 		buffer_desc.BindFlags			= D3D11_BIND_INDEX_BUFFER;			// BIND設定
 		buffer_desc.CPUAccessFlags		= 0;								// リソースへのCPUのアクセス権限についての設定

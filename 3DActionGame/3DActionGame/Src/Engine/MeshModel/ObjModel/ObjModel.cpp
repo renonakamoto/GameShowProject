@@ -113,11 +113,11 @@ bool ObjModel::Load(const char* fileName_, ID3D11Device* device_, VertexShader* 
 
     fclose(fp);
 
-    char flie_path[256];
-    int len = strlen(fileName_);
-    int path_tail_point = 0;
+    char   flie_path[256];
+    size_t len = strlen(fileName_);
+    size_t path_tail_point = 0;
 
-    for (int i = len - 1; i >= 0; i--)
+    for (int i = static_cast<int>(len - 1); i >= 0; i--)
     {
         if (fileName_[i] == '/')
         {
@@ -128,10 +128,12 @@ bool ObjModel::Load(const char* fileName_, ID3D11Device* device_, VertexShader* 
 
     strncpy_s(flie_path, fileName_, path_tail_point + 1);
     
-    if (LoadMaterialFile(material_list, flie_path, device_) == false) return false;
+    if (flie_path != nullptr) {
+        if (LoadMaterialFile(material_list, flie_path, device_) == false) return false;
+    }
 
     if (CreateVertexBuffer(device_) == false) return false;
-    if (CreateIndexBuffer(device_) == false)  return false;
+    if (CreateIndexBuffer(device_)  == false) return false;
     if (CreateInputLayout(device_, vertex_shader) == false) return false;
 
     return true;
@@ -160,8 +162,8 @@ void ObjModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 
         DirectX::XMMATRIX translate = DirectX::XMMatrixTranslation(pos_.x, pos_.y, pos_.z);
         DirectX::XMMATRIX rotate_x = DirectX::XMMatrixRotationX(DirectX::XMConvertToRadians(degree.x));
-        DirectX::XMMATRIX rotate_y = DirectX::XMMatrixRotationY(DirectX::XMConvertToRadians(degree.y));;
-        DirectX::XMMATRIX rotate_z = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(degree.z));;
+        DirectX::XMMATRIX rotate_y = DirectX::XMMatrixRotationY(DirectX::XMConvertToRadians(degree.y));
+        DirectX::XMMATRIX rotate_z = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(degree.z));
         DirectX::XMMATRIX scale = DirectX::XMMatrixScaling(scale_.x, scale_.y, scale_.z);
         DirectX::XMMATRIX world_matrix = scale * rotate_x * rotate_y * rotate_z * translate;
 
@@ -189,7 +191,7 @@ void ObjModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
         }
 
         // 描画
-        context->DrawIndexed(mesh.Indices.size(), 0, 0);
+        context->DrawIndexed(static_cast<UINT>(mesh.Indices.size()), 0, 0);
     }
 }
 
@@ -261,7 +263,7 @@ void ObjModel::ParseFKeywordTag(std::vector<CVertex>& outCustomVertices_, std::s
         outCustomVertices_.push_back(vertex);
 
         // インデックスバッファに追加
-        m_Indices[current_material_name_].push_back(outCustomVertices_.size() - 1);
+        m_Indices[current_material_name_].push_back(static_cast<UINT>(outCustomVertices_.size() - 1));
     }
 
 
@@ -341,7 +343,7 @@ void ObjModel::ParseFKeywordTag(MeshData& outMeshData_, std::string current_mate
         outMeshData_.Vertices.push_back(vertex);
 
         // インデックスバッファに追加
-        outMeshData_.Indices.push_back(outMeshData_.Vertices.size() - 1);
+        outMeshData_.Indices.push_back(static_cast<UINT>(outMeshData_.Vertices.size() - 1));
     }
 
 
@@ -419,7 +421,7 @@ bool ObjModel::LoadMaterialFile(std::vector<std::string> fileList_, std::string 
                 std::vector<std::string> split = Split(&line_buffer[strlen("Ka") + 1], ' ');
 
                 for (size_t i = 0; i < split.size(); ++i) {
-                    m_Materials[current_material_name].Ambient[i] = atof(split[i].c_str());
+                    m_Materials[current_material_name].Ambient[i] = static_cast<float>(atof(split[i].c_str()));
                 }
             }
             // ディフューズ
@@ -429,7 +431,7 @@ bool ObjModel::LoadMaterialFile(std::vector<std::string> fileList_, std::string 
                 std::vector<std::string> split = Split(&line_buffer[strlen("Kd") + 1], ' ');
 
                 for (size_t i = 0; i < split.size(); ++i) {
-                    m_Materials[current_material_name].Diffuse[i] = atof(split[i].c_str());
+                    m_Materials[current_material_name].Diffuse[i] = static_cast<float>(atof(split[i].c_str()));
                 }
             }
             // スペキュラー
@@ -439,7 +441,7 @@ bool ObjModel::LoadMaterialFile(std::vector<std::string> fileList_, std::string 
                 std::vector<std::string> split = Split(&line_buffer[strlen("Ks") + 1], ' ');
 
                 for (size_t i = 0; i < split.size(); ++i) {
-                    m_Materials[current_material_name].Specular[i] = atof(split[i].c_str());
+                    m_Materials[current_material_name].Specular[i] = static_cast<float>(atof(split[i].c_str()));
                 }
             }
             // テクスチャ
@@ -549,7 +551,7 @@ bool ObjModel::CreateVertexBuffer(ID3D11Device* device_)
         // 頂点バッファの作成
         D3D11_BUFFER_DESC buffer_desc;
         // バッファの大きさ
-        buffer_desc.ByteWidth = sizeof(CVertex) * mesh.Vertices.size();
+        buffer_desc.ByteWidth = static_cast<UINT>(sizeof(CVertex) * mesh.Vertices.size());
         // バッファへの各項目でのアクセス許可を指定
         // 基本的にD3D11_USAGE_DEFAULT
         buffer_desc.Usage = D3D11_USAGE_DEFAULT;
@@ -603,7 +605,7 @@ bool ObjModel::CreateIndexBuffer(ID3D11Device* device_)
     for (MeshData& mesh : m_MeshList)
     {
         D3D11_BUFFER_DESC index_buffer_desc;
-        index_buffer_desc.ByteWidth = sizeof(UINT) * mesh.Indices.size();
+        index_buffer_desc.ByteWidth = static_cast<UINT>(sizeof(UINT) * mesh.Indices.size());
         index_buffer_desc.Usage = D3D11_USAGE_DEFAULT;
         index_buffer_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
         index_buffer_desc.CPUAccessFlags = 0;

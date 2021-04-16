@@ -12,12 +12,13 @@
 class ObjModel : public Model
 {
 public:
-	ObjModel()
-	{
-		m_Vertices.clear();
-	}
+	ObjModel() :
+		m_VertexBuffer(nullptr),
+		m_InputLayout(nullptr)	
+	{}
 
-	~ObjModel(){}
+	~ObjModel()
+	{}
 
 	bool Load(const char* fileName_, ID3D11Device* device_, VertexShader* vertex_shader);
 

@@ -11,10 +11,9 @@ public:
 	{}
 
 	Camera(DirectX::XMFLOAT3 lookAt_) :
-		m_LookAt(lookAt_)
-	{
-		Init();
-	}
+		m_LookAt(lookAt_),
+		m_ProjMat(DirectX::XMMatrixIdentity())
+	{}
 	
 	
 	~Camera()
@@ -22,6 +21,8 @@ public:
 		Release();
 	}
 
+
+	virtual void Init();
 	virtual void Update();
 	virtual void Draw();
 
@@ -32,7 +33,6 @@ public:
 	DirectX::XMFLOAT3 GetLeftNormal();
 	
 protected:
-	virtual void Init();
 	virtual void Release();
 
 protected:

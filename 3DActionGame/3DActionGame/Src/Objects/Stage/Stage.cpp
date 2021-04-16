@@ -87,9 +87,7 @@ bool Stage::IntersectRayAndMap(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 r
 
 void Stage::Init()
 {
-	m_Model = ObjFileStrage::GetInstance()->GetModel("Stage");
 	m_Tag = "stage";
-	CreateSplitMapData();
 }
 
 void Stage::Release()

@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Src\2DObject\Title\TitleBackGround.cpp" />
+    <ClCompile Include="Src\2DObject\Title\BackGround.cpp" />
     <ClCompile Include="Src\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Src\Engine\DirectGraphics.cpp" />
     <ClCompile Include="Src\Engine\InputManager.cpp" />
@@ -52,7 +52,6 @@
     <ClCompile Include="Src\Objects\Player\PlayerMotion\Attack02State.cpp" />
     <ClCompile Include="Src\Objects\Player\PlayerMotion\IdleState.cpp" />
     <ClCompile Include="Src\Objects\Player\PlayerMotion\RunState.cpp" />
-    <ClCompile Include="Src\Objects\Player\Sword.cpp" />
     <ClCompile Include="Src\Objects\Stage\Stage.cpp" />
     <ClCompile Include="Src\Scene\ClearScene.cpp" />
     <ClCompile Include="Src\Scene\GameoverScene.cpp" />
@@ -70,7 +69,7 @@
     <ClCompile Include="Src\Utility\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Src\2DObject\Title\TitleBackGround.h" />
+    <ClInclude Include="Src\2DObject\Title\BackGround.h" />
     <ClInclude Include="Src\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Src\Engine\DirectGraphics.h" />
     <ClInclude Include="Src\Engine\InputManager.h" />
@@ -106,7 +105,6 @@
     <ClInclude Include="Src\Objects\Player\PlayerMotion\PlayerState.h" />
     <ClInclude Include="Src\Objects\Player\PlayerMotion\IdleState.h" />
     <ClInclude Include="Src\Objects\Player\PlayerMotion\RunState.h" />
-    <ClInclude Include="Src\Objects\Player\Sword.h" />
     <ClInclude Include="Src\Objects\Stage\Stage.h" />
     <ClInclude Include="Src\Scene\ClearScene.h" />
     <ClInclude Include="Src\Scene\GameoverScene.h" />

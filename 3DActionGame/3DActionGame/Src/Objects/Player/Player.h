@@ -36,23 +36,20 @@ public:
 		m_OBB(nullptr),
 		m_AttackVolume(nullptr)
 #pragma endregion
-	{
-		Init();
-	}
+	{}
 	
 	~Player()
 	{
 		Release();
 	}
 
-	
+	void Init() override;
 	void Update()override;
 	void Draw()override;
 
 	void SetMotion(std::string keyword) { m_Model->Play(keyword); }
 
 private:
-	void Init() override;
 	void Release()override;
 
 	void Attack();

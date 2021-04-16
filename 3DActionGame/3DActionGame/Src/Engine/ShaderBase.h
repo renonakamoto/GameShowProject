@@ -7,7 +7,9 @@
 class ShaderBase
 {
 public:
-	ShaderBase()
+	ShaderBase():
+		m_Data(nullptr),
+		m_Size(0)
 	{}
 
 	~ShaderBase(){}

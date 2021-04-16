@@ -10,13 +10,12 @@ class Button : public Object2D
 {
 public:
 	Button(std::string normal_, std::string hover_, void(*fp)(void), DirectX::XMFLOAT3 pos_):
+		Object2D(pos_),
 		m_Normal(normal_), 
 		m_Hover(hover_),
 		m_PushedFunc(fp),
 		m_IsHover(false)
-	{
-		m_Pos = pos_;
-		
+	{		
 		TextureData* tex = TextureManager::GetInstance()->GetTexture(normal_);
 		if (tex)
 		{
@@ -41,7 +40,7 @@ private:
 	
 
 private:
-	void (*m_PushedFunc)(void);		// 
+	void (*m_PushedFunc)(void);
 	std::string m_Normal;
 	std::string m_Hover;
 	Rect m_Rect;

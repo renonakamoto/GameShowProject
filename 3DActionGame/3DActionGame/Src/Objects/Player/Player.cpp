@@ -135,7 +135,7 @@ void Player::Move(float x_, float z_)
 		m_Velocity = Calculation::Normalize(m_Velocity);
 	}
 	
-	m_Velocity = Calculation::Lerp(m_OldVelocity, m_Velocity, 5 * (1.0f / 60.0f));
+	m_Velocity = Calculation::Lerp(m_OldVelocity, m_Velocity, 5.0f * (1.0f / 60.0f));
 	m_OldVelocity = m_Velocity;
 
 

@@ -78,10 +78,10 @@ bool DirectGraphics::Init()
     m_ConstantBufferData.ClipUV._44 = 1.0f;
 
     DirectX::XMMATRIX tex_uv = DirectX::XMMatrixSet(
-        0.5f, 0, 0, 0,
-        0, -0.5f, 0, 0,
-        0, 0, 1.0f, 0,
-        0.5f, 0.5f, 0, 1.0f);
+        0.5f, 0.0f, 0.0f, 0.0f,
+        0.0f,-0.5f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.0f, 1.0f);
 
     DirectX::XMStoreFloat4x4(&m_ConstantBufferData.ClipUV, DirectX::XMMatrixTranspose(tex_uv));
 
@@ -158,8 +158,8 @@ void DirectGraphics::StartRendering()
     GetClientRect(window_handle, &rect);
 
     D3D11_VIEWPORT vp;
-    vp.Width  = (rect.right - rect.left);
-    vp.Height = (rect.bottom - rect.top);
+    vp.Width    = static_cast<FLOAT>(rect.right  - rect.left);
+    vp.Height   = static_cast<FLOAT>(rect.bottom - rect.top );
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0.0f;
@@ -222,6 +222,7 @@ void DirectGraphics::SetTexture(ID3D11ShaderResourceView* texture_)
 
 void DirectGraphics::SetMaterial(ObjMaterial* material_)
 {
+    // nullptrなら黒にする
     if (!material_) {
         m_ConstantBufferData.MaterialAmbient  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
         m_ConstantBufferData.MaterialDiffuse  = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -229,11 +230,15 @@ void DirectGraphics::SetMaterial(ObjMaterial* material_)
         return;
     }
 
-    m_ConstantBufferData.MaterialAmbient = DirectX::XMFLOAT4(material_->Ambient[0],
-        material_->Ambient[1],
-        material_->Ambient[2], material_->Ambient[3]);
-    m_ConstantBufferData.MaterialDiffuse = DirectX::XMFLOAT4(material_->Diffuse[0], material_->Diffuse[1], material_->Diffuse[2], material_->Diffuse[3]);
-    m_ConstantBufferData.MaterialSpecular = DirectX::XMFLOAT4(material_->Specular[0], material_->Specular[1], material_->Specular[2], material_->Specular[3]);
+    // アンビエント
+    m_ConstantBufferData.MaterialAmbient  = DirectX::XMFLOAT4(material_->Ambient[0], material_->Ambient[1],
+                                                              material_->Ambient[2], material_->Ambient[3]);
+    // ディヒューズ
+    m_ConstantBufferData.MaterialDiffuse  = DirectX::XMFLOAT4(material_->Diffuse[0],  material_->Diffuse[1],
+                                                              material_->Diffuse[2],  material_->Diffuse[3]);
+    // スペキュラ
+    m_ConstantBufferData.MaterialSpecular = DirectX::XMFLOAT4(material_->Specular[0], material_->Specular[1], 
+                                                              material_->Specular[2], material_->Specular[3]);
 }
 
 void DirectGraphics::SetUpDxgiSwapChanDesc(DXGI_SWAP_CHAIN_DESC* dxgi)
@@ -654,9 +659,9 @@ void DirectGraphics::SetUpViewPort()
     // 画面左上のY座標
     view_port.TopLeftY = 0;
     // 横幅
-    view_port.Width = (rect.right - rect.left);
+    view_port.Width  = static_cast<FLOAT>(rect.right - rect.left);
     // 縦幅
-    view_port.Height = (rect.bottom - rect.top);
+    view_port.Height = static_cast<FLOAT>(rect.bottom - rect.top);
     // 深度値の最小値
     view_port.MinDepth = 0.0f;
     // 深度値の最大値

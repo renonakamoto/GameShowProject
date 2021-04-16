@@ -177,9 +177,6 @@
     <ClCompile Include="Src\Objects\Player\Player.cpp">
       <Filter>Src\Objects\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Src\2DObject\Title\TitleBackGround.cpp">
-      <Filter>Src\2DObject\Title</Filter>
-    </ClCompile>
     <ClCompile Include="Src\ObjectManager\ObjectManager.cpp">
       <Filter>Src\ObjectManager</Filter>
     </ClCompile>
@@ -234,9 +231,6 @@
     <ClCompile Include="Src\Objects\Enemy\Enemy.cpp">
       <Filter>Src\Objects\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Objects\Player\Sword.cpp">
-      <Filter>Src\Objects\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Src\CollisionManager\CollisionManager.cpp">
       <Filter>Src\CollisionManager</Filter>
     </ClCompile>
@@ -251,6 +245,9 @@
     </ClCompile>
     <ClCompile Include="Src\Model\SkeletalModel.cpp">
       <Filter>Src\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\2DObject\Title\BackGround.cpp">
+      <Filter>Src\2DObject\Title</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -338,9 +335,6 @@
     <ClInclude Include="Src\Objects\Player\Player.h">
       <Filter>Src\Objects\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Src\2DObject\Title\TitleBackGround.h">
-      <Filter>Src\2DObject\Title</Filter>
-    </ClInclude>
     <ClInclude Include="Src\ObjectManager\ObjectManager.h">
       <Filter>Src\ObjectManager</Filter>
     </ClInclude>
@@ -404,9 +398,6 @@
     <ClInclude Include="Src\Objects\Enemy\Enemy.h">
       <Filter>Src\Objects\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Objects\Player\Sword.h">
-      <Filter>Src\Objects\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Src\CollisionManager\CollisionManager.h">
       <Filter>Src\CollisionManager</Filter>
     </ClInclude>
@@ -427,6 +418,9 @@
     </ClInclude>
     <ClInclude Include="Src\Model\SkeletalModel.h">
       <Filter>Src\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\2DObject\Title\BackGround.h">
+      <Filter>Src\2DObject\Title</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

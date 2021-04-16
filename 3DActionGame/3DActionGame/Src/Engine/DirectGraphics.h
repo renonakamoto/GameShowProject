@@ -17,8 +17,29 @@ public:
 		return &instance;
 	}
 
-	DirectGraphics(){}
-	~DirectGraphics(){}
+	DirectGraphics() :
+		m_Device(nullptr),
+		m_Context(nullptr),
+		m_SwapChain(nullptr),
+		m_RenderTargetView(nullptr),
+		m_DepthStencilTexture(nullptr),
+		m_DepthStencilView(nullptr),
+		m_ConstantBuffer(nullptr),
+		m_ConstantBufferData(),
+		m_ConstBoneBuffer(nullptr),
+		m_ConstBoneBufferData(),
+		m_VertexShader(nullptr),
+		m_PixelShader(nullptr),
+		m_SimpleVertexShader(nullptr),
+		m_SimplePixelShader(nullptr),
+		m_ShadowSamplerState(nullptr),
+		m_FeatureLevel(D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_10_0),
+		m_SamplerState(nullptr),
+		m_SampleDesc{ 0 }
+	{}
+
+	~DirectGraphics()
+	{}
 
 	bool Init();
 
@@ -79,14 +100,13 @@ private:
 	ID3D11Texture2D*		m_DepthStencilTexture;	//! 
 	ID3D11DepthStencilView* m_DepthStencilView;		//!
 	ID3D11SamplerState*		m_SamplerState;			//!
-	ID3D11SamplerState*		m_ShadowSamplerState;	//!
 	DXGI_SAMPLE_DESC		m_SampleDesc;			//!
 	
-	ID3D11Buffer*			m_ConstantBuffer;		//! 
-	ConstantBuffer			m_ConstantBufferData;	//!
+	ID3D11Buffer*			m_ConstantBuffer;		//! モデル用のコンストバッファ
+	ConstantBuffer			m_ConstantBufferData;	//!	モデル用のコンストバッファ
 
-	ID3D11Buffer*			m_ConstBoneBuffer;		//!
-	ConstBoneBuffer			m_ConstBoneBufferData;	//!
+	ID3D11Buffer*			m_ConstBoneBuffer;		//! ボーン用のコンストバッファ
+	ConstBoneBuffer			m_ConstBoneBufferData;	//! ボーン用のコンストバッファ
 	
 	VertexShader*			m_VertexShader;			//! スキンメッシュ用の頂点シェーダ
 	PixelShader*			m_PixelShader;			//! スキンメッシュ用のピクセルシェーダ
@@ -94,6 +114,7 @@ private:
 	VertexShader*			m_SimpleVertexShader;	//!	スタティックメッシュ用の頂点シェーダ
 	PixelShader*			m_SimplePixelShader;	//! スタティックメッシュ用のぷくセルシェーダ
 
+	ID3D11SamplerState* m_ShadowSamplerState;	//!
 };
 
 #endif

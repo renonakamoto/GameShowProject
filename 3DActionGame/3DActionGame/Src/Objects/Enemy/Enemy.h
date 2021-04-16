@@ -24,23 +24,22 @@ public:
 		m_Stage(nullptr),
 		m_State(nullptr),
 		m_Hp(10),
+		m_IsHit(false),
 		m_IsDeath(false)
-	{
-		Init();
-	}
+	{}
 
 	~Enemy()
 	{
 		Release();
 	}
 
+	void Init() override;
 	void Update()override;
 	void Draw()override;
 
 	void Damage(int damageNum_);
 
 private:
-	void Init() override;
 	void Release()override;
 
 private:

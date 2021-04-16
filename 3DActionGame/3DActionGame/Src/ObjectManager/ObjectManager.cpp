@@ -1,5 +1,13 @@
 ﻿#include "ObjectManager.h"
 
+void ObjectManager::Init()
+{
+	for (size_t i = 0; i < m_Objects.size(); ++i)
+	{
+		if (m_Objects[i])m_Objects[i]->Init();
+	}
+}
+
 void ObjectManager::Update()
 {
 	for (size_t i = 0; i < m_Objects.size(); ++i)

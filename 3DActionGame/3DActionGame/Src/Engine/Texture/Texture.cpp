@@ -106,8 +106,8 @@ bool TextureManager::Load(const char* fileName_, std::string keyword_)
 		return false;
 	}
 
-	tex_data.Width  = metadata.width;
-	tex_data.Height = metadata.height;
+	tex_data.Width  = static_cast<UINT>(metadata.width) ;
+	tex_data.Height = static_cast<UINT>(metadata.height);
 
 	if (CreateVertexBuffer(tex_data, device) == false)
 	{

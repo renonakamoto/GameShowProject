@@ -15,7 +15,11 @@ public:
 		m_Model(nullptr),
 		m_CellSize(0)
 	{
-		Init();
+		m_Model = ObjFileStrage::GetInstance()->GetModel("Stage");
+		if (m_Model)
+		{
+			CreateSplitMapData();
+		}
 	}
 
 	~Stage()
@@ -23,6 +27,8 @@ public:
 		Release();
 	}
 
+
+	void Init() override;
 	void Update() override;
 	void Draw() override;
 
@@ -33,7 +39,6 @@ public:
 	bool IntersectRayAndMap(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, float& height_);
 	
 private:
-	void Init() override;
 	void Release() override;
 	void CreateSplitMapData();
 

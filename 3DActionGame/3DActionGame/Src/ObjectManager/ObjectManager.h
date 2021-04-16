@@ -14,6 +14,7 @@ public:
 		return &instance;
 	}
 
+	void Init();
 	void Update();
 	void Draw();
 

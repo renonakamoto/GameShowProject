@@ -33,6 +33,10 @@ struct Motion
 {
 	UINT FrameNum;								  //! フレーム数
 	std::vector<DirectX::XMMATRIX> Key[BONE_MAX]; //! フレーム時姿勢行列
+	
+	Motion():
+		FrameNum(0)
+	{}
 };
 
 /**
@@ -47,10 +51,7 @@ public:
 	FbxModel() :
 		m_InputLayout(nullptr),
 		m_BoneNum(0)
-	{
-		m_MeshList.clear();
-		m_Materials.clear();
-	}
+	{}
 
 	/**
 	* @brief デストラクタ
@@ -195,7 +196,7 @@ private:
 	* @param[in] bone_ ボーン番号
 	* @param[in] boneNode_ ボーンノード
 	*/
-	void LoadKeyFrame(std::string keyword_, int bone_, FbxNode* boneNode_);
+	void LoadKeyFrame(std::string keyword_, UINT bone_, FbxNode* boneNode_);
 
 	/**
 	* @fn bool LoadTexute(ID3D11Device* device_, FbxFileTexture* texture_, std::string& keyword_)

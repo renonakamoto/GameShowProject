@@ -1,4 +1,4 @@
-﻿#ifndef TEXTURE_H_#include "../DirectGraphics.h"
+﻿#ifndef TEXTURE_H_
 #define TEXTURE_H_
 
 #include <D3D11.h>

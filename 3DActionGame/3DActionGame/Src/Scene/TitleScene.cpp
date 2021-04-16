@@ -4,7 +4,7 @@
 #include "SceneManager.h"
 #include "../Engine/InputManager.h"
 #include "../Engine/Texture/Texture.h"
-#include "../2DObject/Title/TitleBackGround.h"
+#include "../2DObject/Title/BackGround.h"
 #include "../ObjectManager/UI/Button.h"
 
 void NextScene()
@@ -24,15 +24,11 @@ TitleScene::TitleScene(SceneChanger* sceneChanger_) :
         &m_dwThreadID);             // ƒXƒŒƒbƒhID
 
     m_CurrentState = SceneState::Load;
-
-    m_ObjectManager = new ObjectManager();
 }
 
 TitleScene::~TitleScene()
 {
     ObjectManager::GetInstance()->AllRelease();
-    delete m_ObjectManager;
-    m_ObjectManager = nullptr;
 }
 
 void TitleScene::Load()
@@ -41,10 +37,11 @@ void TitleScene::Load()
     {
         InputManager::GetInstance()->SetInputMode(InputMode::MODE_UI);
 
-        ObjectManager::GetInstance()->Register(new TitleBackground("bg", DirectX::XMFLOAT3(0.f, 0.f, 1.f)));
+        ObjectManager::GetInstance()->Register(new Background("bg", DirectX::XMFLOAT3(0.f, 0.f, 1.f)));
         ObjectManager::GetInstance()->Register(new Button("start_ui", "quit_ui", NextScene, DirectX::XMFLOAT3(200.f, 360.f, 0.f)));
         ObjectManager::GetInstance()->Register(new Button("quit_ui", "start_ui", NextScene, DirectX::XMFLOAT3(800.f, 360.f, 0.f)));
 
+        ObjectManager::GetInstance()->Init();
         m_CurrentState = SceneState::Main;
     }
 }
