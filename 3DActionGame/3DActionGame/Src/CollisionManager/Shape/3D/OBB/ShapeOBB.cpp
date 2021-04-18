@@ -1,14 +1,9 @@
 ﻿#include "ShapeOBB.h"
-#include "../../../Utility/Calculation.h"
+#include "../../../../Utility/Calculation.h"
 
 bool ShapeOBB::HitTest(Shape3D& shape_)
 {
 	return shape_.HitTest(*this);
-}
-
-bool ShapeOBB::HitTest(ShapeAABB& shape_)
-{
-	return false;
 }
 
 bool ShapeOBB::HitTest(ShapeOBB& shape_)
@@ -154,11 +149,6 @@ bool ShapeOBB::HitTest(ShapeOBB& shape_)
 
 	// 分離平面が存在しないので衝突している
 	return true;
-}
-
-bool ShapeOBB::HitTest(ShapeCapsule& shape_)
-{
-	return false;
 }
 
 float ShapeOBB::LenSegOnSeparateAxis(DirectX::XMFLOAT3& spe_, DirectX::XMFLOAT3& e1_, DirectX::XMFLOAT3& e2_, DirectX::XMFLOAT3* e3_)

@@ -1,7 +1,7 @@
 ﻿#include "Enemy.h"
 #include "../../ObjectManager/ObjectManager.h"
 #include "../../CollisionManager/CollisionManager.h"
-#include "../../Shape/3D/OBB/ShapeOBB.h"
+#include "../../CollisionManager/Shape/3D/OBB/ShapeOBB.h"
 
 void Enemy::Update()
 {

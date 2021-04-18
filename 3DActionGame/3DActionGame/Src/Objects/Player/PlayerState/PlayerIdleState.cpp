@@ -1,31 +1,31 @@
-﻿#include "IdleState.h"
-#include "../Player.h"
+﻿#include "../Player.h"
+#include "PlayerRunState.h"
+#include "PlayerIdleState.h"
+#include "PlayerAttack01State.h"
 #include "../../../Engine/InputManager.h"
-#include "RunState.h"
-#include "Attack01State.h"
 
-PlayerState* IdleState::CheckState(Player* player_)
+PlayerState* PlayerIdleState::CheckState(Player* player_)
 {
 	if (InputManager::GetInstance()->GetKey(KeyInfo::Key_W) ||
 		InputManager::GetInstance()->GetKey(KeyInfo::Key_A) ||
 		InputManager::GetInstance()->GetKey(KeyInfo::Key_S) ||
 		InputManager::GetInstance()->GetKey(KeyInfo::Key_D))
 	{
-		return RunState::GetInstance();
+		return PlayerRunState::GetInstance();
 	}
 	else if (InputManager::GetInstance()->GetMouseDown(MouseButton::Left))
 	{
-		return Attack01State::GetInstance();
+		return PlayerAttack01State::GetInstance();
 	}
 
-	return IdleState::GetInstance();
+	return PlayerIdleState::GetInstance();
 }
 
-void IdleState::Update(Player* player_)
+void PlayerIdleState::Update(Player* player_)
 {
 }
 
-void IdleState::Enter(Player* player_)
+void PlayerIdleState::Enter(Player* player_)
 {
 	player_->SetMotion("Idle");
 }

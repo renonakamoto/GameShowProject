@@ -13,7 +13,6 @@ class ObjModel : public Model
 {
 public:
 	ObjModel() :
-		m_VertexBuffer(nullptr),
 		m_InputLayout(nullptr)	
 	{}
 
@@ -47,12 +46,10 @@ private:
 	bool CreateInputLayout(ID3D11Device* device, VertexShader* vertex_shader);
 
 private:
-	ID3D11Buffer*				 m_VertexBuffer;	// バーテックスバッファ
-	std::vector<ID3D11Buffer*>	 m_IndexBuffers;	// インデックスバッファ
 	ID3D11InputLayout*			 m_InputLayout;		// 入力レイアウト
 	std::vector<CVertex>		 m_Vertices;		// バーテックスバッファ
-	std::map < std::string, std::vector<UINT> >		 m_Indices;		// インデックスバッファ
-	std::map < std::string, ObjMaterial >			 m_Materials;	// マテリアル
+	std::map <std::string, std::vector<UINT>>		 m_Indices;		// インデックスバッファ
+	std::map <std::string, ObjMaterial>			     m_Materials;	// マテリアル
 	std::map<std::string, ID3D11ShaderResourceView*> m_Textures;
 };
 

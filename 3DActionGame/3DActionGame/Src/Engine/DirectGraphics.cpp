@@ -65,8 +65,6 @@ bool DirectGraphics::Init()
 
     DirectX::XMStoreFloat4x4(&m_ConstantBufferData.LightView, DirectX::XMMatrixTranspose(light_view));
 
-    m_ConstantBufferData.Attenuation = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
-
 
     //テクスチャ行列の設定
     ZeroMemory(&m_ConstantBufferData.ClipUV, sizeof(DirectX::XMFLOAT4X4));

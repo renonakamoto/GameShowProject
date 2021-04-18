@@ -18,10 +18,6 @@ void Camera::Update()
     
 }
 
-void Camera::Draw()
-{
-}
-
 DirectX::XMFLOAT3 Camera::GetFowardNormal()
 {
     DirectX::XMFLOAT3 forward;
@@ -44,9 +40,7 @@ DirectX::XMFLOAT3 Camera::GetLeftNormal()
 }
 
 void Camera::Init()
-{    
-    m_Tag = "FollowCamera";
-
+{
     HWND window_handle = FindWindow(Window::ClassName, nullptr);
     RECT rect;
     GetClientRect(window_handle, &rect);
@@ -63,8 +57,4 @@ void Camera::Init()
     // プロジェクション行列の作成
     m_ProjMat = DirectX::XMMatrixPerspectiveFovLH(fov, aspect, near_z, far_z);
     DirectX::XMStoreFloat4x4(&DirectGraphics::GetInstance()->GetConstantBufferData()->Projection, DirectX::XMMatrixTranspose(m_ProjMat));
-}
-
-void Camera::Release()
-{
 }

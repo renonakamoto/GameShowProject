@@ -4,13 +4,19 @@
 #include "../../ObjectManager/Object3D.h"
 #include "../../Model/ObjFileStrage.h"
 
+/**
+* @brief ステージクラス
+*/
 class Stage : public Object3D
 {
-	static const int StageWieth = 1200;
-	static const int StageHeight = 1200;
-	static const int StageSplitNum = 10;
+	static const int m_StageWieth    = 1200; //! ステージの横幅
+	static const int m_StageHeight   = 1200; //! ステージの縦幅
+	static const int m_StageSplitNum = 10;	 //! ステージの分割数
 
 public:
+	/**
+	* @brief コンストラクタ
+	*/
 	Stage() :
 		m_Model(nullptr),
 		m_CellSize(0)
@@ -22,31 +28,72 @@ public:
 		}
 	}
 
+	/**
+	* @brief コンストラクタ
+	*/
 	~Stage()
 	{
 		Release();
 	}
 
-
+	/**
+	* @fn void Init()
+	* @brief 初期化関数
+	*/
 	void Init() override;
-	void Update() override;
-	void Draw() override;
 
+	/**
+	* @fn void Update()
+	* @brief 更新関数
+	*/
+	void Update() override
+	{}
+
+	/**
+	* @fn void Draw()
+	* @brief 描画関数
+	*/
+	void Draw() override;
+	
+	/**
+	* @fn float GetPolygonHeight(DirectX::XMFLOAT3 pos_)
+	* @brief ある座標のマップのポリゴンの高さを返す関数
+	* @param[in] pos_ 高さを調べたい座標
+	* @return float マップのポリゴンの高さ
+	* @details マップの範囲にいなければ-100.fを返す
+	*/
 	float GetPolygonHeight(DirectX::XMFLOAT3 pos_) const;
 
-	std::vector<CVertex>* GetMapData() { return &m_MapData[0][1]; }
-
-	bool IntersectRayAndMap(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, float& height_);
+	/**
+	* @fn bool IntersectRayAndMap(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, float& height_)
+	* @brief レイとステージが当たっているかを判定する関数
+	* @param[in] rayOrigin_ レイの原点
+	* @param[in] rayDistance_ 終点までのベクトル
+	* @param[out] height_ 当たった際のポリゴンの高さ
+	* @return bool 当たっているかどうかを真偽で返す
+	*/
+	bool IntersectRayAndStage(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, float& height_);
 	
 private:
-	void Release() override;
+	/**
+	* @fn void CreateSplitMapData()
+	* @brief ステージを分割する関数
+	* @details ステージとの当たり判定を軽くするためにポリゴンを分割する
+	*/
 	void CreateSplitMapData();
 
-private:
-	std::vector<CVertex> m_MapData[StageSplitNum + 1][StageSplitNum + 1];
-	float m_CellSize;
+	/**
+	* @fn void Release()
+	* @brief 解放関数
+	*/
+	void Release() override
+	{}
 
-	ObjModel* m_Model;
+private:
+	std::vector<CVertex> m_MapData[m_StageSplitNum + 1][m_StageSplitNum + 1];	//! 分割したポリゴンを保存する変数
+	float m_CellSize;	//! ステージを分割した際の1マスのサイズ
+
+	ObjModel* m_Model;	//! ステージのモデル
 };
 
 #endif

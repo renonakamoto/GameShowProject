@@ -521,13 +521,6 @@ bool ObjModel::LoadTexture(std::string keyWord_, std::string fileName_, ID3D11De
     
     if (FAILED(hr)) return false;
 
-    hr = DirectX::CreateShaderResourceView(
-        device_,
-        image.GetImages(),
-        image.GetImageCount(),
-        metadata,
-        &shader_res_view);
-
     if (FAILED(DirectX::CreateShaderResourceView(
         device_,
         image.GetImages(),
@@ -541,7 +534,7 @@ bool ObjModel::LoadTexture(std::string keyWord_, std::string fileName_, ID3D11De
     
     m_Textures[keyWord_] = shader_res_view;
 
-    return true; 
+    return true;
 }
 
 bool ObjModel::CreateVertexBuffer(ID3D11Device* device_)

@@ -43,8 +43,7 @@ int APIENTRY WinMain(
 	{
 		return -5;
 	}
-
-	SoundManager::GetInstance()->LoadSEData("Res/Sounds/button01a.wav", "button01a");
+	
 	
 	while (true)
 	{

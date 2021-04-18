@@ -2,9 +2,9 @@
 #define BUTTON_H_
 
 #include <string>
-#include "../Object2D.h"
+#include "../../ObjectManager/Object2D.h"
 #include "../../Engine/Texture/Texture.h"
-#include "../../Shape/Rect.h"
+#include "../../CollisionManager/Shape/2D/Rect/Rect.h"
 
 class Button : public Object2D
 {

@@ -10,7 +10,6 @@ EnemyState* EnemyIdleState::CheckState(Enemy* enemy_)
 		return EnemyHitState::GetInstance();
 	}
 
-	
 	return EnemyIdleState::GetInstance();
 }
 
@@ -20,5 +19,6 @@ void EnemyIdleState::Update(Enemy* enemy_)
 
 void EnemyIdleState::Enter(Enemy* enemy_)
 {
+	// 待機モーションを再生する
 	enemy_->m_Model->Play("Idle");
 }

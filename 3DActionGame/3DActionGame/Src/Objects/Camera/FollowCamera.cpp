@@ -2,19 +2,24 @@
 #include "../../Engine/DirectGraphics.h"
 #include "../../Engine/InputManager.h"
 
+void FollowCamera::Init()
+{
+    Camera::Init();
+    m_Tag = "FollowCamera";
+}
+
 void FollowCamera::Update()
 {
     // マウスのX軸の移動量をY軸回転に加算
     m_Yaw   -= InputManager::GetInstance()->GetMouseMovementX();
-    m_Pitch -= InputManager::GetInstance()->GetMouseMovementY();
 
     // マウス感度を取得
     float sensi = InputManager::GetInstance()->GetMousemSensitivity();
 
-    SetLookAtPos(m_FollowObject->GetPos());
+    if (m_FollowObject)SetLookAtPos(m_FollowObject->GetPos());
 
     m_Pos.x = ((m_LookAt.x + m_Offset.x) + m_Distance *  sinf(DirectX::XMConvertToRadians(m_Yaw   * sensi)));
-    m_Pos.y = ((m_LookAt.y + m_Offset.y));// +m_Distance * sinf(DirectX::XMConvertToRadians(m_Pitch * sensi)));
+    m_Pos.y = ((m_LookAt.y + m_Offset.y));
     m_Pos.z = ((m_LookAt.z + m_Offset.z) + m_Distance * -cosf(DirectX::XMConvertToRadians(m_Yaw   * sensi)));
 
     

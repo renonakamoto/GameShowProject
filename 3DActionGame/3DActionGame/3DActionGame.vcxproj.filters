@@ -34,14 +34,8 @@
     <Filter Include="Src\Model">
       <UniqueIdentifier>{99845381-0a1c-42c0-bba7-09a699e6488c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Scene">
-      <UniqueIdentifier>{53f2f284-ea99-4273-bf92-e2ca2340ea86}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\ObjectManager">
       <UniqueIdentifier>{b7615539-7465-40f9-89ef-3c2bd1f8bc98}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Image">
-      <UniqueIdentifier>{39234c34-56c2-4ce6-b296-1e7decb55f37}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\Engine\Texure">
       <UniqueIdentifier>{a8ffd892-c2dc-48c4-9e3d-83e69492933e}</UniqueIdentifier>
@@ -61,15 +55,6 @@
     <Filter Include="Src\2DObject\Game">
       <UniqueIdentifier>{4b49f84e-2b80-45b9-a6a0-18331fab46e2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\ObjectManager\UI">
-      <UniqueIdentifier>{ff2a9297-7187-4bec-a747-7b1eca4ee68f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Shape">
-      <UniqueIdentifier>{0c00453c-5d03-4eb1-b169-6c88e25cb9bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Objects\Player\PlayerMotion">
-      <UniqueIdentifier>{cd09f7ed-5e65-4dc9-b293-c3852116fe65}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Objects\Enemy">
       <UniqueIdentifier>{151f8c42-b60f-4e25-be08-98bf998f9d53}</UniqueIdentifier>
     </Filter>
@@ -79,29 +64,35 @@
     <Filter Include="Src\Objects\Camera">
       <UniqueIdentifier>{2edfc950-cfec-4cdf-976e-78dfb87b47cb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Shape\2D">
-      <UniqueIdentifier>{ab4687c5-1662-45dd-b33b-29a98ea1f167}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Shape\3D">
-      <UniqueIdentifier>{c9e05f7a-b6d2-474c-827e-f6bc7ac4a50e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Shape\3D\AABB">
-      <UniqueIdentifier>{eaa32ff0-f738-4b3a-aa20-da5949032c0d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Shape\3D\OBB">
-      <UniqueIdentifier>{063464ea-a878-45ec-a5cb-5b4a205a5f56}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Shape\3D\Ray">
-      <UniqueIdentifier>{368e28e1-7555-463a-ad48-579b437b2143}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Shape\3D\Capsule">
-      <UniqueIdentifier>{8bea86dc-7ffa-425d-97b7-6874d2c84654}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\CollisionManager">
       <UniqueIdentifier>{e9950e62-4478-4f0f-a016-c6e01c2f506b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\Objects\Enemy\EnemyState">
       <UniqueIdentifier>{346b8d20-d3ac-4023-9f5a-30ed69db64d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\2DObject\UI">
+      <UniqueIdentifier>{08a146b0-2784-4417-b328-54ed2b2e61fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Objects\Scene">
+      <UniqueIdentifier>{53f2f284-ea99-4273-bf92-e2ca2340ea86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\CollisionManager\Shape">
+      <UniqueIdentifier>{2d4ad288-ba7e-4747-b7c0-cdc58a08deaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\CollisionManager\Shape\2D">
+      <UniqueIdentifier>{2fbe2ea4-01bc-4f6b-b730-896b0c7f6c2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\CollisionManager\Shape\3D">
+      <UniqueIdentifier>{19044c24-90cb-425f-900e-ed629e8165d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\CollisionManager\Shape\3D\OBB">
+      <UniqueIdentifier>{0a9fcca2-0b2d-45ce-909d-461fb9d8b5e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\CollisionManager\Shape\2D\Rect">
+      <UniqueIdentifier>{746ea8e6-16d8-434f-b129-afba551245e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Objects\Player\PlayerState">
+      <UniqueIdentifier>{cd09f7ed-5e65-4dc9-b293-c3852116fe65}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -142,25 +133,22 @@
       <Filter>Src\Engine\ObjModel</Filter>
     </ClCompile>
     <ClCompile Include="Src\Scene\SceneManager.cpp">
-      <Filter>Src\Scene</Filter>
+      <Filter>Src\Objects\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Src\Scene\TitleScene.cpp">
-      <Filter>Src\Scene</Filter>
+      <Filter>Src\Objects\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Src\Scene\ClearScene.cpp">
-      <Filter>Src\Scene</Filter>
+      <Filter>Src\Objects\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Src\Scene\GameoverScene.cpp">
-      <Filter>Src\Scene</Filter>
+      <Filter>Src\Objects\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Src\Scene\GameScene.cpp">
-      <Filter>Src\Scene</Filter>
+      <Filter>Src\Objects\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Src\Model\FbxStorage.cpp">
       <Filter>Src\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Sprite\Image.cpp">
-      <Filter>Src\Image</Filter>
     </ClCompile>
     <ClCompile Include="Src\Engine\Texture\Texture.cpp">
       <Filter>Src\Engine\Texure</Filter>
@@ -180,29 +168,8 @@
     <ClCompile Include="Src\ObjectManager\ObjectManager.cpp">
       <Filter>Src\ObjectManager</Filter>
     </ClCompile>
-    <ClCompile Include="Src\ObjectManager\UI\Button.cpp">
-      <Filter>Src\ObjectManager\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Utility\Calculation.cpp">
       <Filter>Src\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Shape\Shape.cpp">
-      <Filter>Src\Shape</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Shape\Rect.cpp">
-      <Filter>Src\Shape</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Objects\Player\PlayerMotion\IdleState.cpp">
-      <Filter>Src\Objects\Player\PlayerMotion</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Objects\Player\PlayerMotion\Attack01State.cpp">
-      <Filter>Src\Objects\Player\PlayerMotion</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Objects\Player\PlayerMotion\Attack02State.cpp">
-      <Filter>Src\Objects\Player\PlayerMotion</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Objects\Player\PlayerMotion\RunState.cpp">
-      <Filter>Src\Objects\Player\PlayerMotion</Filter>
     </ClCompile>
     <ClCompile Include="Src\Objects\Stage\Stage.cpp">
       <Filter>Src\Objects\Stage</Filter>
@@ -215,18 +182,6 @@
     </ClCompile>
     <ClCompile Include="Src\Objects\Camera\FollowCamera.cpp">
       <Filter>Src\Objects\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Shape\3D\Capsule\ShapeCapsule.cpp">
-      <Filter>Src\Shape\3D\Capsule</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Shape\3D\AABB\ShapeAABB.cpp">
-      <Filter>Src\Shape\3D\AABB</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Shape\3D\Ray\ShapeRay.cpp">
-      <Filter>Src\Shape\3D\Ray</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Shape\3D\OBB\ShapeOBB.cpp">
-      <Filter>Src\Shape\3D\OBB</Filter>
     </ClCompile>
     <ClCompile Include="Src\Objects\Enemy\Enemy.cpp">
       <Filter>Src\Objects\Enemy</Filter>
@@ -248,6 +203,27 @@
     </ClCompile>
     <ClCompile Include="Src\2DObject\Title\BackGround.cpp">
       <Filter>Src\2DObject\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\2DObject\UI\Button.cpp">
+      <Filter>Src\2DObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionManager\Shape\2D\Rect\Rect.cpp">
+      <Filter>Src\CollisionManager\Shape\2D\Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionManager\Shape\3D\OBB\ShapeOBB.cpp">
+      <Filter>Src\CollisionManager\Shape\3D\OBB</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\Player\PlayerState\PlayerRunState.cpp">
+      <Filter>Src\Objects\Player\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\Player\PlayerState\PlayerIdleState.cpp">
+      <Filter>Src\Objects\Player\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\Player\PlayerState\PlayerAttack02State.cpp">
+      <Filter>Src\Objects\Player\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\Player\PlayerState\PlayerAttack01State.cpp">
+      <Filter>Src\Objects\Player\PlayerState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -288,37 +264,34 @@
       <Filter>Src\Engine\ObjModel</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\SceneChanger.h">
-      <Filter>Src\Scene</Filter>
+      <Filter>Src\Objects\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\SceneDefinition.h">
-      <Filter>Src\Scene</Filter>
+      <Filter>Src\Objects\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\SceneManager.h">
-      <Filter>Src\Scene</Filter>
+      <Filter>Src\Objects\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\TitleScene.h">
-      <Filter>Src\Scene</Filter>
+      <Filter>Src\Objects\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\ClearScene.h">
-      <Filter>Src\Scene</Filter>
+      <Filter>Src\Objects\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\GameoverScene.h">
-      <Filter>Src\Scene</Filter>
+      <Filter>Src\Objects\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\GameScene.h">
-      <Filter>Src\Scene</Filter>
+      <Filter>Src\Objects\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\Scene.h">
-      <Filter>Src\Scene</Filter>
+      <Filter>Src\Objects\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Model\FbxStorage.h">
       <Filter>Src\Model</Filter>
     </ClInclude>
     <ClInclude Include="Src\ObjectManager\ObjectBase.h">
       <Filter>Src\ObjectManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Sprite\Image.h">
-      <Filter>Src\Image</Filter>
     </ClInclude>
     <ClInclude Include="Src\Engine\Texture\Texture.h">
       <Filter>Src\Engine\Texure</Filter>
@@ -338,32 +311,8 @@
     <ClInclude Include="Src\ObjectManager\ObjectManager.h">
       <Filter>Src\ObjectManager</Filter>
     </ClInclude>
-    <ClInclude Include="Src\ObjectManager\UI\Button.h">
-      <Filter>Src\ObjectManager\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Utility\Calculation.h">
       <Filter>Src\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Shape\Shape.h">
-      <Filter>Src\Shape</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Shape\Rect.h">
-      <Filter>Src\Shape</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Objects\Player\PlayerMotion\PlayerState.h">
-      <Filter>Src\Objects\Player\PlayerMotion</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Objects\Player\PlayerMotion\IdleState.h">
-      <Filter>Src\Objects\Player\PlayerMotion</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Objects\Player\PlayerMotion\Attack01State.h">
-      <Filter>Src\Objects\Player\PlayerMotion</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Objects\Player\PlayerMotion\Attack02State.h">
-      <Filter>Src\Objects\Player\PlayerMotion</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Objects\Player\PlayerMotion\RunState.h">
-      <Filter>Src\Objects\Player\PlayerMotion</Filter>
     </ClInclude>
     <ClInclude Include="Src\Objects\Stage\Stage.h">
       <Filter>Src\Objects\Stage</Filter>
@@ -379,21 +328,6 @@
     </ClInclude>
     <ClInclude Include="Src\Objects\Camera\FollowCamera.h">
       <Filter>Src\Objects\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Shape\Shape3D.h">
-      <Filter>Src\Shape</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Shape\3D\Capsule\ShapeCapsule.h">
-      <Filter>Src\Shape\3D\Capsule</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Shape\3D\AABB\ShapeAABB.h">
-      <Filter>Src\Shape\3D\AABB</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Shape\3D\Ray\ShapeRay.h">
-      <Filter>Src\Shape\3D\Ray</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Shape\3D\OBB\ShapeOBB.h">
-      <Filter>Src\Shape\3D\OBB</Filter>
     </ClInclude>
     <ClInclude Include="Src\Objects\Enemy\Enemy.h">
       <Filter>Src\Objects\Enemy</Filter>
@@ -421,6 +355,33 @@
     </ClInclude>
     <ClInclude Include="Src\2DObject\Title\BackGround.h">
       <Filter>Src\2DObject\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\2DObject\UI\Button.h">
+      <Filter>Src\2DObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionManager\Shape\3D\Shape3D.h">
+      <Filter>Src\CollisionManager\Shape\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionManager\Shape\3D\OBB\ShapeOBB.h">
+      <Filter>Src\CollisionManager\Shape\3D\OBB</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionManager\Shape\2D\Rect\Rect.h">
+      <Filter>Src\CollisionManager\Shape\2D\Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Player\PlayerState\PlayerState.h">
+      <Filter>Src\Objects\Player\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Player\PlayerState\PlayerRunState.h">
+      <Filter>Src\Objects\Player\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Player\PlayerState\PlayerIdleState.h">
+      <Filter>Src\Objects\Player\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Player\PlayerState\PlayerAttack02State.h">
+      <Filter>Src\Objects\Player\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Player\PlayerState\PlayerAttack01State.h">
+      <Filter>Src\Objects\Player\PlayerState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

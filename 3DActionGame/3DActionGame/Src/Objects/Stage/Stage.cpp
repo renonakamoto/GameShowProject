@@ -2,10 +2,6 @@
 #include "../../Utility/Vec2I.h"
 #include "../../Utility/Calculation.h"
 
-void Stage::Update()
-{
-}
-
 void Stage::Draw()
 {
 	DirectGraphics::GetInstance()->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -14,9 +10,16 @@ void Stage::Draw()
 
 float Stage::GetPolygonHeight(DirectX::XMFLOAT3 pos_)const
 {
-	UINT idx_x = static_cast<UINT>((pos_.x + StageWieth  / 2) / m_CellSize);
-	UINT idx_y = static_cast<UINT>((pos_.z + StageHeight / 2) / m_CellSize);
-	float height = -1.f;
+	// ステージ外なら
+	if (m_Pos.x > (m_StageWieth / 2) || m_Pos.x <  -(m_StageWieth / 2) ||
+		m_Pos.z > (m_StageHeight / 2)  || m_Pos.z < -(m_StageHeight / 2))
+	{
+		return -100.f;
+	}
+
+	UINT idx_x = static_cast<UINT>((pos_.x + m_StageWieth  / 2) / m_CellSize);
+	UINT idx_y = static_cast<UINT>((pos_.z + m_StageHeight / 2) / m_CellSize);
+	float height = -100.f;
 
 	for (size_t v = 0; v < m_MapData[idx_y][idx_x].size(); v+=3)
 	{
@@ -45,13 +48,13 @@ float Stage::GetPolygonHeight(DirectX::XMFLOAT3 pos_)const
 	return height;
 }
 
-bool Stage::IntersectRayAndMap(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, float& height_)
+bool Stage::IntersectRayAndStage(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, float& height_)
 {
 	// レイの終点のインデックスを算出
 	Vec2I re_idx;
 	DirectX::XMFLOAT3 ray_end = Calculation::Add(rayOrigin_, rayDistance_);
-	re_idx.X = static_cast<UINT>((ray_end.x + StageWieth  / 2) / m_CellSize);
-	re_idx.Y = static_cast<UINT>((ray_end.z + StageHeight / 2) / m_CellSize);
+	re_idx.X = static_cast<UINT>((ray_end.x + m_StageWieth  / 2) / m_CellSize);
+	re_idx.Y = static_cast<UINT>((ray_end.z + m_StageHeight / 2) / m_CellSize);
 
 	for (size_t v = 0; v < m_MapData[re_idx.Y][re_idx.X].size(); v += 3)
 	{
@@ -90,14 +93,11 @@ void Stage::Init()
 	m_Tag = "stage";
 }
 
-void Stage::Release()
-{
-}
 
 void Stage::CreateSplitMapData()
 {
 	// 分割した時の1マスのサイズを算出
-	m_CellSize = StageWieth / StageSplitNum;
+	m_CellSize = m_StageWieth / m_StageSplitNum;
 	// ステージのメッシュ情報を取得
 	const std::vector<CVertex>* vertices = &m_Model->GetMeshData(0)->Vertices;
 	
@@ -113,8 +113,8 @@ void Stage::CreateSplitMapData()
 		// ステージの真ん中が原点になっているので左上原点にするために頂点座標をずらす
 		for (int j = 0; j < 3; ++j)
 		{
-			v[j].x += (StageWieth  / 2);
-			v[j].z += (StageHeight / 2);
+			v[j].x += (m_StageWieth  / 2);
+			v[j].z += (m_StageHeight / 2);
 		}
 		
 		// 分割するサイズで割って配列のサイズにする

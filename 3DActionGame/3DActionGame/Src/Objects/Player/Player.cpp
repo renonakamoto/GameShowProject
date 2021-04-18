@@ -1,7 +1,7 @@
 ﻿#include "Player.h"
 #include "../../Engine/InputManager.h"
 #include "../../Utility/Calculation.h"
-#include "PlayerMotion/IdleState.h"
+#include "PlayerState/PlayerIdleState.h"
 #include "../../ObjectManager/ObjectManager.h"
 #include "../../CollisionManager/CollisionManager.h"
 #include "../../Objects/Enemy/Enemy.h"
@@ -17,7 +17,7 @@ void Player::Init()
 	m_Model->SetModel(FbxStorage::GetInstance()->GetModel("Ekard"));
 	
 	// プレイヤーステートの初期化
-	m_State = IdleState::GetInstance();
+	m_State = PlayerIdleState::GetInstance();
 	m_State->Enter(this);
 
 	// 参照用オブジェクトの取得
@@ -118,7 +118,7 @@ void Player::Attack()
 			Enemy* enemy = dynamic_cast<Enemy*>(obj);
 			if (enemy) {
 				// 敵にダメージを与える
-				enemy->Damage(3);
+				enemy->Damage(m_AttackPower);
 			}
 		}
 	}
@@ -135,11 +135,10 @@ void Player::Move(float x_, float z_)
 		m_Velocity = Calculation::Normalize(m_Velocity);
 	}
 	
-	m_Velocity = Calculation::Lerp(m_OldVelocity, m_Velocity, 5.0f * (1.0f / 60.0f));
+	m_Velocity    = Calculation::Lerp(m_OldVelocity, m_Velocity, (m_Speed / 60.0f));
 	m_OldVelocity = m_Velocity;
 
-
-	if (Calculation::Length(m_Velocity) > 0.2f)
+	if (Calculation::Length(m_Velocity) > 0.1f)
 	{
 		float angle = atan2f(m_Velocity.x, m_Velocity.z);
 		m_Rot.y = DirectX::XMConvertToDegrees(angle);

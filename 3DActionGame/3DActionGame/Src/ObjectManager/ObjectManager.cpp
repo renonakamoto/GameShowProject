@@ -2,43 +2,48 @@
 
 void ObjectManager::Init()
 {
-	for (size_t i = 0; i < m_Objects.size(); ++i)
+	for (size_t i = 0; i < m_ObjectList.size(); ++i)
 	{
-		if (m_Objects[i])m_Objects[i]->Init();
+		if (m_ObjectList[i])m_ObjectList[i]->Init();
 	}
 }
 
 void ObjectManager::Update()
 {
-	for (size_t i = 0; i < m_Objects.size(); ++i)
+	for (size_t i = 0; i < m_ObjectList.size(); ++i)
 	{
-		if (m_Objects[i])m_Objects[i]->Update();
+		if (m_ObjectList[i])m_ObjectList[i]->Update();
 	}
 }
 
 void ObjectManager::Draw()
 {
-	for (size_t i = 0; i < m_Objects.size(); ++i)
+	for (size_t i = 0; i < m_ObjectList.size(); ++i)
 	{
-		if (m_Objects[i])m_Objects[i]->Draw();
+		if (m_ObjectList[i])m_ObjectList[i]->Draw();
 	}
 }
 
 void ObjectManager::Register(ObjectBase* object_)
 {
-	m_Objects.push_back(object_);
+	if (object_ == nullptr) return;
+	m_ObjectList.push_back(object_);
 }
 
 void ObjectManager::Release(ObjectBase* object_)
 {
-	if (!object_)return;
-	for (auto itr = std::begin(m_Objects); itr != std::end(m_Objects); ++itr)
+	if (!object_ || m_ObjectList.empty())return;
+	for (auto itr = std::begin(m_ObjectList); itr != std::end(m_ObjectList); ++itr)
 	{
 		if (*itr == object_) {
-			m_Objects.erase(itr);
-			m_Objects.shrink_to_fit();
+			// リストから削除
+			m_ObjectList.erase(itr);
+			// 領域を切り詰める
+			m_ObjectList.shrink_to_fit();
+			// 解放する
 			delete object_;
 			object_ = nullptr;
+			
 			break;
 		}
 	}
@@ -46,7 +51,7 @@ void ObjectManager::Release(ObjectBase* object_)
 
 ObjectBase* ObjectManager::GetObj(std::string tag_)
 {
-	for (auto* objects : m_Objects)
+	for (auto* objects : m_ObjectList)
 	{
 		if (objects->GetTag() == tag_)
 		{
@@ -59,12 +64,14 @@ ObjectBase* ObjectManager::GetObj(std::string tag_)
 
 void ObjectManager::AllRelease()
 {
-	for (ObjectBase* object : m_Objects)
+	if (m_ObjectList.empty()) return;
+	for (ObjectBase* object : m_ObjectList)
 	{
 		delete object;
 		object = nullptr;
 	}
 
-	m_Objects.clear();
-	m_Objects.shrink_to_fit();
+	m_ObjectList.clear();
+	// 領域を切り詰める
+	m_ObjectList.shrink_to_fit();
 }

@@ -13,7 +13,6 @@
 
 
 static const int MOTION_MAX = 256;
-static const int BONE_MAX = 255;
 
 
 /**

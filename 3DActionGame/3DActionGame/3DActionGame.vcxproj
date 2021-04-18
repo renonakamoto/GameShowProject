@@ -20,7 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\2DObject\Title\BackGround.cpp" />
+    <ClCompile Include="Src\2DObject\UI\Button.cpp" />
     <ClCompile Include="Src\CollisionManager\CollisionManager.cpp" />
+    <ClCompile Include="Src\CollisionManager\Shape\2D\Rect\Rect.cpp" />
+    <ClCompile Include="Src\CollisionManager\Shape\3D\OBB\ShapeOBB.cpp" />
     <ClCompile Include="Src\Engine\DirectGraphics.cpp" />
     <ClCompile Include="Src\Engine\InputManager.cpp" />
     <ClCompile Include="Src\Engine\MeshModel\FbxModel\FbxModel.cpp" />
@@ -40,7 +43,6 @@
     <ClCompile Include="Src\ObjectManager\Object2D.cpp" />
     <ClCompile Include="Src\ObjectManager\Object3D.cpp" />
     <ClCompile Include="Src\ObjectManager\ObjectManager.cpp" />
-    <ClCompile Include="Src\ObjectManager\UI\Button.cpp" />
     <ClCompile Include="Src\Objects\Camera\Camera.cpp" />
     <ClCompile Include="Src\Objects\Camera\FollowCamera.cpp" />
     <ClCompile Include="Src\Objects\Enemy\Enemy.cpp" />
@@ -48,29 +50,26 @@
     <ClCompile Include="Src\Objects\Enemy\EnemyState\EnemyHitState.cpp" />
     <ClCompile Include="Src\Objects\Enemy\EnemyState\EnemyIdleState.cpp" />
     <ClCompile Include="Src\Objects\Player\Player.cpp" />
-    <ClCompile Include="Src\Objects\Player\PlayerMotion\Attack01State.cpp" />
-    <ClCompile Include="Src\Objects\Player\PlayerMotion\Attack02State.cpp" />
-    <ClCompile Include="Src\Objects\Player\PlayerMotion\IdleState.cpp" />
-    <ClCompile Include="Src\Objects\Player\PlayerMotion\RunState.cpp" />
+    <ClCompile Include="Src\Objects\Player\PlayerState\PlayerAttack01State.cpp" />
+    <ClCompile Include="Src\Objects\Player\PlayerState\PlayerAttack02State.cpp" />
+    <ClCompile Include="Src\Objects\Player\PlayerState\PlayerIdleState.cpp" />
+    <ClCompile Include="Src\Objects\Player\PlayerState\PlayerRunState.cpp" />
     <ClCompile Include="Src\Objects\Stage\Stage.cpp" />
     <ClCompile Include="Src\Scene\ClearScene.cpp" />
     <ClCompile Include="Src\Scene\GameoverScene.cpp" />
     <ClCompile Include="Src\Scene\GameScene.cpp" />
     <ClCompile Include="Src\Scene\SceneManager.cpp" />
     <ClCompile Include="Src\Scene\TitleScene.cpp" />
-    <ClCompile Include="Src\Shape\3D\AABB\ShapeAABB.cpp" />
-    <ClCompile Include="Src\Shape\3D\Capsule\ShapeCapsule.cpp" />
-    <ClCompile Include="Src\Shape\3D\OBB\ShapeOBB.cpp" />
-    <ClCompile Include="Src\Shape\3D\Ray\ShapeRay.cpp" />
-    <ClCompile Include="Src\Shape\Rect.cpp" />
-    <ClCompile Include="Src\Shape\Shape.cpp" />
-    <ClCompile Include="Src\Sprite\Image.cpp" />
     <ClCompile Include="Src\Utility\Calculation.cpp" />
     <ClCompile Include="Src\Utility\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\2DObject\Title\BackGround.h" />
+    <ClInclude Include="Src\2DObject\UI\Button.h" />
     <ClInclude Include="Src\CollisionManager\CollisionManager.h" />
+    <ClInclude Include="Src\CollisionManager\Shape\2D\Rect\Rect.h" />
+    <ClInclude Include="Src\CollisionManager\Shape\3D\OBB\ShapeOBB.h" />
+    <ClInclude Include="Src\CollisionManager\Shape\3D\Shape3D.h" />
     <ClInclude Include="Src\Engine\DirectGraphics.h" />
     <ClInclude Include="Src\Engine\InputManager.h" />
     <ClInclude Include="Src\Engine\MeshModel\FbxModel\FbxModel.h" />
@@ -91,7 +90,6 @@
     <ClInclude Include="Src\ObjectManager\Object3D.h" />
     <ClInclude Include="Src\ObjectManager\ObjectBase.h" />
     <ClInclude Include="Src\ObjectManager\ObjectManager.h" />
-    <ClInclude Include="Src\ObjectManager\UI\Button.h" />
     <ClInclude Include="Src\Objects\Camera\Camera.h" />
     <ClInclude Include="Src\Objects\Camera\FollowCamera.h" />
     <ClInclude Include="Src\Objects\Enemy\Enemy.h" />
@@ -100,11 +98,11 @@
     <ClInclude Include="Src\Objects\Enemy\EnemyState\EnemyIdleState.h" />
     <ClInclude Include="Src\Objects\Enemy\EnemyState\EnemyState.h" />
     <ClInclude Include="Src\Objects\Player\Player.h" />
-    <ClInclude Include="Src\Objects\Player\PlayerMotion\Attack01State.h" />
-    <ClInclude Include="Src\Objects\Player\PlayerMotion\Attack02State.h" />
-    <ClInclude Include="Src\Objects\Player\PlayerMotion\PlayerState.h" />
-    <ClInclude Include="Src\Objects\Player\PlayerMotion\IdleState.h" />
-    <ClInclude Include="Src\Objects\Player\PlayerMotion\RunState.h" />
+    <ClInclude Include="Src\Objects\Player\PlayerState\PlayerAttack01State.h" />
+    <ClInclude Include="Src\Objects\Player\PlayerState\PlayerAttack02State.h" />
+    <ClInclude Include="Src\Objects\Player\PlayerState\PlayerIdleState.h" />
+    <ClInclude Include="Src\Objects\Player\PlayerState\PlayerState.h" />
+    <ClInclude Include="Src\Objects\Player\PlayerState\PlayerRunState.h" />
     <ClInclude Include="Src\Objects\Stage\Stage.h" />
     <ClInclude Include="Src\Scene\ClearScene.h" />
     <ClInclude Include="Src\Scene\GameoverScene.h" />
@@ -114,14 +112,6 @@
     <ClInclude Include="Src\Scene\SceneDefinition.h" />
     <ClInclude Include="Src\Scene\SceneManager.h" />
     <ClInclude Include="Src\Scene\TitleScene.h" />
-    <ClInclude Include="Src\Shape\3D\AABB\ShapeAABB.h" />
-    <ClInclude Include="Src\Shape\3D\Capsule\ShapeCapsule.h" />
-    <ClInclude Include="Src\Shape\3D\OBB\ShapeOBB.h" />
-    <ClInclude Include="Src\Shape\3D\Ray\ShapeRay.h" />
-    <ClInclude Include="Src\Shape\Rect.h" />
-    <ClInclude Include="Src\Shape\Shape.h" />
-    <ClInclude Include="Src\Shape\Shape3D.h" />
-    <ClInclude Include="Src\Sprite\Image.h" />
     <ClInclude Include="Src\Utility\Calculation.h" />
     <ClInclude Include="Src\Utility\GraphicsUtility.h" />
     <ClInclude Include="Src\Utility\Utility.h" />

@@ -10,6 +10,7 @@ void EnemyDeathState::Update(Enemy* enemy_)
 {
 	SkeletalModel* model = enemy_->m_Model;
 
+	// 死亡モーションが終了したら死亡フラグをtrueにする
 	if (model->GetCurrentFrame() >= model->GetModel()->GetMotionData("Death")->FrameNum - 2) {
 		enemy_->m_IsDeath = true;
 	}
@@ -17,5 +18,6 @@ void EnemyDeathState::Update(Enemy* enemy_)
 
 void EnemyDeathState::Enter(Enemy* enemy_)
 {
+	// 死亡モーションを再生する
 	enemy_->m_Model->Play("Death");
 }

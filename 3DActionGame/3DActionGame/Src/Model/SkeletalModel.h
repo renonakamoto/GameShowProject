@@ -8,8 +8,16 @@ class SkeletalModel
 {
 public:
 	SkeletalModel() :
-		m_Model(nullptr),
-		m_PlayMotion(""),
+		SkeletalModel(nullptr, "")
+	{}
+
+	SkeletalModel(FbxModel* model_) :
+		SkeletalModel(model_, "")
+	{}
+
+	SkeletalModel(FbxModel* model_, std::string motionName_) :
+		m_Model(model_),
+		m_PlayMotion(motionName_),
 		m_Frame(0.f)
 	{}
 

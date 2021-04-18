@@ -4,30 +4,88 @@
 #include <vector>
 #include "ObjectBase.h"
 
-
+/**
+* @brief ゲームオブジェクトを管理するクラス
+*/
 class ObjectManager
 {
 public:
+	/**
+	* @fn static CollisionManager* GetInstance()
+	* @brief インスタンスを返す関数
+	* @return CollisionManager* インスタンスのポインタ
+	*/
 	static ObjectManager* GetInstance()
 	{
 		static ObjectManager instance;
 		return &instance;
 	}
 
+	/**
+	* @fn void Init()
+	* @brief リストに登録されているゲームオブジェクトのInit関数を呼ぶ関数
+	*/
 	void Init();
+
+	/**
+	* @fn void Update()
+	* @brief リストに登録されているゲームオブジェクトのUpdate関数を呼ぶ関数
+	*/
 	void Update();
+
+	/**
+	* @fn void Draw()
+	* @brief リストに登録されているゲームオブジェクトのDraw関数を呼ぶ関数
+	*/
 	void Draw();
 
+	/**
+	* @fn void Register(Object3D* object_)
+	* @brief オブジェクトリストに追加する関数
+	* @param[in] object_ ゲームオブジェクト
+	*/
 	void Register(ObjectBase* object_);
 
+	/**
+	* @fn void Release(Object3D* object_)
+	* @brief リストから指定したオブジェクトを削除する関数
+	* @param[in] object_ 削除したいオブジェクト
+	* @details 確保されているメモリも一緒に解放する
+	*/
 	void Release(ObjectBase* object_);
 
+	/**
+	* @fn void AllRelease()
+	* @brief リストに登録されているオブジェクトをすべて削除する関数
+	* @details 確保されているメモリも一緒に解放する
+	*/
 	void AllRelease();
 
+	/**
+	* @fn ObjectBase* GetObj(std::string tag_)
+	* @brief 指定されたタグのついているオブジェクトのポインタを返す関数
+	* @return ObjectBase* オブジェクトのポインタ、見つからなかったらnullptrを返す
+	* @details 見つけた最初のオブジェクトを返す
+	*/
 	ObjectBase* GetObj(std::string tag_);
 
 private:
-	std::vector<ObjectBase*> m_Objects;
+	/**
+	* @brief コンストラクタ
+	*/
+	ObjectManager()
+	{}
+
+	/**
+	* @brief デストラクタ
+	*/
+	~ObjectManager()
+	{
+		AllRelease();
+	}
+
+private:
+	std::vector<ObjectBase*> m_ObjectList;	//! ゲームオブジェクトリスト
 	
 };
 

@@ -37,7 +37,6 @@ cbuffer ConstantBuffer : register(b0)
     float4x4 ClipUV;
     float4   CameraPos;
     float4   Light;
-    float4   Attenuation;
     float4   MaterialAmbient;
     float4   MaterialDiffuse;
     float4   MaterialSpecular;

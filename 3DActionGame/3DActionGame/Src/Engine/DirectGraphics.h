@@ -18,6 +18,7 @@ public:
 	}
 
 	DirectGraphics() :
+#pragma region MemberInit
 		m_Device(nullptr),
 		m_Context(nullptr),
 		m_SwapChain(nullptr),
@@ -36,6 +37,7 @@ public:
 		m_FeatureLevel(D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_10_0),
 		m_SamplerState(nullptr),
 		m_SampleDesc{ 0 }
+#pragma endregion
 	{}
 
 	~DirectGraphics()
