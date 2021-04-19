@@ -1,5 +1,6 @@
 ﻿#include <codecvt>
 #include "../../../DirectXTex/DirectXTex.h"
+#include "../../Engine.h"
 #include "FbxModel.h"
 #include "../../../Utility/Utility.h"
 
@@ -124,8 +125,7 @@ bool FbxModel::LoadModel(const char* fileName_)
 		manager->Destroy();
 	}
 
-	ID3D11Device* device	    = DirectGraphics::GetInstance()->GetDevice();
-	VertexShader* vertex_shader = DirectGraphics::GetInstance()->GetVertexShader();
+	ID3D11Device* device = GRAPHICS->GetDevice();
 
 	// バーテックスバッファの作成
 	if (CreateVertexBuffer(device) == false)
@@ -140,7 +140,7 @@ bool FbxModel::LoadModel(const char* fileName_)
 	}
 
 	// 入力レイアウトの作成
-	if (CreateInputLayout(device, vertex_shader) == false)
+	if (CreateInputLayout(device, GRAPHICS->GetVertexShader()) == false)
 	{
 		return false;
 	}
@@ -238,22 +238,24 @@ bool FbxModel::LoadMotion(std::string keyword_, const char* fileName_)
 }
 
 
-void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_, std::string motionName_, float frameNum_)
+void FbxModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_, std::string motionName_, float frameNum_)
 {
-	UINT strides = sizeof(CVertex);
-	UINT offsets = 0;
-	ID3D11DeviceContext* context = graphics_->GetContext();
+	DirectGraphics* graphics = GRAPHICS;
+	ID3D11DeviceContext* context = graphics->GetContext();
 	context->IASetInputLayout(m_InputLayout);
 
 	/*
 		頂点シェーダの設定
 	*/
-	context->VSSetShader(graphics_->GetVertexShader()->GetShaderInterface(), NULL, 0);
+	context->VSSetShader(graphics->GetVertexShader()->GetShaderInterface(), NULL, 0);
 	/*
 		ピクセルシェーダの設定
 	*/
-	context->PSSetShader(graphics_->GetPixelShader()->GetShaderInterface(), NULL, 0);
-
+	context->PSSetShader(graphics->GetPixelShader()->GetShaderInterface(), NULL, 0);
+	
+	UINT strides = sizeof(CVertex);
+	UINT offsets = 0;
+	
 	for (auto& mesh : m_MeshList)
 	{
 		context->IASetVertexBuffers(
@@ -278,7 +280,7 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 		mat_world = mat_scale * mat_rot_x * mat_rot_y * mat_rot_z * mat_trans;
 
 		// ワールド行列をコンスタントバッファに設定
-		DirectX::XMStoreFloat4x4(&graphics_->GetConstantBufferData()->World, DirectX::XMMatrixTranspose(mat_world));
+		DirectX::XMStoreFloat4x4(&graphics->GetConstantBufferData()->World, DirectX::XMMatrixTranspose(mat_world));
 		
 		// ボーン行列
 		Motion* motion = &m_Motion[motionName_];
@@ -295,38 +297,38 @@ void FbxModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
 					//m_Bone[b].Transform = motion->Key[b][f] * (1.0f - (frame - static_cast<int>(frame))) + motion->Key[b][(size_t)f + 1] * (frame - static_cast<int>(frame));
 					m_Bone[b].Transform = motion->Key[b][f];
 					DirectX::XMMATRIX mat = m_Bone[b].Offset * m_Bone[b].Transform;
-					graphics_->GetConstBoneBufferData()->Bone[b] = DirectX::XMMatrixTranspose(mat);
+					graphics->GetConstBoneBufferData()->Bone[b] = DirectX::XMMatrixTranspose(mat);
 				}
 			}
 		}
 
 		if (m_MaterialLinks.count(mesh.MaterialName) > 0)
 		{
-			graphics_->SetTexture(m_MaterialLinks[mesh.MaterialName]);
+			graphics->SetTexture(m_MaterialLinks[mesh.MaterialName]);
 			// コンスタントバッファにマテリアル情報を保存する
-			graphics_->SetMaterial(nullptr);
+			graphics->SetMaterial(nullptr);
 		}
 		else
 		{
 			// コンスタントバッファにマテリアル情報を保存する
-			graphics_->SetMaterial(&m_Materials[mesh.MaterialName]);
-			graphics_->SetTexture(nullptr);
+			graphics->SetMaterial(&m_Materials[mesh.MaterialName]);
+			graphics->SetTexture(nullptr);
 		}
 
 		// コンスタントバッファの更新
-		graphics_->GetContext()->UpdateSubresource(graphics_->GetConstantBuffer(), 0, NULL, graphics_->GetConstantBufferData(), 0, 0);
-		graphics_->GetContext()->UpdateSubresource(graphics_->GetConstBoneBuffer(), 0, NULL, graphics_->GetConstBoneBufferData(), 0, 0);
+		graphics->GetContext()->UpdateSubresource(graphics->GetConstantBuffer(), 0U, NULL, graphics->GetConstantBufferData(), 0U, 0U);
+		graphics->GetContext()->UpdateSubresource(graphics->GetConstBoneBuffer(), 0U, NULL, graphics->GetConstBoneBufferData(), 0U, 0U);
 
 		// シェーダーにコンスタントバッファの情報を送る
-		ID3D11Buffer* constant_buffer = graphics_->GetConstantBuffer();
-		context->VSSetConstantBuffers(0, 1, &constant_buffer);
-		context->PSSetConstantBuffers(0, 1, &constant_buffer);
+		ID3D11Buffer* constant_buffer = graphics->GetConstantBuffer();
+		context->VSSetConstantBuffers(0U, 1U, &constant_buffer);
+		context->PSSetConstantBuffers(0U, 1, &constant_buffer);
 
-		constant_buffer = graphics_->GetConstBoneBuffer();
-		context->VSSetConstantBuffers(1, 1, &constant_buffer);
+		constant_buffer = graphics->GetConstBoneBuffer();
+		context->VSSetConstantBuffers(1U, 1U, &constant_buffer);
 
 		// 描画
-		context->DrawIndexed(static_cast<UINT>(mesh.Indices.size()), 0, 0);
+		context->DrawIndexed(static_cast<UINT>(mesh.Indices.size()), 0U, 0U);
 	}
 
 }
@@ -335,7 +337,7 @@ bool FbxModel::AddMesh(const char* fileName_, DirectX::XMFLOAT3 pos_, DirectX::X
 {
 	// メッシュ追加前のメッシュの数を保存
 	size_t before_mesh_num = m_MeshList.size();
-	size_t after_mesh_num = 0;
+	size_t after_mesh_num  = 0;
 
 	// メッシュの読み込み
 	if (LoadModel(fileName_) == false) return false;
@@ -373,11 +375,11 @@ bool FbxModel::AddMesh(const char* fileName_, DirectX::XMFLOAT3 pos_, DirectX::X
 		}
 	}
 
-	if (CreateVertexBuffer(DirectGraphics::GetInstance()->GetDevice()) == false)
+	if (CreateVertexBuffer(GRAPHICS->GetDevice()) == false)
 	{
 		return false;
 	}
-	if (CreateIndexBuffer(DirectGraphics::GetInstance()->GetDevice()) == false)
+	if (CreateIndexBuffer(GRAPHICS->GetDevice()) == false)
 	{
 		return false;
 	}
@@ -482,7 +484,7 @@ void FbxModel::LoadMaterial(FbxSurfaceMaterial* material_)
 			texture = prop.GetSrcObject<FbxFileTexture>(0);
 		}
 	}
-	if (texture != nullptr && LoadTexute(DirectGraphics::GetInstance()->GetDevice(), texture, keyword) == true)
+	if (texture != nullptr && LoadTexute(GRAPHICS->GetDevice(), texture, keyword) == true)
 	{
 		m_MaterialLinks[material_->GetName()] = m_Textures[keyword];
 	}
@@ -502,7 +504,7 @@ void FbxModel::LoadMaterial(FbxSurfaceMaterial* material_)
 		for (int j = 0; j < tex_count; ++j)
 		{
 			texture = prop.GetSrcObject<FbxFileTexture>(j);
-			if (texture != nullptr && LoadTexute(DirectGraphics::GetInstance()->GetDevice(), texture, keyword) == true)
+			if (texture != nullptr && LoadTexute(GRAPHICS->GetDevice(), texture, keyword) == true)
 			{
 				m_MaterialLinks[material_->GetName()] = m_Textures[keyword];
 			}
@@ -753,23 +755,27 @@ void FbxModel::LoadBones(MeshData& meshData_, FbxMesh* mesh_)
 				// 頂点番号が一致しなければコンテニュー
 				if (index[vtx_i] != weight_id) continue;
 
-				//
 				int weight_count;
 				for (weight_count = 0; weight_count < 4; ++weight_count)
 				{
 					if (meshData_.Vertices[vtx_i].Weight[weight_count] <= 0.0f) break;
 				}
-				if (4 <= weight_count) continue;
-
-				//meshData_.m_Vertices[vtx_i].Index[weight_count] = bone_no;
-				//meshData_.m_Vertices[vtx_i].Weight[weight_count] = static_cast<float>(weight[i]);
-
-				// ボーンの影響度が大きいものを4つ選ぶ
-				if (meshData_.Vertices[vtx_i].Weight[weight_count] < static_cast<float>(weight[i]))
+				if (weight_count >= 4)
 				{
-					meshData_.Vertices[vtx_i].Index[weight_count]  = static_cast<UINT>(bone_no);
-					meshData_.Vertices[vtx_i].Weight[weight_count] = static_cast<float>(weight[i]);
+					for (int x = 0; x < 4; ++x)
+					{
+						if (meshData_.Vertices[vtx_i].Weight[x] < weight[i])
+						{
+							weight_count = x;
+						}
+					}
 				}
+				if (weight_count >= 4)
+				{
+					continue;
+				}
+				meshData_.Vertices[vtx_i].Index[weight_count] = static_cast<UINT>(bone_no);
+				meshData_.Vertices[vtx_i].Weight[weight_count] = static_cast<float>(weight[i]);
 			}
 		}
 	}

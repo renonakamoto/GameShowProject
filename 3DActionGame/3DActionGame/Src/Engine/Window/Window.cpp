@@ -17,7 +17,7 @@ LRESULT Window::WindowProc(HWND windowHandle_, UINT messageId_, WPARAM wparam_, 
 	return 0;
 }
 
-bool Window::Create()
+bool Window::Create(int windowWidth_, int windowHeight, const char* titleName_)
 {
 	if (EntryWindowClass() == false)
 	{
@@ -27,36 +27,38 @@ bool Window::Create()
 	DWORD dw_style = (WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME) | WS_VISIBLE;
 
 	RECT rect;
-	rect.left	= 0;
-	rect.top	= 0;
-	rect.right  = static_cast<long>(m_Width);
-	rect.bottom = static_cast<long>(m_Height);
+	rect.left   = 0;
+	rect.top    = 0;
+	rect.right  = static_cast<long>(windowWidth_);
+	rect.bottom = static_cast<long>(windowHeight);
 
 	// ウィンドウのスタイルに合わせたサイズを取得
 	AdjustWindowRect(&rect, dw_style, false);
 
-	m_Width  = rect.right - rect.left;
-	m_Height = rect.bottom - rect.top;
+	// クライアントサイズを算出
+	m_ClientWidth  = rect.right  - rect.left;
+	m_ClientHeight = rect.bottom - rect.top;
 
 	// ウィンドウ作成
 	m_WindowHandle = CreateWindow(
-	Window::ClassName,
-	m_Title,
-	dw_style,
-	CW_USEDEFAULT,
-	0,
-	m_Width,
-	m_Height,
-	NULL,
-	NULL,
-	GetModuleHandle(NULL),
-	NULL);
+		Window::ClassName,
+		titleName_,
+		dw_style,
+		CW_USEDEFAULT,
+		0,
+		m_ClientWidth,
+		m_ClientHeight,
+		NULL,
+		NULL,
+		GetModuleHandle(NULL),
+		NULL);
 
 	if (m_WindowHandle == NULL)
 	{
 		return false;
 	}
 
+	// Windowを真ん中に持ってくる
 	SetCenterWindow(m_WindowHandle);
 
 	return true;

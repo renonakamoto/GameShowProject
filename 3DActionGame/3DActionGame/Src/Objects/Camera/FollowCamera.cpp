@@ -1,6 +1,5 @@
 ﻿#include "FollowCamera.h"
-#include "../../Engine/DirectGraphics.h"
-#include "../../Engine/InputManager.h"
+#include "../../Engine/Engine.h"
 
 void FollowCamera::Init()
 {
@@ -11,10 +10,10 @@ void FollowCamera::Init()
 void FollowCamera::Update()
 {
     // マウスのX軸の移動量をY軸回転に加算
-    m_Yaw   -= InputManager::GetInstance()->GetMouseMovementX();
+    m_Yaw   -= INPUT->GetMouseMovementX();
 
     // マウス感度を取得
-    float sensi = InputManager::GetInstance()->GetMousemSensitivity();
+    float sensi = INPUT->GetMousemSensitivity();
 
     if (m_FollowObject)SetLookAtPos(m_FollowObject->GetPos());
 
@@ -30,6 +29,6 @@ void FollowCamera::Update()
     DirectX::XMMATRIX view_matrix = DirectX::XMMatrixLookAtLH(eye, focus, up);
     
 
-    DirectX::XMStoreFloat4x4(&DirectGraphics::GetInstance()->GetConstantBufferData()->View, DirectX::XMMatrixTranspose(view_matrix));
-    DirectX::XMStoreFloat4(&DirectGraphics::GetInstance()->GetConstantBufferData()->CameraPos, eye);
+    DirectX::XMStoreFloat4x4(&GRAPHICS->GetConstantBufferData()->View, DirectX::XMMatrixTranspose(view_matrix));
+    DirectX::XMStoreFloat4(&GRAPHICS->GetConstantBufferData()->CameraPos, eye);
 }

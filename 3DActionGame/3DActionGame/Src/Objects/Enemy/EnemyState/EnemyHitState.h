@@ -54,7 +54,7 @@ private:
 	/**
 	* @brief デストラクタ
 	*/
-	~EnemyHitState()
+	~EnemyHitState() final
 	{}
 
 private:

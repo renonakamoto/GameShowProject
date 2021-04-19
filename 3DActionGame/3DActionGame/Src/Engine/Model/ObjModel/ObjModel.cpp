@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <cstdio>
 #include <sstream>
+#include "../../Engine.h"
 #include "../../../Utility/Utility.h"
 #include "ObjModel.h"
 
@@ -18,7 +19,7 @@
 #endif
 
 
-bool ObjModel::Load(const char* fileName_, ID3D11Device* device_, VertexShader* vertex_shader)
+bool ObjModel::Load(const char* fileName_)
 {
     
     FILE* fp = nullptr;
@@ -126,30 +127,32 @@ bool ObjModel::Load(const char* fileName_, ID3D11Device* device_, VertexShader* 
         }
     }
 
+    ID3D11Device* device = GRAPHICS->GetDevice();
+
     strncpy_s(flie_path, fileName_, path_tail_point + 1);
-    
     if (flie_path != nullptr) {
-        if (LoadMaterialFile(material_list, flie_path, device_) == false) return false;
+        if (LoadMaterialFile(material_list, flie_path, device) == false) return false;
     }
 
-    if (CreateVertexBuffer(device_) == false) return false;
-    if (CreateIndexBuffer(device_)  == false) return false;
-    if (CreateInputLayout(device_, vertex_shader) == false) return false;
+    if (CreateVertexBuffer(device) == false) return false;
+    if (CreateIndexBuffer(device)  == false) return false;
+    if (CreateInputLayout(device, GRAPHICS->GetSimpleVertexShader()) == false) return false;
 
     return true;
 }
 
-void ObjModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree)
+void ObjModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree)
 {
     /*
         頂点シェーダの設定
     */
-    ID3D11DeviceContext* context = DirectGraphics::GetInstance()->GetContext();
-    context->VSSetShader(graphics_->GetSimpleVertexShader()->GetShaderInterface(), NULL, 0);
+    DirectGraphics* graphics = GRAPHICS;
+    ID3D11DeviceContext* context = graphics->GetContext();
+    context->VSSetShader(graphics->GetSimpleVertexShader()->GetShaderInterface(), NULL, 0);
     /*
         ピクセルシェーダの設定
     */
-    context->PSSetShader(graphics_->GetSimplePixelShader()->GetShaderInterface(), NULL, 0);
+    context->PSSetShader(graphics->GetSimplePixelShader()->GetShaderInterface(), NULL, 0);
 
     UINT strides = sizeof(CVertex);
     UINT offsets = 0;
@@ -168,30 +171,30 @@ void ObjModel::Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX
         DirectX::XMMATRIX world_matrix = scale * rotate_x * rotate_y * rotate_z * translate;
 
         // ワールド行列をコンスタントバッファに設定
-        DirectX::XMStoreFloat4x4(&graphics_->GetConstantBufferData()->World, DirectX::XMMatrixTranspose(world_matrix));
+        DirectX::XMStoreFloat4x4(&graphics->GetConstantBufferData()->World, DirectX::XMMatrixTranspose(world_matrix));
 
         // マテリアル設定
-        graphics_->SetMaterial(&m_Materials[mesh.MaterialName]);
+        graphics->SetMaterial(&m_Materials[mesh.MaterialName]);
 
         // コンスタントバッファの更新
-        context->UpdateSubresource(graphics_->GetConstantBuffer(), 0, nullptr, graphics_->GetConstantBufferData(), 0, 0);
+        context->UpdateSubresource(graphics->GetConstantBuffer(), 0, nullptr, graphics->GetConstantBufferData(), 0, 0);
 
         // コンスタントバッファを設定
-        ID3D11Buffer* constant_buffer = graphics_->GetConstantBuffer();
-        context->VSSetConstantBuffers(0, 1, &constant_buffer);
-        context->PSSetConstantBuffers(0, 1, &constant_buffer);
+        ID3D11Buffer* constant_buffer = graphics->GetConstantBuffer();
+        context->VSSetConstantBuffers(0U, 1U, &constant_buffer);
+        context->PSSetConstantBuffers(0U, 1U, &constant_buffer);
 
         if (m_Textures.count(m_Materials[mesh.MaterialName].TextureKeyWord) > 0)
         {
-            graphics_->SetTexture(m_Textures[m_Materials[mesh.MaterialName].TextureKeyWord]);
+            graphics->SetTexture(m_Textures[m_Materials[mesh.MaterialName].TextureKeyWord]);
         }
         else
         {
-            graphics_->SetTexture(nullptr);
+            graphics->SetTexture(nullptr);
         }
 
         // 描画
-        context->DrawIndexed(static_cast<UINT>(mesh.Indices.size()), 0, 0);
+        context->DrawIndexed(static_cast<UINT>(mesh.Indices.size()), 0U, 0);
     }
 }
 
@@ -210,86 +213,6 @@ void ObjModel::ParseVertex(std::vector<DirectX::XMFLOAT3>& data_, char* buff_)
     }
 
     data_.push_back(DirectX::XMFLOAT3(value[0], value[1], value[2]));
-}
-
-void ObjModel::ParseFKeywordTag(std::vector<CVertex>& outCustomVertices_, std::string current_material_name_, std::vector<DirectX::XMFLOAT3>& vertices_, std::vector<DirectX::XMFLOAT3>& textures_,  std::vector<DirectX::XMFLOAT3>& normals_, char* buffer_)
-{
-    const int info_num = 3;
-    int vertex_info[info_num] =
-    {
-        -1,// 頂点座標
-        -1,// テクスチャ座標
-        -1 // 法線ベクトル
-    };
-
-    // 面情報をスペース区切りで分ける
-    std::vector<std::string> space_split = Split(buffer_, ' ');
-
-    for (size_t i = 0; i < space_split.size(); ++i)
-    {
-        CVertex vertex;
-        // 「/」毎に分ける
-        ParseSlashKeywordTag(vertex_info, (char*)space_split[i].c_str());
-
-        for (int j = 0; j < info_num; ++j)
-        {
-            if (vertex_info[j] == -1) continue;
-            
-            int id = vertex_info[j];
-
-            switch (j)
-            {
-                // 頂点座標
-            case 0:
-                vertex.Pos = vertices_[id];
-                break;
-
-                // テクスチャ座標
-            case 1:
-                vertex.TexturePos = DirectX::XMFLOAT2(textures_[id].x, textures_[id].y);
-                break;
-
-                // 法線ベクトル
-            case 2:
-                vertex.Normal = normals_[id];
-                
-                break;
-            default:
-                break;
-            }
-        }
-
-        // 頂点リストに追加する
-        outCustomVertices_.push_back(vertex);
-
-        // インデックスバッファに追加
-        m_Indices[current_material_name_].push_back(static_cast<UINT>(outCustomVertices_.size() - 1));
-    }
-
-
-    size_t size = m_Indices[current_material_name_].size();
-
-    if (space_split.size() > 3)
-    {
-        int temp = m_Indices[current_material_name_][size - 1];
-        m_Indices[current_material_name_][size - 1] = m_Indices[current_material_name_][size - 4];
-        m_Indices[current_material_name_][size - 4] = temp;
-
-        temp = m_Indices[current_material_name_][size - 2];
-        m_Indices[current_material_name_][size - 2] = m_Indices[current_material_name_][size - 3];
-        m_Indices[current_material_name_][size - 3] = temp;
-
-        m_Indices[current_material_name_].push_back(m_Indices[current_material_name_][size - 4]);
-        m_Indices[current_material_name_].push_back(m_Indices[current_material_name_][size - 2]);
-
-        return;
-    }
-    
-     //ポリゴンの作成の頂点順番を反転する
-    int temp = m_Indices[current_material_name_][size - 1];
-    m_Indices[current_material_name_][size - 1] = m_Indices[current_material_name_][size - 3];
-    m_Indices[current_material_name_][size - 3] = temp;
-
 }
 
 void ObjModel::ParseFKeywordTag(MeshData& outMeshData_, std::string current_material_name_, std::vector<DirectX::XMFLOAT3>& vertices_, std::vector<DirectX::XMFLOAT3>& textures_, std::vector<DirectX::XMFLOAT3>& normals_, char* buffer_)

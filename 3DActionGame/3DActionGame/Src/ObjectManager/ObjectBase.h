@@ -19,7 +19,7 @@ public:
 	/**
 	* @brief デストラクタ
 	*/
-	~ObjectBase(){}
+	virtual ~ObjectBase(){}
 
 	/**
 	* @fn void Init()

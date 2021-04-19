@@ -3,7 +3,7 @@
 void SkeletalModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_)
 {
 	if (!m_Model) return;
-	m_Model->Render(DirectGraphics::GetInstance(), pos_, scale_, degree_, m_PlayMotion, m_Frame);
+	m_Model->Render(pos_, scale_, degree_, m_PlayMotion, m_Frame);
 }
 
 void SkeletalModel::Play(std::string animName_)

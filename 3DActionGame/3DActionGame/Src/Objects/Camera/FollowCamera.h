@@ -23,7 +23,7 @@ public:
 	/**
 	* @brief デストラクタ
 	*/
-	~FollowCamera()
+	virtual	~FollowCamera()
 	{}
 
 	/**

@@ -7,9 +7,9 @@
 #include <vector>
 #include <fbxsdk.h>
 #include "../../../Utility/GraphicsUtility.h"
-#include "../../VertexShader.h"
-#include "../../DirectGraphics.h"
-#include "../../../Model/Model.h"
+#include "../../Graphics/VertexShader.h"
+#include "../../Graphics/DirectGraphics.h"
+#include "../Model.h"
 
 
 static const int MOTION_MAX = 256;
@@ -34,7 +34,7 @@ struct Motion
 	std::vector<DirectX::XMMATRIX> Key[BONE_MAX]; //! フレーム時姿勢行列
 	
 	Motion():
-		FrameNum(0)
+		FrameNum(0U)
 	{}
 };
 
@@ -49,7 +49,9 @@ public:
 	*/
 	FbxModel() :
 		m_InputLayout(nullptr),
-		m_BoneNum(0)
+		m_BoneNum(0),
+		m_StartFrame(0),
+		m_Bone{ 0 }
 	{}
 
 	/**
@@ -57,25 +59,9 @@ public:
 	*/
 	~FbxModel()
 	{
-		for (auto mesh : m_MeshList)
-		{
-			if (mesh.VertexBuffer != nullptr)
-			{
-				mesh.VertexBuffer->Release();
-			}
-
-			if (mesh.IndexBuffer != nullptr)
-			{
-				mesh.IndexBuffer->Release();
-			}
-			mesh.Indices.clear();
-			mesh.Vertices.clear();
-		}
-
 		if (m_InputLayout != nullptr)
 		{
 			m_InputLayout->Release();
-			m_InputLayout = nullptr;
 		}
 	}
 
@@ -120,7 +106,7 @@ public:
 	* @param[in] degree_ 回転(度数)
 	* @details ボーンのフレーム時行列、ワールド行列をシェーダに送る
 	*/
-	void Render(DirectGraphics* graphics_,  DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_, std::string motionName_ = "", float frameNum_ = 0.f);
+	void Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_, std::string motionName_ = "", float frameNum_ = 0.f);
 
 	const Motion* GetMotionData(std::string motionKeyword_) { return &m_Motion[motionKeyword_]; }
 

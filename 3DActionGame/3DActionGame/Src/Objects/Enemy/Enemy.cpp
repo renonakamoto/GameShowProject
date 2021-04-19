@@ -2,6 +2,7 @@
 #include "../../ObjectManager/ObjectManager.h"
 #include "../../CollisionManager/CollisionManager.h"
 #include "../../CollisionManager/Shape/3D/OBB/ShapeOBB.h"
+#include "../../Engine/Engine.h"
 
 void Enemy::Update()
 {
@@ -30,7 +31,7 @@ void Enemy::Update()
 
 void Enemy::Draw()
 {
-	DirectGraphics::GetInstance()->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	GRAPHICS->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	if (m_Model)m_Model->Render( m_Pos, m_Scale, m_Rot);
 
 	m_Shape->Draw();

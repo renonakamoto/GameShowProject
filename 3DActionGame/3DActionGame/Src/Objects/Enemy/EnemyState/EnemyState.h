@@ -18,7 +18,7 @@ public:
 	/**
 	* @brief デストラクタ
 	*/
-	~EnemyState()
+	virtual ~EnemyState()
 	{}
 
 	/**

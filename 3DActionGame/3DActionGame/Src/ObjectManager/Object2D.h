@@ -40,7 +40,7 @@ public:
 	/**
 	* @brief デストラクタ
 	*/
-	~Object2D()
+	virtual ~Object2D()
 	{}
 
 	/**

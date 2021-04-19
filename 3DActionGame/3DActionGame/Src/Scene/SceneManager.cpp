@@ -3,8 +3,7 @@
 #include "GameScene.h"
 #include "ClearScene.h"
 #include "GameoverScene.h"
-#include "../Engine/DirectGraphics.h"
-#include "../Engine/InputManager.h"
+#include "../Engine/Engine.h"
 
 using namespace std;
 
@@ -82,16 +81,15 @@ void SceneManager::PopScene()
 
 void SceneManager::Update()
 {
-	InputManager::GetInstance()->Update();
+	INPUT->Update();
 	m_SceneStack.top()->Update();
 }
 
 void SceneManager::Draw()
 {
-	DirectGraphics::GetInstance()->StartRendering();
-	DirectGraphics::GetInstance()->SetUpContext();
+	GRAPHICS->StartRendering();
 
 	m_SceneStack.top()->Draw();
 
-	DirectGraphics::GetInstance()->FinishRendering();
+	GRAPHICS->FinishRendering();
 }

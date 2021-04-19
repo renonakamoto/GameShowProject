@@ -1,5 +1,5 @@
 ﻿#include "InputManager.h"
-#include "Window.h"
+#include "../Window/Window.h"
 #include <d3dx9math.h>
 
 LPDIRECTINPUT8 InputManager::m_Interface = nullptr;

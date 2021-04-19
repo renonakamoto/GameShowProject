@@ -3,8 +3,8 @@
 
 #include <string>
 #include "../../ObjectManager/Object2D.h"
-#include "../../Engine/Texture/Texture.h"
 #include "../../CollisionManager/Shape/2D/Rect/Rect.h"
+#include "../../Engine/Engine.h"
 
 class Button : public Object2D
 {
@@ -16,7 +16,7 @@ public:
 		m_PushedFunc(fp),
 		m_IsHover(false)
 	{		
-		TextureData* tex = TextureManager::GetInstance()->GetTexture(normal_);
+		TextureData* tex = TEX_MANAGER->GetTexture(normal_);
 		if (tex)
 		{
 			m_Rect.m_Top	= m_Pos.y;
@@ -29,14 +29,16 @@ public:
 	~Button()
 	{}
 
+	void Init()override
+	{}
+
 	void Update()override;
 
 	void Draw()override;
 
 private:
-
-	void Init()override;
-	void Release()override;
+	void Release()override
+	{}
 	
 
 private:

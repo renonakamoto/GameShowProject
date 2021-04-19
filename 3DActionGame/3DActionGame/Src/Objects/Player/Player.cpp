@@ -1,5 +1,5 @@
 ﻿#include "Player.h"
-#include "../../Engine/InputManager.h"
+#include "../../Engine/Engine.h"
 #include "../../Utility/Calculation.h"
 #include "PlayerState/PlayerIdleState.h"
 #include "../../ObjectManager/ObjectManager.h"
@@ -8,10 +8,6 @@
 
 void Player::Init()
 {
-	m_Scale.x = 0.1f;
-	m_Scale.y = 0.1f;
-	m_Scale.z = 0.1f;
-
 	// モデル情報の取得
 	m_Model = new SkeletalModel();
 	m_Model->SetModel(FbxStorage::GetInstance()->GetModel("Ekard"));
@@ -52,13 +48,13 @@ void Player::Update()
 	
 	static DirectX::XMFLOAT3 offset(0.0f, 9.f, 0.0f);
 
-	if (InputManager::GetInstance()->GetKeyDown(KeyInfo::Key_T))
+	if (INPUT->GetKeyDown(KeyInfo::Key_T))
 	{
 		offset.y++;
 		m_Camera->SetOffset(offset);
 	}
 
-	if (InputManager::GetInstance()->GetKeyDown(KeyInfo::Key_G))
+	if (INPUT->GetKeyDown(KeyInfo::Key_G))
 	{
 		offset.y--;
 		m_Camera->SetOffset(offset);
@@ -86,7 +82,7 @@ void Player::Update()
 
 void Player::Draw()
 {
-	DirectGraphics::GetInstance()->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	GRAPHICS->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_Model->Render(m_Pos, m_Scale, m_Rot);
 	
 	if (m_Shape)m_Shape->Draw();

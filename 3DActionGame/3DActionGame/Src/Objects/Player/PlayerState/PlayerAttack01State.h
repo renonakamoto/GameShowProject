@@ -56,7 +56,7 @@ private:
 	/**
 	* @brief デストラクタ
 	*/
-	~PlayerAttack01State()
+	~PlayerAttack01State() final
 	{}
 
 private:

@@ -1,11 +1,5 @@
-﻿#include "Engine/Window.h"
-#include "Engine/DirectGraphics.h"
-#include "Engine/InputManager.h"
-#include "Engine/SoundManager.h"
-#include "Engine/MeshModel/FbxModel/FbxModel.h"
-#include "Engine/MeshModel/ObjModel/ObjModel.h"
+﻿#include "Engine/Engine.h"
 #include "Scene/SceneManager.h"
-#include "Engine/Texture/Texture.h"
 
 #pragma comment(lib, "winmm.lib")
 
@@ -16,34 +10,11 @@ int APIENTRY WinMain(
 	LPSTR     lpCmpLine,
 	INT       nCmdShow)
 {
-	Window window("3DActionGame", 1280, 720);
-
-	// ウィンドウを作成
-	if (window.Create() == false)
+	//　Engineの初期化
+	if (Engine::GetInstance()->Init(1280, 720, "3DActionGame", hInstance) == false)
 	{
 		return -1;
 	}
-	
-	if (DirectGraphics::GetInstance()->Init() == false)
-	{
-		return -2;
-	}
-
-	if (InputManager::GetInstance()->Init(hInstance, window.GetWindowHandle()) == false)
-	{
-		return -3;
-	}
-
-	if (SoundManager::GetInstance()->Init(window.GetWindowHandle()) == false)
-	{
-		return -4;
-	}
-
-	if (TextureManager::GetInstance()->Init(DirectGraphics::GetInstance()->GetDevice()) == false)
-	{
-		return -5;
-	}
-	
 	
 	while (true)
 	{
@@ -71,11 +42,9 @@ int APIENTRY WinMain(
 		}
 	}
 	
-	/*
-		解放
-	*/
-	DirectGraphics::GetInstance()->Release();
-	InputManager::GetInstance()->Release();
+	
+	// Enigineの解放
+	Engine::GetInstance()->Release();
 
 	return 0;
 }

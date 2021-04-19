@@ -29,7 +29,7 @@ public:
 	*/
 	Player(DirectX::XMFLOAT3 pos_) :
 #pragma region MemberInit
-		Object3D(pos_),
+		Object3D(pos_, { 0.f, 0.f, 0.f }, { 0.1f, 0.1f, 0.1f }),
 		m_Model(nullptr),
 		m_Speed(4.f),
 		m_OldPos(m_Pos),
@@ -49,7 +49,7 @@ public:
 	/**
 	* @brief デストラクタ
 	*/
-	~Player()
+	~Player() final
 	{
 		Release();
 	}

@@ -41,10 +41,9 @@ public:
 	/**
 	* @brief デストラクタ
 	*/
-	~Object3D()
+	virtual ~Object3D()
 	{
-		delete m_Shape;
-		m_Shape = nullptr;
+		Release();
 	}
 
 	/**
@@ -75,7 +74,14 @@ protected:
 	* @brief 解放関数
 	* @details 継承先で定義し、解放処理を行う
 	*/
-	virtual void Release() = 0;
+	virtual void Release()
+	{
+		if (m_Shape)
+		{
+			delete m_Shape;
+			m_Shape = nullptr;
+		}
+	}
 	
 public:
 	/**

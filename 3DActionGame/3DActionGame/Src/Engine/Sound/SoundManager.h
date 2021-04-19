@@ -20,11 +20,15 @@ struct SoundData
 class SoundManager
 {
 public:
-	static SoundManager* GetInstance()
-	{
-		static SoundManager instance;
-		return &instance;
-	}
+	/**
+	* @biref コンストラクタ
+	*/
+	SoundManager() : m_Interface(nullptr) { }
+
+	/**
+	* @biref デストラクタ
+	*/
+	~SoundManager() { }
 
 	/**
 	* @brief サウンド初期化関数
@@ -78,16 +82,6 @@ public:
 	*/
 	void StopBGM(std::string key_);
 private:
-	/**
-	* @biref コンストラクタ
-	*/
-	SoundManager() : m_Interface(nullptr) { }
-
-	/**
-	* @biref デストラクタ
-	*/
-	~SoundManager() { }
-
 	/**
 	* @biref キーチェック関数
 	* 引数のキーが既に登録されているか確認する関数です

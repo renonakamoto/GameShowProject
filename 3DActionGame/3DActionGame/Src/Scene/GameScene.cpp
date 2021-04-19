@@ -3,13 +3,12 @@
 #include "SceneManager.h"
 #include "../Model/FbxStorage.h"
 #include "../Model/ObjFileStrage.h"
-#include "../Engine/DirectGraphics.h"
-#include "../Engine/Texture/Texture.h"
+#include "../Engine/Engine.h"
 #include "../Objects/Player/Player.h"
 #include "../Objects/Enemy/Enemy.h"
 #include "../Objects/Stage/Stage.h"
 #include "../Objects/Camera/FollowCamera.h"
-#include "../Engine/InputManager.h"
+#include "../CollisionManager/CollisionManager.h"
 
 
 GameScene::GameScene(SceneChanger* sceneChanger_) : 
@@ -28,7 +27,9 @@ GameScene::GameScene(SceneChanger* sceneChanger_) :
 
 GameScene::~GameScene()
 {
+    CollisionManager::GetInstance()->AllRelease();
     ObjectManager::GetInstance()->AllRelease();
+    TEX_MANAGER->AllRelease();
 }
 
 void GameScene::Load()
@@ -47,7 +48,7 @@ void GameScene::Load()
         ObjectManager::GetInstance()->Init();
         
         // “ü—Íƒ‚[ƒh‚ð•ÏX
-        InputManager::GetInstance()->SetInputMode(InputMode::MODE_GAME);
+       INPUT->SetInputMode(InputMode::MODE_GAME);
         m_CurrentState = SceneState::Main;
     }
 }
@@ -85,15 +86,15 @@ void GameScene::Main()
 {
     ObjectManager::GetInstance()->Update();
 
-    if (InputManager::GetInstance()->GetKeyDown(KeyInfo::Key_ESC))
+    if (INPUT->GetKeyDown(KeyInfo::Key_ESC))
     {
-        if (InputManager::GetInstance()->GetInputMode() == InputMode::MODE_GAME)
+        if (INPUT->GetInputMode() == InputMode::MODE_GAME)
         {
-            InputManager::GetInstance()->SetInputMode(InputMode::MODE_UI);
+            INPUT->SetInputMode(InputMode::MODE_UI);
         }
         else
         {
-            InputManager::GetInstance()->SetInputMode(InputMode::MODE_GAME);
+            INPUT->SetInputMode(InputMode::MODE_GAME);
         }
         
     }

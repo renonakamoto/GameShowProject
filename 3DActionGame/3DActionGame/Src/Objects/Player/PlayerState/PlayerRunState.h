@@ -53,7 +53,7 @@ private:
 	/**
 	* @brief デストラクタ
 	*/
-	~PlayerRunState()
+	~PlayerRunState() final
 	{}
 };
 

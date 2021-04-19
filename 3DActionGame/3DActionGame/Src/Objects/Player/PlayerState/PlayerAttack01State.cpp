@@ -2,7 +2,7 @@
 #include "PlayerAttack01State.h"
 #include "PlayerAttack02State.h"
 #include "PlayerIdleState.h"
-#include "../../../Engine/InputManager.h"
+#include "../../../Engine/Engine.h"
 
 PlayerState* PlayerAttack01State::CheckState(Player* player_)
 {
@@ -13,7 +13,7 @@ PlayerState* PlayerAttack01State::CheckState(Player* player_)
 		return PlayerIdleState::GetInstance();
 	}
 
-	if (player_->m_Model->GetCurrentFrame() >= 40 && InputManager::GetInstance()->GetMouseDown(MouseButton::Left))
+	if (player_->m_Model->GetCurrentFrame() >= 40 && INPUT->GetMouseDown(MouseButton::Left))
 	{
 		return PlayerAttack02State::GetInstance();
 	}

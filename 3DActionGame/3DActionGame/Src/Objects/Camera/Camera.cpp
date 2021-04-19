@@ -1,7 +1,5 @@
 ﻿#include "Camera.h"
-#include "../../Engine/Window.h"
-#include "../../Engine/DirectGraphics.h"
-#include "../../Engine/InputManager.h"
+#include "../../Engine/Engine.h"
 #include "../../Utility/Calculation.h"
 
 void Camera::Update()
@@ -13,8 +11,8 @@ void Camera::Update()
     DirectX::XMMATRIX view_matrix = DirectX::XMMatrixLookAtLH(eye, focus, up);
     
        
-    DirectX::XMStoreFloat4x4(&DirectGraphics::GetInstance()->GetConstantBufferData()->View, DirectX::XMMatrixTranspose(view_matrix));
-    DirectX::XMStoreFloat4(&DirectGraphics::GetInstance()->GetConstantBufferData()->CameraPos, eye);
+    DirectX::XMStoreFloat4x4(&GRAPHICS->GetConstantBufferData()->View, DirectX::XMMatrixTranspose(view_matrix));
+    DirectX::XMStoreFloat4(&GRAPHICS->GetConstantBufferData()->CameraPos, eye);
     
 }
 
@@ -56,5 +54,5 @@ void Camera::Init()
     float far_z = 500000.f;
     // プロジェクション行列の作成
     m_ProjMat = DirectX::XMMatrixPerspectiveFovLH(fov, aspect, near_z, far_z);
-    DirectX::XMStoreFloat4x4(&DirectGraphics::GetInstance()->GetConstantBufferData()->Projection, DirectX::XMMatrixTranspose(m_ProjMat));
+    DirectX::XMStoreFloat4x4(&GRAPHICS->GetConstantBufferData()->Projection, DirectX::XMMatrixTranspose(m_ProjMat));
 }

@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #include "DirectGraphics.h"
-#include "Window.h"
+#include "../Engine.h"
 
 #pragma comment(lib,"d3d11.lib")
 
@@ -67,14 +67,6 @@ bool DirectGraphics::Init()
 
 
     //テクスチャ行列の設定
-    ZeroMemory(&m_ConstantBufferData.ClipUV, sizeof(DirectX::XMFLOAT4X4));
-    m_ConstantBufferData.ClipUV._11 = 0.5f;
-    m_ConstantBufferData.ClipUV._22 = -0.5f;
-    m_ConstantBufferData.ClipUV._33 = 1.0f;
-    m_ConstantBufferData.ClipUV._41 = 0.5f;
-    m_ConstantBufferData.ClipUV._42 = 0.5f;
-    m_ConstantBufferData.ClipUV._44 = 1.0f;
-
     DirectX::XMMATRIX tex_uv = DirectX::XMMatrixSet(
         0.5f, 0.0f, 0.0f, 0.0f,
         0.0f,-0.5f, 0.0f, 0.0f,
@@ -103,21 +95,65 @@ bool DirectGraphics::Init()
 
 void DirectGraphics::Release()
 {
-    
+    if (m_Device != nullptr)
+    {
+        m_Device->Release();
+        m_Device = nullptr;
+    }
+
     if (m_Context != nullptr)
     {
         m_Context->ClearState();
         m_Context->Release();
+        m_Context = nullptr;
     }
 
     if (m_SwapChain != nullptr)
     {
         m_SwapChain->Release();
+        m_SwapChain = nullptr;
     }
 
-    if (m_Device != nullptr)
+    if (m_RenderTargetView != nullptr)
     {
-        m_Device->Release();
+        m_RenderTargetView->Release();
+        m_RenderTargetView = nullptr;
+    }
+
+    if (m_DepthStencilTexture != nullptr)
+    {
+        m_DepthStencilTexture->Release();
+        m_DepthStencilTexture = nullptr;
+    }
+
+    if (m_DepthStencilView != nullptr)
+    {
+        m_DepthStencilView->Release();
+        m_DepthStencilView = nullptr;
+    }
+
+    if (m_SamplerState != nullptr)
+    {
+        m_SamplerState->Release();
+        m_SamplerState = nullptr;
+    }
+
+    if (m_ConstantBuffer != nullptr)
+    {
+        m_ConstantBuffer->Release();
+        m_ConstantBuffer = nullptr;
+    }
+
+    if (m_ConstBoneBuffer != nullptr)
+    {
+        m_ConstBoneBuffer->Release();
+        m_ConstBoneBuffer = nullptr;
+    }
+
+    if (m_ShadowSamplerState != nullptr)
+    {
+        m_ShadowSamplerState->Release();
+        m_ShadowSamplerState = nullptr;
     }
 
 }
@@ -151,23 +187,19 @@ void DirectGraphics::StartRendering()
     /*
         ビューポートの設定
     */
-    HWND window_handle = FindWindow(Window::ClassName, nullptr);
-    RECT rect;
-    GetClientRect(window_handle, &rect);
-
     D3D11_VIEWPORT vp;
-    vp.Width    = static_cast<FLOAT>(rect.right  - rect.left);
-    vp.Height   = static_cast<FLOAT>(rect.bottom - rect.top );
-    vp.MinDepth = 0.0f;
-    vp.MaxDepth = 1.0f;
-    vp.TopLeftX = 0.0f;
-    vp.TopLeftY = 0.0f;
-    m_Context->RSSetViewports(1, &vp);
+    vp.Width    = static_cast<FLOAT>(WINDOW->GetClientWidth());
+    vp.Height   = static_cast<FLOAT>(WINDOW->GetClientHeight());
+    vp.MinDepth = 0.f;
+    vp.MaxDepth = 1.f;
+    vp.TopLeftX = 0.f;
+    vp.TopLeftY = 0.f;
+    m_Context->RSSetViewports(1U, &vp);
 
     /*
        出力先の設定
     */
-    m_Context->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+    m_Context->OMSetRenderTargets(1U, &m_RenderTargetView, m_DepthStencilView);
 
 }
 
@@ -181,39 +213,16 @@ void DirectGraphics::FinishRendering()
     m_SwapChain->Present(1, 0);
 }
 
-void DirectGraphics::SetUpContext()
-{
-    /*
-    プリミティブの設定
-    描画するポリゴンの作成方法を設定する
-    */
-    m_Context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-    /*
-        頂点シェーダの設定
-    */
-    m_Context->VSSetShader(m_VertexShader->GetShaderInterface(), NULL, 0);
-    /*
-        ピクセルシェーダの設定
-    */
-    m_Context->PSSetShader(m_PixelShader->GetShaderInterface(), NULL, 0);
-
-    /*
-       出力先の設定
-   */
-    m_Context->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
-}
-
 void DirectGraphics::SetTexture(ID3D11ShaderResourceView* texture_)
 {
     m_Context->PSSetSamplers(
-        0,
-        1,
+        0U,
+        1U,
         &m_SamplerState);
 
     m_Context->PSSetShaderResources(
-        0,
-        1,
+        0U,
+        1U,
         &texture_);
     
 }
@@ -249,17 +258,17 @@ void DirectGraphics::SetUpDxgiSwapChanDesc(DXGI_SWAP_CHAIN_DESC* dxgi)
     ZeroMemory(dxgi, sizeof(DXGI_SWAP_CHAIN_DESC));
     
     // バッファの数
-    dxgi->BufferCount = 1;
+    dxgi->BufferCount = 1U;
     // バッファの横幅
-    dxgi->BufferDesc.Width  = static_cast<UINT>(rect.right - rect.left);
+    dxgi->BufferDesc.Width  = static_cast<UINT>(WINDOW->GetClientWidth());
     // バッファの縦幅
-    dxgi->BufferDesc.Height = static_cast<UINT>(rect.bottom - rect.top);
+    dxgi->BufferDesc.Height = static_cast<UINT>(WINDOW->GetClientHeight());
     // バッファのカラーフォーマット
     dxgi->BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     // リフレッシュレートの分子
-    dxgi->BufferDesc.RefreshRate.Numerator   = 60;
+    dxgi->BufferDesc.RefreshRate.Numerator   = 60U;
     // リフレッシュレートの分母
-    dxgi->BufferDesc.RefreshRate.Denominator = 1;
+    dxgi->BufferDesc.RefreshRate.Denominator = 1U;
     // スキャンラインの方法
     // バックバッファをフリップしたときにハードウェアがパソコンのモニターに
     // 点をどう描くかを設定する
@@ -276,9 +285,9 @@ void DirectGraphics::SetUpDxgiSwapChanDesc(DXGI_SWAP_CHAIN_DESC* dxgi)
     // 出力対象のウィンドウハンドル
     dxgi->OutputWindow = window_handle;
     // マルチサンプリングのサンプル数(未使用は1)
-    dxgi->SampleDesc.Count = 1;
+    dxgi->SampleDesc.Count = 1U;
     // マルチサンプリングの品質(未使用は0)
-    dxgi->SampleDesc.Quality = 0;
+    dxgi->SampleDesc.Quality = 0U;
     // ウィンドウモード指定
     dxgi->Windowed = true;
     // スワップチェインの動作オプション
@@ -490,13 +499,13 @@ bool DirectGraphics::CreateDepthAndStencilView()
     D3D11_TEXTURE2D_DESC texture_desc;
     ZeroMemory(&texture_desc, sizeof(D3D11_TEXTURE2D_DESC));
     // バッファの横幅
-    texture_desc.Width = (rect.right - rect.left);
+    texture_desc.Width  = static_cast<UINT>(WINDOW->GetClientWidth());
     // バッファの横幅
-    texture_desc.Height = (rect.bottom - rect.top);
+    texture_desc.Height = static_cast<UINT>(WINDOW->GetClientHeight());
     // ミップマップレベル
-    texture_desc.MipLevels = 1;
+    texture_desc.MipLevels = 1U;
     // テクスチャ配列のサイズ
-    texture_desc.ArraySize = 1;
+    texture_desc.ArraySize = 1U;
     // テクスチャのフォーマット
     // DXGI_FORMAT_D24_UNORM_S8_UINT
     // Depth24bit, Stencil8bitとなる
@@ -505,8 +514,8 @@ bool DirectGraphics::CreateDepthAndStencilView()
 #ifdef ENABLE_MASS
     texture_desc.SampleDesc = m_SampleDesc;
 #else
-    texture_desc.SampleDesc.Count = 1;
-    texture_desc.SampleDesc.Quality = 0;
+    texture_desc.SampleDesc.Count   = 1U;
+    texture_desc.SampleDesc.Quality = 0U;
 #endif
     // テクスチャの使用方法
     texture_desc.Usage = D3D11_USAGE_DEFAULT;
@@ -515,10 +524,10 @@ bool DirectGraphics::CreateDepthAndStencilView()
     texture_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
     // リソースへのCPUのアクセス権限
     // 0で問題ない
-    texture_desc.CPUAccessFlags = 0;
+    texture_desc.CPUAccessFlags = 0U;
     // リソースオプションのフラグ
     // 必要なければ0
-    texture_desc.MiscFlags = 0;
+    texture_desc.MiscFlags = 0U;
     
     // テクスチャの作成
     if (FAILED(m_Device->CreateTexture2D(&texture_desc, NULL, &m_DepthStencilTexture)))
@@ -537,7 +546,7 @@ bool DirectGraphics::CreateDepthAndStencilView()
 #else
     dsv_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 #endif
-    dsv_desc.Texture2D.MipSlice = 0;
+    dsv_desc.Texture2D.MipSlice = 0U;
     
     // DepthStencilViewの作成
     if (FAILED(m_Device->CreateDepthStencilView(
@@ -548,7 +557,7 @@ bool DirectGraphics::CreateDepthAndStencilView()
         return false;
     }
 
-    m_Context->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+    m_Context->OMSetRenderTargets(1U, &m_RenderTargetView, m_DepthStencilView);
 
     return true;
 }
@@ -588,9 +597,9 @@ bool DirectGraphics::CreateConstantBuffer()
     buffer_desc.ByteWidth           = sizeof(ConstantBuffer);
     buffer_desc.Usage               = D3D11_USAGE_DEFAULT;
     buffer_desc.BindFlags           = D3D11_BIND_CONSTANT_BUFFER;
-    buffer_desc.CPUAccessFlags      = 0;
-    buffer_desc.MiscFlags           = 0;
-    buffer_desc.StructureByteStride = 0;
+    buffer_desc.CPUAccessFlags      = 0U;
+    buffer_desc.MiscFlags           = 0U;
+    buffer_desc.StructureByteStride = 0U;
 
     if (FAILED(m_Device->CreateBuffer(&buffer_desc, nullptr, &m_ConstantBuffer)))
     {
@@ -623,19 +632,19 @@ bool DirectGraphics::CreateTextureSampler()
         return false;
     }
 
-    sampler_desc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
-    sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
-    sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
-    sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
+    sampler_desc.Filter         = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+    sampler_desc.AddressU       = D3D11_TEXTURE_ADDRESS_BORDER;
+    sampler_desc.AddressV       = D3D11_TEXTURE_ADDRESS_BORDER;
+    sampler_desc.AddressW       = D3D11_TEXTURE_ADDRESS_BORDER;
     sampler_desc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
-    sampler_desc.BorderColor[0] = 1.0f;
-    sampler_desc.BorderColor[1] = 1.0f;
-    sampler_desc.BorderColor[2] = 1.0f;
-    sampler_desc.BorderColor[3] = 1.0f;
-    sampler_desc.MaxAnisotropy = 1;
-    sampler_desc.MipLODBias = 0;
-    sampler_desc.MinLOD = -FLT_MAX;
-    sampler_desc.MaxLOD = +FLT_MAX;
+    sampler_desc.BorderColor[0] = 1.f;
+    sampler_desc.BorderColor[1] = 1.f;
+    sampler_desc.BorderColor[2] = 1.f;
+    sampler_desc.BorderColor[3] = 1.f;
+    sampler_desc.MaxAnisotropy  = 1U;
+    sampler_desc.MipLODBias     = 0.f;
+    sampler_desc.MinLOD         = -FLT_MAX;
+    sampler_desc.MaxLOD         = +FLT_MAX;
 
     if (FAILED(m_Device->CreateSamplerState(&sampler_desc, &m_ShadowSamplerState)))
     {
@@ -647,23 +656,19 @@ bool DirectGraphics::CreateTextureSampler()
 
 void DirectGraphics::SetUpViewPort()
 {
-    HWND window_handle = FindWindow(Window::ClassName, nullptr);
-    RECT rect;
-    GetClientRect(window_handle, &rect);
-
     D3D11_VIEWPORT view_port;
     // 画面左上のX座標
-    view_port.TopLeftX = 0;
+    view_port.TopLeftX = 0.f;
     // 画面左上のY座標
-    view_port.TopLeftY = 0;
+    view_port.TopLeftY = 0.f;
     // 横幅
-    view_port.Width  = static_cast<FLOAT>(rect.right - rect.left);
+    view_port.Width  = static_cast<FLOAT>(WINDOW->GetClientWidth());
     // 縦幅
-    view_port.Height = static_cast<FLOAT>(rect.bottom - rect.top);
+    view_port.Height = static_cast<FLOAT>(WINDOW->GetClientHeight());
     // 深度値の最小値
-    view_port.MinDepth = 0.0f;
+    view_port.MinDepth = 0.f;
     // 深度値の最大値
-    view_port.MaxDepth = 1.0f;
+    view_port.MaxDepth = 1.f;
 
     // ViewPortの設定
     m_Context->RSSetViewports(1, &view_port);

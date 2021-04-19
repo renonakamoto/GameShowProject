@@ -3,12 +3,9 @@
 bool FbxStorage::LoadModel(const char* fileName_, std::string keyword_)
 {
 	// すでにキーが存在する場合は読み込みが終わっているので早期リターン
-	//for (auto itr = m_ModelData.begin(); itr != m_ModelData.end(); ++itr)
-	//{
-	//	if (itr->first == keyword_) return true;
-	//}
+	if (m_ModelData.find(keyword_) != m_ModelData.end()) return true;
 	
-	// 読み込み 
+	// 読み込み
 	if (m_ModelData[keyword_].LoadModel(fileName_) == true)
 	{
 		return true;
@@ -28,8 +25,14 @@ bool FbxStorage::LoadMotion(const char* fileName_, std::string modelKeyword_, st
 
 void FbxStorage::Release(std::string keyword_)
 {
+	std::map<std::string, FbxModel>::iterator itr = m_ModelData.find(keyword_);
+	if (itr != m_ModelData.end())
+	{
+		m_ModelData.erase(itr);
+	}
 }
 
 void FbxStorage::AllRelease()
 {
+	m_ModelData.clear();
 }

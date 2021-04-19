@@ -53,7 +53,7 @@ private:
 	/**
 	* @brief デストラクタ
 	*/
-	~PlayerIdleState()
+	~PlayerIdleState() final
 	{}
 	
 };

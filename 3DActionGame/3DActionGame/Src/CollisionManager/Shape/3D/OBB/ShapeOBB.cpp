@@ -1,5 +1,6 @@
 ﻿#include "ShapeOBB.h"
 #include "../../../../Utility/Calculation.h"
+#include "../../../../Engine/Engine.h"
 
 bool ShapeOBB::HitTest(Shape3D& shape_)
 {
@@ -162,13 +163,11 @@ float ShapeOBB::LenSegOnSeparateAxis(DirectX::XMFLOAT3& spe_, DirectX::XMFLOAT3&
 
 void ShapeOBB::Draw()
 {
-	
-	DirectGraphics::GetInstance()->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	GRAPHICS->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 	DirectX::XMFLOAT3 pos   = m_Pos;
 	DirectX::XMFLOAT3 scale = DirectX::XMFLOAT3(m_Length[0], m_Length[1], m_Length[2]);
 	float y = atan2f(m_NormalDirect[2].x, m_NormalDirect[2].z);
 	DirectX::XMFLOAT3 rot = DirectX::XMFLOAT3(0.f, DirectX::XMConvertToDegrees(y), 0.f);
 
-	m_OBB->Render(DirectGraphics::GetInstance(), pos, scale, rot);
-
+	m_OBB->Render(pos, scale, rot);
 }

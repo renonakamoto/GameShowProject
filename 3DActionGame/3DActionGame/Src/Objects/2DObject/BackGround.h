@@ -5,14 +5,14 @@
 #include "../../ObjectManager/Object2D.h"
 
 /**
-* @brief タイトルの背景クラス
+* @brief 背景クラス
 */
 class Background : public Object2D
 {
 public:
 	/**
 	* @brief コンストラクタ
-	* @param[in] keyword_ モデルの描画ハンドルキーワード
+	* @param[in] keyword_ モデルの描画ハンドル
 	*/
 	Background(std::string keyword_) :
 		Background(keyword_, DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f))

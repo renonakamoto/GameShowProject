@@ -1,18 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="ヘッダー ファイル">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="リソース ファイル">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Src">
       <UniqueIdentifier>{2df5f066-3bb9-4ffd-b674-160019b77c8e}</UniqueIdentifier>
     </Filter>
@@ -24,12 +12,6 @@
     </Filter>
     <Filter Include="Shader">
       <UniqueIdentifier>{499c75ef-600a-40d8-b1d2-ca35714c085e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Engine\FbxModel">
-      <UniqueIdentifier>{ea777420-ee77-4544-99f9-ab2691928e80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Engine\ObjModel">
-      <UniqueIdentifier>{caa2cb48-e79f-4f1f-a929-16095ee961f1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\Model">
       <UniqueIdentifier>{99845381-0a1c-42c0-bba7-09a699e6488c}</UniqueIdentifier>
@@ -73,9 +55,6 @@
     <Filter Include="Src\2DObject\UI">
       <UniqueIdentifier>{08a146b0-2784-4417-b328-54ed2b2e61fa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Objects\Scene">
-      <UniqueIdentifier>{53f2f284-ea99-4273-bf92-e2ca2340ea86}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\CollisionManager\Shape">
       <UniqueIdentifier>{2d4ad288-ba7e-4747-b7c0-cdc58a08deaf}</UniqueIdentifier>
     </Filter>
@@ -94,64 +73,58 @@
     <Filter Include="Src\Objects\Player\PlayerState">
       <UniqueIdentifier>{cd09f7ed-5e65-4dc9-b293-c3852116fe65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Engine\Window">
+      <UniqueIdentifier>{d76a18ee-02a5-49d2-b60f-9338ca04b44d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Engine\Graphics">
+      <UniqueIdentifier>{2880c9da-d898-42ba-bd88-ae60fffb70e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Engine\Input">
+      <UniqueIdentifier>{67941d23-64ae-485f-aeb7-8123dc6be549}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Engine\Sound">
+      <UniqueIdentifier>{91577946-d069-41ff-97ad-4cd14cdee8dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Engine\Model">
+      <UniqueIdentifier>{3fc25859-5d98-4054-88a1-a103429969d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Engine\Model\FbxModel">
+      <UniqueIdentifier>{017929e4-5d48-4987-b684-ac93e4d46cf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Engine\Model\ObjModel">
+      <UniqueIdentifier>{9c3603d8-9866-4644-ad1d-aab876c921db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Scene">
+      <UniqueIdentifier>{53f2f284-ea99-4273-bf92-e2ca2340ea86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Objects\2DObject">
+      <UniqueIdentifier>{5b679473-797e-4d3f-bd99-dc083cd7ef52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Engine\DirectGraphics.cpp">
-      <Filter>Src\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Engine\InputManager.cpp">
-      <Filter>Src\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Engine\PixelShader.cpp">
-      <Filter>Src\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Engine\ShaderBase.cpp">
-      <Filter>Src\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Engine\VertexShader.cpp">
-      <Filter>Src\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Engine\Window.cpp">
-      <Filter>Src\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Utility\Utility.cpp">
       <Filter>Src\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Engine\SoundManager.cpp">
-      <Filter>Src\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Model\Model.cpp">
-      <Filter>Src\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Engine\MeshModel\FbxModel\FbxModel.cpp">
-      <Filter>Src\Engine\FbxModel</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Engine\MeshModel\ObjModel\ObjModel.cpp">
-      <Filter>Src\Engine\ObjModel</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Scene\SceneManager.cpp">
-      <Filter>Src\Objects\Scene</Filter>
+      <Filter>Src\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Src\Scene\TitleScene.cpp">
-      <Filter>Src\Objects\Scene</Filter>
+      <Filter>Src\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Src\Scene\ClearScene.cpp">
-      <Filter>Src\Objects\Scene</Filter>
+      <Filter>Src\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Src\Scene\GameoverScene.cpp">
-      <Filter>Src\Objects\Scene</Filter>
+      <Filter>Src\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Src\Scene\GameScene.cpp">
-      <Filter>Src\Objects\Scene</Filter>
+      <Filter>Src\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Src\Model\FbxStorage.cpp">
       <Filter>Src\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Engine\Texture\Texture.cpp">
-      <Filter>Src\Engine\Texure</Filter>
     </ClCompile>
     <ClCompile Include="Src\ObjectManager\Object2D.cpp">
       <Filter>Src\ObjectManager</Filter>
@@ -201,12 +174,6 @@
     <ClCompile Include="Src\Model\SkeletalModel.cpp">
       <Filter>Src\Model</Filter>
     </ClCompile>
-    <ClCompile Include="Src\2DObject\Title\BackGround.cpp">
-      <Filter>Src\2DObject\Title</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\2DObject\UI\Button.cpp">
-      <Filter>Src\2DObject\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Src\CollisionManager\Shape\2D\Rect\Rect.cpp">
       <Filter>Src\CollisionManager\Shape\2D\Rect</Filter>
     </ClCompile>
@@ -225,76 +192,88 @@
     <ClCompile Include="Src\Objects\Player\PlayerState\PlayerAttack01State.cpp">
       <Filter>Src\Objects\Player\PlayerState</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Model\StaticModel.cpp">
+      <Filter>Src\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Engine.cpp">
+      <Filter>Src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Texture\TextureManager.cpp">
+      <Filter>Src\Engine\Texure</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Graphics\ShaderBase.cpp">
+      <Filter>Src\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Graphics\VertexShader.cpp">
+      <Filter>Src\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Graphics\DirectGraphics.cpp">
+      <Filter>Src\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Graphics\PixelShader.cpp">
+      <Filter>Src\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Input\InputManager.cpp">
+      <Filter>Src\Engine\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Sound\SoundManager.cpp">
+      <Filter>Src\Engine\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Window\Window.cpp">
+      <Filter>Src\Engine\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Model\Model.cpp">
+      <Filter>Src\Engine\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Model\ObjModel\ObjModel.cpp">
+      <Filter>Src\Engine\Model\ObjModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Model\FbxModel\FbxModel.cpp">
+      <Filter>Src\Engine\Model\FbxModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\2DObject\Button.cpp">
+      <Filter>Src\Objects\2DObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\2DObject\BackGround.cpp">
+      <Filter>Src\Objects\2DObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Src\Engine\DirectGraphics.h">
-      <Filter>Src\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Engine\InputManager.h">
-      <Filter>Src\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Engine\PixelShader.h">
-      <Filter>Src\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Engine\ShaderBase.h">
-      <Filter>Src\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Engine\VertexShader.h">
-      <Filter>Src\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Engine\Window.h">
-      <Filter>Src\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Utility\GraphicsUtility.h">
       <Filter>Src\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Src\Utility\Utility.h">
       <Filter>Src\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Engine\SoundManager.h">
-      <Filter>Src\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Model\Model.h">
-      <Filter>Src\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Engine\MeshModel\FbxModel\FbxModel.h">
-      <Filter>Src\Engine\FbxModel</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Engine\MeshModel\ObjModel\ObjModel.h">
-      <Filter>Src\Engine\ObjModel</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Scene\SceneChanger.h">
-      <Filter>Src\Objects\Scene</Filter>
+      <Filter>Src\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\SceneDefinition.h">
-      <Filter>Src\Objects\Scene</Filter>
+      <Filter>Src\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\SceneManager.h">
-      <Filter>Src\Objects\Scene</Filter>
+      <Filter>Src\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\TitleScene.h">
-      <Filter>Src\Objects\Scene</Filter>
+      <Filter>Src\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\ClearScene.h">
-      <Filter>Src\Objects\Scene</Filter>
+      <Filter>Src\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\GameoverScene.h">
-      <Filter>Src\Objects\Scene</Filter>
+      <Filter>Src\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\GameScene.h">
-      <Filter>Src\Objects\Scene</Filter>
+      <Filter>Src\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\Scene.h">
-      <Filter>Src\Objects\Scene</Filter>
+      <Filter>Src\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\Model\FbxStorage.h">
       <Filter>Src\Model</Filter>
     </ClInclude>
     <ClInclude Include="Src\ObjectManager\ObjectBase.h">
       <Filter>Src\ObjectManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Engine\Texture\Texture.h">
-      <Filter>Src\Engine\Texure</Filter>
     </ClInclude>
     <ClInclude Include="Src\ObjectManager\Object2D.h">
       <Filter>Src\ObjectManager</Filter>
@@ -353,12 +332,6 @@
     <ClInclude Include="Src\Model\SkeletalModel.h">
       <Filter>Src\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Src\2DObject\Title\BackGround.h">
-      <Filter>Src\2DObject\Title</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\2DObject\UI\Button.h">
-      <Filter>Src\2DObject\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Src\CollisionManager\Shape\3D\Shape3D.h">
       <Filter>Src\CollisionManager\Shape\3D</Filter>
     </ClInclude>
@@ -382,6 +355,48 @@
     </ClInclude>
     <ClInclude Include="Src\Objects\Player\PlayerState\PlayerAttack01State.h">
       <Filter>Src\Objects\Player\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Engine.h">
+      <Filter>Src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Texture\TextureManager.h">
+      <Filter>Src\Engine\Texure</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Graphics\ShaderBase.h">
+      <Filter>Src\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Graphics\VertexShader.h">
+      <Filter>Src\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Graphics\DirectGraphics.h">
+      <Filter>Src\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Graphics\PixelShader.h">
+      <Filter>Src\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Input\InputManager.h">
+      <Filter>Src\Engine\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Sound\SoundManager.h">
+      <Filter>Src\Engine\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Window\Window.h">
+      <Filter>Src\Engine\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Model\Model.h">
+      <Filter>Src\Engine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Model\ObjModel\ObjModel.h">
+      <Filter>Src\Engine\Model\ObjModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Model\FbxModel\FbxModel.h">
+      <Filter>Src\Engine\Model\FbxModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\2DObject\Button.h">
+      <Filter>Src\Objects\2DObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\2DObject\BackGround.h">
+      <Filter>Src\Objects\2DObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

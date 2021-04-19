@@ -18,7 +18,7 @@ public:
 	/**
 	* @brief デストラクタ
 	*/
-	~PlayerState()
+	virtual ~PlayerState()
 	{}
 
 	/**

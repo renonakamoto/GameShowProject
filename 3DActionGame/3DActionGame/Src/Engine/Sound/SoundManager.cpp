@@ -47,8 +47,12 @@ void SoundManager::Release()
 	}
 	m_SEData.clear();
 
-	m_Interface->Release();
-	m_Interface = nullptr;
+	if (m_Interface)
+	{
+		m_Interface->Release();
+		m_Interface = nullptr;
+	}
+
 }
 
 bool SoundManager::LoadBGMData(std::string file_name, std::string key_name)

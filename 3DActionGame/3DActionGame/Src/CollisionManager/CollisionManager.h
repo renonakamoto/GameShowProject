@@ -81,7 +81,7 @@ private:
 	}
 
 private:
-	std::vector<Object3D*> m_Collision3DList;
+	std::vector<Object3D*> m_Collision3DList;	//! コリジョンリスト
 
 };
 

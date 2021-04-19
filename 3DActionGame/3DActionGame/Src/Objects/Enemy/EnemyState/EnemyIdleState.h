@@ -53,7 +53,7 @@ private:
 	/**
 	* @brief デストラクタ
 	*/
-	~EnemyIdleState()
+	~EnemyIdleState() final
 	{}
 };
 

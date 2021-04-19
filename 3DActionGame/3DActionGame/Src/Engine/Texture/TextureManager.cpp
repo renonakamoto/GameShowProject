@@ -1,7 +1,8 @@
 ﻿#include "../../DirectXTex/DirectXTex.h"
 #include <D3D11.h>
 #include <codecvt>
-#include "Texture.h"
+#include "TextureManager.h"
+#include "../Engine.h"
 #include "../../Utility/Utility.h"
 
 
@@ -38,15 +39,9 @@ bool TextureManager::Init(ID3D11Device* device_)
 bool TextureManager::Load(const char* fileName_, std::string keyword_)
 {
 	// すでにキーが存在する場合は読み込みが終わっているので早期リターン
-	//for (auto itr = m_Texture.begin(); itr != m_Texture.end(); ++itr)
-	//{
-	//	if (itr->first == keyword_) return true;
-	//}
+	if (m_Texture.find(keyword_) != m_Texture.end()) return true;
 
-	TextureData tex_data;
-	
-	// デバイスを取得
-	ID3D11Device* device = DirectGraphics::GetInstance()->GetDevice();
+	TextureData* tex_data = &m_Texture[keyword_];
 
 	// ファイル分解
 	char buffer[256];
@@ -93,47 +88,52 @@ bool TextureManager::Load(const char* fileName_, std::string keyword_)
 	// 読み込みに失敗したとき
 	if (FAILED(hr))
 	{
+		m_Texture.erase(keyword_);
 		return false;
 	}
+
+	// デバイスを取得
+	ID3D11Device* device = GRAPHICS->GetDevice();
 
 	if (FAILED(DirectX::CreateShaderResourceView(
 		device,
 		image.GetImages(),
 		image.GetImageCount(),
 		metadata,
-		&tex_data.Texture)))
+		&tex_data->Texture)))
 	{
+		m_Texture.erase(keyword_);
 		return false;
 	}
 
-	tex_data.Width  = static_cast<UINT>(metadata.width) ;
-	tex_data.Height = static_cast<UINT>(metadata.height);
+	tex_data->Width  = static_cast<UINT>(metadata.width) ;
+	tex_data->Height = static_cast<UINT>(metadata.height);
 
-	if (CreateVertexBuffer(tex_data, device) == false)
+	if (CreateVertexBuffer(*tex_data, device) == false)
 	{
+		m_Texture.erase(keyword_);
 		return false;
 	}
 	
-	if (CreateIndexBuffer(tex_data, device) == false)
+	if (CreateIndexBuffer(*tex_data, device) == false)
 	{
+		m_Texture.erase(keyword_);
 		return false;
 	}
-
-	m_Texture[keyword_] = tex_data;
 
 	return true;
 }
 
 void TextureManager::Render(std::string keyword_, DirectX::XMFLOAT3 pos_)
 {
-	ID3D11DeviceContext* context = DirectGraphics::GetInstance()->GetContext();
-	ID3D11Device* device = DirectGraphics::GetInstance()->GetDevice();
-
-	TextureData* texture = &m_Texture[keyword_];
+	if (m_Texture.find(keyword_) == m_Texture.end()) return;
+	
+	ID3D11DeviceContext* context = GRAPHICS->GetContext();
 
 	// 入力レイアウトを設定
 	context->IASetInputLayout(m_InputLayout);
 
+	TextureData* texture = &m_Texture[keyword_];
 	// 頂点バッファの登録
 	UINT stride = sizeof(Vertex2D);
 	UINT offset = 0;
@@ -158,6 +158,22 @@ void TextureManager::Render(std::string keyword_, DirectX::XMFLOAT3 pos_)
 
 	// インデックスバッファで描画
 	context->DrawIndexed(6, 0, 0);
+}
+
+void TextureManager::Release(std::string keyword_)
+{
+	// すでにキーが存在する場合は読み込みが終わっているので早期リターン
+	auto itr = m_Texture.find(keyword_);
+	
+	if (itr != m_Texture.end())
+	{
+		m_Texture.erase(itr);
+	}
+}
+
+void TextureManager::AllRelease()
+{
+	m_Texture.clear();
 }
 
 bool TextureManager::CreateVertexBuffer(TextureData& data_, ID3D11Device* device_)

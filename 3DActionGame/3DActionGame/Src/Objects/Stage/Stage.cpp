@@ -1,11 +1,12 @@
 ﻿#include "Stage.h"
 #include "../../Utility/Vec2I.h"
 #include "../../Utility/Calculation.h"
+#include "../../Engine/Engine.h"
 
 void Stage::Draw()
 {
-	DirectGraphics::GetInstance()->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	if (m_Model)m_Model->Render(DirectGraphics::GetInstance(), m_Pos, m_Scale, m_Rot);
+	GRAPHICS->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	if (m_Model)m_Model->Render(m_Pos, m_Scale, m_Rot);
 }
 
 float Stage::GetPolygonHeight(DirectX::XMFLOAT3 pos_)const
@@ -99,7 +100,8 @@ void Stage::CreateSplitMapData()
 	// 分割した時の1マスのサイズを算出
 	m_CellSize = m_StageWieth / m_StageSplitNum;
 	// ステージのメッシュ情報を取得
-	const std::vector<CVertex>* vertices = &m_Model->GetMeshData(0)->Vertices;
+	const std::vector<MeshData>* mesh    = m_Model->GetMeshData();
+	const std::vector<CVertex>* vertices = &mesh->at(0).Vertices;
 	
 	for (size_t i = 0; i < vertices->size(); i += 3)
 	{

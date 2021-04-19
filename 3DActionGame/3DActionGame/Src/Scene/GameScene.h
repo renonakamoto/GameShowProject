@@ -2,7 +2,7 @@
 #define GAMESCENE_H_
 
 #include "Scene.h"
-#include "../Engine/MeshModel/FbxModel/FbxModel.h"
+#include "../Engine/Model/FbxModel/FbxModel.h"
 #include "../ObjectManager/ObjectManager.h"
 
 class GameScene : public Scene

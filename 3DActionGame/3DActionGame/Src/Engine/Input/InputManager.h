@@ -170,11 +170,15 @@ enum class InputMode
 class InputManager
 {
 public:
-	static InputManager* GetInstance()
-	{
-		static InputManager instance;
-		return &instance;
-	}
+	/**
+	* @biref コンストラクタ
+	*/
+	InputManager();
+
+	/**
+	* @biref デストラクタ
+	*/
+	~InputManager() { }
 
 	/**
 	* @brief Input機能の初期化関数
@@ -278,16 +282,6 @@ public:
 	float GetMousemSensitivity() { return m_MouseSensitivity; }
 
 private:
-	/**
-	* @biref コンストラクタ
-	*/
-	InputManager();
-
-	/**
-	* @biref デストラクタ
-	*/
-	~InputManager() { }
-
 	/**
 	* @brief キーボード用のデバイスの生成
 	* キーボード用のDirectInputDeviceを生成、初期化します

@@ -30,7 +30,7 @@ public:
 	/**
 	* @brief デストラクタ
 	*/
-	~Camera()
+	virtual ~Camera()
 	{
 		Release();
 	}

@@ -2,10 +2,10 @@
 #include <sstream>
 #include "TitleScene.h"
 #include "SceneManager.h"
-#include "../Engine/InputManager.h"
-#include "../Engine/Texture/Texture.h"
-#include "../2DObject/Title/BackGround.h"
-#include "../2DObject/UI/Button.h"
+#include "../Engine/Engine.h"
+#include "../Engine/Texture/TextureManager.h"
+#include "../Objects/2DObject/BackGround.h"
+#include "../Objects/2DObject/Button.h"
 
 void NextScene()
 {
@@ -29,6 +29,7 @@ TitleScene::TitleScene(SceneChanger* sceneChanger_) :
 TitleScene::~TitleScene()
 {
     ObjectManager::GetInstance()->AllRelease();
+    TEX_MANAGER->AllRelease();
 }
 
 void TitleScene::Load()
@@ -41,7 +42,7 @@ void TitleScene::Load()
 
         ObjectManager::GetInstance()->Init();
 
-        InputManager::GetInstance()->SetInputMode(InputMode::MODE_UI);
+        INPUT->SetInputMode(InputMode::MODE_UI);
         
         m_CurrentState = SceneState::Main;
     }
@@ -49,9 +50,9 @@ void TitleScene::Load()
 
 DWORD WINAPI TitleScene::LoadResources(LPVOID lpParam_)
 {
-    TextureManager::GetInstance()->Load("Res/Textures/title_bg.png", "bg");
-    TextureManager::GetInstance()->Load("Res/Textures/title_ui_quit.png", "quit_ui");
-    TextureManager::GetInstance()->Load("Res/Textures/title_ui_start.png", "start_ui");
+    TEX_MANAGER->Load("Res/Textures/title_bg.png", "bg");
+    TEX_MANAGER->Load("Res/Textures/title_ui_quit.png", "quit_ui");
+    TEX_MANAGER->Load("Res/Textures/title_ui_start.png", "start_ui");
 
     return 0;
 }

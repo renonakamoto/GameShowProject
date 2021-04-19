@@ -12,14 +12,14 @@ public:
 		m_Size(0)
 	{}
 
-	~ShaderBase(){}
+	virtual ~ShaderBase(){}
 
-	inline const char* GetData()
+	const char* GetData()
 	{
 		return m_Data;
 	}
 
-	inline long GetSize()
+	long GetSize()
 	{
 		return m_Size;
 	}

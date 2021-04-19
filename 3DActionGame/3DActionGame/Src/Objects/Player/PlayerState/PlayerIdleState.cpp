@@ -2,18 +2,18 @@
 #include "PlayerRunState.h"
 #include "PlayerIdleState.h"
 #include "PlayerAttack01State.h"
-#include "../../../Engine/InputManager.h"
+#include "../../../Engine/Engine.h"
 
 PlayerState* PlayerIdleState::CheckState(Player* player_)
 {
-	if (InputManager::GetInstance()->GetKey(KeyInfo::Key_W) ||
-		InputManager::GetInstance()->GetKey(KeyInfo::Key_A) ||
-		InputManager::GetInstance()->GetKey(KeyInfo::Key_S) ||
-		InputManager::GetInstance()->GetKey(KeyInfo::Key_D))
+	if (INPUT->GetKey(KeyInfo::Key_W) ||
+		INPUT->GetKey(KeyInfo::Key_A) ||
+		INPUT->GetKey(KeyInfo::Key_S) ||
+		INPUT->GetKey(KeyInfo::Key_D))
 	{
 		return PlayerRunState::GetInstance();
 	}
-	else if (InputManager::GetInstance()->GetMouseDown(MouseButton::Left))
+	else if (INPUT->GetMouseDown(MouseButton::Left))
 	{
 		return PlayerAttack01State::GetInstance();
 	}

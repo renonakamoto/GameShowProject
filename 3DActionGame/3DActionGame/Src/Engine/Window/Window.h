@@ -19,10 +19,10 @@ public:
 	/**
 	* @brief コンストラクタ
 	*/
-	Window(const char* title_, int width_, int height_):
-		m_Title(title_),
-		m_Width(width_),
-		m_Height(height_)
+	Window():
+		m_ClientWidth(0),
+		m_ClientHeight(0),
+		m_WindowHandle(nullptr)
 	{}
 
 	/**
@@ -35,7 +35,7 @@ public:
 	* @brief ウィンドウ作成する関数
 	* @return bool 成功したかどうかを真偽で返す
 	*/
-	bool Create();
+	bool Create(int windowWidth_, int windowHeight, const char* titleName_);
 
 public:
 	/**
@@ -50,14 +50,14 @@ public:
 	* @brief クライアントの横幅を取得する関数
 	* @return int クライアントの横幅を返す
 	*/
-	int GetClientWidth()  { return m_Width;  }
+	int GetClientWidth()  { return m_ClientWidth;  }
 
 	/**
 	* @fn void GetClientHeight()
 	* @brief クライアントの縦幅を取得する関数
 	* @return int クライアントの縦幅を返す
 	*/
-	int GetClientHeight() { return m_Height; }
+	int GetClientHeight() { return m_ClientHeight; }
 
 private:
 	/**
@@ -75,9 +75,8 @@ private:
 	void SetCenterWindow(HWND windowHandle_);
 
 private:
-	const char*  m_Title;	//! ウィンドウのタイトル名
-	int m_Width;			//! ウィンドウの横幅
-	int m_Height;			//! ウィンドウの縦幅
+	int m_ClientWidth;		//! クライアントの横幅
+	int m_ClientHeight;		//! クライアントの縦幅
 	HWND m_WindowHandle;	//! ウィンドウハンドル
 };
 

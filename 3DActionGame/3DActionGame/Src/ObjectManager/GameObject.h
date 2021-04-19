@@ -40,6 +40,12 @@ public:
 	{}
 
 	/**
+	* @brief デストラクタ
+	*/
+	virtual ~GameObject()
+	{}
+
+	/**
 	* @fn void Init()
 	* @brief 初期化関数
 	* @details 継承先で定義し、オブジェクトの初期化を行う

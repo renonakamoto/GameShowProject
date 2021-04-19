@@ -4,7 +4,6 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include "../CollisionManager/Shape/2D/Rect/Rect.h"
-#include "../Model/Model.h"
 
 
 /**

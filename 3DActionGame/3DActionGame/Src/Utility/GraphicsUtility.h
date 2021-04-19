@@ -117,9 +117,9 @@ struct CVertex {
 */
 struct ObjMaterial
 {
-    float Ambient[4];              //! アンビエント光
-    float Diffuse[4];              //! ディヒューズ光
-    float Specular[4];             //! スペキュラー光
+    float       Ambient[4];        //! アンビエント光
+    float       Diffuse[4];        //! ディヒューズ光
+    float       Specular[4];       //! スペキュラー光
     std::string TextureKeyWord;    //! テクスチャキーワード
     std::string TextureName;       //! テクスチャのパス
 
@@ -130,8 +130,7 @@ struct ObjMaterial
         Ambient { 0,0,0,1 },
         Diffuse { 0,0,0,1 },
         Specular{ 0,0,0,1 }
-    {
-    }
+    {}
 };
 
 /**
@@ -151,7 +150,10 @@ struct MeshData
     MeshData() :
         VertexBuffer(nullptr),
         IndexBuffer(nullptr)
-    {}
+    {
+        if (VertexBuffer)VertexBuffer->Release();
+        if (IndexBuffer) IndexBuffer->Release();
+    }
 };
 
 /**
@@ -171,6 +173,16 @@ struct TextureData
     TextureData()
     {
         ZeroMemory(this, sizeof(TextureData));
+    }
+
+    /**
+    * @brief デストラクタ
+    */
+    ~TextureData()
+    {
+        if (VertexBuffer)VertexBuffer->Release();
+        if (IndexBuffer) IndexBuffer->Release();
+        if (Texture)     Texture->Release();
     }
 };
 
