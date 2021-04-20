@@ -1,6 +1,4 @@
 
-#define ENABLE_SKINMESH
-
 // シェーダーに送れるボーン行列の最大数
 #define MAX_BONE_MATRIX 255
 
@@ -18,14 +16,14 @@ struct VS_IN
 // VertexShaderから出力するデータ構造
 struct VS_OUT
 {
-        float4 pos : SV_POSITION;
-        float4 posw : POSITION0;
-        float3 norw : NORMAL0;
-        float2 texture_pos : TEXCOORD0;
-        float3 light : TEXCOORD1;
-        float3 eye_vec : TEXCOORD2;
+        float4 pos             : SV_POSITION;
+        float4 posw            : POSITION0;
+        float3 norw            : NORMAL0;
+        float2 texture_pos     : TEXCOORD0;
+        float3 light           : TEXCOORD1;
+        float3 eye_vec         : TEXCOORD2;
         float4 light_tex_coord : TEXCOORD3;
-        float4 light_view_pos : TEXCOORD4;
+        float4 light_view_pos  : TEXCOORD4;
 };
  
 cbuffer ConstantBuffer : register(b0)
@@ -97,12 +95,11 @@ VS_OUT vs_main( VS_IN input )
 {
         VS_OUT output = (VS_OUT)0;
 
-#ifdef ENABLE_SKINMESH
+        // スキンメッシュを行う
         Skin skinned = SkinVert(input);
+        
+        // ワールド座標に変換
         output.posw = mul(skinned.pos, World);
-#else
-        output.posw = mul(input.pos, World);
-#endif
         // ワールド座標 * ビュー座標変換行列
         output.pos = mul(output.posw, View);
         // ビュー座標 * プロジェクション座標変換行列
@@ -111,20 +108,25 @@ VS_OUT vs_main( VS_IN input )
         // テクスチャ座標
         output.texture_pos = input.texture_pos;
         
-#ifdef ENABLE_SKINMESH
         // 法線ベクトル
-        output.norw = mul(skinned.nor, (float3x3)World);
-#else
-        // 法線ベクトル
-        output.norw = mul(input.nor, (float3x3)World);
-#endif
+        output.norw = normalize(mul(skinned.nor, (float3x3)World));
+        //output.norw = saturate(dot(normal, Light));
         
+        // カメラの向き
         output.eye_vec = normalize(CameraPos - output.posw);
+
+        // ライトの方向
         output.light = normalize(Light);
+
+        /*
+            シャドウマップ用
+        */
         
+        // ライト視点でのビュー座標変換
         output.light_view_pos = mul(output.posw, LightView);
+        // ライト視点でのプロジェクション座標変換
         output.light_view_pos = mul(output.light_view_pos, Projection);
-        //output.light_tex_coord = output.light_view_pos;//mul(output.light_view_pos, ClipUV);
+        // テクスチャUVの変換
         output.light_tex_coord = mul(output.light_view_pos, ClipUV);
 
         return output;

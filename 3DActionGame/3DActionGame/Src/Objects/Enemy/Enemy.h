@@ -33,7 +33,9 @@ public:
 		m_Hp(10),
 		m_IsHit(false),
 		m_IsDeath(false)
-	{}
+	{
+		m_Tag = "Enemy";
+	}
 	
 	/**
 	* @brief デストラクタ

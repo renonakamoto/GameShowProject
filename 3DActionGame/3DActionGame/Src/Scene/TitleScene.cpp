@@ -57,7 +57,6 @@ DWORD WINAPI TitleScene::LoadResources(LPVOID lpParam_)
     return 0;
 }
 
-
 void TitleScene::Main()
 {
     ObjectManager::GetInstance()->Update();
@@ -90,6 +89,4 @@ void TitleScene::Draw()
     default:
         break;
     }
-
-   
 }

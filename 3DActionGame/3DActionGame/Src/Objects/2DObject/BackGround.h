@@ -39,7 +39,6 @@ public:
 	/**
 	* @fn void Init()
 	* @brief 初期化関数
-	* @details シーンの最初に自動敵に一度呼ばれる
 	*/
 	void Init()override
 	{}

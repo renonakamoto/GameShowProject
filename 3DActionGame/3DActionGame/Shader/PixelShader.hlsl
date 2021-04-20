@@ -35,18 +35,30 @@ SamplerState ShadowSampler : register(s1[0]);
 
 float4 ps_main(PS_IN input) : SV_Target
 {
-    // 環境光
-    float4 ambient = MaterialAmbient;
-    // 拡散光
-    //float NL = saturate(dot(input.norw, input.light));
-    float4 diffuse = Texture.Sample(Sampler, input.texture_pos);
-    //float4 diffuse = (MaterialDiffuse / 2 + Texture.Sample(Sampler, input.texture_pos) / 2) * NL;
-    // 鏡面反射光
-    //float3 reflect = normalize(2 * NL * input.norw - input.light);
-    //float4 specular = pow(saturate(dot(reflect, input.eye_vec)), 4) * MaterialSpecular;
-    // フォン
-    float4 color = (diffuse * diffuse.a) + (MaterialDiffuse * MaterialDiffuse.a);
+    // 法線ベクトル
+    float4 N = float4(input.norw, 0.0);
+    // ライトベクトル
+    float4 L = float4(input.light, 0.0);
+    // 法線とライトの内積でどれだけ光の当たり具合を算出
+    float NL = saturate(dot(N, L));
+    // 反射ベクトルを算出
+    float4 R = normalize(-L + 2.0 * N * NL);
 
+    // 鏡面反射光
+    float4 specular = pow(saturate(dot(R, input.eye_vec)), 60.0);
+
+    // 拡散光
+    float4 tex_color = Texture.Sample(Sampler, input.texture_pos);
+    float4 diffuse   = (tex_color * tex_color.w) + (MaterialDiffuse * MaterialDiffuse.w);
+    diffuse = diffuse * NL;
+    
+    // 環境光
+    float4 ambient = diffuse / 3.0;
+
+    // フォンシェーディング(アンビエント光 + ディヒューズ光 + スペキュラー光)
+    float4 color = ambient + (diffuse * NL) + specular;
+
+    
     // 影
     //input.light_tex_coord /= input.light_tex_coord.w;
     //float max_depth_slope = max(abs(ddx(input.light_tex_coord.z)), abs(ddy(input.light_tex_coord.z)));

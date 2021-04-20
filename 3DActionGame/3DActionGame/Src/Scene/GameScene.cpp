@@ -23,6 +23,8 @@ GameScene::GameScene(SceneChanger* sceneChanger_) :
         &m_dwThreadID);             // スレッドID
 
     m_CurrentState = SceneState::Load;
+
+    TEX_MANAGER->Load("Res/Textures/nowloading.png", "NowLoading");
 }
 
 GameScene::~GameScene()
@@ -37,16 +39,17 @@ void GameScene::Load()
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
         // リソースの読み込みが終了したら、各オブジェクトのインスタンスを作成
-        ObjectManager::GetInstance()->Register(new Stage());
-        ObjectManager::GetInstance()->Register(new FollowCamera());
         ObjectManager::GetInstance()->Register(new Player(DirectX::XMFLOAT3(0.f, 100.f, 0.f)));
         ObjectManager::GetInstance()->Register(new Enemy(DirectX::XMFLOAT3(0.f, 0.f, 300.f)));
         ObjectManager::GetInstance()->Register(new Enemy(DirectX::XMFLOAT3(259.f, 0.f, 184.f)));
         ObjectManager::GetInstance()->Register(new Enemy(DirectX::XMFLOAT3(260.f, 0.f, -119.f)));
         ObjectManager::GetInstance()->Register(new Enemy(DirectX::XMFLOAT3(-325.f, 0.f, 112.f)));
 
-        ObjectManager::GetInstance()->Init();
+        ObjectManager::GetInstance()->Register(new Stage());
+        ObjectManager::GetInstance()->Register(new FollowCamera());
         
+        // 各オブジェクトの生成後、各オブジェクトのInitを行う
+        ObjectManager::GetInstance()->Init();
         // 入力モードを変更
        INPUT->SetInputMode(InputMode::MODE_GAME);
         m_CurrentState = SceneState::Main;
@@ -84,8 +87,11 @@ DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 
 void GameScene::Main()
 {
+    // オブジェクトの更新
     ObjectManager::GetInstance()->Update();
-
+    
+#ifdef _DEBUG
+    // Escキーで入力モード切替
     if (INPUT->GetKeyDown(KeyInfo::Key_ESC))
     {
         if (INPUT->GetInputMode() == InputMode::MODE_GAME)
@@ -96,8 +102,11 @@ void GameScene::Main()
         {
             INPUT->SetInputMode(InputMode::MODE_GAME);
         }
-        
+
     }
+
+#endif
+
 }
 
 void GameScene::Update()
@@ -120,6 +129,7 @@ void GameScene::Draw()
     switch (m_CurrentState)
     {
     case SceneState::Load:
+        TEX_MANAGER->Render("NowLoading", DirectX::XMFLOAT3(0.f, 0.f, 0.f));
         break;
     case SceneState::Main:
         ObjectManager::GetInstance()->Draw();

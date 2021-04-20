@@ -1,6 +1,6 @@
-﻿#include "InputManager.h"
-#include "../Window/Window.h"
-#include <d3dx9math.h>
+﻿#include <d3dx9math.h>
+#include "InputManager.h"
+#include "../Engine.h"
 
 LPDIRECTINPUT8 InputManager::m_Interface = nullptr;
 
@@ -310,7 +310,7 @@ void InputManager::Release()
 		m_MouseDevice = nullptr;
 	}
 
-	m_Interface->Release();
+	if (m_Interface)m_Interface->Release();
 }
 
 void InputManager::Update()
@@ -366,15 +366,15 @@ void InputManager::UpdateKeyState()
 void InputManager::UpdateMouseState()
 {	
 	if (m_InputMode == InputMode::MODE_GAME) {
-		HWND window_handle = FindWindow(Window::ClassName, nullptr);
-		RECT rect;
-		GetClientRect(window_handle, &rect);
-
 		POINT po;
 		GetCursorPos(&po);
+		
+		m_MovementX = po.x - (WINDOW->GetClientWidth() / 2);
+		m_MovementY = po.y - (WINDOW->GetClientHeight() / 2);
+	}
 
-		m_MovementX = po.x - (rect.right  / 2);
-		m_MovementY = po.y - (rect.bottom / 2);
+	if (m_InputMode == InputMode::MODE_GAME) {
+		SetMousePos(WINDOW->GetClientWidth() / 2, WINDOW->GetClientHeight() / 2);
 	}
 
 	DIMOUSESTATE mouse;
@@ -416,15 +416,6 @@ void InputManager::UpdateMouseState()
 	for (int i = 0; i < static_cast<int>(MouseButton::Max_Mouse_Btn); i++)
 	{
 		m_InputState[i + key] = static_cast<int>(m_MouseState[i]);
-	}
-
-
-	if (m_InputMode == InputMode::MODE_GAME) {
-		HWND window_handle = FindWindow(Window::ClassName, nullptr);
-		RECT rect;
-		GetClientRect(window_handle, &rect);
-
-		SetMousePos(rect.right / 2, rect.bottom / 2);
 	}
 }
 

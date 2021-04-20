@@ -82,7 +82,7 @@ void Player::Update()
 
 void Player::Draw()
 {
-	GRAPHICS->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	GRAPHICS->SetRasterizerMode(RasterizerMode::MODE_CULL_NONE);
 	m_Model->Render(m_Pos, m_Scale, m_Rot);
 	
 	if (m_Shape)m_Shape->Draw();

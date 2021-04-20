@@ -28,15 +28,6 @@
     <Filter Include="Src\Objects\Player">
       <UniqueIdentifier>{fc6c36c8-1ac1-49a3-84f8-0acaecec936b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\2DObject">
-      <UniqueIdentifier>{4cd5025e-842b-4d00-88b9-b03e5e3b2bbf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\2DObject\Title">
-      <UniqueIdentifier>{78cd9830-7e17-426c-8b01-3ae26a9abde8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\2DObject\Game">
-      <UniqueIdentifier>{4b49f84e-2b80-45b9-a6a0-18331fab46e2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Objects\Enemy">
       <UniqueIdentifier>{151f8c42-b60f-4e25-be08-98bf998f9d53}</UniqueIdentifier>
     </Filter>
@@ -51,9 +42,6 @@
     </Filter>
     <Filter Include="Src\Objects\Enemy\EnemyState">
       <UniqueIdentifier>{346b8d20-d3ac-4023-9f5a-30ed69db64d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\2DObject\UI">
-      <UniqueIdentifier>{08a146b0-2784-4417-b328-54ed2b2e61fa}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\CollisionManager\Shape">
       <UniqueIdentifier>{2d4ad288-ba7e-4747-b7c0-cdc58a08deaf}</UniqueIdentifier>
@@ -409,13 +397,16 @@
     <FxCompile Include="Shader\SimpleVertexShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\SimplePixelShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
     <FxCompile Include="Shader\Tex2DPixelShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\Tex2DVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\DepthPixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\DepthVertexShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

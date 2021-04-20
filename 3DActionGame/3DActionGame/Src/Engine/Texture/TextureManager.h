@@ -7,9 +7,15 @@
 #include "../../Utility/GraphicsUtility.h"
 #include "../Graphics/DirectGraphics.h"
 
+/**
+* @brief テクスチャ管理クラス
+*/
 class TextureManager
 {
 public:
+	/**
+	* @brief コンストラクタ
+	*/
 	TextureManager() :
 		m_VertexShader(nullptr),
 		m_PixelShader(nullptr),
@@ -18,6 +24,9 @@ public:
 		m_SamplerState(nullptr)
 	{}
 
+	/**
+	* @brief デストラクタ
+	*/
 	~TextureManager()
 	{
 		AllRelease();
@@ -26,19 +35,46 @@ public:
 		if (m_ConstantBuffer)m_ConstantBuffer->Release();
 	}
 	
+	/**
+	* @fn bool Init(ID3D11Device* device_)
+	* @brief 初期化関数
+	* @param[in] device_ グラフィックデバイス
+	* @details シェーダ、入力レイアウト、定数バッファの作成を行う
+	*/
 	bool Init(ID3D11Device* device_);
 
+	/**
+	* @fn bool Load(const char* fileName_, std::string keyword_)
+	* @brief テクスチャ読み込み関数
+	* @param[in] fileName_ ファイル名(パス付き)
+	* @param[in] keyword_ テクスチャに紐づけるキーワード
+	* @details 対応形式 : dds, tga, bmp, jpg, png
+	*/
 	bool Load(const char* fileName_, std::string keyword_);
-
+	
+	/**
+	* @fn void Render(std::string keyword_, DirectX::XMFLOAT3 pos_)
+	* @brief テクスチャ描画関数
+	* @param[in] keyword_ ファイル名(パス付き)
+	* @param[in] pos_ テクスチャに紐づいているキーワード
+	* @details 対応形式 : dds, tga, bmp, jpg, png
+	*/
 	void Render(std::string keyword_, DirectX::XMFLOAT3 pos_);
 
-	TextureData* GetTexture(std::string keyword_) { return &m_Texture[keyword_]; }
+	/**
+	* @fn TextureData* GetTexture(std::string keyword_)
+	* @brief テクスチャ取得関数
+	* @param[in] keyword_ テクスチャに紐づいているキーワード
+	*/
+	TextureData* GetTexture(std::string keyword_) { 
+		if (m_Textures.find(keyword_) == m_Textures.end()) return;
+		return &m_Textures[keyword_];
+	}
 
 	/**
 	* @fn void Release(std::string keyword_)
-	* @brief リストから指定したオブジェクトを削除する関数
-	* @param[in] object_ 削除したいオブジェクト
-	* @details 確保されているメモリも一緒に解放する
+	* @brief 指定したテクスチャを削除する関数
+	* @param[in] keyword_ テクスチャに紐づいているキーワード
 	*/
 	void Release(std::string keyword_);
 
@@ -49,24 +85,60 @@ public:
 	void AllRelease();
 	
 private:
+	/**
+	* @fn bool CreateVertexBuffer(TextureData& data_, ID3D11Device* device_)
+	* @brief 頂点バッファの作成関数
+	* @param[in] data_ テクスチャデータ
+	* @param[in] device_ グラフィックデバイス
+	*/
 	bool CreateVertexBuffer(TextureData& data_, ID3D11Device* device_);
+
+	/**
+	* @fn bool CreateIndexBuffer(TextureData& data_, ID3D11Device* device_)
+	* @brief インデックスバッファの作成関数
+	* @param[in] data_ テクスチャデータ
+	* @param[in] device_ グラフィックデバイス
+	*/
 	bool CreateIndexBuffer(TextureData& data_, ID3D11Device* device_);
 
 private:
-
+	/**
+	* @fn bool CreateShader(ID3D11Device* device_)
+	* @brief シェーダー作成関数
+	* @param[in] device_ グラフィックデバイス
+	* @details 2D描画用のシェーダーを作成する
+	*/
 	bool CreateShader(ID3D11Device* device_);
+
+	/**
+	* @fn bool CreateInputLayout(ID3D11Device* device_)
+	* @brief 入力レイアウトの作成関数
+	* @param[in] device_ グラフィックデバイス
+	*/
 	bool CreateInputLayout(ID3D11Device* device_);
+
+	/**
+	* @fn bool CreateConstantBuffer(ID3D11Device* device_)
+	* @brief 定数バッファの作成関数
+	* @param[in] device_ グラフィックデバイス
+	*/
 	bool CreateConstantBuffer(ID3D11Device* device_);
+
+	/**
+	* @fn bool CreateSamplerState(ID3D11Device* device_)
+	* @brief テクスチャサンプラーの作成関数
+	* @param[in] device_ グラフィックデバイス
+	*/
 	bool CreateSamplerState(ID3D11Device* device_);
 
 private:
-	std::map<std::string, TextureData> m_Texture;
-	VertexShader*						m_VertexShader;
-	PixelShader*						m_PixelShader;
-	ID3D11InputLayout*					m_InputLayout;
-	ID3D11SamplerState*					m_SamplerState;
-	ID3D11Buffer*						m_ConstantBuffer;
-	ConstantBuffer2D					m_ConstantBufferData;
+	std::map<std::string, TextureData>  m_Textures;				//! テクスチャ保存用マップ
+	VertexShader*						m_VertexShader;			//! 頂点シェーダー
+	PixelShader*						m_PixelShader;			//! ピクセルシェーダ
+	ID3D11InputLayout*					m_InputLayout;			//! 入力レイアウト
+	ID3D11SamplerState*					m_SamplerState;			//! サンプラーステート
+	ID3D11Buffer*						m_ConstantBuffer;		//! 定数バッファオブジェクト
+	ConstantBuffer2D					m_ConstantBufferData;	//! 定数バッファ
 
 };
 

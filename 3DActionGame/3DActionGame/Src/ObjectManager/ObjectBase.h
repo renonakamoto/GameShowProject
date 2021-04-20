@@ -17,6 +17,14 @@ public:
 	{}
 
 	/**
+	* @brief コンストラクタ
+	* @param[in] tag_ タグ名
+	*/
+	ObjectBase(std::string tag_) :
+		m_Tag(tag_)
+	{}
+
+	/**
 	* @brief デストラクタ
 	*/
 	virtual ~ObjectBase(){}

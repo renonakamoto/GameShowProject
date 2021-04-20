@@ -247,20 +247,20 @@ void FbxModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
 	/*
 		頂点シェーダの設定
 	*/
-	context->VSSetShader(graphics->GetVertexShader()->GetShaderInterface(), NULL, 0);
+	context->VSSetShader(graphics->GetVertexShader()->GetShaderInterface(), NULL, 0U);
 	/*
 		ピクセルシェーダの設定
 	*/
-	context->PSSetShader(graphics->GetPixelShader()->GetShaderInterface(), NULL, 0);
+	context->PSSetShader(graphics->GetPixelShader()->GetShaderInterface(), NULL, 0U);
 	
 	UINT strides = sizeof(CVertex);
-	UINT offsets = 0;
+	UINT offsets = 0U;
 	
 	for (auto& mesh : m_MeshList)
 	{
 		context->IASetVertexBuffers(
-			0,
-			1,
+			0U,
+			1U,
 			&mesh.VertexBuffer,
 			&strides,
 			&offsets);
@@ -268,7 +268,7 @@ void FbxModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
 		context->IASetIndexBuffer(
 			mesh.IndexBuffer,
 			DXGI_FORMAT_R32_UINT,
-			0);
+			0U);
 
 		// ワールド行列の作成
 		DirectX::XMMATRIX mat_world, mat_trans, mat_rot_x, mat_rot_y, mat_rot_z, mat_scale;

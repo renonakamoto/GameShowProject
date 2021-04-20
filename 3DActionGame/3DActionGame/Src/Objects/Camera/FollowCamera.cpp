@@ -4,13 +4,12 @@
 void FollowCamera::Init()
 {
     Camera::Init();
-    m_Tag = "FollowCamera";
 }
 
 void FollowCamera::Update()
 {
     // マウスのX軸の移動量をY軸回転に加算
-    m_Yaw   -= INPUT->GetMouseMovementX();
+    m_Yaw -= INPUT->GetMouseMovementX();
 
     // マウス感度を取得
     float sensi = INPUT->GetMousemSensitivity();

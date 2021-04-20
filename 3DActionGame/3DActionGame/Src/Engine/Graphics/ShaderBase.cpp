@@ -28,8 +28,10 @@ int ShaderBase::LoadFile(const char* fileName_)
 		return 0;
 	}
 
+	// ファイルの終端に移動してサイズを取得
 	fseek(fp, 0, SEEK_END);
 	m_Size = ftell(fp);
+	// ファイルの先頭に移動してデータを格納する
 	fseek(fp, 0, SEEK_SET);
 	m_Data = new char[m_Size];
 	fread_s(m_Data, m_Size, m_Size, 1, fp);

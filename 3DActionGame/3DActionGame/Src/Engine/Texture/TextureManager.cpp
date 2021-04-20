@@ -8,7 +8,6 @@
 
 bool TextureManager::Init(ID3D11Device* device_)
 {
-	// nullチェック
 	if (device_ == nullptr) return false;
 
 	// シェーダーの作成
@@ -39,9 +38,9 @@ bool TextureManager::Init(ID3D11Device* device_)
 bool TextureManager::Load(const char* fileName_, std::string keyword_)
 {
 	// すでにキーが存在する場合は読み込みが終わっているので早期リターン
-	if (m_Texture.find(keyword_) != m_Texture.end()) return true;
+	if (m_Textures.find(keyword_) != m_Textures.end()) return true;
 
-	TextureData* tex_data = &m_Texture[keyword_];
+	TextureData* tex_data = &m_Textures[keyword_];
 
 	// ファイル分解
 	char buffer[256];
@@ -88,7 +87,7 @@ bool TextureManager::Load(const char* fileName_, std::string keyword_)
 	// 読み込みに失敗したとき
 	if (FAILED(hr))
 	{
-		m_Texture.erase(keyword_);
+		m_Textures.erase(keyword_);
 		return false;
 	}
 
@@ -102,7 +101,7 @@ bool TextureManager::Load(const char* fileName_, std::string keyword_)
 		metadata,
 		&tex_data->Texture)))
 	{
-		m_Texture.erase(keyword_);
+		m_Textures.erase(keyword_);
 		return false;
 	}
 
@@ -111,13 +110,13 @@ bool TextureManager::Load(const char* fileName_, std::string keyword_)
 
 	if (CreateVertexBuffer(*tex_data, device) == false)
 	{
-		m_Texture.erase(keyword_);
+		m_Textures.erase(keyword_);
 		return false;
 	}
 	
 	if (CreateIndexBuffer(*tex_data, device) == false)
 	{
-		m_Texture.erase(keyword_);
+		m_Textures.erase(keyword_);
 		return false;
 	}
 
@@ -126,14 +125,14 @@ bool TextureManager::Load(const char* fileName_, std::string keyword_)
 
 void TextureManager::Render(std::string keyword_, DirectX::XMFLOAT3 pos_)
 {
-	if (m_Texture.find(keyword_) == m_Texture.end()) return;
+	if (m_Textures.find(keyword_) == m_Textures.end()) return;
 	
 	ID3D11DeviceContext* context = GRAPHICS->GetContext();
 
 	// 入力レイアウトを設定
 	context->IASetInputLayout(m_InputLayout);
 
-	TextureData* texture = &m_Texture[keyword_];
+	TextureData* texture = &m_Textures[keyword_];
 	// 頂点バッファの登録
 	UINT stride = sizeof(Vertex2D);
 	UINT offset = 0;
@@ -143,37 +142,38 @@ void TextureManager::Render(std::string keyword_, DirectX::XMFLOAT3 pos_)
 	// プリミティブタイプの設定
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	m_ConstantBufferData.World		= DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.f - (pos_.x / 640.f), 1.f - (pos_.y / 360.f), pos_.z));
-	m_ConstantBufferData.Projection = DirectX::XMMatrixTranspose(DirectX::XMMatrixOrthographicOffCenterLH(0.0f, 1280, 720, 0.0f, -1.0f, 1.0f));
-	context->UpdateSubresource(m_ConstantBuffer, 0, nullptr, &m_ConstantBufferData, 0, 0);
+	int client_width  = WINDOW->GetClientWidth();
+	int client_height = WINDOW->GetClientHeight();
+	m_ConstantBufferData.World		= DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.f - (pos_.x / (client_width/2)), 1.f - (pos_.y / (client_height / 2)), pos_.z));
+	m_ConstantBufferData.Projection = DirectX::XMMatrixTranspose(DirectX::XMMatrixOrthographicOffCenterLH(0.0f, client_width, client_height, 0.0f, -1.0f, 1.0f));
+	context->UpdateSubresource(m_ConstantBuffer, 0U, nullptr, &m_ConstantBufferData, 0U, 0U);
 	
 	// GPUにバッファをセット
-	context->VSSetShader(m_VertexShader->GetShaderInterface(), nullptr, 0);
-	context->PSSetShader(m_PixelShader->GetShaderInterface(), nullptr, 0);
+	context->VSSetShader(m_VertexShader->GetShaderInterface(), nullptr, 0U);
+	context->PSSetShader(m_PixelShader->GetShaderInterface(), nullptr, 0U);
 	context->VSSetConstantBuffers(0, 1, &m_ConstantBuffer);
 
 	// テクスチャをシェーダに登録
-	context->PSSetSamplers(0, 1, &m_SamplerState);
-	context->PSSetShaderResources(0, 1, &texture->Texture);
+	context->PSSetSamplers(0U, 1U, &m_SamplerState);
+	context->PSSetShaderResources(0U, 1U, &texture->Texture);
 
 	// インデックスバッファで描画
-	context->DrawIndexed(6, 0, 0);
+	context->DrawIndexed(6U, 0U, 0U);
 }
 
 void TextureManager::Release(std::string keyword_)
 {
-	// すでにキーが存在する場合は読み込みが終わっているので早期リターン
-	auto itr = m_Texture.find(keyword_);
+	auto itr = m_Textures.find(keyword_);
 	
-	if (itr != m_Texture.end())
+	if (itr != m_Textures.end())
 	{
-		m_Texture.erase(itr);
+		m_Textures.erase(itr);
 	}
 }
 
 void TextureManager::AllRelease()
 {
-	m_Texture.clear();
+	m_Textures.clear();
 }
 
 bool TextureManager::CreateVertexBuffer(TextureData& data_, ID3D11Device* device_)
@@ -290,11 +290,11 @@ bool TextureManager::CreateInputLayout(ID3D11Device* device_)
 bool TextureManager::CreateConstantBuffer(ID3D11Device* device_)
 {
 	D3D11_BUFFER_DESC buffer_desc;
-	buffer_desc.ByteWidth = sizeof(ConstantBuffer2D);
-	buffer_desc.Usage = D3D11_USAGE_DEFAULT;
-	buffer_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	buffer_desc.CPUAccessFlags = 0;
-	buffer_desc.MiscFlags = 0;
+	buffer_desc.ByteWidth			= sizeof(ConstantBuffer2D);
+	buffer_desc.Usage				= D3D11_USAGE_DEFAULT;
+	buffer_desc.BindFlags			= D3D11_BIND_CONSTANT_BUFFER;
+	buffer_desc.CPUAccessFlags		= 0;
+	buffer_desc.MiscFlags			= 0;
 	buffer_desc.StructureByteStride = 0;
 
 	if (FAILED(device_->CreateBuffer(&buffer_desc, nullptr, &m_ConstantBuffer)))

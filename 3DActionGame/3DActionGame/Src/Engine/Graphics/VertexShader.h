@@ -49,7 +49,7 @@ public:
 	}
 
 private:
-	ID3D11VertexShader* m_Interface;	//! 頂点シェーダーインターフェース
+	ID3D11VertexShader* m_Interface;	//! バーテックスシェーダーインターフェース
 	
 };
 

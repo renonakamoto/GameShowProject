@@ -21,6 +21,7 @@ public:
 		m_Model(nullptr),
 		m_CellSize(0)
 	{
+		m_Tag = "stage";
 		m_Model = ObjFileStrage::GetInstance()->GetModel("Stage");
 		if (m_Model)
 		{
@@ -40,7 +41,8 @@ public:
 	* @fn void Init()
 	* @brief 初期化関数
 	*/
-	void Init() override;
+	void Init() override
+	{}
 
 	/**
 	* @fn void Update()

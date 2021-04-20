@@ -9,9 +9,14 @@ struct VS_IN
 // VertexShaderから出力するデータ構造
 struct VS_OUT
 {
-        float4 pos : SV_POSITION;
-        float4 nor : NORMAL;
-        float4 texture_pos : TEXCOORD0;
+    float4 pos : SV_POSITION;
+    float4 posw : POSITION0;
+    float3 norw : NORMAL0;
+    float2 texture_pos : TEXCOORD0;
+    float3 light : TEXCOORD1;
+    float3 eye_vec : TEXCOORD2;
+    float4 light_tex_coord : TEXCOORD3;
+    float4 light_view_pos : TEXCOORD4;
 };
  
 cbuffer ConstantBuffer
@@ -30,22 +35,30 @@ cbuffer ConstantBuffer
  
 VS_OUT vs_main( VS_IN input )
 {
-        VS_OUT output;
-
+        VS_OUT output = (VS_OUT)0;
+        
         // ローカル座標 * ワールド座標変換行列
-        output.pos = mul(input.pos,  World);
+        output.posw = mul(input.pos,  World);
         // ワールド座標 * ビュー座標変換行列
-        output.pos = mul(output.pos, View);
+        output.pos = mul(output.posw, View);
         // ビュー座標 * プロジェクション座標変換行列
         output.pos = mul(output.pos, Projection);
 
-        float4 normal;
-        input.nor.w = 0.0;
-        normal = mul(input.nor, World).xyzw;
-        normal = normalize(normal);
-        output.nor = saturate(dot(normal, Light));
+        // テクスチャ座標
+        output.texture_pos = input.texture_pos;
+
+        // 法線ベクトル
+        output.norw = normalize ( mul(input.nor, (float3x3)World) );
 
         output.texture_pos = input.texture_pos;
+
+        output.eye_vec = normalize(CameraPos - output.posw);
+        
+        output.light = normalize(Light);
+        
+        output.light_view_pos = mul(output.posw, LightView);
+        output.light_view_pos = mul(output.light_view_pos, Projection);
+        output.light_tex_coord = mul(output.light_view_pos, ClipUV);
 
         return output;
 }

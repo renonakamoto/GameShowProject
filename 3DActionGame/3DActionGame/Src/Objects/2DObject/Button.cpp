@@ -15,6 +15,7 @@ void Button::Update()
 
 void Button::Draw()
 {
+	GRAPHICS->SetRasterizerMode(RasterizerMode::MODE_CULL_BACK);
 	if (m_IsHover)
 	{
 		TEX_MANAGER->Render(m_Hover, m_Pos);

@@ -24,20 +24,16 @@ bool Window::Create(int windowWidth_, int windowHeight, const char* titleName_)
 		return false;
 	}
 
-	DWORD dw_style = (WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME) | WS_VISIBLE;
+	DWORD dw_style = WS_OVERLAPPEDWINDOW;
 
 	RECT rect;
 	rect.left   = 0;
 	rect.top    = 0;
-	rect.right  = static_cast<long>(windowWidth_);
-	rect.bottom = static_cast<long>(windowHeight);
+	rect.right  = static_cast<LONG>(windowWidth_);
+	rect.bottom = static_cast<LONG>(windowHeight);
 
 	// ウィンドウのスタイルに合わせたサイズを取得
 	AdjustWindowRect(&rect, dw_style, false);
-
-	// クライアントサイズを算出
-	m_ClientWidth  = rect.right  - rect.left;
-	m_ClientHeight = rect.bottom - rect.top;
 
 	// ウィンドウ作成
 	m_WindowHandle = CreateWindow(
@@ -46,8 +42,8 @@ bool Window::Create(int windowWidth_, int windowHeight, const char* titleName_)
 		dw_style,
 		CW_USEDEFAULT,
 		0,
-		m_ClientWidth,
-		m_ClientHeight,
+		rect.right - rect.left,
+		rect.bottom - rect.top,
 		NULL,
 		NULL,
 		GetModuleHandle(NULL),
@@ -57,6 +53,9 @@ bool Window::Create(int windowWidth_, int windowHeight, const char* titleName_)
 	{
 		return false;
 	}
+
+	m_ClientWidth = windowWidth_;
+	m_ClientHeight = windowHeight;
 
 	// Windowを真ん中に持ってくる
 	SetCenterWindow(m_WindowHandle);
@@ -91,16 +90,11 @@ bool Window::EntryWindowClass()
 
 void Window::SetCenterWindow(HWND windowHandle_)
 {
-	int x, y;
-	int screen_width, screen_height;
-	RECT rect;
+	int screen_width = GetSystemMetrics(SM_CXFULLSCREEN);
+	int screen_height = GetSystemMetrics(SM_CYFULLSCREEN);
 
-	GetWindowRect(m_WindowHandle, &rect);
-	screen_width = GetSystemMetrics(SM_CXFULLSCREEN);
-	screen_height = GetSystemMetrics(SM_CYFULLSCREEN);
-
-	x = (screen_width - (rect.right - rect.left)) / 2;
-	y = (screen_height - (rect.bottom - rect.top)) / 2;
+	int x = (screen_width  - m_ClientWidth)  / 2;
+	int y = (screen_height - m_ClientHeight) / 2;
 
 	// ウインドウの表示
 	SetWindowPos(m_WindowHandle, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);

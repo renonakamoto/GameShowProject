@@ -5,7 +5,7 @@
 
 void Stage::Draw()
 {
-	GRAPHICS->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	GRAPHICS->SetRasterizerMode(RasterizerMode::MODE_CULL_BACK);
 	if (m_Model)m_Model->Render(m_Pos, m_Scale, m_Rot);
 }
 
@@ -88,12 +88,6 @@ bool Stage::IntersectRayAndStage(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3
 
 	return false;
 }
-
-void Stage::Init()
-{
-	m_Tag = "stage";
-}
-
 
 void Stage::CreateSplitMapData()
 {

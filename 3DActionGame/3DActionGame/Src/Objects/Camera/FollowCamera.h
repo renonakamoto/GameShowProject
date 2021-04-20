@@ -18,7 +18,9 @@ public:
 		m_Height(9.f),
 		m_Offset(DirectX::XMFLOAT3(0.f, 0.f, 0.f)),
 		m_FollowObject(nullptr)
-	{}
+	{
+		m_Tag = "FollowCamera";
+	}
 
 	/**
 	* @brief デストラクタ

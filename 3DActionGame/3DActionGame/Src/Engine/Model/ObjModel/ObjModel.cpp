@@ -152,7 +152,7 @@ void ObjModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
     /*
         ピクセルシェーダの設定
     */
-    context->PSSetShader(graphics->GetSimplePixelShader()->GetShaderInterface(), NULL, 0);
+    context->PSSetShader(graphics->GetPixelShader()->GetShaderInterface(), NULL, 0);
 
     UINT strides = sizeof(CVertex);
     UINT offsets = 0;
@@ -176,14 +176,6 @@ void ObjModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
         // マテリアル設定
         graphics->SetMaterial(&m_Materials[mesh.MaterialName]);
 
-        // コンスタントバッファの更新
-        context->UpdateSubresource(graphics->GetConstantBuffer(), 0, nullptr, graphics->GetConstantBufferData(), 0, 0);
-
-        // コンスタントバッファを設定
-        ID3D11Buffer* constant_buffer = graphics->GetConstantBuffer();
-        context->VSSetConstantBuffers(0U, 1U, &constant_buffer);
-        context->PSSetConstantBuffers(0U, 1U, &constant_buffer);
-
         if (m_Textures.count(m_Materials[mesh.MaterialName].TextureKeyWord) > 0)
         {
             graphics->SetTexture(m_Textures[m_Materials[mesh.MaterialName].TextureKeyWord]);
@@ -192,6 +184,15 @@ void ObjModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
         {
             graphics->SetTexture(nullptr);
         }
+
+        // コンスタントバッファの更新
+        context->UpdateSubresource(graphics->GetConstantBuffer(), 0, nullptr, graphics->GetConstantBufferData(), 0, 0);
+
+        // コンスタントバッファを設定
+        ID3D11Buffer* constant_buffer = graphics->GetConstantBuffer();
+        context->VSSetConstantBuffers(0U, 1U, &constant_buffer);
+        context->PSSetConstantBuffers(0U, 1U, &constant_buffer);
+
 
         // 描画
         context->DrawIndexed(static_cast<UINT>(mesh.Indices.size()), 0U, 0);

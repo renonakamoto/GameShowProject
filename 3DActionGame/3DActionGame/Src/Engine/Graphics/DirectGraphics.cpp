@@ -5,7 +5,8 @@
 
 #pragma comment(lib,"d3d11.lib")
 
-//#define ENABLE_MASS
+// MSAAの有効
+//#define ENABLE_MSAA
 
 bool DirectGraphics::Init()
 {
@@ -26,9 +27,6 @@ bool DirectGraphics::Init()
     {
         return false;
     }
-
-    // ビューポート設定
-    SetUpViewPort();
     
     // シェーダーの作成
     if (CreateShader() == false)
@@ -48,25 +46,25 @@ bool DirectGraphics::Init()
         return false;
     }
 
-    // ライトの設定
-    DirectX::XMStoreFloat4(&m_ConstantBufferData.Light, DirectX::XMVector3Normalize(DirectX::XMVectorSet(0.0f, 0.5f, -1.0f, 0.0f)));
-    //DirectX::XMMATRIX mat_rot = DirectX::XMMatrixIdentity();
-    //
-    //DirectX::XMMATRIX mat   =  DirectX::XMMatrixRotationX(DirectX::XMConvertToRadians(90.f));
-    //DirectX::XMMATRIX trans =  DirectX::XMMatrixTranslation(m_ConstantBufferData.Light.x, m_ConstantBufferData.Light.y, m_ConstantBufferData.Light.z);
-    //mat = mat * trans;
-    //DirectX::XMMATRIX light_view = DirectX::XMMatrixInverse(nullptr, mat);
-    //DirectX::XMStoreFloat4x4(&m_ConstantBufferData.LightView, DirectX::XMMatrixTranspose(light_view));
+    // ラスタライザの作成
+    if (CreateRasterizer() == false)
+    {
+        return false;
+    }
 
-    DirectX::XMMATRIX light_view = DirectX::XMMatrixLookAtLH(
-        DirectX::XMVectorSet(m_ConstantBufferData.Light.x, m_ConstantBufferData.Light.y, m_ConstantBufferData.Light.z, 0.0f),
-        DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),
-        DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
+    // シャドウマップ用の
+    if (CreateDepthDSVAndRTV() == false)
+    {
+        return false;
+    }
 
-    DirectX::XMStoreFloat4x4(&m_ConstantBufferData.LightView, DirectX::XMMatrixTranspose(light_view));
+    // ビューポート設定
+    SetUpViewPort();
 
-
-    //テクスチャ行列の設定
+    // ライト設定
+    SetUpLight();
+    
+    // UV変換行列の設定
     DirectX::XMMATRIX tex_uv = DirectX::XMMatrixSet(
         0.5f, 0.0f, 0.0f, 0.0f,
         0.0f,-0.5f, 0.0f, 0.0f,
@@ -75,21 +73,7 @@ bool DirectGraphics::Init()
 
     DirectX::XMStoreFloat4x4(&m_ConstantBufferData.ClipUV, DirectX::XMMatrixTranspose(tex_uv));
 
-    // ラスタライザ
-    D3D11_RASTERIZER_DESC rasterizerDesc;
-    ID3D11RasterizerState* state;
-    ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
-    rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-    rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
-    rasterizerDesc.FrontCounterClockwise = TRUE;
-    if (FAILED(m_Device->CreateRasterizerState(&rasterizerDesc, &state)))
-    {
-        return false;
-    }
-
-    m_Context->RSSetState(state);
-
-
+    
     return true;
 }
 
@@ -156,6 +140,48 @@ void DirectGraphics::Release()
         m_ShadowSamplerState = nullptr;
     }
 
+    for (int i = 0; i < static_cast<int>(RasterizerMode::MODE_NUM); ++i)
+    {
+        if (m_RasterizerState[i] == nullptr) continue;
+        m_RasterizerState[i]->Release();
+        m_RasterizerState[i] = nullptr;
+    }
+
+    if (m_DepthTextureView != nullptr)
+    {
+        m_DepthTextureView->Release();
+        m_DepthTextureView = nullptr;
+    }
+
+    if (m_DepthRenderTargetView != nullptr)
+    {
+        m_DepthRenderTargetView->Release();
+        m_DepthRenderTargetView = nullptr;
+    }
+
+    if (m_DepthDepthStencilView != nullptr)
+    {
+        m_DepthDepthStencilView->Release();
+        m_DepthDepthStencilView = nullptr;
+    }
+
+    if (m_DepthDepthStencilTexture != nullptr)
+    {
+        m_DepthDepthStencilTexture->Release();
+        m_DepthDepthStencilTexture = nullptr;
+    }
+
+    if (m_DepthTexture != nullptr)
+    {
+        m_DepthTexture->Release();
+        m_DepthTexture = nullptr;
+    }
+
+    if (m_ShadowSamplerState != nullptr)
+    {
+        m_ShadowSamplerState->Release();
+        m_ShadowSamplerState = nullptr;
+    }
 }
 
 /*
@@ -181,20 +207,13 @@ void DirectGraphics::StartRendering()
                 m_DepthStencilView,                      // 対象のビュー
                 D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, // クリアフラグ
                 1.0f,                                    // 深度クリア値
-                0                                        // ステンシルクリア値
+                0U                                       // ステンシルクリア値
                 );
 
     /*
         ビューポートの設定
     */
-    D3D11_VIEWPORT vp;
-    vp.Width    = static_cast<FLOAT>(WINDOW->GetClientWidth());
-    vp.Height   = static_cast<FLOAT>(WINDOW->GetClientHeight());
-    vp.MinDepth = 0.f;
-    vp.MaxDepth = 1.f;
-    vp.TopLeftX = 0.f;
-    vp.TopLeftY = 0.f;
-    m_Context->RSSetViewports(1U, &vp);
+    //SetUpViewPort();
 
     /*
        出力先の設定
@@ -211,6 +230,11 @@ void DirectGraphics::FinishRendering()
 {
     // バックバッファをフロントバッファに送信する   
     m_SwapChain->Present(1, 0);
+}
+
+void DirectGraphics::SetRasterizerMode(RasterizerMode mode_)
+{
+    m_Context->RSSetState(m_RasterizerState[static_cast<int>(mode_)]);
 }
 
 void DirectGraphics::SetTexture(ID3D11ShaderResourceView* texture_)
@@ -248,58 +272,53 @@ void DirectGraphics::SetMaterial(ObjMaterial* material_)
                                                               material_->Specular[2], material_->Specular[3]);
 }
 
-void DirectGraphics::SetUpDxgiSwapChanDesc(DXGI_SWAP_CHAIN_DESC* dxgi)
+void DirectGraphics::SetUpDxgiSwapChanDesc(DXGI_SWAP_CHAIN_DESC* dxgi_)
 {
-    HWND window_handle = FindWindow(Window::ClassName, nullptr);
-    RECT rect;
-    GetClientRect(window_handle, &rect);
-
     // スワップチェイン作成時に必要な設定
-    ZeroMemory(dxgi, sizeof(DXGI_SWAP_CHAIN_DESC));
+    ZeroMemory(dxgi_, sizeof(DXGI_SWAP_CHAIN_DESC));
     
     // バッファの数
-    dxgi->BufferCount = 1U;
+    dxgi_->BufferCount = 1U;
     // バッファの横幅
-    dxgi->BufferDesc.Width  = static_cast<UINT>(WINDOW->GetClientWidth());
+    dxgi_->BufferDesc.Width  = static_cast<UINT>(WINDOW->GetClientWidth());
     // バッファの縦幅
-    dxgi->BufferDesc.Height = static_cast<UINT>(WINDOW->GetClientHeight());
+    dxgi_->BufferDesc.Height = static_cast<UINT>(WINDOW->GetClientHeight());
     // バッファのカラーフォーマット
-    dxgi->BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    dxgi_->BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     // リフレッシュレートの分子
-    dxgi->BufferDesc.RefreshRate.Numerator   = 60U;
+    dxgi_->BufferDesc.RefreshRate.Numerator   = 60U;
     // リフレッシュレートの分母
-    dxgi->BufferDesc.RefreshRate.Denominator = 1U;
+    dxgi_->BufferDesc.RefreshRate.Denominator = 1U;
     // スキャンラインの方法
     // バックバッファをフリップしたときにハードウェアがパソコンのモニターに
     // 点をどう描くかを設定する
     // 特に理由がなければデフォルト値であるDXGI_MODE_SCANLINE_ORDER_UNSPECIFIEDでOK
-    dxgi->BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+    dxgi_->BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
     // ウィンドウのサイズに応じてスケーリングするかどうかの設定
     // スケーリングする場合   DXGI_MODE_SCALING_STRETCHED 
     // スケーリングしない場合 DXGI_MODE_SCALING_CENTERED
-    dxgi->BufferDesc.Scaling = DXGI_MODE_SCALING_STRETCHED;
+    dxgi_->BufferDesc.Scaling = DXGI_MODE_SCALING_STRETCHED;
     // バッファの使用方法
     // レンダーターゲットとして使用する場合は、DXGI_USAGE_RENDER_TARGET_OUTPUT 
     // シェーダー入力用として使用する場合はDXGI_USAGE_SHADER_INPUT
-    dxgi->BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    dxgi_->BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     // 出力対象のウィンドウハンドル
-    dxgi->OutputWindow = window_handle;
+    dxgi_->OutputWindow = WINDOW->GetWindowHandle();
     // マルチサンプリングのサンプル数(未使用は1)
-    dxgi->SampleDesc.Count = 1U;
+    dxgi_->SampleDesc.Count = 1U;
     // マルチサンプリングの品質(未使用は0)
-    dxgi->SampleDesc.Quality = 0U;
+    dxgi_->SampleDesc.Quality = 0U;
     // ウィンドウモード指定
-    dxgi->Windowed = true;
+    dxgi_->Windowed = true;
     // スワップチェインの動作オプション
     // DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCHを指定した場合
     // フルスクリーンとウィンドウモードの切り替えが可能
-    dxgi->Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-
+    dxgi_->Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 }
 
 bool DirectGraphics::CreateDeviceAndSwapChain()
 {
-#ifdef ENABLE_MASS
+#ifdef ENABLE_MSAA
     if (FAILED(D3D11CreateDevice(
         nullptr,
         D3D_DRIVER_TYPE_HARDWARE,
@@ -316,6 +335,7 @@ bool DirectGraphics::CreateDeviceAndSwapChain()
     }
 
 
+    // 使用できるサンプルレベルを調べる
     for (int i = 0; i <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; ++i)
     {
         UINT quality;
@@ -491,13 +511,9 @@ bool DirectGraphics::CreateDepthAndStencilView()
         D3D11_TEXTURE2D_DESCでテクスチャの設定を行う
     */
     
-    HWND window_handle = FindWindow(Window::ClassName, nullptr);
-    RECT rect;
-    GetClientRect(window_handle, &rect);
-    
     // 深度ステンシルバッファの作成
     D3D11_TEXTURE2D_DESC texture_desc;
-    ZeroMemory(&texture_desc, sizeof(D3D11_TEXTURE2D_DESC));
+    ZeroMemory(&texture_desc, sizeof(texture_desc));
     // バッファの横幅
     texture_desc.Width  = static_cast<UINT>(WINDOW->GetClientWidth());
     // バッファの横幅
@@ -511,7 +527,7 @@ bool DirectGraphics::CreateDepthAndStencilView()
     // Depth24bit, Stencil8bitとなる
     texture_desc.Format = DXGI_FORMAT_D32_FLOAT;
     // 
-#ifdef ENABLE_MASS
+#ifdef ENABLE_MSAA
     texture_desc.SampleDesc = m_SampleDesc;
 #else
     texture_desc.SampleDesc.Count   = 1U;
@@ -541,7 +557,7 @@ bool DirectGraphics::CreateDepthAndStencilView()
     // Viewのフォーマット
     dsv_desc.Format = texture_desc.Format;
     // テクスチャの種類
-#ifdef ENABLE_MASS
+#ifdef ENABLE_MSAA
     dsv_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
 #else
     dsv_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
@@ -582,8 +598,14 @@ bool DirectGraphics::CreateShader()
         return false;
     }
 
-    m_SimplePixelShader = new PixelShader();
-    if (m_SimplePixelShader->Create(m_Device, "Res/Shader/SimplePixelShader.cso") == false)
+    m_DepthVertexShader = new VertexShader();
+    if (m_DepthVertexShader->Create(m_Device, "Res/Shader/DepthVertexShader.cso") == false)
+    {
+        return false;
+    }
+
+    m_DepthPixelShader = new PixelShader();
+    if (m_DepthPixelShader->Create(m_Device, "Res/Shader/DepthPixelShader.cso") == false)
     {
         return false;
     }
@@ -654,6 +676,104 @@ bool DirectGraphics::CreateTextureSampler()
     return true;
 }
 
+bool DirectGraphics::CreateRasterizer()
+{
+    /*
+        カリングなし
+    */
+    // ラスタライザ
+    D3D11_RASTERIZER_DESC ras_desc;
+    ID3D11RasterizerState* RasBackCulling;
+    ZeroMemory(&ras_desc, sizeof(ras_desc));
+    ras_desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;  //! レンダリングするポリゴンを塗りつぶす
+    ras_desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;   //! カリングなし
+    ras_desc.FrontCounterClockwise = FALSE;                 //! 時計周りが表、反時計回りが裏
+    if (FAILED(m_Device->CreateRasterizerState(&ras_desc, &m_RasterizerState[static_cast<int>(RasterizerMode::MODE_CULL_NONE)])))
+    {
+        return false;
+    }
+
+    /*
+        背面カリング
+    */
+    ras_desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;   //! 背面カリング
+    if (FAILED(m_Device->CreateRasterizerState(&ras_desc, &m_RasterizerState[static_cast<int>(RasterizerMode::MODE_CULL_BACK)])))
+    {
+        return false;
+    }
+
+    /*
+        ワイヤーフレーム
+    */
+    ras_desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;  //! ポリゴンを塗りつぶさない
+    if (FAILED(m_Device->CreateRasterizerState(&ras_desc, &m_RasterizerState[static_cast<int>(RasterizerMode::MODE_WIREFRAME)])))
+    {
+        return false;
+    }
+
+    // デフォルトは背面カリング
+    SetRasterizerMode(RasterizerMode::MODE_CULL_BACK);
+    return true;
+}
+
+bool DirectGraphics::CreateDepthDSVAndRTV()
+{
+    // 深度ステンシルビューの作成
+    D3D11_TEXTURE2D_DESC texture_desc;
+    ZeroMemory(&texture_desc, sizeof(texture_desc));
+    texture_desc.Width              = static_cast<UINT>(WINDOW->GetClientWidth() * 2);
+    texture_desc.Height             = static_cast<UINT>(WINDOW->GetClientHeight() * 2);
+    texture_desc.MipLevels          = 1U;
+    texture_desc.ArraySize          = 1U;
+    texture_desc.MiscFlags          = 0U;
+    texture_desc.Format             = DXGI_FORMAT_R32_FLOAT;
+    texture_desc.SampleDesc.Count   = 1U;
+    texture_desc.SampleDesc.Quality = 0U;
+    texture_desc.Usage              = D3D11_USAGE_DEFAULT;
+    texture_desc.BindFlags          = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+    texture_desc.CPUAccessFlags     = 0U;
+
+    if (FAILED(m_Device->CreateTexture2D(&texture_desc, nullptr, &m_DepthTexture)))
+    {
+        return false;
+    }
+
+    D3D11_RENDER_TARGET_VIEW_DESC rtv_desc;
+    ZeroMemory(&rtv_desc, sizeof(rtv_desc));
+    rtv_desc.Format             = texture_desc.Format;
+    rtv_desc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
+    rtv_desc.Texture2D.MipSlice = 0U;
+
+    if (FAILED(m_Device->CreateRenderTargetView(m_DepthTexture, &rtv_desc, &m_DepthRenderTargetView)))
+    {
+        return false;
+    }
+    
+    texture_desc.Format    = DXGI_FORMAT_D32_FLOAT;
+    texture_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+    if (FAILED(m_Device->CreateTexture2D(&texture_desc, nullptr, &m_DepthDepthStencilTexture)))
+    {
+        return false;
+    }
+    if (FAILED(m_Device->CreateDepthStencilView(m_DepthDepthStencilTexture, nullptr, &m_DepthDepthStencilView)))
+    {
+        return false;
+    }
+
+    D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc;
+    ZeroMemory(&srv_desc, sizeof(srv_desc));
+    srv_desc.Format              = DXGI_FORMAT_R32_FLOAT;
+    srv_desc.ViewDimension       = D3D11_SRV_DIMENSION_TEXTURE2D;
+    srv_desc.Texture2D.MipLevels = 1U;
+
+    if (FAILED(m_Device->CreateShaderResourceView(m_DepthTexture, &srv_desc, &m_DepthTextureView)))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 void DirectGraphics::SetUpViewPort()
 {
     D3D11_VIEWPORT view_port;
@@ -671,5 +791,17 @@ void DirectGraphics::SetUpViewPort()
     view_port.MaxDepth = 1.f;
 
     // ViewPortの設定
-    m_Context->RSSetViewports(1, &view_port);
+    m_Context->RSSetViewports(1U, &view_port);
+}
+
+void DirectGraphics::SetUpLight()
+{
+    DirectX::XMStoreFloat4(&m_ConstantBufferData.Light, DirectX::XMVector3Normalize(DirectX::XMVectorSet(0.0f, 0.5f, -1.0f, 0.0f)));
+
+    DirectX::XMMATRIX light_view = DirectX::XMMatrixLookAtLH(
+        DirectX::XMVectorSet(m_ConstantBufferData.Light.x, m_ConstantBufferData.Light.y, m_ConstantBufferData.Light.z, 0.0f),
+        DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),
+        DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
+
+    DirectX::XMStoreFloat4x4(&m_ConstantBufferData.LightView, DirectX::XMMatrixTranspose(light_view));
 }

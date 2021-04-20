@@ -31,7 +31,7 @@ void Enemy::Update()
 
 void Enemy::Draw()
 {
-	GRAPHICS->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	GRAPHICS->SetRasterizerMode(RasterizerMode::MODE_CULL_NONE);
 	if (m_Model)m_Model->Render( m_Pos, m_Scale, m_Rot);
 
 	m_Shape->Draw();
@@ -51,7 +51,6 @@ void Enemy::Damage(int damageNum_)
 void Enemy::Init()
 {
 	m_Scale = DirectX::XMFLOAT3(0.1f, 0.1f, 0.1f);
-	m_Tag = "Enemy";
 
 	m_Model = new SkeletalModel(); 
 	m_Model->SetModel(FbxStorage::GetInstance()->GetModel("Enemy"));
