@@ -31,6 +31,7 @@ void GameoverScene::Load()
 DWORD WINAPI GameoverScene::LoadResources(LPVOID lpParam_)
 {
 
+
     return 0;
 }
 

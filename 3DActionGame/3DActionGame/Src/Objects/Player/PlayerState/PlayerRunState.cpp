@@ -7,13 +7,16 @@
 
 PlayerState* PlayerRunState::CheckState(Player* player_)
 {
+	// 左クリックが押された時は攻撃状態へ遷移
 	if (INPUT->GetMouseDown(MouseButton::Left))
 	{
 		return PlayerAttack01State::GetInstance();
 	}
-	else if (Calculation::Length(player_->m_Velocity) < 0.1f)
+	
+	// 移動速度が0に近かったら待機状態へ
+	if (Calculation::Length(player_->GetVelocity()) < 0.1f)
 	{
-		player_->m_Velocity = DirectX::XMFLOAT3(0.f, 0.f, 0.f);
+		player_->SetVelocity(DirectX::XMFLOAT3(0.f, 0.f, 0.f));
 		return PlayerIdleState::GetInstance();
 	}
 	

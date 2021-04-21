@@ -148,18 +148,18 @@ void ObjModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
     */
     DirectGraphics* graphics = GRAPHICS;
     ID3D11DeviceContext* context = graphics->GetContext();
-    context->VSSetShader(graphics->GetSimpleVertexShader()->GetShaderInterface(), NULL, 0);
+    context->VSSetShader(graphics->GetSimpleVertexShader()->GetShaderInterface(), NULL, 0U);
     /*
         ピクセルシェーダの設定
     */
-    context->PSSetShader(graphics->GetPixelShader()->GetShaderInterface(), NULL, 0);
+    context->PSSetShader(graphics->GetPixelShader()->GetShaderInterface(), NULL, 0U);
 
     UINT strides = sizeof(CVertex);
-    UINT offsets = 0;
+    UINT offsets = 0U;
     for (MeshData& mesh : m_MeshList)
     {
-        context->IASetVertexBuffers(0, 1, &mesh.VertexBuffer, &strides, &offsets);
-        context->IASetIndexBuffer(mesh.IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+        context->IASetVertexBuffers(0U, 1U, &mesh.VertexBuffer, &strides, &offsets);
+        context->IASetIndexBuffer(mesh.IndexBuffer, DXGI_FORMAT_R32_UINT, 0U);
 
         context->IASetInputLayout(m_InputLayout);
 
@@ -186,7 +186,7 @@ void ObjModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
         }
 
         // コンスタントバッファの更新
-        context->UpdateSubresource(graphics->GetConstantBuffer(), 0, nullptr, graphics->GetConstantBufferData(), 0, 0);
+        context->UpdateSubresource(graphics->GetConstantBuffer(), 0U, nullptr, graphics->GetConstantBufferData(), 0U, 0U);
 
         // コンスタントバッファを設定
         ID3D11Buffer* constant_buffer = graphics->GetConstantBuffer();
@@ -195,7 +195,7 @@ void ObjModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
 
 
         // 描画
-        context->DrawIndexed(static_cast<UINT>(mesh.Indices.size()), 0U, 0);
+        context->DrawIndexed(static_cast<UINT>(mesh.Indices.size()), 0U, 0U);
     }
 }
 

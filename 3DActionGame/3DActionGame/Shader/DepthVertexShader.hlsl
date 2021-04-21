@@ -3,7 +3,6 @@ struct VS_IN
 {
     float4 pos : POSITION0;
     float4 nor : NORMAL0;
-    float4 color : COLOR0;
     float2 texture_pos : TEXCOORD0;
 };
 

@@ -28,9 +28,9 @@ cbuffer ConstantBuffer
     float4   MaterialSpecular;
 };
 
-Texture2D    Texture : register(t0[0]); // Textureをスロット0の0番目のテクスチャレジスタに設定
-Texture2D    TextureDepth : register(t1[0]);
-SamplerState Sampler : register(s0[0]); // Samplerをスロット0の0番目のサンプラレジスタに設定
+Texture2D    Texture       : register(t0[0]); // Textureをスロット0の0番目のテクスチャレジスタに設定
+Texture2D    TextureDepth  : register(t1[0]);
+SamplerState Sampler       : register(s0[0]); // Samplerをスロット0の0番目のサンプラレジスタに設定
 SamplerState ShadowSampler : register(s1[0]);
 
 float4 ps_main(PS_IN input) : SV_Target
@@ -39,21 +39,20 @@ float4 ps_main(PS_IN input) : SV_Target
     float4 N = float4(input.norw, 0.0);
     // ライトベクトル
     float4 L = float4(input.light, 0.0);
-    // 法線とライトの内積でどれだけ光の当たり具合を算出
+    // 法線とライトの内積で光の当たり具合を算出
     float NL = saturate(dot(N, L));
     // 反射ベクトルを算出
     float4 R = normalize(-L + 2.0 * N * NL);
 
     // 鏡面反射光
-    float4 specular = pow(saturate(dot(R, input.eye_vec)), 60.0);
+    float4 specular = pow(saturate(dot(R, input.eye_vec)), 200) * MaterialSpecular;
 
     // 拡散光
     float4 tex_color = Texture.Sample(Sampler, input.texture_pos);
-    float4 diffuse   = (tex_color * tex_color.w) + (MaterialDiffuse * MaterialDiffuse.w);
-    diffuse = diffuse * NL;
+    float4 diffuse   = (tex_color * tex_color.w) + (MaterialDiffuse * MaterialDiffuse.w);  
     
     // 環境光
-    float4 ambient = diffuse / 3.0;
+    float4 ambient = diffuse / 2.0;
 
     // フォンシェーディング(アンビエント光 + ディヒューズ光 + スペキュラー光)
     float4 color = ambient + (diffuse * NL) + specular;

@@ -81,7 +81,7 @@ void Player::Update()
 }
 
 void Player::Draw()
-{
+{	
 	GRAPHICS->SetRasterizerMode(RasterizerMode::MODE_CULL_NONE);
 	m_Model->Render(m_Pos, m_Scale, m_Rot);
 	
@@ -122,20 +122,21 @@ void Player::Attack()
 
 void Player::Move(float x_, float z_)
 {
-	m_OldPos = m_Pos;
-
 	// 移動ベクトルを正規化
 	m_Velocity = DirectX::XMFLOAT3(x_, 0.f, z_);
 	if (m_Velocity.x != 0.f || m_Velocity.z != 0.f)
 	{
 		m_Velocity = Calculation::Normalize(m_Velocity);
 	}
+
 	
 	m_Velocity    = Calculation::Lerp(m_OldVelocity, m_Velocity, (m_Speed / 60.0f));
 	m_OldVelocity = m_Velocity;
 
 	if (Calculation::Length(m_Velocity) > 0.1f)
 	{
+		m_OldPos = m_Pos;
+
 		float angle = atan2f(m_Velocity.x, m_Velocity.z);
 		m_Rot.y = DirectX::XMConvertToDegrees(angle);
 

@@ -8,31 +8,31 @@ bool Engine::Init(int windowWidth_, int windowHeight_, const char* titleName_, H
 		return false;
 	}
 
-	// Graphicsの作成
+	// Graphicsの初期化
 	if (m_Graphics.Init() == false)
 	{
 		return false;
 	}
 
-	// Inputの作成
+	// Inputの初期化
 	if (m_Input.Init(hInstance_, m_Window.GetWindowHandle()) == false)
 	{
 		return false;
 	}
 
-	// Soundの作成
+	// Soundの初期化
 	if (m_Sound.Init(m_Window.GetWindowHandle()) == false)
 	{
 		return false;
 	}
 
-	// Textureの作成
+	// Textureの初期化
 	if (m_Texture.Init(m_Graphics.GetDevice()) == false)
 	{
 		return false;
 	}
 
-	// Engineの作成成功
+	// Engineの初期化成功
 	return true;
 }
 

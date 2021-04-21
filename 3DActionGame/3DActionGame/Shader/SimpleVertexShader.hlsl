@@ -50,8 +50,6 @@ VS_OUT vs_main( VS_IN input )
         // 法線ベクトル
         output.norw = normalize ( mul(input.nor, (float3x3)World) );
 
-        output.texture_pos = input.texture_pos;
-
         output.eye_vec = normalize(CameraPos - output.posw);
         
         output.light = normalize(Light);

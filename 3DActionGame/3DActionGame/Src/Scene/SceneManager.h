@@ -43,8 +43,8 @@ public:
 
 private:
 	/**
-* @biref コンストラクタ
-*/
+    * @biref コンストラクタ
+    */
 	SceneManager();
 
 	/**

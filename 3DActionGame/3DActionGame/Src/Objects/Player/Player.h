@@ -31,7 +31,7 @@ public:
 #pragma region MemberInit
 		Object3D(pos_, { 0.f, 0.f, 0.f }, { 0.1f, 0.1f, 0.1f }),
 		m_Model(nullptr),
-		m_Speed(4.f),
+		m_Speed(10.f),
 		m_OldPos(m_Pos),
 		m_Angle(0.f),
 		m_AttackPower(3),
@@ -74,6 +74,20 @@ public:
 
 	void SetMotion(std::string keyword) { m_Model->Play(keyword); }
 
+	/**
+	* @fn DirectX::XMFLOAT3 GetVelocity()
+	* @brief Velocityの取得関数
+	* @return DirectX::XMFLOAT3 Velocity
+	*/
+	DirectX::XMFLOAT3 GetVelocity() { return m_Velocity; }
+
+	/**
+	* @fn void SetVelocity(DirectX::XMFLOAT3 velocity_)
+	* @brief Velocityのセット関数
+	* @param[in] velocity_ Velocity
+	*/
+	void SetVelocity(DirectX::XMFLOAT3 velocity_) { m_Velocity = velocity_; }
+
 private:
 	/**
 	* @fn void Release()
@@ -100,13 +114,13 @@ private:
 private:
 	SkeletalModel* m_Model;				//! モデル
 	PlayerState* m_State;				//! プレイヤーの状態管理クラス
+	ShapeOBB* m_AttackVolume;			//! 攻撃範囲
 	float m_Angle;						//!	Y軸の角度(度数法)
 	DirectX::XMFLOAT3 m_DirectionVec;	//! 向きベクトル
 	float m_Speed;						//! 移動速度
 	DirectX::XMFLOAT3 m_Velocity;		//! 現在の移動速度
 	DirectX::XMFLOAT3 m_OldVelocity;	//! 1フレーム前の移動速度
 	DirectX::XMFLOAT3 m_OldPos;			//! 1フレーム前の座標
-	ShapeOBB* m_AttackVolume;			//! 攻撃範囲
 	int m_AttackPower;					//! 攻撃力
 
 	ShapeOBB* m_OBB;					//! 当たり判定用

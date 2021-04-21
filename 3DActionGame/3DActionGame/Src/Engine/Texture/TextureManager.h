@@ -67,7 +67,7 @@ public:
 	* @param[in] keyword_ テクスチャに紐づいているキーワード
 	*/
 	TextureData* GetTexture(std::string keyword_) { 
-		if (m_Textures.find(keyword_) == m_Textures.end()) return;
+		if (m_Textures.find(keyword_) == m_Textures.end()) return nullptr;
 		return &m_Textures[keyword_];
 	}
 
