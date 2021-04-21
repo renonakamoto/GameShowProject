@@ -1,10 +1,8 @@
-#include "ClearScene.h"
+#include "DebugScene.h"
 #include "../Engine/Engine.h"
-#include "../ObjectManager/ObjectManager.h"
-#include "../Objects/2DObject/BackGround.h"
+#include "../GameManager/GameManager.h"
 
-
-ClearScene::ClearScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
+DebugScene::DebugScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
     m_ThreadHandle = CreateThread(
         nullptr,                    // セキュリティ属性
@@ -17,19 +15,15 @@ ClearScene::ClearScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
     m_CurrentState = SceneState::Load;
 }
 
-ClearScene::~ClearScene()
+DebugScene::~DebugScene()
 {
-    ObjectManager::GetInstance()->AllRelease();
     TEX_MANAGER->AllRelease();
 }
 
-void ClearScene::Load()
+void DebugScene::Load()
 {
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
-        ObjectManager::GetInstance()->Register(new Background("gameclear_bg"));
-
-        ObjectManager::GetInstance()->Init();
 
         // 入力モード変更
         INPUT->SetInputMode(InputMode::MODE_UI);
@@ -37,29 +31,7 @@ void ClearScene::Load()
     }
 }
 
-DWORD WINAPI ClearScene::LoadResources(LPVOID lpParam_)
-{
-    TEX_MANAGER->Load("Res/Textures/gameclear_bg.png", "gameclear_bg");
-
-    return 0;
-}
-
-
-void ClearScene::Main()
-{
-    if (INPUT->GetKeyDown(KeyInfo::Key_Space))
-    {
-#ifdef _DEBUG
-        m_SceneChanger->ChangeScene(SceneID::Debug);
-#else
-        m_SceneChanger->ChangeScene(SceneID::Tilte);
-#endif
-    }
-
-    ObjectManager::GetInstance()->Update();
-}
-
-void ClearScene::Update()
+void DebugScene::Update()
 {
     switch (m_CurrentState)
     {
@@ -74,16 +46,31 @@ void ClearScene::Update()
     }
 }
 
-void ClearScene::Draw()
+void DebugScene::Draw()
 {
     switch (m_CurrentState)
     {
     case SceneState::Load:
         break;
     case SceneState::Main:
-        ObjectManager::GetInstance()->Draw();
+        TEX_MANAGER->Render("debug", { 0.f,0.f,0.f });
         break;
     default:
         break;
     }
+}
+
+void DebugScene::Main()
+{
+    if (INPUT->GetKeyDown(KeyInfo::Key_1)) m_SceneChanger->ChangeScene(SceneID::Tilte);
+    else if (INPUT->GetKeyDown(KeyInfo::Key_2)) m_SceneChanger->ChangeScene(SceneID::Game);
+    else if (INPUT->GetKeyDown(KeyInfo::Key_3)) m_SceneChanger->ChangeScene(SceneID::Clear);
+    else if (INPUT->GetKeyDown(KeyInfo::Key_4)) m_SceneChanger->ChangeScene(SceneID::Gameover);
+    else if (INPUT->GetKeyDown(KeyInfo::Key_5)) GameManager::GetInstance()->QuitGame();
+}
+
+DWORD __stdcall DebugScene::LoadResources(LPVOID lpParam_)
+{
+    TEX_MANAGER->Load("Res/Textures/debug_bg.png", "debug");
+	return 0;
 }

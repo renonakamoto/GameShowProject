@@ -15,7 +15,7 @@ public:
 	FollowCamera() :
 		m_Distance(0.f),
 		m_Yaw(0.f),
-		m_Height(9.f),
+		m_Height(0.f),
 		m_Offset(DirectX::XMFLOAT3(0.f, 0.f, 0.f)),
 		m_FollowObject(nullptr)
 	{
@@ -60,9 +60,17 @@ public:
 	* @fn void SetOffset(DirectX::XMFLOAT3 offset_)
 	* @brief 注視点からのオフセット値をセットする関数
 	* @param[in] offset_ オフセット値
-	* @details 注視点がオブジェクトの原点になるので、オフセット値で注視点を変えることができる
+	* @details 注視点がオブジェクトの原点になるので、オフセット値で注視点を移動することができる
 	*/
 	void SetOffset(DirectX::XMFLOAT3 offset_) { m_Offset = offset_; }
+	
+	/**
+	* @fn void SetHeight(float height_)
+	* @brief カメラの高さをセットする関数
+	* @param[in] height_ 高さ
+	* @details カメラと注視点を高さ分上げる
+	*/
+	void SetHeight(float height_) { m_Height = height_; }
 
 private:
 	float m_Distance;				//! オブジェクトとの距離

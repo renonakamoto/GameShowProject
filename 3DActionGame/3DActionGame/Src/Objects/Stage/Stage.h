@@ -9,9 +9,9 @@
 */
 class Stage : public Object3D
 {
-	static const int m_StageWieth    = 1200; //! ステージの横幅
-	static const int m_StageHeight   = 1200; //! ステージの縦幅
-	static const int m_StageSplitNum = 10;	 //! ステージの分割数
+	static const int STAGE_WIETH     = 1200; //! ステージの横幅
+	static const int STAGE_HEIGHT    = 1200; //! ステージの縦幅
+	static const int STAGE_SPLITNUM  = 10;	 //! ステージの分割数
 
 public:
 	/**
@@ -92,7 +92,7 @@ private:
 	{}
 
 private:
-	std::vector<CVertex> m_MapData[m_StageSplitNum + 1][m_StageSplitNum + 1];	//! 分割したポリゴンを保存する変数
+	std::vector<CVertex> m_MapData[STAGE_SPLITNUM + 1][STAGE_SPLITNUM + 1];	//! 分割したポリゴンを保存する変数
 	float m_CellSize;	//! ステージを分割した際の1マスのサイズ
 
 	ObjModel* m_Model;	//! ステージのモデル

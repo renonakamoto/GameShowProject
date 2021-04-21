@@ -73,3 +73,13 @@ void CollisionManager::AllRelease()
 	// 領域を切り詰める
 	m_Collision3DList.shrink_to_fit();
 }
+
+void CollisionManager::Draw()
+{
+	for (auto* object : m_Collision3DList)
+	{
+		// 形状を取得
+		Shape3D* shape = object->GetShape();
+		if (shape)shape->Draw();
+	}
+}

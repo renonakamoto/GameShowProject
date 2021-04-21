@@ -5,12 +5,12 @@
 #include "../../ObjectManager/ObjectManager.h"
 #include "../../CollisionManager/CollisionManager.h"
 #include "../../Objects/Enemy/Enemy.h"
+#include "../../GameManager/GameManager.h"
 
 void Player::Init()
 {
 	// モデル情報の取得
-	m_Model = new SkeletalModel();
-	m_Model->SetModel(FbxStorage::GetInstance()->GetModel("Ekard"));
+	m_Model = new SkeletalModel(FbxStorage::GetInstance()->GetModel("Ekard"));
 	
 	// プレイヤーステートの初期化
 	m_State = PlayerIdleState::GetInstance();
@@ -18,7 +18,7 @@ void Player::Init()
 
 	// 参照用オブジェクトの取得
 	// ステージオブジェクトの取得
-	ObjectBase* stage = ObjectManager::GetInstance()->GetObj("stage");
+	ObjectBase* stage = ObjectManager::GetInstance()->GetObj("Stage");
 	if (stage) m_Stage = dynamic_cast<Stage*>(stage);
 	if (m_Stage)
 	{
@@ -31,41 +31,29 @@ void Player::Init()
 	if (m_Camera)
 	{
 		m_Camera->SetFollowObject(this);
-		m_Camera->SetDistance(27.0f);
-		m_Camera->SetOffset(DirectX::XMFLOAT3(0.0f, 9.f, 0.0f));
+		m_Camera->SetDistance(m_CameraDistance);
+		m_Camera->SetOffset(m_CameraLookAtOffset);
+		m_Camera->SetHeight(m_CameraHeight);
 	}
 
 	
 	DirectX::XMFLOAT3 shape_pos = m_Pos;
-	shape_pos.y = m_Pos.y + (m_Height / 2.f);
-	m_Shape = new ShapeOBB(shape_pos, 1.4f, 4.f, 1.1f);
+	shape_pos.y = m_Pos.y + (m_PlayerSize.y / 2.f);
+	m_Shape = new ShapeOBB(shape_pos, m_PlayerSize.x / 2.f, m_PlayerSize.y / 2.f, m_PlayerSize.z / 2.f);
 	m_OBB = dynamic_cast<ShapeOBB*>(m_Shape);
 
 	// コリジョンマネージャーに登録
 	CollisionManager::GetInstance()->Register(this);
 
-	m_AttackVolume = new ShapeOBB(shape_pos, 3.f, 2.5f, 2.2f);
+	m_AttackVolume = new ShapeOBB(shape_pos, m_AttackVolumLength.x, m_AttackVolumLength.y, m_AttackVolumLength.z);
 }
 
 void Player::Update()
 {
-#ifdef _DEBUG
-	
-	static DirectX::XMFLOAT3 offset(0.0f, 9.f, 0.0f);
-
-	if (INPUT->GetKeyDown(KeyInfo::Key_T))
-	{
-		offset.y++;
-		m_Camera->SetOffset(offset);
+	// もし死亡したらゲームマネージャーに伝える
+	if (m_IsDeath == true) {
+		GameManager::GetInstance()->GameOver();
 	}
-
-	if (INPUT->GetKeyDown(KeyInfo::Key_G))
-	{
-		offset.y--;
-		m_Camera->SetOffset(offset);
-	}
-
-#endif
 	
 	// プレイヤーの状態を更新する
 	PlayerState* state = m_State->CheckState(this);
@@ -77,7 +65,7 @@ void Player::Update()
 		m_State->Enter(this);
 	}
 
-	// 
+	// ステートの更新
 	m_State->Update(this);
 	
 	// モーションのフレームを進める
@@ -89,30 +77,38 @@ void Player::Draw()
 	GRAPHICS->SetRasterizerMode(RasterizerMode::MODE_CULL_NONE);
 	m_Model->Render(m_Pos, m_Scale, m_Rot);
 	
-	if (m_Shape)m_Shape->Draw();
 	if (m_AttackVolume)m_AttackVolume->Draw();
+}
+
+void Player::Damage(int damageNum_)
+{
+	m_Hp -= damageNum_;
+
+	m_IsHit = true;
 }
 
 void Player::Release()
 {
 	delete m_AttackVolume;
+	m_AttackVolume = nullptr;
 }
 
 void Player::Attack()
 {
 	// 当たり判定の更新
-	DirectX::XMFLOAT3 shape_pos = Calculation::Add(m_Pos, Calculation::Mul(m_DirectionVec, 3.f));
-	shape_pos.y = m_Pos.y + (m_Height / 2.f);
+	DirectX::XMFLOAT3 shape_pos = Calculation::Add(m_Pos, Calculation::Mul(m_DirectionVec, m_AttackForwardDistance));
+	shape_pos.y = m_Pos.y + (m_PlayerSize.y / 2.f);
 	m_AttackVolume->m_Pos = shape_pos;
 	m_AttackVolume->m_NormalDirect[0] = DirectX::XMFLOAT3(m_DirectionVec.z, m_DirectionVec.y, -m_DirectionVec.x);
 	m_AttackVolume->m_NormalDirect[2] = m_DirectionVec;
 	
+	// 敵と当たっているかを調べる
 	std::vector<Object3D*> hit_list;
 	CollisionManager::GetInstance()->CheckHitObjects(*m_AttackVolume, &hit_list);
 	for (auto obj : hit_list) {
 		// 敵に当たっていたら
 		if (obj->GetTag() == "Enemy") {
-			// エネミーにダウンキャスト
+			// 敵にダウンキャスト
 			Enemy* enemy = dynamic_cast<Enemy*>(obj);
 			if (enemy) {
 				// 敵にダメージを与える
@@ -153,7 +149,7 @@ void Player::Move(float x_, float z_)
 
 		// 当たり判定の更新を行う
 		DirectX::XMFLOAT3 shape_pos = m_Pos;
-		shape_pos.y = m_Pos.y + (m_Height / 2.f);
+		shape_pos.y = m_Pos.y + (m_PlayerSize.y / 2.f);
 		m_OBB->m_Pos = shape_pos;
 		m_OBB->m_NormalDirect[0] = Calculation::Normalize(DirectX::XMFLOAT3(m_Velocity.z, m_Velocity.y, -m_Velocity.x));
 		m_OBB->m_NormalDirect[2] = Calculation::Normalize(m_Velocity);

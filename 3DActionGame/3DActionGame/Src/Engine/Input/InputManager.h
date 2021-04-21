@@ -64,6 +64,17 @@ enum class KeyInfo
 	Key_Return,
 	Key_ESC,
 	Key_Space,
+	Key_1,
+	Key_2,
+	Key_3,
+	Key_4,
+	Key_5,
+	Key_6,
+	Key_7,
+	Key_8,
+	Key_9,
+	Key_0,
+
 	Max_Key_Info
 };
 
@@ -387,6 +398,16 @@ private:
 	DIK_RETURN,
 	DIK_ESCAPE,
 	DIK_SPACE,
+	DIK_1,
+	DIK_2,
+	DIK_3,
+	DIK_4,
+	DIK_5,
+	DIK_6,
+	DIK_7,
+	DIK_8,
+	DIK_9,
+	DIK_0,
 	};																		//!< キーボード割り当て情報
 
 	InputState m_MouseState[3];		//!< マウス入力情報

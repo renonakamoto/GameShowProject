@@ -39,12 +39,20 @@ public:
 		m_State(nullptr),
 		m_Stage(nullptr),
 		m_Camera(nullptr),
-		m_Velocity{ 0.f,0.f,0.f },
-		m_OldVelocity{ 0.f,0.f,0.f },
+		m_Velocity(0.f, 0.f, 0.f), 
+		m_OldVelocity(0.f, 0.f, 0.f), 
 		m_OBB(nullptr),
 		m_AttackVolume(nullptr),
-		m_RotateSpeed(20.f),
-		m_Height(8.f)
+		m_AttackVolumLength(3.f, 2.5f, 2.2f),
+		m_AttackForwardDistance(3.f),
+		m_PlayerSize(2.8f, 8.f, 2.2f),
+		m_RotateSpeed(12.f),
+		m_Hp(10),
+		m_IsHit(false),
+		m_IsDeath(false),
+		m_CameraDistance(27.0f),
+		m_CameraHeight(9.0f),
+		m_CameraLookAtOffset(0.0f, 9.f, 0.0f)
 #pragma endregion
 	{}
 	
@@ -90,6 +98,14 @@ public:
 	*/
 	void SetVelocity(DirectX::XMFLOAT3 velocity_) { m_Velocity = velocity_; }
 
+	/**
+	* @fn void Damage(int damageNum_)
+	* @brief プレイヤーのHPを減らす関数
+	* @param[in] damageNum_ 受けるダメージ数
+	* @details HPが0以下になったら死亡する
+	*/
+	void Damage(int damageNum_);
+
 private:
 	/**
 	* @fn void Release()
@@ -114,22 +130,31 @@ private:
 	void Move(float x_, float z_);
 
 private:
-	SkeletalModel*		m_Model;		//! モデル
-	PlayerState*		m_State;		//! プレイヤーの状態管理クラス
-	ShapeOBB*			m_AttackVolume;	//! 攻撃範囲
-	DirectX::XMFLOAT3	m_DirectionVec;	//! 向きベクトル
-	DirectX::XMFLOAT3	m_Velocity;		//! 現在の移動速度
-	DirectX::XMFLOAT3	m_OldVelocity;	//! 1フレーム前の移動速度
-	DirectX::XMFLOAT3	m_OldPos;		//! 1フレーム前の座標
-	int					m_AttackPower;	//! 攻撃力
-	float				m_RotateSpeed;	//! 回転速度
-	float				m_Height;		//! プレイヤーの高
-	float				m_Speed;		//! 移動速度さ
-	float				m_Angle;		//!	Y軸の角度(度数法)
+	SkeletalModel*		m_Model;				//! モデル
+	PlayerState*		m_State;				//! プレイヤーの状態管理クラス
+	ShapeOBB*			m_AttackVolume;			//! 攻撃範囲用のOBB
+	DirectX::XMFLOAT3	m_AttackVolumLength;	//! 攻撃範囲のサイズ
+	float				m_AttackForwardDistance;//! 攻撃の際のボリューム生成距離
+	DirectX::XMFLOAT3	m_PlayerSize;			//! プレイヤーの大きさ
+	DirectX::XMFLOAT3	m_DirectionVec;			//! 向きベクトル
+	DirectX::XMFLOAT3	m_Velocity;				//! 現在の移動速度
+	DirectX::XMFLOAT3	m_OldVelocity;			//! 1フレーム前の移動速度
+	DirectX::XMFLOAT3	m_OldPos;				//! 1フレーム前の座標
+	int					m_AttackPower;			//! 攻撃力
+	float				m_RotateSpeed;			//! 回転速度
+	float				m_Speed;				//! 移動速度さ
+	float				m_Angle;				//!	Y軸の角度(度数法)
+	int					m_Hp;					//! ヒットポイント
+	bool				m_IsHit;				//! 攻撃をくらったかどうか
+	bool				m_IsDeath;				//! 死んでいるかどうか
 
-	ShapeOBB*			m_OBB;			//! 当たり判定用
-	Stage*				m_Stage;		//! ステージ参照用変数
-	FollowCamera*		m_Camera;		//! カメラ参照用変数
+	float				m_CameraDistance;
+	float				m_CameraHeight;
+	DirectX::XMFLOAT3	m_CameraLookAtOffset;
+
+	ShapeOBB*			m_OBB;					//! 当たり判定用
+	Stage*				m_Stage;				//! ステージ参照用変数
+	FollowCamera*		m_Camera;				//! カメラ参照用変数
 };
 
 #endif

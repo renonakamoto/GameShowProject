@@ -20,6 +20,7 @@ PlayerState* PlayerRunState::CheckState(Player* player_)
 		return PlayerIdleState::GetInstance();
 	}
 	
+	// 移動状態
 	return PlayerRunState::GetInstance();
 }
 

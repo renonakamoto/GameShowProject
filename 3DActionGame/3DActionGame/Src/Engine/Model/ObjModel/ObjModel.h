@@ -27,7 +27,7 @@ public:
 	~ObjModel()
 	{
 		if (m_InputLayout)m_InputLayout->Release();
-		for (auto tex : m_Textures)
+		for (auto& tex : m_Textures)
 		{
 			tex.second->Release();
 			tex.second = nullptr;

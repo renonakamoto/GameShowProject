@@ -12,14 +12,14 @@ void Stage::Draw()
 float Stage::GetPolygonHeight(DirectX::XMFLOAT3 pos_)const
 {
 	// ステージ外なら
-	if (m_Pos.x > (m_StageWieth / 2) || m_Pos.x <  -(m_StageWieth / 2) ||
-		m_Pos.z > (m_StageHeight / 2)  || m_Pos.z < -(m_StageHeight / 2))
+	if (m_Pos.x > (STAGE_WIETH / 2) || m_Pos.x <  -(STAGE_WIETH / 2) ||
+		m_Pos.z > (STAGE_HEIGHT / 2)  || m_Pos.z < -(STAGE_HEIGHT / 2))
 	{
 		return -100.f;
 	}
 
-	UINT idx_x = static_cast<UINT>((pos_.x + m_StageWieth  / 2) / m_CellSize);
-	UINT idx_y = static_cast<UINT>((pos_.z + m_StageHeight / 2) / m_CellSize);
+	UINT idx_x = static_cast<UINT>((pos_.x + STAGE_WIETH / 2) / m_CellSize);
+	UINT idx_y = static_cast<UINT>((pos_.z + STAGE_HEIGHT / 2) / m_CellSize);
 	float height = -100.f;
 
 	for (size_t v = 0; v < m_MapData[idx_y][idx_x].size(); v+=3)
@@ -54,8 +54,8 @@ bool Stage::IntersectRayAndStage(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3
 	// レイの終点のインデックスを算出
 	Vec2I re_idx;
 	DirectX::XMFLOAT3 ray_end = Calculation::Add(rayOrigin_, rayDistance_);
-	re_idx.X = static_cast<UINT>((ray_end.x + m_StageWieth  / 2) / m_CellSize);
-	re_idx.Y = static_cast<UINT>((ray_end.z + m_StageHeight / 2) / m_CellSize);
+	re_idx.X = static_cast<UINT>((ray_end.x + STAGE_WIETH / 2) / m_CellSize);
+	re_idx.Y = static_cast<UINT>((ray_end.z + STAGE_HEIGHT / 2) / m_CellSize);
 
 	for (size_t v = 0; v < m_MapData[re_idx.Y][re_idx.X].size(); v += 3)
 	{
@@ -92,7 +92,7 @@ bool Stage::IntersectRayAndStage(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3
 void Stage::CreateSplitMapData()
 {
 	// 分割した時の1マスのサイズを算出
-	m_CellSize = m_StageWieth / m_StageSplitNum;
+	m_CellSize = STAGE_WIETH / STAGE_SPLITNUM;
 	// ステージのメッシュ情報を取得
 	const std::vector<MeshData>* mesh    = m_Model->GetMeshData();
 	const std::vector<CVertex>* vertices = &mesh->at(0).Vertices;
@@ -109,8 +109,8 @@ void Stage::CreateSplitMapData()
 		// ステージの真ん中が原点になっているので左上原点にするために頂点座標をずらす
 		for (int j = 0; j < 3; ++j)
 		{
-			v[j].x += (m_StageWieth  / 2);
-			v[j].z += (m_StageHeight / 2);
+			v[j].x += (STAGE_WIETH / 2);
+			v[j].z += (STAGE_HEIGHT / 2);
 		}
 		
 		// 分割するサイズで割って配列のサイズにする

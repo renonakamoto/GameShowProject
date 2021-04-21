@@ -26,13 +26,14 @@ public:
 	* @param[in] pos_ 座標
 	*/
 	Enemy(DirectX::XMFLOAT3 pos_) :
-		Object3D(pos_),
+		Object3D(pos_, { 0.f, 0.f, 0.f }, { 0.1f, 0.1f, 0.1f }),
 		m_Model(nullptr),
 		m_Stage(nullptr),
 		m_State(nullptr),
 		m_Hp(10),
 		m_IsHit(false),
-		m_IsDeath(false)
+		m_IsDeath(false),
+		m_EnemySize(30.f, 40.f, 22.f)
 	{
 		m_Tag = "Enemy";
 	}
@@ -67,9 +68,16 @@ public:
 	* @fn void Damage(int damageNum_)
 	* @brief エネミーのHPを減らす関数
 	* @param[in] damageNum_ エネミーが受けるダメージ数
-	* @details HPが0以下になったらm_IsDeathがtrueになる
+	* @details HPが0以下になったら死亡する
 	*/
 	void Damage(int damageNum_);
+
+	/**
+	* @fn bool IsDeath()
+	* @brief 死亡フラグ取得関数
+	* @return bool true:死亡  false:生存
+	*/
+	bool IsDeath() { return m_IsDeath; }
 
 private:
 	/**
@@ -84,6 +92,7 @@ private:
 	int m_Hp;				//! ヒットポイント
 	bool m_IsHit;			//! 攻撃をくらったかどうか
 	bool m_IsDeath;			//! 死んでいるかどうか
+	DirectX::XMFLOAT3	m_EnemySize; //! エネミーの大きさ
 
 	Stage* m_Stage;			//! ステージの参照用変数
 };

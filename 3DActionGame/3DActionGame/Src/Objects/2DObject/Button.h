@@ -80,7 +80,7 @@ private:
 	std::string m_Hover;		//! マウスと重なっている時のテクスチャキーワード
 	Rect		m_Rect;			//! ボタンの矩形情報
 	bool		m_IsHover;		//! マウスと重なっているかどうかを保存する変数
-	T*			m_Receiver;
+	T*			m_Receiver;		//! 
 	void (T::*m_PushedFunc)(void);	//! 押されたときに呼び出す関数を保存する変数
 };
 

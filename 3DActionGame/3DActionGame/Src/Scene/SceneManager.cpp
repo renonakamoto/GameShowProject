@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "DebugScene.h"
 #include "TitleScene.h"
 #include "GameScene.h"
 #include "ClearScene.h"
@@ -9,7 +10,11 @@ using namespace std;
 
 SceneManager::SceneManager()
 {
+#ifdef _DEBUG
+	m_SceneStack.push(make_shared<DebugScene>(this));
+#else
 	m_SceneStack.push(make_shared<TitleScene>(this));
+#endif 
 }
 
 SceneManager::~SceneManager()
@@ -40,6 +45,9 @@ void SceneManager::ChangeScene(SceneID id_)
 		break;
 	case SceneID::Gameover:
 		m_SceneStack.push(make_shared<GameoverScene>(this));
+		break;
+	case SceneID::Debug:
+		m_SceneStack.push(make_shared<DebugScene>(this));
 		break;
 	case SceneID::MaxSceneID:
 		break;

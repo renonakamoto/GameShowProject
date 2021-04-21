@@ -11,9 +11,9 @@ class ObjectManager
 {
 public:
 	/**
-	* @fn static CollisionManager* GetInstance()
+	* @fn static ObjectManager* GetInstance()
 	* @brief インスタンスを返す関数
-	* @return CollisionManager* インスタンスのポインタ
+	* @return ObjectManager* インスタンスのポインタ
 	*/
 	static ObjectManager* GetInstance()
 	{

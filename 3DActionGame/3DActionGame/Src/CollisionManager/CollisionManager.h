@@ -65,6 +65,12 @@ public:
 	*/
 	void AllRelease();
 
+	/**
+	* @fn void Draw()
+	* @brief リストに登録されているコリジョンを描画する関数
+	*/
+	void Draw();
+
 private:
 	/**
 	* @brief コンストラクタ

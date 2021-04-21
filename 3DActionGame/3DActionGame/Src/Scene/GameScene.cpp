@@ -6,9 +6,12 @@
 #include "../Engine/Engine.h"
 #include "../Objects/Player/Player.h"
 #include "../Objects/Enemy/Enemy.h"
+#include "../Objects/Enemy/EnemyManager.h"
 #include "../Objects/Stage/Stage.h"
 #include "../Objects/Camera/FollowCamera.h"
 #include "../CollisionManager/CollisionManager.h"
+#include "../GameManager/GameManager.h"
+#include "../Model/FbxStorage.h"
 
 
 GameScene::GameScene(SceneChanger* sceneChanger_) : 
@@ -32,6 +35,8 @@ GameScene::~GameScene()
     CollisionManager::GetInstance()->AllRelease();
     ObjectManager::GetInstance()->AllRelease();
     TEX_MANAGER->AllRelease();
+    FbxStorage::GetInstance()->AllRelease();
+    ObjFileStrage::GetInstance()->AllRelease();
 }
 
 void GameScene::Load()
@@ -40,10 +45,7 @@ void GameScene::Load()
     {
         // リソースの読み込みが終了したら、各オブジェクトのインスタンスを作成
         ObjectManager::GetInstance()->Register(new Player(DirectX::XMFLOAT3(0.f, 100.f, 0.f)));
-        ObjectManager::GetInstance()->Register(new Enemy(DirectX::XMFLOAT3(0.f, 0.f, 300.f)));
-        ObjectManager::GetInstance()->Register(new Enemy(DirectX::XMFLOAT3(259.f, 0.f, 184.f)));
-        ObjectManager::GetInstance()->Register(new Enemy(DirectX::XMFLOAT3(260.f, 0.f, -119.f)));
-        ObjectManager::GetInstance()->Register(new Enemy(DirectX::XMFLOAT3(-325.f, 0.f, 112.f)));
+        ObjectManager::GetInstance()->Register(new EnemyManager());
 
         ObjectManager::GetInstance()->Register(new Stage());
         ObjectManager::GetInstance()->Register(new FollowCamera());
@@ -90,6 +92,7 @@ void GameScene::Main()
     // オブジェクトの更新
     ObjectManager::GetInstance()->Update();
     
+    
 #ifdef _DEBUG
     // Escキーで入力モード切替
     if (INPUT->GetKeyDown(KeyInfo::Key_ESC))
@@ -129,10 +132,22 @@ void GameScene::Draw()
     switch (m_CurrentState)
     {
     case SceneState::Load:
+        
         TEX_MANAGER->Render("NowLoading", DirectX::XMFLOAT3(0.f, 0.f, 0.f));
         break;
+        
     case SceneState::Main:
         ObjectManager::GetInstance()->Draw();
+        
+#ifdef _DEBUG
+        {
+            static bool is_draw = true;
+            if (INPUT->GetKeyDown(KeyInfo::Key_Return)) is_draw = !is_draw;
+            if (is_draw) {
+                CollisionManager::GetInstance()->Draw();
+            }
+        }
+#endif
         break;
     default:
         break;

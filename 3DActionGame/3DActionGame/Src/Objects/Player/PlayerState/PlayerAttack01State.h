@@ -49,7 +49,8 @@ private:
 	* @brief コンストラクタ
 	*/
 	PlayerAttack01State() :
-		m_AttackFrame(30)
+		m_AttackFrame(30),
+		m_AttackChainFrame(40)
 	{
 	}
 
@@ -60,7 +61,8 @@ private:
 	{}
 
 private:
-	const int m_AttackFrame;	//! 攻撃を与える瞬間のフレーム数
+	const int m_AttackFrame;	  //! 攻撃を与える瞬間のフレーム数
+	const int m_AttackChainFrame; //! 連続攻撃が可能なフレーム
 
 };
 

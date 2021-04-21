@@ -28,10 +28,10 @@ cbuffer ConstantBuffer
     float4   MaterialSpecular;
 };
 
-Texture2D    Texture       : register(t0[0]); // Textureをスロット0の0番目のテクスチャレジスタに設定
-Texture2D    TextureDepth  : register(t1[0]);
-SamplerState Sampler       : register(s0[0]); // Samplerをスロット0の0番目のサンプラレジスタに設定
-SamplerState ShadowSampler : register(s1[0]);
+Texture2D    Texture       : register(t0); // Textureをスロット0の0番目のテクスチャレジスタに設定
+Texture2D    TextureDepth  : register(t1);
+SamplerState Sampler       : register(s0); // Samplerをスロット0の0番目のサンプラレジスタに設定
+SamplerState ShadowSampler : register(s1);
 
 float4 ps_main(PS_IN input) : SV_Target
 {

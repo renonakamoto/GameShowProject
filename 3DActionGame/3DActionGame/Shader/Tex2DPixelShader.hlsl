@@ -14,6 +14,8 @@ SamplerState Sampler : register(s0);
 // エントリーポイント
 float4 ps_main(PS_IN input) : SV_TARGET
 {
-    // そのまま出力
-    return Texture.Sample(Sampler, input.texture_pos);
+    float4 color = Texture.Sample(Sampler, input.texture_pos);
+    if (color.a <= 0.0) discard;
+    
+    return color;
 }

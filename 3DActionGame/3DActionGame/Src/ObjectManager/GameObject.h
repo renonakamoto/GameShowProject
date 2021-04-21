@@ -77,6 +77,7 @@ public:
 	/**
 	* @fn DirectX::XMFLOAT3 GetPos()
 	* @brief 座標を返す関数
+	* @return DirectX::XMFLOAT3 座標
 	*/
 	DirectX::XMFLOAT3 GetPos() { return m_Pos; }
 
@@ -90,6 +91,7 @@ public:
 	/**
 	* @fn DirectX::XMFLOAT3 GetRot()
 	* @brief 回転(度数)を返す関数
+	* @return DirectX::XMFLOAT3 回転(度数)
 	*/
 	DirectX::XMFLOAT3 GetRot() { return m_Rot; }
 
@@ -103,6 +105,7 @@ public:
 	/**
 	* @fn DirectX::XMFLOAT3 GetScale()
 	* @brief スケールを返す関数
+	* @return DirectX::XMFLOAT3 スケール
 	*/
 	DirectX::XMFLOAT3 GetScale() { return m_Scale; }
 	
