@@ -1,5 +1,6 @@
 ﻿#include "Engine/Engine.h"
 #include "Scene/SceneManager.h"
+#include "GameManager/GameManager.h"
 
 #pragma comment(lib, "winmm.lib")
 
@@ -16,7 +17,7 @@ int APIENTRY WinMain(
 		return -1;
 	}
 	
-	while (true)
+	while (!GameManager::GetInstance()->HasQuit())
 	{
 		MSG msg = { 0 };
 

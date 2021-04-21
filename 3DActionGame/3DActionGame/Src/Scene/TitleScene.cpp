@@ -6,11 +6,8 @@
 #include "../Engine/Texture/TextureManager.h"
 #include "../Objects/2DObject/BackGround.h"
 #include "../Objects/2DObject/Button.h"
+#include "../GameManager/GameManager.h"
 
-void NextScene()
-{
-    SceneManager::GetInstance()->ChangeScene(SceneID::Game);
-}
 
 TitleScene::TitleScene(SceneChanger* sceneChanger_) : 
     Scene(sceneChanger_)
@@ -36,16 +33,23 @@ void TitleScene::Load()
 {
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
+        // オブジェクトの登録
         ObjectManager::GetInstance()->Register(new Background("bg", DirectX::XMFLOAT3(0.f, 0.f, 1.f)));
-        ObjectManager::GetInstance()->Register(new Button("start_ui", "quit_ui", NextScene, DirectX::XMFLOAT3(200.f, 360.f, 0.f)));
-        ObjectManager::GetInstance()->Register(new Button("quit_ui", "start_ui", NextScene, DirectX::XMFLOAT3(800.f, 360.f, 0.f)));
+        ObjectManager::GetInstance()->Register(new Button<TitleScene>("start_ui", "quit_ui", DirectX::XMFLOAT3(200.f, 360.f, 0.f), this, &TitleScene::NextScene));
+        ObjectManager::GetInstance()->Register(new Button<GameManager>("quit_ui", "start_ui", DirectX::XMFLOAT3(800.f, 360.f, 0.f), GameManager::GetInstance(), &GameManager::QuitGame));
 
+        // オブジェクトの初期化
         ObjectManager::GetInstance()->Init();
 
+        // 入力モード変更
         INPUT->SetInputMode(InputMode::MODE_UI);
-        
         m_CurrentState = SceneState::Main;
     }
+}
+
+void TitleScene::NextScene()
+{
+    m_SceneChanger->ChangeScene(SceneID::Game);
 }
 
 DWORD WINAPI TitleScene::LoadResources(LPVOID lpParam_)

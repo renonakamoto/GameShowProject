@@ -1,15 +1,15 @@
 // VertexShaderに送られてくるデータ構造
 struct VS_IN
 {
-    float4 pos : POSITION0;
-    float4 nor : NORMAL0;
-    float2 texture_pos : TEXCOORD0;
+    float4 pos          : POSITION0;
+    float4 nor          : NORMAL0;
+    float2 texture_pos  : TEXCOORD0;
 };
 
 // VertexShaderから出力するデータ構造
 struct VS_OUT
 {
-    float4 pos : SV_POSITION;
+    float4 pos   : SV_POSITION;
     float4 depth : POSITION0;
 };
 

@@ -17,6 +17,7 @@ void Player::Init()
 	m_State->Enter(this);
 
 	// 参照用オブジェクトの取得
+	// ステージオブジェクトの取得
 	ObjectBase* stage = ObjectManager::GetInstance()->GetObj("stage");
 	if (stage) m_Stage = dynamic_cast<Stage*>(stage);
 	if (m_Stage)
@@ -24,6 +25,7 @@ void Player::Init()
 		m_Pos.y = m_Stage->GetPolygonHeight(m_Pos);
 	}
 	
+	// カメラオブジェクトの取得
 	ObjectBase* camera = ObjectManager::GetInstance()->GetObj("FollowCamera");
 	if (camera) m_Camera = dynamic_cast<FollowCamera*>(camera);
 	if (m_Camera)
@@ -33,13 +35,16 @@ void Player::Init()
 		m_Camera->SetOffset(DirectX::XMFLOAT3(0.0f, 9.f, 0.0f));
 	}
 
+	
 	DirectX::XMFLOAT3 shape_pos = m_Pos;
-	shape_pos.y = m_Pos.y + 4.f;
+	shape_pos.y = m_Pos.y + (m_Height / 2.f);
 	m_Shape = new ShapeOBB(shape_pos, 1.4f, 4.f, 1.1f);
 	m_OBB = dynamic_cast<ShapeOBB*>(m_Shape);
 
 	// コリジョンマネージャーに登録
 	CollisionManager::GetInstance()->Register(this);
+
+	m_AttackVolume = new ShapeOBB(shape_pos, 3.f, 2.5f, 2.2f);
 }
 
 void Player::Update()
@@ -62,7 +67,6 @@ void Player::Update()
 
 #endif
 	
-
 	// プレイヤーの状態を更新する
 	PlayerState* state = m_State->CheckState(this);
 
@@ -87,21 +91,19 @@ void Player::Draw()
 	
 	if (m_Shape)m_Shape->Draw();
 	if (m_AttackVolume)m_AttackVolume->Draw();
-
-	delete m_AttackVolume;
-	m_AttackVolume = nullptr;
 }
 
 void Player::Release()
 {
+	delete m_AttackVolume;
 }
 
 void Player::Attack()
 {
 	// 当たり判定の更新
 	DirectX::XMFLOAT3 shape_pos = Calculation::Add(m_Pos, Calculation::Mul(m_DirectionVec, 3.f));
-	shape_pos.y = m_Pos.y + 4.f;
-	m_AttackVolume = new ShapeOBB(shape_pos, 3.f, 2.5f, 2.2f);
+	shape_pos.y = m_Pos.y + (m_Height / 2.f);
+	m_AttackVolume->m_Pos = shape_pos;
 	m_AttackVolume->m_NormalDirect[0] = DirectX::XMFLOAT3(m_DirectionVec.z, m_DirectionVec.y, -m_DirectionVec.x);
 	m_AttackVolume->m_NormalDirect[2] = m_DirectionVec;
 	
@@ -129,27 +131,34 @@ void Player::Move(float x_, float z_)
 		m_Velocity = Calculation::Normalize(m_Velocity);
 	}
 
-	
-	m_Velocity    = Calculation::Lerp(m_OldVelocity, m_Velocity, (m_Speed / 60.0f));
+	// 前回の速度と今回の速度で線形補間を行う
+	m_Velocity    = Calculation::Lerp(m_OldVelocity, m_Velocity, (m_RotateSpeed / 60.0f));
+	// 今回の速度を保存する
 	m_OldVelocity = m_Velocity;
 
 	if (Calculation::Length(m_Velocity) > 0.1f)
 	{
+		// 移動する前に座標を保存する
 		m_OldPos = m_Pos;
-
+		// 移動方向を算出
 		float angle = atan2f(m_Velocity.x, m_Velocity.z);
 		m_Rot.y = DirectX::XMConvertToDegrees(angle);
 
-		m_Pos.x += m_Velocity.x;
-		m_Pos.z += m_Velocity.z;
+		// 移動する
+		m_Pos.x += m_Velocity.x * m_Speed * (1.f / 60.f);
+		m_Pos.z += m_Velocity.z * m_Speed * (1.f / 60.f);
+
+		// 移動地点でのステージのポリゴンの高さを算出
 		m_Pos.y = m_Stage->GetPolygonHeight(m_Pos);
 
+		// 当たり判定の更新を行う
 		DirectX::XMFLOAT3 shape_pos = m_Pos;
-		shape_pos.y = m_Pos.y + 4.f;
+		shape_pos.y = m_Pos.y + (m_Height / 2.f);
 		m_OBB->m_Pos = shape_pos;
 		m_OBB->m_NormalDirect[0] = Calculation::Normalize(DirectX::XMFLOAT3(m_Velocity.z, m_Velocity.y, -m_Velocity.x));
 		m_OBB->m_NormalDirect[2] = Calculation::Normalize(m_Velocity);
 
+		// 移動
 		m_DirectionVec = Calculation::Normalize(m_Velocity);
 	}
 }

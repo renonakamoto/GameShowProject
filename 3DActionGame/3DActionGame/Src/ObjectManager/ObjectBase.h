@@ -34,7 +34,7 @@ public:
 	* @brief 初期化関数
 	* @details 継承先で定義し、オブジェクトの初期化を行う
 	*/
-	virtual void Init()   = 0;
+	virtual void Init() = 0;
 
 	/**
 	* @fn void Update()
@@ -48,7 +48,7 @@ public:
 	* @brief 描画関数
 	* @details 継承先で定義し、オブジェクトの描画を行う
 	*/
-	virtual void Draw()   = 0;
+	virtual void Draw() = 0;
 
 	/**
 	* @fn std::string GetTag()

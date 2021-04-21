@@ -4,14 +4,14 @@
 // PixelShaderに送られてくるデータ構造
 struct PS_IN
 {
-    float4 pos : SV_POSITION;
-    float4 posw : POSITION0;
-    float3 norw : NORMAL0;
-    float2 texture_pos : TEXCOORD0;
-    float3 light : TEXCOORD1;
-    float3 eye_vec : TEXCOORD2;
-    float4 light_tex_coord : TEXCOORD3;
-    float4 light_view_pos : TEXCOORD4;
+    float4 pos              : SV_POSITION;
+    float4 posw             : POSITION0;
+    float3 norw             : NORMAL0;
+    float2 texture_pos      : TEXCOORD0;
+    float3 light            : TEXCOORD1;
+    float3 eye_vec          : TEXCOORD2;
+    float4 light_tex_coord  : TEXCOORD3;
+    float4 light_view_pos   : TEXCOORD4;
 };
  
 cbuffer ConstantBuffer

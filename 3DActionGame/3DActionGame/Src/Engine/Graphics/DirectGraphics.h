@@ -277,10 +277,10 @@ private:
 	ID3D11RenderTargetView*   m_DepthRenderTargetView;
 	ID3D11DepthStencilView*   m_DepthDepthStencilView;
 	ID3D11Texture2D*		  m_DepthDepthStencilTexture;
-	ID3D11Texture2D*		  m_DepthTexture;
+	ID3D11Texture2D*		  m_DepthTexture;				//! 
 	ID3D11SamplerState*		  m_ShadowSamplerState;			//! シャドウマップ用のテクスチャサンプラー
-	VertexShader*			  m_DepthVertexShader;
-	PixelShader*			  m_DepthPixelShader;
+	VertexShader*			  m_DepthVertexShader;			//! 頂点シェーダ
+	PixelShader*			  m_DepthPixelShader;			//! ピクセルシェーダ
 
 };
 

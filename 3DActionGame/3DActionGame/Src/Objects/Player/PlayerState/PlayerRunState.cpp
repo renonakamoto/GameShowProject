@@ -61,5 +61,6 @@ void PlayerRunState::Update(Player* player_)
 
 void PlayerRunState::Enter(Player* player_)
 {
+	player_->m_OldVelocity = player_->m_DirectionVec;
 	player_->SetMotion("Run");
 }

@@ -88,6 +88,9 @@
     <Filter Include="Src\Objects\2DObject">
       <UniqueIdentifier>{5b679473-797e-4d3f-bd99-dc083cd7ef52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\GameManager">
+      <UniqueIdentifier>{6ffc4e15-9d83-402b-a6e8-1e4543e2a1c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -224,6 +227,9 @@
     </ClCompile>
     <ClCompile Include="Src\Objects\2DObject\BackGround.cpp">
       <Filter>Src\Objects\2DObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameManager\GameManager.cpp">
+      <Filter>Src\GameManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -385,6 +391,9 @@
     </ClInclude>
     <ClInclude Include="Src\Objects\2DObject\BackGround.h">
       <Filter>Src\Objects\2DObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameManager\GameManager.h">
+      <Filter>Src\GameManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

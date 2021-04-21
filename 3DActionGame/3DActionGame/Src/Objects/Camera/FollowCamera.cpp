@@ -8,17 +8,17 @@ void FollowCamera::Init()
 
 void FollowCamera::Update()
 {
-    // マウスのX軸の移動量をY軸回転に加算
-    m_Yaw -= INPUT->GetMouseMovementX();
-
     // マウス感度を取得
     float sensi = INPUT->GetMousemSensitivity();
 
+    // マウスのX軸の移動量をY軸回転に加算
+    m_Yaw -= INPUT->GetMouseMovementX() * sensi;
+
     if (m_FollowObject)SetLookAtPos(m_FollowObject->GetPos());
 
-    m_Pos.x = ((m_LookAt.x + m_Offset.x) + m_Distance *  sinf(DirectX::XMConvertToRadians(m_Yaw   * sensi)));
+    m_Pos.x = ((m_LookAt.x + m_Offset.x) + m_Distance *  sinf(DirectX::XMConvertToRadians(m_Yaw)));
     m_Pos.y = ((m_LookAt.y + m_Offset.y));
-    m_Pos.z = ((m_LookAt.z + m_Offset.z) + m_Distance * -cosf(DirectX::XMConvertToRadians(m_Yaw   * sensi)));
+    m_Pos.z = ((m_LookAt.z + m_Offset.z) + m_Distance * -cosf(DirectX::XMConvertToRadians(m_Yaw)));
 
     
     // View行列設定

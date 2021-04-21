@@ -21,7 +21,7 @@ public:
 		m_Model(nullptr),
 		m_CellSize(0)
 	{
-		m_Tag = "stage";
+		m_Tag = "Stage";
 		m_Model = ObjFileStrage::GetInstance()->GetModel("Stage");
 		if (m_Model)
 		{

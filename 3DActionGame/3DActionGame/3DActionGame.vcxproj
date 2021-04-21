@@ -34,6 +34,7 @@
     <ClCompile Include="Src\Engine\Sound\SoundManager.cpp" />
     <ClCompile Include="Src\Engine\Texture\TextureManager.cpp" />
     <ClCompile Include="Src\Engine\Window\Window.cpp" />
+    <ClCompile Include="Src\GameManager\GameManager.cpp" />
     <ClCompile Include="Src\Main.cpp" />
     <ClCompile Include="Src\Model\FbxStorage.cpp" />
     <ClCompile Include="Src\Model\ObjFileStrage.cpp" />
@@ -82,6 +83,7 @@
     <ClInclude Include="Src\Engine\Sound\SoundManager.h" />
     <ClInclude Include="Src\Engine\Texture\TextureManager.h" />
     <ClInclude Include="Src\Engine\Window\Window.h" />
+    <ClInclude Include="Src\GameManager\GameManager.h" />
     <ClInclude Include="Src\Model\FbxStorage.h" />
     <ClInclude Include="Src\Model\ObjFileStrage.h" />
     <ClInclude Include="Src\Model\SkeletalModel.h" />

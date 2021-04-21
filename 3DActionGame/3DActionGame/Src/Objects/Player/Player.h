@@ -31,7 +31,7 @@ public:
 #pragma region MemberInit
 		Object3D(pos_, { 0.f, 0.f, 0.f }, { 0.1f, 0.1f, 0.1f }),
 		m_Model(nullptr),
-		m_Speed(10.f),
+		m_Speed(40.f),
 		m_OldPos(m_Pos),
 		m_Angle(0.f),
 		m_AttackPower(3),
@@ -42,7 +42,9 @@ public:
 		m_Velocity{ 0.f,0.f,0.f },
 		m_OldVelocity{ 0.f,0.f,0.f },
 		m_OBB(nullptr),
-		m_AttackVolume(nullptr)
+		m_AttackVolume(nullptr),
+		m_RotateSpeed(20.f),
+		m_Height(8.f)
 #pragma endregion
 	{}
 	
@@ -112,20 +114,22 @@ private:
 	void Move(float x_, float z_);
 
 private:
-	SkeletalModel* m_Model;				//! モデル
-	PlayerState* m_State;				//! プレイヤーの状態管理クラス
-	ShapeOBB* m_AttackVolume;			//! 攻撃範囲
-	float m_Angle;						//!	Y軸の角度(度数法)
-	DirectX::XMFLOAT3 m_DirectionVec;	//! 向きベクトル
-	float m_Speed;						//! 移動速度
-	DirectX::XMFLOAT3 m_Velocity;		//! 現在の移動速度
-	DirectX::XMFLOAT3 m_OldVelocity;	//! 1フレーム前の移動速度
-	DirectX::XMFLOAT3 m_OldPos;			//! 1フレーム前の座標
-	int m_AttackPower;					//! 攻撃力
+	SkeletalModel*		m_Model;		//! モデル
+	PlayerState*		m_State;		//! プレイヤーの状態管理クラス
+	ShapeOBB*			m_AttackVolume;	//! 攻撃範囲
+	DirectX::XMFLOAT3	m_DirectionVec;	//! 向きベクトル
+	DirectX::XMFLOAT3	m_Velocity;		//! 現在の移動速度
+	DirectX::XMFLOAT3	m_OldVelocity;	//! 1フレーム前の移動速度
+	DirectX::XMFLOAT3	m_OldPos;		//! 1フレーム前の座標
+	int					m_AttackPower;	//! 攻撃力
+	float				m_RotateSpeed;	//! 回転速度
+	float				m_Height;		//! プレイヤーの高
+	float				m_Speed;		//! 移動速度さ
+	float				m_Angle;		//!	Y軸の角度(度数法)
 
-	ShapeOBB* m_OBB;					//! 当たり判定用
-	Stage* m_Stage;						//! ステージ参照用変数
-	FollowCamera* m_Camera;				//! カメラ参照用変数
+	ShapeOBB*			m_OBB;			//! 当たり判定用
+	Stage*				m_Stage;		//! ステージ参照用変数
+	FollowCamera*		m_Camera;		//! カメラ参照用変数
 };
 
 #endif

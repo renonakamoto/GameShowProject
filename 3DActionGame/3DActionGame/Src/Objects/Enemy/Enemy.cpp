@@ -58,7 +58,7 @@ void Enemy::Init()
 	m_State = EnemyIdleState::GetInstance();
 	m_State->Enter(this);
 
-	ObjectBase* stage = ObjectManager::GetInstance()->GetObj("stage");
+	ObjectBase* stage = ObjectManager::GetInstance()->GetObj("Stage");
 	if (stage) m_Stage = dynamic_cast<Stage*>(stage);
 	if (m_Stage)
 	{

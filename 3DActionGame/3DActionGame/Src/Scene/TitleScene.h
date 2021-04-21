@@ -16,7 +16,7 @@ private:
 	static DWORD WINAPI LoadResources(LPVOID lpParam_);
 	void Main() override;
 	void Load() override;
-
+	void NextScene();
 };
 
 #endif // !TITLESCENE_H_

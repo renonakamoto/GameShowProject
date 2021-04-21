@@ -5,10 +5,12 @@
 #include "../../ObjectManager/Object2D.h"
 #include "../../CollisionManager/Shape/2D/Rect/Rect.h"
 #include "../../Engine/Engine.h"
+#include "../../Utility/Calculation.h"
 
 /**
 * @brief ボタンクラス
 */
+template<class T>
 class Button : public Object2D
 {
 public:
@@ -19,11 +21,12 @@ public:
 	* @param[in] fp_ 押したときに呼ばれるコールバック関数
 	* @param[in] pos_ 描画座標 (左上原点)
 	*/
-	Button(std::string normal_, std::string hover_, void(*fp_)(void), DirectX::XMFLOAT3 pos_):
+	Button(std::string normal_, std::string hover_, DirectX::XMFLOAT3 pos_, T* t_, void(T::* fp_)(void)) :
 		Object2D(pos_),
 		m_Normal(normal_), 
 		m_Hover(hover_),
 		m_PushedFunc(fp_),
+		m_Receiver(t_),
 		m_IsHover(false)
 	{		
 		TextureData* tex = TEX_MANAGER->GetTexture(normal_);
@@ -77,7 +80,34 @@ private:
 	std::string m_Hover;		//! マウスと重なっている時のテクスチャキーワード
 	Rect		m_Rect;			//! ボタンの矩形情報
 	bool		m_IsHover;		//! マウスと重なっているかどうかを保存する変数
-	void (*m_PushedFunc)(void);	//! 押されたときに呼び出す関数を保存する変数
+	T*			m_Receiver;
+	void (T::*m_PushedFunc)(void);	//! 押されたときに呼び出す関数を保存する変数
 };
 
 #endif
+
+template<class T>
+inline void Button<T>::Update()
+{
+	POINT mouse_pos = INPUT->GetMousePos();
+	m_IsHover = Calculation::HitRectAndPoint(m_Rect, static_cast<float>(mouse_pos.x), static_cast<float>(mouse_pos.y));
+
+	if (m_IsHover && INPUT->GetMouseDown(MouseButton::Left))
+	{
+		(m_Receiver->*m_PushedFunc)();
+	}
+}
+
+template<class T>
+inline void Button<T>::Draw()
+{
+	GRAPHICS->SetRasterizerMode(RasterizerMode::MODE_CULL_BACK);
+	if (m_IsHover)
+	{
+		TEX_MANAGER->Render(m_Hover, m_Pos);
+	}
+	else
+	{
+		TEX_MANAGER->Render(m_Normal, m_Pos);
+	}
+}
