@@ -57,7 +57,9 @@ private:
 	* @brief デストラクタ
 	*/
 	~ObjFileStrage()
-	{}
+	{
+		AllRelease();
+	}
 
 private:
 	std::map<std::string, ObjModel> m_ModelData; //! モデルデータを保存する変数

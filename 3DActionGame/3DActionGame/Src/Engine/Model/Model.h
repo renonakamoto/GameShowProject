@@ -18,7 +18,7 @@ public:
 	/**
 	* @brief デストラクタ
 	*/
-	~Model()
+	virtual ~Model()
 	{
 		m_MeshList.clear();
 	}
