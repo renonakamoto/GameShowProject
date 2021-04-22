@@ -4,7 +4,6 @@
 
 #pragma comment(lib, "winmm.lib")
 
-
 int APIENTRY WinMain(
 	HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
