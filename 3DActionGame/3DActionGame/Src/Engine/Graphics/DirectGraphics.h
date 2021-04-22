@@ -211,6 +211,7 @@ private:
 	* @fn bool CreateShader()
 	* @brief シェーダーオブジェクト作成関数
 	* @details 使用するシェーダーオブジェクトの作成を行う
+	* @return bool 成功したかどうかを真偽で返す
 	*/
 	bool CreateShader();
 
@@ -218,6 +219,7 @@ private:
 	* @fn bool CreateShader()
 	* @brief コンスタントバッファの作成関数
 	* @details 使用するコンスタントバッファの作成を行う
+	* @return bool 成功したかどうかを真偽で返す
 	*/
 	bool CreateConstantBuffer();
 
@@ -225,6 +227,7 @@ private:
 	* @fn bool CreateTextureSampler()
 	* @brief テクスチャサンプラの作成関数
 	* @details 使用するテクスチャサンプラの作成を行う
+	* @return bool 成功したかどうかを真偽で返す
 	*/
 	bool CreateTextureSampler();
 
@@ -232,9 +235,15 @@ private:
 	* @fn bool CreateRasterizer()
 	* @brief ラスタライザの作成関数
 	* @details 使用するラスタライザの作成を行う
+	* @return bool 成功したかどうかを真偽で返す
 	*/
 	bool CreateRasterizer();
 
+	/**
+	* @fn bool CreateDepthDSVAndRTV()
+	* @brief マルチパスで使用するレンダーターゲットの作成をおこなう関数
+	* @return bool 成功したかどうかを真偽で返す
+	*/
 	bool CreateDepthDSVAndRTV();
 
 	/**

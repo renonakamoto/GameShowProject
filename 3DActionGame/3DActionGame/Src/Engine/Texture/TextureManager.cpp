@@ -173,6 +173,7 @@ void TextureManager::Release(std::string keyword_)
 
 void TextureManager::AllRelease()
 {
+	if (m_Textures.empty()) return;
 	m_Textures.clear();
 }
 
