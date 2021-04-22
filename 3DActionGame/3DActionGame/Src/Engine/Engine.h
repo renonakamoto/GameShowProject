@@ -101,7 +101,7 @@ private:
 // 簡易アクセス用
 #define WINDOW   (Engine::GetInstance()->GetWindow())
 #define GRAPHICS (Engine::GetInstance()->GetGraphics())
-#define INPUT    (Engine::GetInstance()->GetInput())
+#define INPUT_MANAGER (Engine::GetInstance()->GetInput())
 #define SOUND    (Engine::GetInstance()->GetSound())
 #define TEX_MANAGER (Engine::GetInstance()->GetTexture())
 

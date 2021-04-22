@@ -31,7 +31,7 @@ void GameoverScene::Load()
         ObjectManager::GetInstance()->Init();
 
         // 入力モード変更
-        INPUT->SetInputMode(InputMode::MODE_UI);
+        INPUT_MANAGER->SetInputMode(InputMode::MODE_UI);
         m_CurrentState = SceneState::Main;
     }
 }
@@ -46,7 +46,7 @@ DWORD WINAPI GameoverScene::LoadResources(LPVOID lpParam_)
 
 void GameoverScene::Main()
 {
-    if (INPUT->GetKeyDown(KeyInfo::Key_Space))
+    if (INPUT_MANAGER->GetKeyDown(KeyInfo::Key_Space))
     {
 #ifdef _DEBUG
         m_SceneChanger->ChangeScene(SceneID::Debug);

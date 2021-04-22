@@ -89,10 +89,10 @@ private:
 template<class T>
 inline void Button<T>::Update()
 {
-	POINT mouse_pos = INPUT->GetMousePos();
+	POINT mouse_pos = INPUT_MANAGER->GetMousePos();
 	m_IsHover = Calculation::HitRectAndPoint(m_Rect, static_cast<float>(mouse_pos.x), static_cast<float>(mouse_pos.y));
 
-	if (m_IsHover && INPUT->GetMouseDown(MouseButton::Left))
+	if (m_IsHover && INPUT_MANAGER->GetMouseDown(MouseButton::Left))
 	{
 		(m_Receiver->*m_PushedFunc)();
 	}

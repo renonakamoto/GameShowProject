@@ -3,7 +3,6 @@
 #include "SceneManager.h"
 #include "../Model/FbxStorage.h"
 #include "../Model/ObjFileStrage.h"
-#include "../Engine/Engine.h"
 #include "../Objects/Player/Player.h"
 #include "../Objects/Enemy/Enemy.h"
 #include "../Objects/Enemy/EnemyManager.h"
@@ -12,7 +11,7 @@
 #include "../CollisionManager/CollisionManager.h"
 #include "../GameManager/GameManager.h"
 #include "../Model/FbxStorage.h"
-
+#include "../Engine/Engine.h"
 
 GameScene::GameScene(SceneChanger* sceneChanger_) : 
     Scene(sceneChanger_)
@@ -53,7 +52,7 @@ void GameScene::Load()
         // 各オブジェクトの生成後、各オブジェクトのInitを行う
         ObjectManager::GetInstance()->Init();
         // 入力モードを変更
-       INPUT->SetInputMode(InputMode::MODE_GAME);
+        INPUT_MANAGER->SetInputMode(InputMode::MODE_GAME);
         m_CurrentState = SceneState::Main;
     }
 }
@@ -92,15 +91,15 @@ void GameScene::Main()
     
 #ifdef _DEBUG
     // Escキーで入力モード切替
-    if (INPUT->GetKeyDown(KeyInfo::Key_ESC))
+    if (INPUT_MANAGER->GetKeyDown(KeyInfo::Key_ESC))
     {
-        if (INPUT->GetInputMode() == InputMode::MODE_GAME)
+        if (INPUT_MANAGER->GetInputMode() == InputMode::MODE_GAME)
         {
-            INPUT->SetInputMode(InputMode::MODE_UI);
+            INPUT_MANAGER->SetInputMode(InputMode::MODE_UI);
         }
         else
         {
-            INPUT->SetInputMode(InputMode::MODE_GAME);
+            INPUT_MANAGER->SetInputMode(InputMode::MODE_GAME);
         }
 
     }
@@ -139,7 +138,7 @@ void GameScene::Draw()
 #ifdef _DEBUG
         {
             static bool is_draw = true;
-            if (INPUT->GetKeyDown(KeyInfo::Key_Return)) is_draw = !is_draw;
+            if (INPUT_MANAGER->GetKeyDown(KeyInfo::Key_Return)) is_draw = !is_draw;
             if (is_draw) {
                 CollisionManager::GetInstance()->Draw();
             }

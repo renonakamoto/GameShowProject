@@ -15,7 +15,7 @@ PlayerState* PlayerAttack01State::CheckState(Player* player_)
 	}
 	
 	// 連続攻撃が可能なフレーム　かつ　左クリックが押された時次の攻撃状態へ遷移
-	if (player_->m_Model->GetCurrentFrame() >= m_AttackChainFrame && INPUT->GetMouseDown(MouseButton::Left))
+	if (player_->m_Model->GetCurrentFrame() >= m_AttackChainFrame && INPUT_MANAGER->GetMouseDown(MouseButton::Left))
 	{
 		return PlayerAttack02State::GetInstance();
 	}

@@ -89,7 +89,7 @@ void SceneManager::PopScene()
 
 void SceneManager::Update()
 {
-	INPUT->Update();
+	INPUT_MANAGER->Update();
 	m_SceneStack.top()->Update();
 }
 

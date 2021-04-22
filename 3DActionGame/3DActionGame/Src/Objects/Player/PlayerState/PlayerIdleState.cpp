@@ -7,15 +7,15 @@
 PlayerState* PlayerIdleState::CheckState(Player* player_)
 {
 	// 移動キーが押されたら移動状態へ遷移
-	if (INPUT->GetKey(KeyInfo::Key_W) ||
-		INPUT->GetKey(KeyInfo::Key_A) ||
-		INPUT->GetKey(KeyInfo::Key_S) ||
-		INPUT->GetKey(KeyInfo::Key_D))
+	if (INPUT_MANAGER->GetKey(KeyInfo::Key_W) ||
+		INPUT_MANAGER->GetKey(KeyInfo::Key_A) ||
+		INPUT_MANAGER->GetKey(KeyInfo::Key_S) ||
+		INPUT_MANAGER->GetKey(KeyInfo::Key_D))
 	{
 		return PlayerRunState::GetInstance();
 	}
 	// 左クリックが押されたら攻撃状態へ遷移
-	else if (INPUT->GetMouseDown(MouseButton::Left))
+	else if (INPUT_MANAGER->GetMouseDown(MouseButton::Left))
 	{
 		return PlayerAttack01State::GetInstance();
 	}

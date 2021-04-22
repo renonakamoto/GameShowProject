@@ -42,7 +42,7 @@ void TitleScene::Load()
         ObjectManager::GetInstance()->Init();
 
         // 入力モード変更
-        INPUT->SetInputMode(InputMode::MODE_UI);
+        INPUT_MANAGER->SetInputMode(InputMode::MODE_UI);
         m_CurrentState = SceneState::Main;
     }
 }

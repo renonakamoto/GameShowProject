@@ -26,7 +26,7 @@ void DebugScene::Load()
     {
 
         // 入力モード変更
-        INPUT->SetInputMode(InputMode::MODE_UI);
+        INPUT_MANAGER->SetInputMode(InputMode::MODE_UI);
         m_CurrentState = SceneState::Main;
     }
 }
@@ -62,11 +62,11 @@ void DebugScene::Draw()
 
 void DebugScene::Main()
 {
-    if (INPUT->GetKeyDown(KeyInfo::Key_1)) m_SceneChanger->ChangeScene(SceneID::Tilte);
-    else if (INPUT->GetKeyDown(KeyInfo::Key_2)) m_SceneChanger->ChangeScene(SceneID::Game);
-    else if (INPUT->GetKeyDown(KeyInfo::Key_3)) m_SceneChanger->ChangeScene(SceneID::Clear);
-    else if (INPUT->GetKeyDown(KeyInfo::Key_4)) m_SceneChanger->ChangeScene(SceneID::Gameover);
-    else if (INPUT->GetKeyDown(KeyInfo::Key_5)) GameManager::GetInstance()->QuitGame();
+    if (INPUT_MANAGER->GetKeyDown(KeyInfo::Key_1)) m_SceneChanger->ChangeScene(SceneID::Tilte);
+    else if (INPUT_MANAGER->GetKeyDown(KeyInfo::Key_2)) m_SceneChanger->ChangeScene(SceneID::Game);
+    else if (INPUT_MANAGER->GetKeyDown(KeyInfo::Key_3)) m_SceneChanger->ChangeScene(SceneID::Clear);
+    else if (INPUT_MANAGER->GetKeyDown(KeyInfo::Key_4)) m_SceneChanger->ChangeScene(SceneID::Gameover);
+    else if (INPUT_MANAGER->GetKeyDown(KeyInfo::Key_5)) GameManager::GetInstance()->QuitGame();
 }
 
 DWORD __stdcall DebugScene::LoadResources(LPVOID lpParam_)
