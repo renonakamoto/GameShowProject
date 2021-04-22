@@ -11,10 +11,10 @@
 */
 struct Rect
 {
-	float m_Top;
-	float m_Bottom;
-	float m_Left;
-	float m_Right;
+	float m_Top;		//! 上底Y
+	float m_Bottom;		//! 低辺Y
+	float m_Left;		//! 左辺X
+	float m_Right;		//! 右辺X
 
 	/**
 	* @brief コンストラクタ
