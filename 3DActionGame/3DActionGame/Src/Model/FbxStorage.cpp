@@ -34,5 +34,6 @@ void FbxStorage::Release(std::string keyword_)
 
 void FbxStorage::AllRelease()
 {
+	if (m_ModelData.empty()) return;
 	m_ModelData.clear();
 }
