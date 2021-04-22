@@ -28,5 +28,6 @@ void ObjFileStrage::Release(std::string keyword_)
 
 void ObjFileStrage::AllRelease()
 {
+	if (m_ModelData.empty()) return;
 	m_ModelData.clear();
 }
