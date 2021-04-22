@@ -27,12 +27,16 @@ public:
 	~ObjModel()
 	{
 		if (m_InputLayout)m_InputLayout->Release();
-		for (auto& tex : m_Textures)
+		if (!m_Textures.empty())
 		{
-			tex.second->Release();
-			tex.second = nullptr;
+			for (auto tex : m_Textures)
+			{
+				if (tex.second == nullptr) continue;
+				tex.second->Release();
+				tex.second = nullptr;
+			}
+			m_Textures.clear();
 		}
-		m_Textures.clear();
 	}
 
 	/**
