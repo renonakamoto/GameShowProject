@@ -88,14 +88,12 @@ public:
 	* @fn bool AddMesh(const char* fileName_, DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_, const char* boneName_ = nullptr)
 	* @brief メッシュを追加する関数
 	* @param[in] fileName_ ファイル名(パス付)
-	* @param[in] pos_ 移動
-	* @param[in] scale_ 拡縮
-	* @param[in] degree_ 回転(度数)
+	* @param[in] pos_ 座標
 	* @param[in] boneName_ 影響を貰うボーンの名前
 	* @return bool 成功したかどうかを真偽で返す
 	* @details ボーン情報は読み込めない、ボーン名を指定することで、特定のボーンの影響を受けることができる
 	*/
-	bool AddMesh(const char* fileName_, DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_, const char* boneName_ = nullptr);
+	bool AddMesh(const char* fileName_, DirectX::XMFLOAT3 pos_, const char* boneName_ = nullptr);
 
 	/**
 	* @fn void Render(DirectGraphics* graphics_, DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_)

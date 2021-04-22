@@ -1,0 +1,57 @@
+
+●命名規則
+
+ローカル変数
+	スネークケース
+	例：example_case
+	
+グローバル変数
+	g_ + アッパーキャメルケース
+	例：g_ExampleCase
+	
+クラスメソッド
+	アッパーキャメルケース
+	ExampleCase()
+
+クラスフィールド
+	m_ + アッパーキャメルケース
+	例：m_ExampleCase
+
+構造体メソッド
+	アッパーキャメルケース
+	ExampleCase()
+
+構造体フィールド
+	アッパーキャメルケース
+	例：ExampleCase
+
+定数(Define,const,enum)
+	すべて大文字のスネークケース
+	例：EXAMPLE_CASE
+
+引数
+	ローワーキャメルケース + 末端に_
+	例：exampleCase_
+	
+
+関数内の定数はローカル変数の規約に従う
+
+
+●hlslでの命名規則
+
+ローカル変数
+	スネークケース
+	例：example_case
+
+定数
+	すべて大文字のスネークケース
+	例：EXAMPLE_CASE
+	
+構造体
+	スネークケース
+	例：example_case
+	
+定数バッファ
+	アッパーキャメルケース
+	例：ExampleCase
+

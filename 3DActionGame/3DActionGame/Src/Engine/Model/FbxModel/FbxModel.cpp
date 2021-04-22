@@ -333,7 +333,7 @@ void FbxModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
 
 }
 
-bool FbxModel::AddMesh(const char* fileName_, DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_, const char* boneName_)
+bool FbxModel::AddMesh(const char* fileName_, DirectX::XMFLOAT3 pos_,const char* boneName_)
 {
 	// メッシュ追加前のメッシュの数を保存
 	size_t before_mesh_num = m_MeshList.size();
