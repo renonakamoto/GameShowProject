@@ -1,4 +1,4 @@
-#include <thread>
+ï»¿#include <thread>
 #include <sstream>
 #include "TitleScene.h"
 #include "SceneManager.h"
@@ -13,12 +13,12 @@ TitleScene::TitleScene(SceneChanger* sceneChanger_) :
     Scene(sceneChanger_)
 {
     m_ThreadHandle = CreateThread(
-        nullptr,                    // ƒZƒLƒ…ƒŠƒeƒB‘®«
-        0,                          // ƒXƒ^ƒbƒNƒTƒCƒY
-        this->LoadResources,        // ƒXƒŒƒbƒhŠÖ”
-        nullptr,                    // ƒXƒŒƒbƒhŠÖ”‚É“n‚·ˆø”
-        0,                          // ì¬ƒIƒvƒVƒ‡ƒ“
-        &m_dwThreadID);             // ƒXƒŒƒbƒhID
+        nullptr,                    // ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£å±žæ€§
+        0,                          // ã‚¹ã‚¿ãƒƒã‚¯ã‚µã‚¤ã‚º
+        this->LoadResources,        // ã‚¹ãƒ¬ãƒƒãƒ‰é–¢æ•°
+        nullptr,                    // ã‚¹ãƒ¬ãƒƒãƒ‰é–¢æ•°ã«æ¸¡ã™å¼•æ•°
+        0,                          // ä½œæˆã‚ªãƒ—ã‚·ãƒ§ãƒ³
+        &m_dwThreadID);             // ã‚¹ãƒ¬ãƒƒãƒ‰ID
 
     m_CurrentState = SceneState::Load;
 }
@@ -33,15 +33,15 @@ void TitleScene::Load()
 {
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
-        // ƒIƒuƒWƒFƒNƒg‚Ì“o˜^
+        // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç™»éŒ²
         ObjectManager::GetInstance()->Register(new Background("bg", DirectX::XMFLOAT3(0.f, 0.f, 1.f)));
         ObjectManager::GetInstance()->Register(new Button<TitleScene>("start_ui_normal", "start_ui_hover", DirectX::XMFLOAT3(200.f, 400.f, 0.f), this, &TitleScene::NextScene));
         ObjectManager::GetInstance()->Register(new Button<GameManager>("quit_ui_normal", "quit_ui_hover", DirectX::XMFLOAT3(800.f, 400.f, 0.f), GameManager::GetInstance(), &GameManager::QuitGame));
 
-        // ƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰»
+        // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ–
         ObjectManager::GetInstance()->Init();
 
-        // “ü—Íƒ‚[ƒh•ÏX
+        // å…¥åŠ›ãƒ¢ãƒ¼ãƒ‰å¤‰æ›´
         INPUT->SetInputMode(InputMode::MODE_UI);
         m_CurrentState = SceneState::Main;
     }

@@ -1,4 +1,4 @@
-#ifndef SCENEDEFINITION_H_
+﻿#ifndef SCENEDEFINITION_H_
 #define SCENEDEFINITION_H_
 
 

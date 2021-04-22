@@ -1,4 +1,4 @@
-
+ï»¿
 #include "../../../DirectXTex/DirectXTex.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,7 +25,7 @@ bool ObjModel::Load(const char* fileName_)
     FILE* fp = nullptr;
     fopen_s(&fp, fileName_, "r");
 
-    // “Ç‚İ‚İ‚ª¬Œ÷‚µ‚Ä‚¢‚é‚©‚ğ’²‚×‚é
+    // èª­ã¿è¾¼ã¿ãŒæˆåŠŸã—ã¦ã„ã‚‹ã‹ã‚’èª¿ã¹ã‚‹
     if (fp == nullptr) { return false; }
 
     std::vector<DirectX::XMFLOAT3> vertices;
@@ -38,67 +38,67 @@ bool ObjModel::Load(const char* fileName_)
     const int line_buffer_length = 1024;
     char line_buffer[line_buffer_length];
 
-    // 1sæ“¾‚·‚é
+    // 1è¡Œå–å¾—ã™ã‚‹
     while (fgets(line_buffer, line_buffer_length, fp) != nullptr)
     {
-        // ƒRƒƒ“ƒg‚È‚ç–³‹‚·‚é
+        // ã‚³ãƒ¡ãƒ³ãƒˆãªã‚‰ç„¡è¦–ã™ã‚‹
         if (line_buffer[0] == '#') continue;
 
-        // 1s‚Ì’†‚©‚çAƒXƒy[ƒX‚ğ’T‚µ‚»‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾‚·‚é
+        // 1è¡Œã®ä¸­ã‹ã‚‰ã€ã‚¹ãƒšãƒ¼ã‚¹ã‚’æ¢ã—ãã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹
         char* parse_point = strchr(line_buffer, ' ');
-        // ‚à‚µƒXƒy[ƒX‚ª‚È‚¯‚ê‚Î–³‹‚·‚é
+        // ã‚‚ã—ã‚¹ãƒšãƒ¼ã‚¹ãŒãªã‘ã‚Œã°ç„¡è¦–ã™ã‚‹
         if (parse_point == nullptr) continue;
 
         Replace('\n', '\0', line_buffer);
 
 
         /*
-            v  : ’¸“_À•Wƒf[ƒ^
-            vn : –@üƒf[ƒ^
-            f  : –Êƒf[ƒ^
+            v  : é ‚ç‚¹åº§æ¨™ãƒ‡ãƒ¼ã‚¿
+            vn : æ³•ç·šãƒ‡ãƒ¼ã‚¿
+            f  : é¢ãƒ‡ãƒ¼ã‚¿
         */
 
-        // æ“ª‚ğ’²‚×uvv‚È‚ç’¸“_î•ñ‚È‚Ì‚Å‰ğÍ‚ğs‚¤
+        // å…ˆé ­ã‚’èª¿ã¹ã€Œvã€ãªã‚‰é ‚ç‚¹æƒ…å ±ãªã®ã§è§£æã‚’è¡Œã†
         if (line_buffer[0] == 'v')
         {
-            // “ñ•¶š–Ú‚ÉƒAƒNƒZƒX‚µ‚Ä’¸“_‚Ìƒf[ƒ^‚Ìí—Ş‚ğ’²‚×‚é
-            // ’¸“_À•W
+            // äºŒæ–‡å­—ç›®ã«ã‚¢ã‚¯ã‚»ã‚¹ã—ã¦é ‚ç‚¹ã®ãƒ‡ãƒ¼ã‚¿ã®ç¨®é¡ã‚’èª¿ã¹ã‚‹
+            // é ‚ç‚¹åº§æ¨™
             if (line_buffer[1] == ' ') {
 
                 ParseVertex(vertices, &parse_point[1]);
 
-                // X²‚ğ”½“]‚³‚¹‚ÄÀ•WŒn‚ğ‰EèŒn‚©‚ç¶èŒn‚É•ÏŠ·
+                // Xè»¸ã‚’åè»¢ã•ã›ã¦åº§æ¨™ç³»ã‚’å³æ‰‹ç³»ã‹ã‚‰å·¦æ‰‹ç³»ã«å¤‰æ›
                 vertices[vertices.size() - 1].x *= -1.0f;
             }
-            // ƒeƒNƒXƒ`ƒƒÀ•W
+            // ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™
             else if (line_buffer[1] == 't') {
                 ParseVertex(textures, &parse_point[1]);
-                // V²‚ğ”½“]‚³‚¹‚é
+                // Vè»¸ã‚’åè»¢ã•ã›ã‚‹
                 textures[textures.size() - 1].y = (1.0f - textures[textures.size() - 1].y);
             }
-            // –@üƒxƒNƒgƒ‹
+            // æ³•ç·šãƒ™ã‚¯ãƒˆãƒ«
             else if (line_buffer[1] == 'n') {
 
                 ParseVertex(normals, &parse_point[1]);
 
-                // X²‚ğ”½“]‚³‚¹‚ÄÀ•WŒn‚ğ‰EèŒn‚©‚ç¶èŒn‚É•ÏŠ·
+                // Xè»¸ã‚’åè»¢ã•ã›ã¦åº§æ¨™ç³»ã‚’å³æ‰‹ç³»ã‹ã‚‰å·¦æ‰‹ç³»ã«å¤‰æ›
                 normals[normals.size() - 1].x *= -1.0f;
             }
         }
-        // ‚à‚µufv‚È‚ç–Êî•ñ‚È‚Ì‚Å‰ğÍ‚ğs‚¢ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚É‹l‚ß‚Ş
+        // ã‚‚ã—ã€Œfã€ãªã‚‰é¢æƒ…å ±ãªã®ã§è§£æã‚’è¡Œã„ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã«è©°ã‚è¾¼ã‚€
         else if (line_buffer[0] == 'f')
         {
             Replace('\n', '\0', line_buffer);
             //ParseFKeywordTag(m_Vertices, current_mat_name, vertices, textures, normals, &parse_point[1]);
             ParseFKeywordTag(mesh_data[current_mat_name], current_mat_name, vertices, textures, normals, &parse_point[1]);
         }
-        // ‚à‚µumtllibv‚È‚çƒ}ƒeƒŠƒAƒ‹–¼‚È‚Ì‚Å•Û‘¶‚·‚é
+        // ã‚‚ã—ã€Œmtllibã€ãªã‚‰ãƒãƒ†ãƒªã‚¢ãƒ«åãªã®ã§ä¿å­˜ã™ã‚‹
         else if (strstr(line_buffer, "mtllib") == line_buffer)
         {
             Replace('\n', '\0', line_buffer);
             material_list.push_back(&line_buffer[strlen("mtllib") + 1]);
         }
-        // ‚à‚µuusemtlv‚È‚çŠ‘®‚·‚é‘®«‚ª•Ï‚í‚é‚Ì‚Å•ÏX‚·‚é
+        // ã‚‚ã—ã€Œusemtlã€ãªã‚‰æ‰€å±ã™ã‚‹å±æ€§ãŒå¤‰ã‚ã‚‹ã®ã§å¤‰æ›´ã™ã‚‹
         else if (strstr(line_buffer, "usemtl") == line_buffer)
         {
             Replace('\n', '\0', line_buffer);
@@ -144,13 +144,13 @@ bool ObjModel::Load(const char* fileName_)
 void ObjModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree)
 {
     /*
-        ’¸“_ƒVƒF[ƒ_‚Ìİ’è
+        é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ã®è¨­å®š
     */
     DirectGraphics* graphics = GRAPHICS;
     ID3D11DeviceContext* context = graphics->GetContext();
     context->VSSetShader(graphics->GetSimpleVertexShader()->GetShaderInterface(), NULL, 0U);
     /*
-        ƒsƒNƒZƒ‹ƒVƒF[ƒ_‚Ìİ’è
+        ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ã®è¨­å®š
     */
     context->PSSetShader(graphics->GetPixelShader()->GetShaderInterface(), NULL, 0U);
 
@@ -170,10 +170,10 @@ void ObjModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
         DirectX::XMMATRIX scale = DirectX::XMMatrixScaling(scale_.x, scale_.y, scale_.z);
         DirectX::XMMATRIX world_matrix = scale * rotate_x * rotate_y * rotate_z * translate;
 
-        // ƒ[ƒ‹ƒhs—ñ‚ğƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚Éİ’è
+        // ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã‚’ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ã«è¨­å®š
         DirectX::XMStoreFloat4x4(&graphics->GetConstantBufferData()->World, DirectX::XMMatrixTranspose(world_matrix));
 
-        // ƒ}ƒeƒŠƒAƒ‹İ’è
+        // ãƒãƒ†ãƒªã‚¢ãƒ«è¨­å®š
         graphics->SetMaterial(&m_Materials[mesh.MaterialName]);
 
         if (m_Textures.count(m_Materials[mesh.MaterialName].TextureKeyWord) > 0)
@@ -185,16 +185,16 @@ void ObjModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
             graphics->SetTexture(nullptr);
         }
 
-        // ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚ÌXV
+        // ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ã®æ›´æ–°
         context->UpdateSubresource(graphics->GetConstantBuffer(), 0U, nullptr, graphics->GetConstantBufferData(), 0U, 0U);
 
-        // ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚ğİ’è
+        // ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ã‚’è¨­å®š
         ID3D11Buffer* constant_buffer = graphics->GetConstantBuffer();
         context->VSSetConstantBuffers(0U, 1U, &constant_buffer);
         context->PSSetConstantBuffers(0U, 1U, &constant_buffer);
 
 
-        // •`‰æ
+        // æç”»
         context->DrawIndexed(static_cast<UINT>(mesh.Indices.size()), 0U, 0U);
     }
 }
@@ -221,18 +221,18 @@ void ObjModel::ParseFKeywordTag(MeshData& outMeshData_, std::string current_mate
     const int info_num = 3;
     int vertex_info[info_num] =
     {
-        -1,// ’¸“_À•W
-        -1,// ƒeƒNƒXƒ`ƒƒÀ•W
-        -1 // –@üƒxƒNƒgƒ‹
+        -1,// é ‚ç‚¹åº§æ¨™
+        -1,// ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™
+        -1 // æ³•ç·šãƒ™ã‚¯ãƒˆãƒ«
     };
 
-    // –Êî•ñ‚ğƒXƒy[ƒX‹æØ‚è‚Å•ª‚¯‚é
+    // é¢æƒ…å ±ã‚’ã‚¹ãƒšãƒ¼ã‚¹åŒºåˆ‡ã‚Šã§åˆ†ã‘ã‚‹
     std::vector<std::string> space_split = Split(buffer_, ' ');
 
     for (size_t i = 0; i < space_split.size(); ++i)
     {
         CVertex vertex;
-        // u/v–ˆ‚É•ª‚¯‚é
+        // ã€Œ/ã€æ¯ã«åˆ†ã‘ã‚‹
         ParseSlashKeywordTag(vertex_info, (char*)space_split[i].c_str());
 
         for (int j = 0; j < info_num; ++j)
@@ -243,17 +243,17 @@ void ObjModel::ParseFKeywordTag(MeshData& outMeshData_, std::string current_mate
 
             switch (j)
             {
-                // ’¸“_À•W
+                // é ‚ç‚¹åº§æ¨™
             case 0:
                 vertex.Pos = vertices_[id];
                 break;
 
-                // ƒeƒNƒXƒ`ƒƒÀ•W
+                // ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™
             case 1:
                 vertex.TexturePos = DirectX::XMFLOAT2(textures_[id].x, textures_[id].y);
                 break;
 
-                // –@üƒxƒNƒgƒ‹
+                // æ³•ç·šãƒ™ã‚¯ãƒˆãƒ«
             case 2:
                 vertex.Normal = normals_[id];
 
@@ -263,10 +263,10 @@ void ObjModel::ParseFKeywordTag(MeshData& outMeshData_, std::string current_mate
             }
         }
 
-        // ’¸“_ƒŠƒXƒg‚É’Ç‰Á‚·‚é
+        // é ‚ç‚¹ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
         outMeshData_.Vertices.push_back(vertex);
 
-        // ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚É’Ç‰Á
+        // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã«è¿½åŠ 
         outMeshData_.Indices.push_back(static_cast<UINT>(outMeshData_.Vertices.size() - 1));
     }
 
@@ -289,7 +289,7 @@ void ObjModel::ParseFKeywordTag(MeshData& outMeshData_, std::string current_mate
         return;
     }
 
-    //ƒ|ƒŠƒSƒ“‚Ìì¬‚Ì’¸“_‡”Ô‚ğ”½“]‚·‚é
+    //ãƒãƒªã‚´ãƒ³ã®ä½œæˆã®é ‚ç‚¹é †ç•ªã‚’åè»¢ã™ã‚‹
     UINT temp = outMeshData_.Indices[size - 1];
     outMeshData_.Indices[size - 1] = outMeshData_.Indices[size - 3];
     outMeshData_.Indices[size - 3] = temp;
@@ -299,7 +299,7 @@ void ObjModel::ParseSlashKeywordTag(int* list_, char* buffer_)
 {
     int counter = 0;
 
-    // u/v‚Å•¶š—ñ‚ğ•ª‰ğ‚·‚é
+    // ã€Œ/ã€ã§æ–‡å­—åˆ—ã‚’åˆ†è§£ã™ã‚‹
     std::vector<std::string> slash_split = Split(buffer_, '/');
 
     for (std::string str : slash_split)
@@ -332,13 +332,13 @@ bool ObjModel::LoadMaterialFile(std::vector<std::string> fileList_, std::string 
 
         while (fgets(line_buffer, 1024, fp) != nullptr)
         {
-            // ƒ}ƒeƒŠƒAƒ‹–¼
+            // ãƒãƒ†ãƒªã‚¢ãƒ«å
             if (strstr(line_buffer, "newmtl") == line_buffer)
             {
                 Replace('\n', '\0', line_buffer);
                 current_material_name = &line_buffer[strlen("newmtl") + 1];
             }
-            // ƒAƒ“ƒrƒGƒ“ƒg
+            // ã‚¢ãƒ³ãƒ“ã‚¨ãƒ³ãƒˆ
             else if (strstr(line_buffer, "Ka") == line_buffer)
             {
                 Replace('\n', '\0', line_buffer);
@@ -348,7 +348,7 @@ bool ObjModel::LoadMaterialFile(std::vector<std::string> fileList_, std::string 
                     m_Materials[current_material_name].Ambient[i] = static_cast<float>(atof(split[i].c_str()));
                 }
             }
-            // ƒfƒBƒtƒ…[ƒY
+            // ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚º
             else if (strstr(line_buffer, "Kd") == line_buffer)
             {
                 Replace('\n', '\0', line_buffer);
@@ -358,7 +358,7 @@ bool ObjModel::LoadMaterialFile(std::vector<std::string> fileList_, std::string 
                     m_Materials[current_material_name].Diffuse[i] = static_cast<float>(atof(split[i].c_str()));
                 }
             }
-            // ƒXƒyƒLƒ…ƒ‰[
+            // ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼
             else if (strstr(line_buffer, "Ks") == line_buffer)
             {
                 Replace('\n', '\0', line_buffer);
@@ -368,13 +368,13 @@ bool ObjModel::LoadMaterialFile(std::vector<std::string> fileList_, std::string 
                     m_Materials[current_material_name].Specular[i] = static_cast<float>(atof(split[i].c_str()));
                 }
             }
-            // ƒeƒNƒXƒ`ƒƒ
+            // ãƒ†ã‚¯ã‚¹ãƒãƒ£
             else if (strstr(line_buffer, "map_Kd") == line_buffer)
             {
                 Replace('\n', '\0', line_buffer);
                 std::string texture_name = &line_buffer[strlen("map_Kd") + 1];
 
-                // ƒeƒNƒXƒ`ƒƒ‚Ü‚Å‚ÌƒpƒX‚ğ•Û‘¶
+                // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã¾ã§ã®ãƒ‘ã‚¹ã‚’ä¿å­˜
                 m_Materials[current_material_name].TextureName = filePath_ + texture_name;
                 
                 std::vector<std::string> split = Split((char*)texture_name.c_str(), '.');
@@ -396,17 +396,17 @@ bool ObjModel::LoadMaterialFile(std::vector<std::string> fileList_, std::string 
 
 bool ObjModel::LoadTexture(std::string keyWord_, std::string fileName_, ID3D11Device* device_)
 {
-    // ƒtƒ@ƒCƒ‹–¼‚ğæ“¾
+    // ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–å¾—
     std::string file_path = fileName_;
 
-    // ƒtƒ@ƒCƒ‹•ª‰ğ
+    // ãƒ•ã‚¡ã‚¤ãƒ«åˆ†è§£
     char buffer[256];
     ZeroMemory(buffer, sizeof(char) * 256);
     memcpy(buffer, file_path.c_str(), sizeof(char) * 256);
 
     Replace('\\', '/', buffer);
 
-    // /‚Å•ª‰ğ
+    // /ã§åˆ†è§£
     std::vector<std::string> split_list = Split(buffer, '/');
 
     std::string root_path = "Res/Textures/";
@@ -427,17 +427,17 @@ bool ObjModel::LoadTexture(std::string keyWord_, std::string fileName_, ID3D11De
 
     ID3D11ShaderResourceView* shader_res_view;
     
-    // DDSƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
+    // DDSãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿
     if (strcmp(extension, "dds") == 0)
     {
         hr = DirectX::LoadFromDDSFile(wstr_file_name.c_str(), DirectX::DDS_FLAGS::DDS_FLAGS_NONE, &metadata, image);
     }
-    // TGAƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
+    // TGAãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿
     else if (strcmp(extension, "tga") == 0)
     {
         hr = DirectX::LoadFromTGAFile(wstr_file_name.c_str(), &metadata, image);
     }
-    // WICƒtƒ@ƒCƒ‹(bmp,jpg,png)‚Ì“Ç‚İ‚İ
+    // WICãƒ•ã‚¡ã‚¤ãƒ«(bmp,jpg,png)ã®èª­ã¿è¾¼ã¿
     else
     {
         hr = DirectX::LoadFromWICFile(wstr_file_name.c_str(), DirectX::WIC_FLAGS::WIC_FLAGS_NONE, &metadata, image);
@@ -465,48 +465,48 @@ bool ObjModel::CreateVertexBuffer(ID3D11Device* device_)
 {
     for (MeshData& mesh : m_MeshList)
     {
-        // ’¸“_ƒoƒbƒtƒ@‚Ìì¬
+        // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ
         D3D11_BUFFER_DESC buffer_desc;
-        // ƒoƒbƒtƒ@‚Ì‘å‚«‚³
+        // ãƒãƒƒãƒ•ã‚¡ã®å¤§ãã•
         buffer_desc.ByteWidth = static_cast<UINT>(sizeof(CVertex) * mesh.Vertices.size());
-        // ƒoƒbƒtƒ@‚Ö‚ÌŠe€–Ú‚Å‚ÌƒAƒNƒZƒX‹–‰Â‚ğw’è
-        // Šî–{“I‚ÉD3D11_USAGE_DEFAULT
+        // ãƒãƒƒãƒ•ã‚¡ã¸ã®å„é …ç›®ã§ã®ã‚¢ã‚¯ã‚»ã‚¹è¨±å¯ã‚’æŒ‡å®š
+        // åŸºæœ¬çš„ã«D3D11_USAGE_DEFAULT
         buffer_desc.Usage = D3D11_USAGE_DEFAULT;
-        // ƒoƒCƒ“ƒh‚Ì•û–@
-        // ’¸“_ƒoƒbƒtƒ@‚âƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚Æ‚µ‚Äg—p‚·‚é‚±‚Æ‚ğŒˆ‚ß‚é
+        // ãƒã‚¤ãƒ³ãƒ‰ã®æ–¹æ³•
+        // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã‚„ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ã¨ã—ã¦ä½¿ç”¨ã™ã‚‹ã“ã¨ã‚’æ±ºã‚ã‚‹
         buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-        // ƒŠƒ\[ƒX‚É‘Î‚µ‚Ä‚ÌCPUƒAƒNƒZƒX•û–@
-        // 0‚ğw’è‚·‚ê‚ÎCPUƒAƒNƒZƒX‚ª•s—v‚Æ‚¢‚¤İ’è
+        // ãƒªã‚½ãƒ¼ã‚¹ã«å¯¾ã—ã¦ã®CPUã‚¢ã‚¯ã‚»ã‚¹æ–¹æ³•
+        // 0ã‚’æŒ‡å®šã™ã‚Œã°CPUã‚¢ã‚¯ã‚»ã‚¹ãŒä¸è¦ã¨ã„ã†è¨­å®š
         buffer_desc.CPUAccessFlags = 0;
-        // ‚»‚Ì‘¼‚ÌƒIƒvƒVƒ‡ƒ“
-        // •s—v‚È‚ç0
+        // ãã®ä»–ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+        // ä¸è¦ãªã‚‰0
         buffer_desc.MiscFlags = 0;
-        // \‘¢‘Ì‚ÌƒTƒCƒY
-        // ƒoƒbƒtƒ@‚ğ\‘¢‘Ì‚Æ‚µ‚ÄŠm•Û‚·‚éê‡‚Ég—p
-        // 0‚ğw’è‚µ‚Ä‚àOK
+        // æ§‹é€ ä½“ã®ã‚µã‚¤ã‚º
+        // ãƒãƒƒãƒ•ã‚¡ã‚’æ§‹é€ ä½“ã¨ã—ã¦ç¢ºä¿ã™ã‚‹å ´åˆã«ä½¿ç”¨
+        // 0ã‚’æŒ‡å®šã—ã¦ã‚‚OK
         buffer_desc.StructureByteStride = 0;
 
         /*
-            ƒŠƒ\[ƒX‚Ìî•ñ‚ğİ’è‚·‚é\‘¢‘Ì
-            ã‹L‚ÌD3D11_BUFFER_DESC‚ÆƒZƒbƒg‚É‚È‚Á‚Ä‚¢‚ÄA
-            ì¬‚µ‚½ƒoƒbƒtƒ@‚Ì‰Šú‰»ƒf[ƒ^‚Ìw’è•û–@‚Æ‚µ‚Äg‚í‚ê‚é
+            ãƒªã‚½ãƒ¼ã‚¹ã®æƒ…å ±ã‚’è¨­å®šã™ã‚‹æ§‹é€ ä½“
+            ä¸Šè¨˜ã®D3D11_BUFFER_DESCã¨ã‚»ãƒƒãƒˆã«ãªã£ã¦ã„ã¦ã€
+            ä½œæˆã—ãŸãƒãƒƒãƒ•ã‚¡ã®åˆæœŸåŒ–ãƒ‡ãƒ¼ã‚¿ã®æŒ‡å®šæ–¹æ³•ã¨ã—ã¦ä½¿ã‚ã‚Œã‚‹
         */
         D3D11_SUBRESOURCE_DATA sub_resource_data;
-        // ƒoƒbƒtƒ@‚ğ‰Šú‰»‚·‚éƒf[ƒ^‚ğw’è
-        // ’¸“_ƒoƒbƒtƒ@‚È‚ç’¸“_\‘¢‘Ì‚Ì”z—ñ
-        // ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚È‚çƒCƒ“ƒfƒbƒNƒX‚ğ•Û‘¶‚µ‚½ƒf[ƒ^‚Ì”z—ñ
-        // ‚È‚Ç‚È‚Ç
+        // ãƒãƒƒãƒ•ã‚¡ã‚’åˆæœŸåŒ–ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã‚’æŒ‡å®š
+        // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ãªã‚‰é ‚ç‚¹æ§‹é€ ä½“ã®é…åˆ—
+        // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãªã‚‰ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’ä¿å­˜ã—ãŸãƒ‡ãƒ¼ã‚¿ã®é…åˆ—
+        // ãªã©ãªã©
         sub_resource_data.pSysMem = &mesh.Vertices[0];
-        // ƒƒ‚ƒŠ‚Ìƒsƒbƒ`
-        // 2D‚Ü‚½‚Í3DƒeƒNƒXƒ`ƒƒ‚Ìê‡‚Ég—p‚·‚é
+        // ãƒ¡ãƒ¢ãƒªã®ãƒ”ãƒƒãƒ
+        // 2Dã¾ãŸã¯3Dãƒ†ã‚¯ã‚¹ãƒãƒ£ã®å ´åˆã«ä½¿ç”¨ã™ã‚‹
         sub_resource_data.SysMemPitch = 0;
-        // [“xƒŒƒxƒ‹
-        // 2D‚Ü‚½‚Í3DƒeƒNƒXƒ`ƒƒ‚Ìê‡‚Ég—p‚·‚é
+        // æ·±åº¦ãƒ¬ãƒ™ãƒ«
+        // 2Dã¾ãŸã¯3Dãƒ†ã‚¯ã‚¹ãƒãƒ£ã®å ´åˆã«ä½¿ç”¨ã™ã‚‹
         sub_resource_data.SysMemSlicePitch = 0;
 
 
         /*
-        * D3D11_BUFFER_DESC‚ÆD3D11_SUBRESOURCE_DATA‚Ìî•ñ‚ğ‚à‚Æ‚Éƒoƒbƒtƒ@‚ğì¬‚·‚é
+        * D3D11_BUFFER_DESCã¨D3D11_SUBRESOURCE_DATAã®æƒ…å ±ã‚’ã‚‚ã¨ã«ãƒãƒƒãƒ•ã‚¡ã‚’ä½œæˆã™ã‚‹
         */
         if (FAILED(device_->CreateBuffer(&buffer_desc, &sub_resource_data, &mesh.VertexBuffer)))
         {
@@ -552,13 +552,13 @@ bool ObjModel::CreateInputLayout(ID3D11Device* device, VertexShader* vertex_shad
         { "TEXTURE",    0, DXGI_FORMAT_R32G32_FLOAT,        0,  D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
 
-    //’¸“_ƒŒƒCƒAƒEƒgì¬
+    //é ‚ç‚¹ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆä½œæˆ
     if (FAILED(device->CreateInputLayout(
-        vertex_desc,				// ƒŒƒCƒAƒEƒgİ’è
-        ARRAYSIZE(vertex_desc),		// ”z—ñƒTƒCƒY
-        vertex_shader->GetData(),	// ƒŒƒCƒAƒEƒg‚ÆŠÖ˜A•t‚¯‚é’¸“_ƒVƒF[ƒ_‚Ìƒf[ƒ^
-        vertex_shader->GetSize(),	// ƒŒƒCƒAƒEƒg‚ÆŠÖ˜A•t‚¯‚é’¸“_ƒVƒF[ƒ_‚ÌƒTƒCƒY
-        &m_InputLayout)))			// ì¬‚³‚ê‚½’¸“_ƒŒƒCƒAƒEƒg‚ÌŠi”[æ
+        vertex_desc,				// ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆè¨­å®š
+        ARRAYSIZE(vertex_desc),		// é…åˆ—ã‚µã‚¤ã‚º
+        vertex_shader->GetData(),	// ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã¨é–¢é€£ä»˜ã‘ã‚‹é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ã®ãƒ‡ãƒ¼ã‚¿
+        vertex_shader->GetSize(),	// ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã¨é–¢é€£ä»˜ã‘ã‚‹é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ã®ã‚µã‚¤ã‚º
+        &m_InputLayout)))			// ä½œæˆã•ã‚ŒãŸé ‚ç‚¹ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã®æ ¼ç´å…ˆ
     {
         return false;
     }

@@ -1,4 +1,4 @@
-#ifndef SCENEMANAGER_H_
+ï»¿#ifndef SCENEMANAGER_H_
 #define SCENEMANAGER_H_
 
 #include <stack>
@@ -17,42 +17,42 @@ public:
 	}
 
 	/**
-	* @brief XVŠÖ”
+	* @brief æ›´æ–°é–¢æ•°
 	*/
 	void Update();
 
 	/**
-	* @biref •`‰æŠÖ”
+	* @biref æç”»é–¢æ•°
 	*/
 	void Draw();
 
 	/**
-	* @biref ƒV[ƒ“•ÏXŠÖ”
+	* @biref ã‚·ãƒ¼ãƒ³å¤‰æ›´é–¢æ•°
 	*/
 	void ChangeScene(SceneID id_) override;
 
 	/**
-	* @biref ƒV[ƒ“’Ç‰ÁŠÖ”
+	* @biref ã‚·ãƒ¼ãƒ³è¿½åŠ é–¢æ•°
 	*/
 	void PushScene(SceneID id_) override;
 
 	/**
-	* @biref ƒV[ƒ“íœŠÖ”
+	* @biref ã‚·ãƒ¼ãƒ³å‰Šé™¤é–¢æ•°
 	*/
 	void PopScene() override;
 
 private:
 	/**
-    * @biref ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+    * @biref ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     */
 	SceneManager();
 
 	/**
-	* @brief ƒfƒXƒgƒ‰ƒNƒ^
+	* @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	*/
 	~SceneManager();
 
-	std::stack<std::shared_ptr<Scene>> m_SceneStack;		//!< ƒV[ƒ“•Û•Ï”
+	std::stack<std::shared_ptr<Scene>> m_SceneStack;		//!< ã‚·ãƒ¼ãƒ³ä¿æŒå¤‰æ•°
 };
 
 #endif // !SCENEMANAGER_H_

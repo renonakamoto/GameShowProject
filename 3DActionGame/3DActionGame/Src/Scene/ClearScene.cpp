@@ -1,4 +1,4 @@
-#include "ClearScene.h"
+ï»¿#include "ClearScene.h"
 #include "../Engine/Engine.h"
 #include "../ObjectManager/ObjectManager.h"
 #include "../Objects/2DObject/BackGround.h"
@@ -7,12 +7,12 @@
 ClearScene::ClearScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
     m_ThreadHandle = CreateThread(
-        nullptr,                    // ƒZƒLƒ…ƒŠƒeƒB‘®«
-        0,                          // ƒXƒ^ƒbƒNƒTƒCƒY
-        this->LoadResources,        // ƒXƒŒƒbƒhŠÖ”
-        nullptr,                    // ƒXƒŒƒbƒhŠÖ”‚É“n‚·ˆø”
-        0,                          // ì¬ƒIƒvƒVƒ‡ƒ“
-        &m_dwThreadID);             // ƒXƒŒƒbƒhID
+        nullptr,                    // ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£å±žæ€§
+        0,                          // ã‚¹ã‚¿ãƒƒã‚¯ã‚µã‚¤ã‚º
+        this->LoadResources,        // ã‚¹ãƒ¬ãƒƒãƒ‰é–¢æ•°
+        nullptr,                    // ã‚¹ãƒ¬ãƒƒãƒ‰é–¢æ•°ã«æ¸¡ã™å¼•æ•°
+        0,                          // ä½œæˆã‚ªãƒ—ã‚·ãƒ§ãƒ³
+        &m_dwThreadID);             // ã‚¹ãƒ¬ãƒƒãƒ‰ID
 
     m_CurrentState = SceneState::Load;
 }
@@ -31,7 +31,7 @@ void ClearScene::Load()
 
         ObjectManager::GetInstance()->Init();
 
-        // “ü—Íƒ‚[ƒh•ÏX
+        // å…¥åŠ›ãƒ¢ãƒ¼ãƒ‰å¤‰æ›´
         INPUT->SetInputMode(InputMode::MODE_UI);
         m_CurrentState = SceneState::Main;
     }

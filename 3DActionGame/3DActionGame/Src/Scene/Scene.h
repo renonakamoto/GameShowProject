@@ -1,4 +1,4 @@
-#ifndef SCENE_H_
+ï»¿#ifndef SCENE_H_
 #define SCENE_H_
 
 #include <Windows.h>
@@ -12,8 +12,8 @@ class Scene
 {
 public:
 	/**
-	* @biref ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	* @param[in] sceneChanger_ ƒV[ƒ“•ÏX‚Ì‚½‚ß‚ÌƒCƒ“ƒ^[ƒtƒFƒCƒX(SceneManager)‚Ìƒ|ƒCƒ“ƒ^
+	* @biref ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	* @param[in] sceneChanger_ ã‚·ãƒ¼ãƒ³å¤‰æ›´ã®ãŸã‚ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹(SceneManager)ã®ãƒã‚¤ãƒ³ã‚¿
 	*/
 	Scene(SceneChanger* sceneChanger_) :
 		m_SceneChanger(sceneChanger_),
@@ -23,37 +23,37 @@ public:
 	{}
 
 	/**
-	* @biref ƒfƒXƒgƒ‰ƒNƒ^
+	* @biref ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	*/
 	virtual ~Scene() {	}
 
 	/**
-	* @biref XVŠÖ”
+	* @biref æ›´æ–°é–¢æ•°
 	*/
 	virtual void Update() = 0;
 
 	/**
-	* @biref •`‰æŠÖ”
+	* @biref æç”»é–¢æ•°
 	*/
 	virtual void Draw() {	};
 	
 protected:
 
 	/**
-	* @biref Mainˆ—ŠÖ”
+	* @biref Mainå‡¦ç†é–¢æ•°
 	*/
 	virtual void Main() = 0;
 
 	/**
-	* @brief Loadingˆ—ŠÖ”
+	* @brief Loadingå‡¦ç†é–¢æ•°
 	*/
 	virtual void Load() = 0;
 
 protected:
-	SceneChanger* m_SceneChanger;		//!< ƒV[ƒ“•ÏX‚Ì‚½‚ß‚ÌƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğ•Û‚·‚éƒ|ƒCƒ“ƒ^
-	SceneState m_CurrentState;			//!< Œ»İ‚ÌƒV[ƒ“‚Ìó‘Ô
-	HANDLE m_ThreadHandle;				//!< ƒ}ƒ‹ƒ`ƒXƒŒƒbƒh—p‚Ìƒnƒ“ƒhƒ‹•Û‘¶•Ï”
-	DWORD m_dwThreadID;					//!< ƒ}ƒ‹ƒ`ƒXƒŒƒbƒh—p‚ÌƒXƒŒƒbƒhID
+	SceneChanger* m_SceneChanger;		//!< ã‚·ãƒ¼ãƒ³å¤‰æ›´ã®ãŸã‚ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’ä¿æŒã™ã‚‹ãƒã‚¤ãƒ³ã‚¿
+	SceneState m_CurrentState;			//!< ç¾åœ¨ã®ã‚·ãƒ¼ãƒ³ã®çŠ¶æ…‹
+	HANDLE m_ThreadHandle;				//!< ãƒãƒ«ãƒã‚¹ãƒ¬ãƒƒãƒ‰ç”¨ã®ãƒãƒ³ãƒ‰ãƒ«ä¿å­˜å¤‰æ•°
+	DWORD m_dwThreadID;					//!< ãƒãƒ«ãƒã‚¹ãƒ¬ãƒƒãƒ‰ç”¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰ID
 };
 
 #endif // !SCENE_H_

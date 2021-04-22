@@ -1,4 +1,4 @@
-#include <sstream>
+ï»¿#include <sstream>
 #include "GameScene.h"
 #include "SceneManager.h"
 #include "../Model/FbxStorage.h"
@@ -18,12 +18,12 @@ GameScene::GameScene(SceneChanger* sceneChanger_) :
     Scene(sceneChanger_)
 {
     m_ThreadHandle = CreateThread(
-        nullptr,                    // ƒZƒLƒ…ƒŠƒeƒB‘®«
-        0,                          // ƒXƒ^ƒbƒNƒTƒCƒY
-        this->LoadResources,        // ƒXƒŒƒbƒhŠÖ”
-        nullptr,                    // ƒXƒŒƒbƒhŠÖ”‚É“n‚·ˆø”
-        0,                          // ì¬ƒIƒvƒVƒ‡ƒ“
-        &m_dwThreadID);             // ƒXƒŒƒbƒhID
+        nullptr,                    // ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£å±žæ€§
+        0,                          // ã‚¹ã‚¿ãƒƒã‚¯ã‚µã‚¤ã‚º
+        this->LoadResources,        // ã‚¹ãƒ¬ãƒƒãƒ‰é–¢æ•°
+        nullptr,                    // ã‚¹ãƒ¬ãƒƒãƒ‰é–¢æ•°ã«æ¸¡ã™å¼•æ•°
+        0,                          // ä½œæˆã‚ªãƒ—ã‚·ãƒ§ãƒ³
+        &m_dwThreadID);             // ã‚¹ãƒ¬ãƒƒãƒ‰ID
 
     m_CurrentState = SceneState::Load;
 
@@ -43,16 +43,16 @@ void GameScene::Load()
 {
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
-        // ƒŠƒ\[ƒX‚Ì“Ç‚Ýž‚Ý‚ªI—¹‚µ‚½‚çAŠeƒIƒuƒWƒFƒNƒg‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ðì¬
+        // ãƒªã‚½ãƒ¼ã‚¹ã®èª­ã¿è¾¼ã¿ãŒçµ‚äº†ã—ãŸã‚‰ã€å„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½œæˆ
         ObjectManager::GetInstance()->Register(new Player(DirectX::XMFLOAT3(0.f, 100.f, 0.f)));
         ObjectManager::GetInstance()->Register(new EnemyManager());
 
         ObjectManager::GetInstance()->Register(new Stage());
         ObjectManager::GetInstance()->Register(new FollowCamera());
         
-        // ŠeƒIƒuƒWƒFƒNƒg‚Ì¶¬ŒãAŠeƒIƒuƒWƒFƒNƒg‚ÌInit‚ðs‚¤
+        // å„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆå¾Œã€å„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®Initã‚’è¡Œã†
         ObjectManager::GetInstance()->Init();
-        // “ü—Íƒ‚[ƒh‚ð•ÏX
+        // å…¥åŠ›ãƒ¢ãƒ¼ãƒ‰ã‚’å¤‰æ›´
        INPUT->SetInputMode(InputMode::MODE_GAME);
         m_CurrentState = SceneState::Main;
     }
@@ -60,7 +60,7 @@ void GameScene::Load()
 
 DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 {
-    // ƒvƒŒƒCƒ„[ƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
+    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ¢ãƒ‡ãƒ«ã®èª­ã¿è¾¼ã¿
     FbxStorage::GetInstance()->LoadModel("Res/Models/Ekard.fbx",                  "Ekard");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Run_01.fbx",          "Ekard", "Run");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_Attack_01.fbx",       "Ekard", "Attack01");
@@ -68,7 +68,7 @@ DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Ekard_BattleIdle_01_h.fbx", "Ekard", "Idle");
     FbxStorage::GetInstance()->GetModel("Ekard")->AddMesh("Res/Models/Sword_12.fbx", DirectX::XMFLOAT3(22.9f, 0.0f, 40.0f), "Bip001 R Hand");
 
-    // ƒGƒlƒ~[ƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
+    // ã‚¨ãƒãƒŸãƒ¼ãƒ¢ãƒ‡ãƒ«ã®èª­ã¿è¾¼ã¿
     FbxStorage::GetInstance()->LoadModel("Res/Models/Enemy/Grenadier.fbx",              "Enemy");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierWalk.fbx",        "Enemy", "Walk"  );
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierIdle.fbx",        "Enemy", "Idle"  );
@@ -76,22 +76,22 @@ DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierDeath.fbx",       "Enemy", "Death" );
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierHit.fbx",         "Enemy", "Hit"   );
 
-    // ƒXƒe[ƒWƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
+    // ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ¢ãƒ‡ãƒ«ã®èª­ã¿è¾¼ã¿
     ObjFileStrage::GetInstance()->LoadModel("Res/Models/Ground.obj",     "Stage");
 
-    // “–‚½‚è”»’è—p‚ÌƒLƒ…[ƒuƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
+    // å½“ãŸã‚Šåˆ¤å®šç”¨ã®ã‚­ãƒ¥ãƒ¼ãƒ–ãƒ¢ãƒ‡ãƒ«ã®èª­ã¿è¾¼ã¿
     ObjFileStrage::GetInstance()->LoadModel("Res/Models/Shape/Cube.obj", "Cube" );
     return 0;
 }
 
 void GameScene::Main()
 {
-    // ƒIƒuƒWƒFƒNƒg‚ÌXV
+    // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ›´æ–°
     ObjectManager::GetInstance()->Update();
     
     
 #ifdef _DEBUG
-    // EscƒL[‚Å“ü—Íƒ‚[ƒhØ‘Ö
+    // Escã‚­ãƒ¼ã§å…¥åŠ›ãƒ¢ãƒ¼ãƒ‰åˆ‡æ›¿
     if (INPUT->GetKeyDown(KeyInfo::Key_ESC))
     {
         if (INPUT->GetInputMode() == InputMode::MODE_GAME)

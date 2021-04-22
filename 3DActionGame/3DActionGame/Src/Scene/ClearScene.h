@@ -1,4 +1,4 @@
-#ifndef CLEARSCENE_H_
+﻿#ifndef CLEARSCENE_H_
 #define CLEARSCENE_H_
 
 #include "Scene.h"

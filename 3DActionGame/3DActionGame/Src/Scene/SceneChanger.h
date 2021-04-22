@@ -1,4 +1,4 @@
-#ifndef SCENECHANGER_H_
+ï»¿#ifndef SCENECHANGER_H_
 #define SCENECHANGER_H_
 
 #include "SceneDefinition.h"
@@ -10,32 +10,32 @@ class SceneChanger
 {
 public:
 	/**
-	* @biref ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	* @biref ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	*/
 	SceneChanger() = default;
 	
 	/**
-	* @biref ƒfƒXƒgƒ‰ƒNƒ^
+	* @biref ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	*/
 	virtual ~SceneChanger() = default;
 	
 	/**
-	* @biref ƒV[ƒ“•ÏXŠÖ”
-	* ƒXƒ^ƒbƒN‚ğƒNƒŠƒA‚µ‚Äw’è‚µ‚½ƒV[ƒ“‚ğ¶¬‚µ‚Ü‚·
-	* @param[in] scene_ •ÏX‚·‚éŸ‚ÌƒV[ƒ“
+	* @biref ã‚·ãƒ¼ãƒ³å¤‰æ›´é–¢æ•°
+	* ã‚¹ã‚¿ãƒƒã‚¯ã‚’ã‚¯ãƒªã‚¢ã—ã¦æŒ‡å®šã—ãŸã‚·ãƒ¼ãƒ³ã‚’ç”Ÿæˆã—ã¾ã™
+	* @param[in] scene_ å¤‰æ›´ã™ã‚‹æ¬¡ã®ã‚·ãƒ¼ãƒ³
 	*/
 	virtual void ChangeScene(SceneID id_) = 0;
 
 	/**
-	* @biref ƒV[ƒ“’Ç‰ÁŠÖ”
-	* ƒXƒ^ƒbƒN‚ğƒNƒŠƒA‚¹‚¸‚Éw’è‚µ‚½ƒV[ƒ“‚ğ¶¬‚µ‚Ü‚·
-	* @param[in] scene_ ’Ç‰Á‚·‚éƒV[ƒ“
+	* @biref ã‚·ãƒ¼ãƒ³è¿½åŠ é–¢æ•°
+	* ã‚¹ã‚¿ãƒƒã‚¯ã‚’ã‚¯ãƒªã‚¢ã›ãšã«æŒ‡å®šã—ãŸã‚·ãƒ¼ãƒ³ã‚’ç”Ÿæˆã—ã¾ã™
+	* @param[in] scene_ è¿½åŠ ã™ã‚‹ã‚·ãƒ¼ãƒ³
 	*/
 	virtual void PushScene(SceneID id_) = 0;
 
 	/**
-	* @biref ƒV[ƒ“íœŠÖ”
-	* Œ»İ‚ÌƒV[ƒ“‚ğíœ‚µ‚Ü‚·
+	* @biref ã‚·ãƒ¼ãƒ³å‰Šé™¤é–¢æ•°
+	* ç¾åœ¨ã®ã‚·ãƒ¼ãƒ³ã‚’å‰Šé™¤ã—ã¾ã™
 	*/
 	virtual void PopScene() = 0;
 };

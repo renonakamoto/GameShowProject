@@ -1,16 +1,16 @@
-#include "DebugScene.h"
+ï»¿#include "DebugScene.h"
 #include "../Engine/Engine.h"
 #include "../GameManager/GameManager.h"
 
 DebugScene::DebugScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
     m_ThreadHandle = CreateThread(
-        nullptr,                    // ƒZƒLƒ…ƒŠƒeƒB‘®«
-        0,                          // ƒXƒ^ƒbƒNƒTƒCƒY
-        this->LoadResources,        // ƒXƒŒƒbƒhŠÖ”
-        nullptr,                    // ƒXƒŒƒbƒhŠÖ”‚É“n‚·ˆø”
-        0,                          // ì¬ƒIƒvƒVƒ‡ƒ“
-        &m_dwThreadID);             // ƒXƒŒƒbƒhID
+        nullptr,                    // ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£å±žæ€§
+        0,                          // ã‚¹ã‚¿ãƒƒã‚¯ã‚µã‚¤ã‚º
+        this->LoadResources,        // ã‚¹ãƒ¬ãƒƒãƒ‰é–¢æ•°
+        nullptr,                    // ã‚¹ãƒ¬ãƒƒãƒ‰é–¢æ•°ã«æ¸¡ã™å¼•æ•°
+        0,                          // ä½œæˆã‚ªãƒ—ã‚·ãƒ§ãƒ³
+        &m_dwThreadID);             // ã‚¹ãƒ¬ãƒƒãƒ‰ID
 
     m_CurrentState = SceneState::Load;
 }
@@ -25,7 +25,7 @@ void DebugScene::Load()
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
 
-        // “ü—Íƒ‚[ƒh•ÏX
+        // å…¥åŠ›ãƒ¢ãƒ¼ãƒ‰å¤‰æ›´
         INPUT->SetInputMode(InputMode::MODE_UI);
         m_CurrentState = SceneState::Main;
     }

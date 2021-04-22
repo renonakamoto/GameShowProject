@@ -1,4 +1,4 @@
-#ifndef DEBUG_SCENE_H_
+﻿#ifndef DEBUG_SCENE_H_
 #define DEBUG_SCENE_H_
 
 #include "Scene.h"

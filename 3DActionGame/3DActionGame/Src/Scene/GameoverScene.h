@@ -1,4 +1,4 @@
-#ifndef GAMEOVERSCENE_H_
+﻿#ifndef GAMEOVERSCENE_H_
 #define GAMEOVERSCENE_H_
 
 #include "Scene.h"
