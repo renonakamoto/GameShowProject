@@ -11,10 +11,6 @@
 #include "../../Graphics/DirectGraphics.h"
 #include "../Model.h"
 
-
-static const int MOTION_MAX = 256;
-
-
 /**
 * @brief ボーン情報を保持する構造体
 */
