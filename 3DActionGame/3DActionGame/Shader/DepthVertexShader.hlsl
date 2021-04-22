@@ -13,20 +13,19 @@ struct VS_OUT
     float4 depth : POSITION0;
 };
 
-cbuffer ConstantBuffer
+cbuffer ConstantBuffer : register(b0)
 {
-    float4x4 World;
-    float4x4 View;
-    float4x4 Projection;
-    float4x4 LightView;
-    float4x4 ClipUV;
-    float4   CameraPos;
-    float4   Light;
-    float4   MaterialAmbient;
-    float4   MaterialDiffuse;
-    float4   MaterialSpecular;
+    float4x4 World;             //! ワールド行列
+    float4x4 View;              //! ビュー行列
+    float4x4 Projection;        //! プロジェクション行列
+    float4x4 LightView;         //! ライトのビュー行列
+    float4x4 ClipUV;            //! UV変換用行列
+    float4   CameraPos;         //! カメラ座標
+    float4   Light;             //! ライトの方向
+    float4   MaterialAmbient;   //! アンビエント光
+    float4   MaterialDiffuse;   //! ディヒューズ光
+    float4   MaterialSpecular;  //! スペキュラー光
 };
-
 VS_OUT vs_main( VS_IN input )
 {
     VS_OUT output = (VS_OUT)0;

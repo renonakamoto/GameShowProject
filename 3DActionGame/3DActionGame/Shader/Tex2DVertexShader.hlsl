@@ -17,8 +17,8 @@ struct VS_OUT
 // 定数バッファ
 cbuffer ConstantBuffer : register(b0)
 {
-    matrix world;
-    matrix projection;
+    matrix World;
+    matrix Projection;
 };
 
 
@@ -28,7 +28,7 @@ VS_OUT vs_main( VS_IN input )
     VS_OUT output = (VS_OUT)0;
     
     // 行列変換
-    matrix wp = world * projection;
+    matrix wp = World * Projection;
     output.pos = mul(input.pos, wp);
     
     output.texture_pos = input.texture_pos;
