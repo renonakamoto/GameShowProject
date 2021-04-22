@@ -692,8 +692,14 @@ void InputManager::SetMousePos(int x, int y)
 
 void InputManager::SetInputMode(InputMode mode)
 {
+	if (m_InputMode == mode) return;
 	m_InputMode = mode;
-	ShowCursor(m_InputMode == InputMode::MODE_UI);
+	if (m_InputMode == InputMode::MODE_GAME) {
+		ShowCursor(FALSE);
+	}
+	else {
+		ShowCursor(TRUE);
+	}
 }
 
 bool InputManager::GetKey(KeyInfo key_) const
