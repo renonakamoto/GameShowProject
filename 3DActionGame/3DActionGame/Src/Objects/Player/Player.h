@@ -6,9 +6,11 @@
 #include "../../Model/ObjFileStrage.h"
 #include "../../Model/SkeletalModel.h"
 #include "PlayerState/PlayerState.h"
+#include "PlayerState/PlayerIdleState.h"
 #include "PlayerState/PlayerRunState.h"
 #include "PlayerState/PlayerAttack01State.h"
 #include "PlayerState/PlayerAttack02State.h"
+#include "PlayerState/PlayerHitState.h"
 #include "PlayerMotion/../../Stage/Stage.h"
 #include "../Camera/FollowCamera.h"
 #include "../../CollisionManager/Shape/3D/OBB/ShapeOBB.h"
@@ -19,9 +21,11 @@
 */
 class Player : public Object3D
 {
+	friend PlayerIdleState;
 	friend PlayerRunState;
 	friend PlayerAttack01State;
 	friend PlayerAttack02State;
+	friend PlayerHitState;
 public:
 	/**
 	* @brief コンストラクタ
@@ -105,6 +109,13 @@ public:
 	* @details HPが0以下になったら死亡する
 	*/
 	void Damage(int damageNum_);
+
+	/**
+	* @fn int GetHp()
+	* @brief HPの取得関数
+	* @return int HP
+	*/
+	int GetHp() { return m_Hp; }
 
 private:
 	/**

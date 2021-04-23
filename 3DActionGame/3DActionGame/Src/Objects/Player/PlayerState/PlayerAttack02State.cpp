@@ -4,6 +4,11 @@
 
 PlayerState* PlayerAttack02State::CheckState(Player* player_)
 {
+	if (player_->m_IsHit)
+	{
+		return PlayerHitState::GetInstance();
+	}
+
 	UINT current_frame = player_->m_Model->GetCurrentFrame();
 	UINT attack_frame  = player_->m_Model->GetModel()->GetMotionData("Attack02")->FrameNum;
 

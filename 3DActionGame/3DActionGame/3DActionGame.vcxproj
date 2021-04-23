@@ -55,6 +55,7 @@
     <ClCompile Include="Src\Objects\Player\Player.cpp" />
     <ClCompile Include="Src\Objects\Player\PlayerState\PlayerAttack01State.cpp" />
     <ClCompile Include="Src\Objects\Player\PlayerState\PlayerAttack02State.cpp" />
+    <ClCompile Include="Src\Objects\Player\PlayerState\PlayerHitState.cpp" />
     <ClCompile Include="Src\Objects\Player\PlayerState\PlayerIdleState.cpp" />
     <ClCompile Include="Src\Objects\Player\PlayerState\PlayerRunState.cpp" />
     <ClCompile Include="Src\Objects\Stage\Stage.cpp" />
@@ -106,6 +107,7 @@
     <ClInclude Include="Src\Objects\Player\Player.h" />
     <ClInclude Include="Src\Objects\Player\PlayerState\PlayerAttack01State.h" />
     <ClInclude Include="Src\Objects\Player\PlayerState\PlayerAttack02State.h" />
+    <ClInclude Include="Src\Objects\Player\PlayerState\PlayerHitState.h" />
     <ClInclude Include="Src\Objects\Player\PlayerState\PlayerIdleState.h" />
     <ClInclude Include="Src\Objects\Player\PlayerState\PlayerState.h" />
     <ClInclude Include="Src\Objects\Player\PlayerState\PlayerRunState.h" />

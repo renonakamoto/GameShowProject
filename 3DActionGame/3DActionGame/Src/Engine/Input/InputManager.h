@@ -286,8 +286,8 @@ public:
 	void SetInputMode(InputMode mode);
 	InputMode GetInputMode() { return m_InputMode; };
 
-	int GetMouseMovementX() { return m_MovementX; }
-	int GetMouseMovementY() { return m_MovementY; }
+	int GetMouseMovementX() { return m_MovementX * m_MouseSensitivity; }
+	int GetMouseMovementY() { return m_MovementY * m_MouseSensitivity; }
 
 	void SetMousemSensitivity(float sensitivity) { m_MouseSensitivity = sensitivity; }
 	float GetMousemSensitivity() { return m_MouseSensitivity; }

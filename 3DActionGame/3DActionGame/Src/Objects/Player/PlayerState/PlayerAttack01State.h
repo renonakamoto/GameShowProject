@@ -22,7 +22,7 @@ public:
 	}
 
 	/**
-	* @fn PlayerState* CheckState(Player* enemy_)
+	* @fn PlayerState* CheckState(Player* player_)
 	* @brief 状態を確認して適切な状態を返す関数
 	* @param[in] player_ プレイヤークラスのポインタ
 	* @return Player* プレイヤーの状態クラスのポインタを返す

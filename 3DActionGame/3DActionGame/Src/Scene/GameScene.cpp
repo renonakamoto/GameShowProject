@@ -65,6 +65,7 @@ DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Player/Ekard_Attack_01.fbx",       "Ekard", "Attack01");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Player/Ekard_Attack_02.fbx",       "Ekard", "Attack02");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Player/Ekard_BattleIdle_01_h.fbx", "Ekard", "Idle");
+    FbxStorage::GetInstance()->LoadMotion("Res/Models/Player/Ekard_Stun_01.fbx",         "Ekard", "Stun");
     FbxStorage::GetInstance()->GetModel("Ekard")->AddMesh("Res/Models/Player/Sword_12.fbx", DirectX::XMFLOAT3(22.9f, 0.0f, 40.0f), "Bip001 R Hand");
 
     // エネミーモデルの読み込み

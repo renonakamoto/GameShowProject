@@ -8,11 +8,8 @@ void FollowCamera::Init()
 
 void FollowCamera::Update()
 {
-    // マウス感度を取得
-    float sensi = INPUT_MANAGER->GetMousemSensitivity();
-
     // マウスのX軸の移動量をY軸回転に加算
-    m_Yaw -= INPUT_MANAGER->GetMouseMovementX() * sensi;
+    m_Yaw -= INPUT_MANAGER->GetMouseMovementX();
 
     if (m_FollowObject)SetLookAtPos(m_FollowObject->GetPos());
 

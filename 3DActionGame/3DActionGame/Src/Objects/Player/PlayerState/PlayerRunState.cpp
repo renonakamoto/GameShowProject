@@ -2,11 +2,17 @@
 #include "PlayerIdleState.h"
 #include "PlayerRunState.h"
 #include "PlayerAttack01State.h"
+#include "PlayerHitState.h"
 #include "../../../Engine/Engine.h"
 #include "../../../Utility/Calculation.h"
 
 PlayerState* PlayerRunState::CheckState(Player* player_)
 {
+	if (player_->m_IsHit)
+	{
+		return PlayerHitState::GetInstance();
+	}
+
 	// 左クリックが押された時は攻撃状態へ遷移
 	if (INPUT_MANAGER->GetMouseDown(MouseButton::Left))
 	{

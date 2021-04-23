@@ -234,6 +234,9 @@
     <ClCompile Include="Src\Scene\DebugScene.cpp">
       <Filter>Src\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Objects\Player\PlayerState\PlayerHitState.cpp">
+      <Filter>Src\Objects\Player\PlayerState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Utility\GraphicsUtility.h">
@@ -400,6 +403,9 @@
     </ClInclude>
     <ClInclude Include="Src\Scene\DebugScene.h">
       <Filter>Src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Player\PlayerState\PlayerHitState.h">
+      <Filter>Src\Objects\Player\PlayerState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

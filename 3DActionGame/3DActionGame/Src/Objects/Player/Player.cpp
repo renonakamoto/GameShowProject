@@ -50,9 +50,17 @@ void Player::Init()
 
 void Player::Update()
 {
+#ifdef _DEBUG
+	if (INPUT_MANAGER->GetKeyDown(KeyInfo::Key_8))
+	{
+		Damage(5);
+	}
+#endif
+
 	// もし死亡したらゲームマネージャーに伝える
 	if (m_IsDeath == true) {
 		GameManager::GetInstance()->GameOver();
+		return;
 	}
 	
 	// プレイヤーの状態を更新する
@@ -76,8 +84,9 @@ void Player::Draw()
 {	
 	GRAPHICS->SetRasterizerMode(RasterizerMode::MODE_CULL_NONE);
 	m_Model->Render(m_Pos, m_Scale, m_Rot);
-	
+#ifdef _DEBUG
 	if (m_AttackVolume)m_AttackVolume->Draw();
+#endif
 }
 
 void Player::Damage(int damageNum_)

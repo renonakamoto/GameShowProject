@@ -6,6 +6,11 @@
 
 PlayerState* PlayerIdleState::CheckState(Player* player_)
 {
+	if (player_->m_IsHit)
+	{
+		return PlayerHitState::GetInstance();
+	}
+
 	// 移動キーが押されたら移動状態へ遷移
 	if (INPUT_MANAGER->GetKey(KeyInfo::Key_W) ||
 		INPUT_MANAGER->GetKey(KeyInfo::Key_A) ||
