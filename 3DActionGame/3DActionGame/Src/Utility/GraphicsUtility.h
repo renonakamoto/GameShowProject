@@ -17,6 +17,7 @@ struct ConstantBuffer
     DirectX::XMFLOAT4X4 View;               //! ビュー行列
     DirectX::XMFLOAT4X4 Projection;         //! プロジェクション行列
     DirectX::XMFLOAT4X4 LightView;          //! ライト行列
+    DirectX::XMFLOAT4X4 LightProjection;    //! ライトプロジェクション行列
     DirectX::XMFLOAT4X4 ClipUV;             //! UV変換用行列
     DirectX::XMFLOAT4   CameraPos;          //! カメラ座標
     DirectX::XMFLOAT4   Light;              //! ライトの方向ベクトル

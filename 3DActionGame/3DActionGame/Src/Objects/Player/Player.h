@@ -2,6 +2,7 @@
 #define PLAYER_H_
 
 #include "../../ObjectManager/Object3D.h"
+#include "../../ObjectManager/ShadowMapObject.h"
 #include "../../Model/FbxStorage.h"
 #include "../../Model/ObjFileStrage.h"
 #include "../../Model/SkeletalModel.h"
@@ -19,7 +20,7 @@
 /**
 * @brief プレイヤークラス
 */
-class Player : public Object3D
+class Player : public ShadowMapObject
 {
 	friend PlayerIdleState;
 	friend PlayerRunState;
@@ -33,7 +34,7 @@ public:
 	*/
 	Player(DirectX::XMFLOAT3 pos_) :
 #pragma region MemberInit
-		Object3D(pos_, { 0.f, 0.f, 0.f }, { 0.1f, 0.1f, 0.1f }),
+		ShadowMapObject(pos_, { 0.f, 0.f, 0.f }, { 0.1f, 0.1f, 0.1f }),
 		m_Model(nullptr),
 		m_Speed(40.f),
 		m_OldPos(m_Pos),
@@ -58,7 +59,9 @@ public:
 		m_CameraHeight(9.0f),
 		m_CameraLookAtOffset(0.0f, 9.f, 0.0f)
 #pragma endregion
-	{}
+	{
+		m_Tag = "Player";
+	}
 	
 	/**
 	* @brief デストラクタ
@@ -85,6 +88,8 @@ public:
 	* @brief 描画関数
 	*/
 	void Draw()override;
+
+	void DrawShadowMap() override;
 
 	void SetMotion(std::string keyword) { m_Model->Play(keyword); }
 

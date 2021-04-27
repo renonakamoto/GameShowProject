@@ -3,7 +3,7 @@ struct VS_IN
 {
         float4 pos          : POSITION0;
         float4 nor          : NORMAL0;
-        float4 texture_pos  : TEXTURE0;
+        float2 texture_pos  : TEXTURE0;
 };
  
 // VertexShaderから出力するデータ構造
@@ -24,7 +24,8 @@ cbuffer ConstantBuffer : register(b0)
     float4x4 World;             //! ワールド行列
     float4x4 View;              //! ビュー行列
     float4x4 Projection;        //! プロジェクション行列
-    float4x4 LightView;         //! ライトのビュー行列
+    float4x4 LightView;         //! ライトから見たビュー行列
+    float4x4 LightProjection;   //! ライトから見たプロジェクション行列
     float4x4 ClipUV;            //! UV変換用行列
     float4   CameraPos;         //! カメラ座標
     float4   Light;             //! ライトの方向
@@ -55,7 +56,7 @@ VS_OUT vs_main( VS_IN input )
         output.light = normalize(Light);
         
         output.light_view_pos = mul(output.posw, LightView);
-        output.light_view_pos = mul(output.light_view_pos, Projection);
+        output.light_view_pos = mul(output.light_view_pos, LightProjection);
         output.light_tex_coord = mul(output.light_view_pos, ClipUV);
 
         return output;

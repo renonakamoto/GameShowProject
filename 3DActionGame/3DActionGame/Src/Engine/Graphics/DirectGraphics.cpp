@@ -2,6 +2,7 @@
 
 #include "DirectGraphics.h"
 #include "../Engine.h"
+#include "../../Utility/Utility.h"
 
 #pragma comment(lib,"d3d11.lib")
 
@@ -52,7 +53,7 @@ bool DirectGraphics::Init()
         return false;
     }
 
-    // シャドウマップ用の
+    // シャドウマップ用
     if (CreateDepthDSVAndRTV() == false)
     {
         return false;
@@ -73,6 +74,7 @@ bool DirectGraphics::Init()
 
     DirectX::XMStoreFloat4x4(&m_ConstantBufferData.ClipUV, DirectX::XMMatrixTranspose(tex_uv));
 
+    
     
     return true;
 }
@@ -182,6 +184,13 @@ void DirectGraphics::Release()
         m_ShadowSamplerState->Release();
         m_ShadowSamplerState = nullptr;
     }
+
+    SAFE_DELETE(m_VertexShader);
+    SAFE_DELETE(m_SimpleVertexShader);
+    SAFE_DELETE(m_PixelShader);
+    SAFE_DELETE(m_DepthSkinningVertexShader);
+    SAFE_DELETE(m_DepthVertexShader);
+    SAFE_DELETE(m_DepthPixelShader);
 }
 
 /*
@@ -196,13 +205,13 @@ void DirectGraphics::StartRendering()
 
     float clear_color[4] = { 0.0f,0.0f,1.0f,1.0f };
 
-    // レンダーターゲットビューのクリアw
+    // レンダーターゲットビューのクリア
     m_Context->ClearRenderTargetView(
                 m_RenderTargetView, // 対象のレンダーターゲットビュー
                 clear_color         // クリアするビューのカラー
                 );
 
-    // デプスステンシルビューのクリア
+    // 深度ステンシルビューのクリア
     m_Context->ClearDepthStencilView(
                 m_DepthStencilView,                      // 対象のビュー
                 D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, // クリアフラグ
@@ -211,15 +220,20 @@ void DirectGraphics::StartRendering()
                 );
 
     /*
-        ビューポートの設定
-    */
-    //SetUpViewPort();
-
-    /*
        出力先の設定
     */
     m_Context->OMSetRenderTargets(1U, &m_RenderTargetView, m_DepthStencilView);
 
+
+    // ビューポートの設定
+    D3D11_VIEWPORT vp;
+    vp.Width    = WINDOW->GetClientWidth();
+    vp.Height   = WINDOW->GetClientHeight();
+    vp.MinDepth = 0.0f;
+    vp.MaxDepth = 1.0f;
+    vp.TopLeftX = 0.0f;
+    vp.TopLeftY = 0.0f;
+    m_Context->RSSetViewports(1, &vp);
 }
 
 /*
@@ -230,6 +244,29 @@ void DirectGraphics::FinishRendering()
 {
     // バックバッファをフロントバッファに送信する   
     m_SwapChain->Present(1, 0);
+}
+
+void DirectGraphics::StartShadwMapRendering()
+{    
+    // レンダーターゲットの設定
+    m_Context->OMSetRenderTargets(1U, &m_DepthRenderTargetView, m_DepthDepthStencilView);
+    float clear_color[4] = { 0.f,0.f,0.f,1.f };
+
+    // レンダーターゲットのクリア
+    m_Context->ClearRenderTargetView(m_DepthRenderTargetView, clear_color);
+
+    // 深度ステンシルのクリア
+    m_Context->ClearDepthStencilView(m_DepthDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+    // ビューポートの設定
+    D3D11_VIEWPORT vp;
+    vp.Width = WINDOW->GetClientWidth() * 2;
+    vp.Height = WINDOW->GetClientHeight() * 2;
+    vp.MinDepth = 0.0f;
+    vp.MaxDepth = 1.0f;
+    vp.TopLeftX = 0.0f;
+    vp.TopLeftY = 0.0f;
+    m_Context->RSSetViewports(1, &vp);
 }
 
 void DirectGraphics::SetRasterizerMode(RasterizerMode mode_)
@@ -610,6 +647,12 @@ bool DirectGraphics::CreateShader()
         return false;
     }
 
+    m_DepthSkinningVertexShader = new VertexShader();
+    if (m_DepthSkinningVertexShader->Create(m_Device, "Res/Shader/DpthSkinningVertexShader.cso") == false)
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -654,19 +697,19 @@ bool DirectGraphics::CreateTextureSampler()
         return false;
     }
 
-    sampler_desc.Filter         = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
-    sampler_desc.AddressU       = D3D11_TEXTURE_ADDRESS_BORDER;
-    sampler_desc.AddressV       = D3D11_TEXTURE_ADDRESS_BORDER;
-    sampler_desc.AddressW       = D3D11_TEXTURE_ADDRESS_BORDER;
-    sampler_desc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
-    sampler_desc.BorderColor[0] = 1.f;
-    sampler_desc.BorderColor[1] = 1.f;
-    sampler_desc.BorderColor[2] = 1.f;
-    sampler_desc.BorderColor[3] = 1.f;
-    sampler_desc.MaxAnisotropy  = 1U;
-    sampler_desc.MipLODBias     = 0.f;
-    sampler_desc.MinLOD         = -FLT_MAX;
-    sampler_desc.MaxLOD         = +FLT_MAX;
+    sampler_desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    sampler_desc.AddressU       = D3D11_TEXTURE_ADDRESS_CLAMP;
+    sampler_desc.AddressV       = D3D11_TEXTURE_ADDRESS_CLAMP;
+    sampler_desc.AddressW       = D3D11_TEXTURE_ADDRESS_CLAMP;
+    //sampler_desc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
+    //sampler_desc.BorderColor[0] = 1.f;
+    //sampler_desc.BorderColor[1] = 1.f;
+    //sampler_desc.BorderColor[2] = 1.f;
+    //sampler_desc.BorderColor[3] = 1.f;
+    //sampler_desc.MaxAnisotropy  = 1U;
+    //sampler_desc.MipLODBias     = 0.f;
+    //sampler_desc.MinLOD         = -FLT_MAX;
+    //sampler_desc.MaxLOD         = +FLT_MAX;
 
     if (FAILED(m_Device->CreateSamplerState(&sampler_desc, &m_ShadowSamplerState)))
     {
@@ -796,12 +839,26 @@ void DirectGraphics::SetUpViewPort()
 
 void DirectGraphics::SetUpLight()
 {
-    DirectX::XMStoreFloat4(&m_ConstantBufferData.Light, DirectX::XMVector3Normalize(DirectX::XMVectorSet(0.0f, 0.5f, -1.0f, 0.0f)));
+    DirectX::XMFLOAT3 light_pos(0.0f, 200.0f, -1.0f);
+    DirectX::XMStoreFloat4(&m_ConstantBufferData.Light, DirectX::XMVector3Normalize(DirectX::XMVectorSet(light_pos.x, light_pos.y, light_pos.z, 0.0f)));
 
     DirectX::XMMATRIX light_view = DirectX::XMMatrixLookAtLH(
-        DirectX::XMVectorSet(m_ConstantBufferData.Light.x, m_ConstantBufferData.Light.y, m_ConstantBufferData.Light.z, 0.0f),
+        DirectX::XMVectorSet(light_pos.x, light_pos.y, light_pos.z, 0.0f),
         DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),
         DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 
     DirectX::XMStoreFloat4x4(&m_ConstantBufferData.LightView, DirectX::XMMatrixTranspose(light_view));
+
+    // プロジェクション行列設定
+    // 視野角
+    constexpr float fov = DirectX::XMConvertToRadians(45.0f);
+    // アスペクト比
+    float aspect = static_cast<float>(WINDOW->GetClientWidth()) / static_cast<float>(WINDOW->GetClientHeight());
+    // Near
+    float near_z = 0.1f;
+    // Far
+    float far_z = 500000.f;
+    // プロジェクション行列の作成
+    DirectX::XMMATRIX proj_mat = DirectX::XMMatrixPerspectiveFovLH(fov, aspect, near_z, far_z);
+    DirectX::XMStoreFloat4x4(&GRAPHICS->GetConstantBufferData()->LightProjection, DirectX::XMMatrixTranspose(proj_mat));
 }

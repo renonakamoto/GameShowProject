@@ -237,6 +237,9 @@
     <ClCompile Include="Src\Objects\Player\PlayerState\PlayerHitState.cpp">
       <Filter>Src\Objects\Player\PlayerState</Filter>
     </ClCompile>
+    <ClCompile Include="Src\ObjectManager\ShadowMapObject.cpp">
+      <Filter>Src\ObjectManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Utility\GraphicsUtility.h">
@@ -407,6 +410,9 @@
     <ClInclude Include="Src\Objects\Player\PlayerState\PlayerHitState.h">
       <Filter>Src\Objects\Player\PlayerState</Filter>
     </ClInclude>
+    <ClInclude Include="Src\ObjectManager\ShadowMapObject.h">
+      <Filter>Src\ObjectManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\VertexShader.hlsl">
@@ -428,6 +434,9 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\DepthVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\DpthSkinningVertexShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

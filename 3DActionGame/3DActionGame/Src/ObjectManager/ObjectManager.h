@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "ObjectBase.h"
+#include "ShadowMapObject.h"
 
 /**
 * @brief ゲームオブジェクトを管理するクラス
@@ -39,12 +40,16 @@ public:
 	*/
 	void Draw();
 
+	void DrawShadowMapObj();
+
 	/**
 	* @fn void Register(Object3D* object_)
 	* @brief オブジェクトリストに追加する関数
 	* @param[in] object_ ゲームオブジェクト
 	*/
 	void Register(ObjectBase* object_);
+
+	void ResisterShadowMap(ShadowMapObject* object_);
 
 	/**
 	* @fn void Release(Object3D* object_)
@@ -53,6 +58,8 @@ public:
 	* @details 確保されているメモリも一緒に解放する
 	*/
 	void Release(ObjectBase* object_);
+
+	void Release(ShadowMapObject* object_);
 
 	/**
 	* @fn void AllRelease()
@@ -86,6 +93,7 @@ private:
 
 private:
 	std::vector<ObjectBase*> m_ObjectList;	//! ゲームオブジェクトリスト
+	std::vector<ShadowMapObject*> m_ShadowMapObject;
 	
 };
 

@@ -85,6 +85,7 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
+    GRAPHICS->StartRendering();
     switch (m_CurrentState)
     {
     case SceneState::Load:
@@ -95,4 +96,5 @@ void TitleScene::Draw()
     default:
         break;
     }
+    GRAPHICS->FinishRendering();
 }

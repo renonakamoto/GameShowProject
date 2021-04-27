@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#define SAFE_DELETE(p)  {delete p; p = nullptr;}
+
 /**
 * @fn std::vector<std::string> Split(std::string str_, char del_)
 * @brief 文字列を特定の文字で分割する関数

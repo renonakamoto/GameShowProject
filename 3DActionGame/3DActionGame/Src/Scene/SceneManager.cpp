@@ -95,9 +95,5 @@ void SceneManager::Update()
 
 void SceneManager::Draw()
 {
-	GRAPHICS->StartRendering();
-
 	m_SceneStack.top()->Draw();
-
-	GRAPHICS->FinishRendering();
 }

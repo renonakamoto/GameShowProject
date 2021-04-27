@@ -47,6 +47,14 @@ void EnemyManager::Draw()
 	}
 }
 
+void EnemyManager::DrawShadowMap()
+{
+	for (Enemy* enemy : m_Enemies)
+	{
+		if (enemy)enemy->DrawShadowMap();
+	}
+}
+
 void EnemyManager::Erase(int idx_)
 {
 	delete m_Enemies[idx_];

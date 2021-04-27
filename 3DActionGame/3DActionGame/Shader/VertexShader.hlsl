@@ -31,7 +31,8 @@ cbuffer ConstantBuffer : register(b0)
     float4x4 World;             //! ワールド行列
     float4x4 View;              //! ビュー行列
     float4x4 Projection;        //! プロジェクション行列
-    float4x4 LightView;         //! ライトのビュー行列
+    float4x4 LightView;         //! ライトから見たビュー行列
+    float4x4 LightProjection;   //! ライトから見たプロジェクション行列
     float4x4 ClipUV;            //! UV変換用行列
     float4   CameraPos;         //! カメラ座標
     float4   Light;             //! ライトの方向
@@ -93,41 +94,41 @@ Skin SkinVert(VS_IN input)
  
 VS_OUT vs_main( VS_IN input )
 {
-        VS_OUT output = (VS_OUT)0;
+    VS_OUT output = (VS_OUT)0;
 
-        // スキンメッシュを行う
-        Skin skinned = SkinVert(input);
-        
-        // ワールド座標に変換
-        output.posw = mul(skinned.pos, World);
-        // ワールド座標 * ビュー座標変換行列
-        output.pos = mul(output.posw, View);
-        // ビュー座標 * プロジェクション座標変換行列
-        output.pos = mul(output.pos, Projection);
+    // スキンメッシュを行う
+    Skin skinned = SkinVert(input);
+    
+    // ワールド座標に変換
+    output.posw = mul(skinned.pos, World);
+    // ワールド座標 * ビュー座標変換行列
+    output.pos = mul(output.posw, View);
+    // ビュー座標 * プロジェクション座標変換行列
+    output.pos = mul(output.pos, Projection);
 
-        // テクスチャ座標
-        output.texture_pos = input.texture_pos;
-        
-        // 法線ベクトル
-        output.norw = normalize(mul(skinned.nor, (float3x3)World));
-        //output.norw = saturate(dot(normal, Light));
-        
-        // カメラの向き
-        output.eye_vec = normalize(CameraPos - output.posw);
+    // テクスチャ座標
+    output.texture_pos = input.texture_pos;
+    
+    // 法線ベクトル
+    output.norw = normalize(mul(skinned.nor, (float3x3)World));
+    //output.norw = saturate(dot(normal, Light));
+    
+    // カメラの向き
+    output.eye_vec = normalize(CameraPos - output.posw);
 
-        // ライトの方向
-        output.light = normalize(Light);
+    // ライトの方向
+    output.light = normalize(Light);
 
-        /*
-            シャドウマップ用
-        */
-        
-        // ライト視点でのビュー座標変換
-        output.light_view_pos = mul(output.posw, LightView);
-        // ライト視点でのプロジェクション座標変換
-        output.light_view_pos = mul(output.light_view_pos, Projection);
-        // テクスチャUVの変換
-        output.light_tex_coord = mul(output.light_view_pos, ClipUV);
+    /*
+        シャドウマップ用
+    */
+    
+    // ライト視点でのビュー座標変換
+    output.light_view_pos = mul(output.posw, LightView);
+    // ライト視点でのプロジェクション座標変換
+    output.light_view_pos = mul(output.light_view_pos, LightProjection);
+    // テクスチャUVの変換
+    output.light_tex_coord = mul(output.light_view_pos, ClipUV);
 
-        return output;
+    return output;
 }

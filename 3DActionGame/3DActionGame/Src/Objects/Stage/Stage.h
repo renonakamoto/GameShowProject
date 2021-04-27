@@ -2,12 +2,13 @@
 #define STAGE_H_
 
 #include "../../ObjectManager/Object3D.h"
+#include "../../ObjectManager/ShadowMapObject.h"
 #include "../../Model/ObjFileStrage.h"
 
 /**
 * @brief ステージクラス
 */
-class Stage : public Object3D
+class Stage : public ShadowMapObject
 {
 	static const int STAGE_WIETH     = 1200; //! ステージの横幅
 	static const int STAGE_HEIGHT    = 1200; //! ステージの縦幅
@@ -56,6 +57,8 @@ public:
 	* @brief 描画関数
 	*/
 	void Draw() override;
+
+	void DrawShadowMap() override;
 	
 	/**
 	* @fn float GetPolygonHeight(DirectX::XMFLOAT3 pos_)

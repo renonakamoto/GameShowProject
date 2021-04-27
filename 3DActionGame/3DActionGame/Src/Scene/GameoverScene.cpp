@@ -75,6 +75,7 @@ void GameoverScene::Update()
 
 void GameoverScene::Draw()
 {
+    GRAPHICS->StartRendering();
     switch (m_CurrentState)
     {
     case SceneState::Load:
@@ -85,4 +86,5 @@ void GameoverScene::Draw()
     default:
         break;
     }
+    GRAPHICS->FinishRendering();
 }

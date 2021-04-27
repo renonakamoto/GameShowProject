@@ -53,7 +53,8 @@ public:
 		m_DepthTexture(nullptr),
 		m_ShadowSamplerState(nullptr),
 		m_DepthVertexShader(nullptr),
-		m_DepthPixelShader(nullptr)
+		m_DepthPixelShader(nullptr),
+		m_DepthSkinningVertexShader(nullptr)
 #pragma endregion
 	{}
 
@@ -91,6 +92,8 @@ public:
 	*/
 	void FinishRendering();
 
+	void StartShadwMapRendering();
+
 public:
 	/**
 	* @fn ID3D11Device* GetDevice()
@@ -105,6 +108,15 @@ public:
 	* @return ID3D11DeviceContext* Contextのポインタ
 	*/
 	ID3D11DeviceContext* GetContext() { return m_Context; }
+
+	/**
+	* @fn void SetRasterizerMode(RasterizerMode mode_)
+	* @brief ラスタライズのモードを変更する関数
+	* @param[in] mode_ ラスタライズモード
+	*/
+	void SetRasterizerMode(RasterizerMode mode_);
+
+public:
 
 	/**
 	* @fn VertexShader* GetVertexShader()
@@ -126,6 +138,29 @@ public:
 	* @return VertexShader* VertexShaderのポインタ
 	*/
 	VertexShader* GetSimpleVertexShader() { return m_SimpleVertexShader; }
+
+	/**
+	* @fn VertexShader* GetDepthVertexShader()
+	* @brief シャドウマップ用のVertexShader取得関数
+	* @return VertexShader* VertexShaderのポインタ
+	*/
+	VertexShader* GetDepthVertexShader() { return m_DepthVertexShader; }
+
+	/**
+	* @fn PixelShader* GetDepthPixelShader()
+	* @brief シャドウマップ用のPixelShader取得関数
+	* @return PixelShader* PixelShaderのポインタ
+	*/
+	PixelShader* GetDepthPixelShader() { return m_DepthPixelShader; }
+
+	/**
+	* @fn VertexShader* GetDepthSkinningVertexShader()
+	* @brief スキニングするシャドウマップ用のVertexShader取得関数
+	* @return VertexShader* VertexShaderのポインタ
+	*/
+	VertexShader* GetDepthSkinningVertexShader() { return m_DepthSkinningVertexShader; }
+
+public:
 
 	/**
 	* @fn ID3D11Buffer* GetConstantBuffer()
@@ -156,13 +191,6 @@ public:
 	ConstBoneBuffer* GetConstBoneBufferData() { return &m_ConstBoneBufferData; }
 
 	/**
-	* @fn void SetRasterizerMode(RasterizerMode mode_)
-	* @brief ラスタライズのモードを変更する関数
-	* @param[in] mode_ ラスタライズモード
-	*/
-	void SetRasterizerMode(RasterizerMode mode_);
-
-	/**
 	* @fn void SetTexture(ID3D11ShaderResourceView* texture_)
 	* @brief テクスチャをピクセルシェーダに送る関数
 	* @param[in] texture_ テクスチャデータ
@@ -177,6 +205,9 @@ public:
 	* @details 設定しないときはnullptr
 	*/
 	void SetMaterial(ObjMaterial* material_);
+
+	ID3D11ShaderResourceView* GetDepthTextureView() { return m_DepthTextureView; }
+	ID3D11SamplerState* GetShadowMapSamplerState() { return m_ShadowSamplerState; }
 
 private:
 	/**
@@ -288,6 +319,7 @@ private:
 	ID3D11Texture2D*		  m_DepthDepthStencilTexture;
 	ID3D11Texture2D*		  m_DepthTexture;				//! 
 	ID3D11SamplerState*		  m_ShadowSamplerState;			//! シャドウマップ用のテクスチャサンプラー
+	VertexShader*			  m_DepthSkinningVertexShader;	//! 頂点シェーダ
 	VertexShader*			  m_DepthVertexShader;			//! 頂点シェーダ
 	PixelShader*			  m_DepthPixelShader;			//! ピクセルシェーダ
 

@@ -48,6 +48,7 @@ void DebugScene::Update()
 
 void DebugScene::Draw()
 {
+    GRAPHICS->StartRendering();
     switch (m_CurrentState)
     {
     case SceneState::Load:
@@ -58,6 +59,7 @@ void DebugScene::Draw()
     default:
         break;
     }
+    GRAPHICS->FinishRendering();
 }
 
 void DebugScene::Main()

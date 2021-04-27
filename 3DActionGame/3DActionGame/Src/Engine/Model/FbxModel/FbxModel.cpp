@@ -240,48 +240,33 @@ bool FbxModel::LoadMotion(std::string keyword_, const char* fileName_)
 
 void FbxModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_, std::string motionName_, float frameNum_)
 {
-	DirectGraphics* graphics = GRAPHICS;
-	ID3D11DeviceContext* context = graphics->GetContext();
+	DirectGraphics*      graphics = GRAPHICS;
+	ID3D11DeviceContext* context  = graphics->GetContext();
 	context->IASetInputLayout(m_InputLayout);
 
-	/*
-		頂点シェーダの設定
-	*/
-	context->VSSetShader(graphics->GetVertexShader()->GetShaderInterface(), NULL, 0U);
-	/*
-		ピクセルシェーダの設定
-	*/
-	context->PSSetShader(graphics->GetPixelShader()->GetShaderInterface(), NULL, 0U);
+	// ワールド行列の作成
+	DirectX::XMMATRIX mat_world, mat_trans, mat_rot_x, mat_rot_y, mat_rot_z, mat_scale;
+	mat_trans = DirectX::XMMatrixTranslation(pos_.x, pos_.y, pos_.z);
+	mat_rot_x = DirectX::XMMatrixRotationX(DirectX::XMConvertToRadians(degree_.x));
+	mat_rot_y = DirectX::XMMatrixRotationY(DirectX::XMConvertToRadians(degree_.y));
+	mat_rot_z = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(degree_.z));
+	mat_scale = DirectX::XMMatrixScaling(scale_.x, scale_.y, scale_.z);
+	mat_world = mat_scale * mat_rot_x * mat_rot_y * mat_rot_z * mat_trans;
+
+	// ワールド行列をコンスタントバッファに設定
+	DirectX::XMStoreFloat4x4(&graphics->GetConstantBufferData()->World, DirectX::XMMatrixTranspose(mat_world));
+
 	
 	UINT strides = sizeof(CVertex);
 	UINT offsets = 0U;
 	
 	for (auto& mesh : m_MeshList)
 	{
-		context->IASetVertexBuffers(
-			0U,
-			1U,
-			&mesh.VertexBuffer,
-			&strides,
-			&offsets);
+		// 頂点バッファをバインド
+		context->IASetVertexBuffers(0U, 1U, &mesh.VertexBuffer, &strides, &offsets);
+		// インデックスバッファをバインド
+		context->IASetIndexBuffer(mesh.IndexBuffer, DXGI_FORMAT_R32_UINT, 0U);
 
-		context->IASetIndexBuffer(
-			mesh.IndexBuffer,
-			DXGI_FORMAT_R32_UINT,
-			0U);
-
-		// ワールド行列の作成
-		DirectX::XMMATRIX mat_world, mat_trans, mat_rot_x, mat_rot_y, mat_rot_z, mat_scale;
-		mat_trans = DirectX::XMMatrixTranslation(pos_.x, pos_.y, pos_.z);
-		mat_rot_x = DirectX::XMMatrixRotationX(DirectX::XMConvertToRadians(degree_.x));
-		mat_rot_y = DirectX::XMMatrixRotationY(DirectX::XMConvertToRadians(degree_.y));
-		mat_rot_z = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(degree_.z));
-		mat_scale = DirectX::XMMatrixScaling(scale_.x, scale_.y, scale_.z);
-		mat_world = mat_scale * mat_rot_x * mat_rot_y * mat_rot_z * mat_trans;
-
-		// ワールド行列をコンスタントバッファに設定
-		DirectX::XMStoreFloat4x4(&graphics->GetConstantBufferData()->World, DirectX::XMMatrixTranspose(mat_world));
-		
 		// ボーン行列
 		Motion* motion = &m_Motion[motionName_];
 		if (motion != nullptr)

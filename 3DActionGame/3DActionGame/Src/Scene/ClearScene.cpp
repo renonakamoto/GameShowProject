@@ -76,6 +76,7 @@ void ClearScene::Update()
 
 void ClearScene::Draw()
 {
+    GRAPHICS->StartRendering();
     switch (m_CurrentState)
     {
     case SceneState::Load:
@@ -86,4 +87,5 @@ void ClearScene::Draw()
     default:
         break;
     }
+    GRAPHICS->FinishRendering();
 }

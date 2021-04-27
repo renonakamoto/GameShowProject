@@ -14,7 +14,7 @@
 /**
 * @brief 敵クラス
 */
-class Enemy : public Object3D
+class Enemy : public ShadowMapObject
 {
 	friend EnemyIdleState;
 	friend EnemyHitState;
@@ -26,7 +26,7 @@ public:
 	* @param[in] pos_ 座標
 	*/
 	Enemy(DirectX::XMFLOAT3 pos_) :
-		Object3D(pos_, { 0.f, 0.f, 0.f }, { 0.1f, 0.1f, 0.1f }),
+		ShadowMapObject(pos_, { 0.f, 0.f, 0.f }, { 0.1f, 0.1f, 0.1f }),
 		m_Model(nullptr),
 		m_Stage(nullptr),
 		m_State(nullptr),
@@ -63,6 +63,8 @@ public:
 	* @brief 描画関数
 	*/
 	void Draw()override;
+
+	void DrawShadowMap() override;
 
 	/**
 	* @fn void Damage(int damageNum_)

@@ -143,35 +143,31 @@ bool ObjModel::Load(const char* fileName_)
 
 void ObjModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree)
 {
-    /*
-        頂点シェーダの設定
-    */
     DirectGraphics* graphics = GRAPHICS;
     ID3D11DeviceContext* context = graphics->GetContext();
-    context->VSSetShader(graphics->GetSimpleVertexShader()->GetShaderInterface(), NULL, 0U);
-    /*
-        ピクセルシェーダの設定
-    */
-    context->PSSetShader(graphics->GetPixelShader()->GetShaderInterface(), NULL, 0U);
+
+    // ワールド行列の作成
+    DirectX::XMMATRIX translate = DirectX::XMMatrixTranslation(pos_.x, pos_.y, pos_.z);
+    DirectX::XMMATRIX rotate_x = DirectX::XMMatrixRotationX(DirectX::XMConvertToRadians(degree.x));
+    DirectX::XMMATRIX rotate_y = DirectX::XMMatrixRotationY(DirectX::XMConvertToRadians(degree.y));
+    DirectX::XMMATRIX rotate_z = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(degree.z));
+    DirectX::XMMATRIX scale = DirectX::XMMatrixScaling(scale_.x, scale_.y, scale_.z);
+    DirectX::XMMATRIX world_matrix = scale * rotate_x * rotate_y * rotate_z * translate;
+
+    // ワールド行列をコンスタントバッファに設定
+    DirectX::XMStoreFloat4x4(&graphics->GetConstantBufferData()->World, DirectX::XMMatrixTranspose(world_matrix));
+
+    // 入力レイアウトのバインド
+    context->IASetInputLayout(m_InputLayout);    
 
     UINT strides = sizeof(CVertex);
     UINT offsets = 0U;
     for (MeshData& mesh : m_MeshList)
     {
+        // 頂点バッファをバインド
         context->IASetVertexBuffers(0U, 1U, &mesh.VertexBuffer, &strides, &offsets);
+        // インデックスバッファをバインド
         context->IASetIndexBuffer(mesh.IndexBuffer, DXGI_FORMAT_R32_UINT, 0U);
-
-        context->IASetInputLayout(m_InputLayout);
-
-        DirectX::XMMATRIX translate = DirectX::XMMatrixTranslation(pos_.x, pos_.y, pos_.z);
-        DirectX::XMMATRIX rotate_x = DirectX::XMMatrixRotationX(DirectX::XMConvertToRadians(degree.x));
-        DirectX::XMMATRIX rotate_y = DirectX::XMMatrixRotationY(DirectX::XMConvertToRadians(degree.y));
-        DirectX::XMMATRIX rotate_z = DirectX::XMMatrixRotationZ(DirectX::XMConvertToRadians(degree.z));
-        DirectX::XMMATRIX scale = DirectX::XMMatrixScaling(scale_.x, scale_.y, scale_.z);
-        DirectX::XMMATRIX world_matrix = scale * rotate_x * rotate_y * rotate_z * translate;
-
-        // ワールド行列をコンスタントバッファに設定
-        DirectX::XMStoreFloat4x4(&graphics->GetConstantBufferData()->World, DirectX::XMMatrixTranspose(world_matrix));
 
         // マテリアル設定
         graphics->SetMaterial(&m_Materials[mesh.MaterialName]);
@@ -192,7 +188,6 @@ void ObjModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
         ID3D11Buffer* constant_buffer = graphics->GetConstantBuffer();
         context->VSSetConstantBuffers(0U, 1U, &constant_buffer);
         context->PSSetConstantBuffers(0U, 1U, &constant_buffer);
-
 
         // 描画
         context->DrawIndexed(static_cast<UINT>(mesh.Indices.size()), 0U, 0U);

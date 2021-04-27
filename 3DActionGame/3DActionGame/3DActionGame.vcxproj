@@ -43,6 +43,7 @@
     <ClCompile Include="Src\ObjectManager\Object2D.cpp" />
     <ClCompile Include="Src\ObjectManager\Object3D.cpp" />
     <ClCompile Include="Src\ObjectManager\ObjectManager.cpp" />
+    <ClCompile Include="Src\ObjectManager\ShadowMapObject.cpp" />
     <ClCompile Include="Src\Objects\2DObject\BackGround.cpp" />
     <ClCompile Include="Src\Objects\2DObject\Button.cpp" />
     <ClCompile Include="Src\Objects\Camera\Camera.cpp" />
@@ -94,6 +95,7 @@
     <ClInclude Include="Src\ObjectManager\Object3D.h" />
     <ClInclude Include="Src\ObjectManager\ObjectBase.h" />
     <ClInclude Include="Src\ObjectManager\ObjectManager.h" />
+    <ClInclude Include="Src\ObjectManager\ShadowMapObject.h" />
     <ClInclude Include="Src\Objects\2DObject\BackGround.h" />
     <ClInclude Include="Src\Objects\2DObject\Button.h" />
     <ClInclude Include="Src\Objects\Camera\Camera.h" />
@@ -142,6 +144,16 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\3DActionGame\Res\Shader\%(Filename).cso</ObjectFileOutput>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Shader\DpthSkinningVertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\3DActionGame\Res\Shader\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="Shader\PixelShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

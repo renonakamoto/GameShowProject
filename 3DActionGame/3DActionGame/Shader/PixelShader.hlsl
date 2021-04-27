@@ -19,7 +19,8 @@ cbuffer ConstantBuffer
     float4x4 World;
     float4x4 View;
     float4x4 Projection;
-    float4x4 LightView;
+    float4x4 LightView;         //! ライトから見たビュー行列
+    float4x4 LightProjection;   //! ライトから見たプロジェクション行列
     float4x4 ClipUV;
     float4   CameraPos;
     float4   Light;
@@ -45,7 +46,7 @@ float4 ps_main(PS_IN input) : SV_Target
     float4 R = normalize(-L + 2.0 * N * NL);
 
     // 鏡面反射光
-    float4 specular = pow(saturate(dot(R, input.eye_vec)), 200) * MaterialSpecular;
+    float4 specular = pow(saturate(dot(R, input.eye_vec)), 60);
 
     // 拡散光
     float4 tex_color = Texture.Sample(Sampler, input.texture_pos);
@@ -59,14 +60,14 @@ float4 ps_main(PS_IN input) : SV_Target
 
     
     // 影
-    //input.light_tex_coord /= input.light_tex_coord.w;
-    //float max_depth_slope = max(abs(ddx(input.light_tex_coord.z)), abs(ddy(input.light_tex_coord.z)));
-    //float tex_value = TextureDepth.Sample(Sampler, input.light_tex_coord).r;
-    //float light_length = input.light_view_pos.z / input.light_view_pos.w;
-    //if ((tex_value) < light_length)
-    //{
-    //    color /= 3;
-    //}
+    input.light_tex_coord /= input.light_tex_coord.w;
+    float max_depth_slope = max(abs(ddx(input.light_tex_coord.z)), abs(ddy(input.light_tex_coord.z)));
+    float tex_value = TextureDepth.Sample(ShadowSampler, input.light_tex_coord).r;
+    float light_length = input.light_view_pos.z / input.light_view_pos.w;
+    if ((tex_value + 0.005) > light_length)
+    {
+        color /= 3;
+    }
 
     return color;
 }

@@ -7,7 +7,7 @@
 /**
 * @brief エネミー管理クラス
 */
-class EnemyManager : public GameObject
+class EnemyManager : public ShadowMapObject
 {
 public:
 	/**
@@ -44,6 +44,8 @@ public:
 	* @details エネミーリストの描画を行う
 	*/
 	void Draw() override;
+
+	void DrawShadowMap() override;
 
 private:
 	/**

@@ -18,7 +18,8 @@ cbuffer ConstantBuffer : register(b0)
     float4x4 World;             //! ワールド行列
     float4x4 View;              //! ビュー行列
     float4x4 Projection;        //! プロジェクション行列
-    float4x4 LightView;         //! ライトのビュー行列
+    float4x4 LightView;         //! ライトから見たビュー行列
+    float4x4 LightProjection;   //! ライトから見たプロジェクション行列
     float4x4 ClipUV;            //! UV変換用行列
     float4   CameraPos;         //! カメラ座標
     float4   Light;             //! ライトの方向
@@ -32,7 +33,7 @@ VS_OUT vs_main( VS_IN input )
 
     output.pos = mul(input.pos, World);
     output.pos = mul(output.pos, LightView);
-    output.pos = mul(output.pos, Projection);
+    output.pos = mul(output.pos, LightProjection);
     output.depth = output.pos;
 
 	return output;

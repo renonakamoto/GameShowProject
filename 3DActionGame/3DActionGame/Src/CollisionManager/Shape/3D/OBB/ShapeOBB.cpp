@@ -163,7 +163,16 @@ float ShapeOBB::LenSegOnSeparateAxis(DirectX::XMFLOAT3& spe_, DirectX::XMFLOAT3&
 
 void ShapeOBB::Draw()
 {
-	GRAPHICS->SetRasterizerMode(RasterizerMode::MODE_WIREFRAME);
+	DirectGraphics* graphics = GRAPHICS;
+	ID3D11DeviceContext* context = GRAPHICS->GetContext();
+
+	// ラスタラスザの設定
+	graphics->SetRasterizerMode(RasterizerMode::MODE_WIREFRAME);
+	// 頂点シェーダの設定
+	context->VSSetShader(graphics->GetSimpleVertexShader()->GetShaderInterface(), NULL, 0U);
+	// ピクセルシェーダの設定
+	context->PSSetShader(graphics->GetPixelShader()->GetShaderInterface(), NULL, 0U);
+	
 	DirectX::XMFLOAT3 pos   = m_Pos;
 	DirectX::XMFLOAT3 scale = DirectX::XMFLOAT3(m_Length[0], m_Length[1], m_Length[2]);
 	float y = atan2f(m_NormalDirect[2].x, m_NormalDirect[2].z);

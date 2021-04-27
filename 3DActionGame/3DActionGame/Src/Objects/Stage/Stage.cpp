@@ -5,8 +5,40 @@
 
 void Stage::Draw()
 {
-	GRAPHICS->SetRasterizerMode(RasterizerMode::MODE_CULL_BACK);
+	DirectGraphics* graphics = GRAPHICS;
+	ID3D11DeviceContext* context = GRAPHICS->GetContext();
+
+	// ラスタラスザの設定
+	graphics->SetRasterizerMode(RasterizerMode::MODE_CULL_NONE);
+	// 頂点シェーダの設定
+	context->VSSetShader(graphics->GetSimpleVertexShader()->GetShaderInterface(), NULL, 0U);
+	// ピクセルシェーダの設定
+	context->PSSetShader(graphics->GetPixelShader()->GetShaderInterface(), NULL, 0U);
+
+	ID3D11ShaderResourceView* depth_tex = graphics->GetDepthTextureView();
+	context->PSSetShaderResources(1U, 1U, &depth_tex);
+
+	ID3D11SamplerState* sampler_state = graphics->GetShadowMapSamplerState();
+	context->PSSetSamplers(1U, 1U, &sampler_state);
+
 	if (m_Model)m_Model->Render(m_Pos, m_Scale, m_Rot);
+}
+
+void Stage::DrawShadowMap()
+{
+	if (m_Model == nullptr) return;
+
+	DirectGraphics* graphics = GRAPHICS;
+	ID3D11DeviceContext* context = GRAPHICS->GetContext();
+
+	// ラスタラスザの設定
+	graphics->SetRasterizerMode(RasterizerMode::MODE_CULL_NONE);
+	// 頂点シェーダの設定
+	context->VSSetShader(graphics->GetDepthVertexShader()->GetShaderInterface(), NULL, 0U);
+	// ピクセルシェーダの設定
+	context->PSSetShader(graphics->GetDepthPixelShader()->GetShaderInterface(), NULL, 0U);
+	
+	m_Model->Render(m_Pos, m_Scale, m_Rot);
 }
 
 float Stage::GetPolygonHeight(DirectX::XMFLOAT3 pos_)const
