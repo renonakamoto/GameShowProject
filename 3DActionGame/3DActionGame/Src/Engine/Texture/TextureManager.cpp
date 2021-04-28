@@ -99,7 +99,7 @@ bool TextureManager::Load(const char* fileName_, std::string keyword_)
 		image.GetImages(),
 		image.GetImageCount(),
 		metadata,
-		&tex_data->Texture)))
+		tex_data->Texture.GetAddressOf())))
 	{
 		m_Textures.erase(keyword_);
 		return false;
@@ -130,32 +130,40 @@ void TextureManager::Render(std::string keyword_, DirectX::XMFLOAT3 pos_)
 	ID3D11DeviceContext* context = GRAPHICS->GetContext();
 
 	// 入力レイアウトを設定
-	context->IASetInputLayout(m_InputLayout);
+	context->IASetInputLayout(m_InputLayout.Get());
 
 	TextureData* texture = &m_Textures[keyword_];
+	
 	// 頂点バッファの登録
 	UINT stride = sizeof(Vertex2D);
 	UINT offset = 0;
-	context->IASetVertexBuffers(0, 1, &texture->VertexBuffer, &stride, &offset);
+	context->IASetVertexBuffers(0U, 1U, texture->VertexBuffer.GetAddressOf(), &stride, &offset);
+	
 	// インデックスバッファの登録
-	context->IASetIndexBuffer(texture->IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	context->IASetIndexBuffer(texture->IndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0U);
+	
 	// プリミティブタイプの設定
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	// ワールド行列の設定
 	int client_width  = WINDOW->GetClientWidth();
 	int client_height = WINDOW->GetClientHeight();
 	m_ConstantBufferData.World		= DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.f - (pos_.x / (client_width/2)), 1.f - (pos_.y / (client_height / 2)), pos_.z));
-	m_ConstantBufferData.Projection = DirectX::XMMatrixTranspose(DirectX::XMMatrixOrthographicOffCenterLH(0.0f, client_width, client_height, 0.0f, -1.0f, 1.0f));
-	context->UpdateSubresource(m_ConstantBuffer, 0U, nullptr, &m_ConstantBufferData, 0U, 0U);
 	
-	// GPUにバッファをセット
+	// 正射影行列の設定
+	m_ConstantBufferData.Projection = DirectX::XMMatrixTranspose(DirectX::XMMatrixOrthographicOffCenterLH(0.0f, client_width, client_height, 0.0f, -1.0f, 1.0f));
+	context->UpdateSubresource(m_ConstantBuffer.Get(), 0U, nullptr, &m_ConstantBufferData, 0U, 0U);
+	
+	// 定数バッファの設定
+	context->VSSetConstantBuffers(0U, 1U, m_ConstantBuffer.GetAddressOf());
+
+	// シェーダーの設定
 	context->VSSetShader(m_VertexShader->GetShaderInterface(), nullptr, 0U);
 	context->PSSetShader(m_PixelShader->GetShaderInterface(), nullptr, 0U);
-	context->VSSetConstantBuffers(0, 1, &m_ConstantBuffer);
 
 	// テクスチャをシェーダに登録
-	context->PSSetSamplers(0U, 1U, &m_SamplerState);
-	context->PSSetShaderResources(0U, 1U, &texture->Texture);
+	context->PSSetSamplers(0U, 1U, m_SamplerState.GetAddressOf());
+	context->PSSetShaderResources(0U, 1U, texture->Texture.GetAddressOf());
 
 	// インデックスバッファで描画
 	context->DrawIndexed(6U, 0U, 0U);
@@ -209,7 +217,7 @@ bool TextureManager::CreateVertexBuffer(TextureData& data_, ID3D11Device* device
 	if (FAILED(device_->CreateBuffer(
 		&buffer_desc,										// バッファ情報
 		&init_data,										    // リソース情報
-		&data_.VertexBuffer)))								// 作成されたバッファの格納先
+		data_.VertexBuffer.GetAddressOf())))								// 作成されたバッファの格納先
 	{
 		return false;
 	}
@@ -242,7 +250,7 @@ bool TextureManager::CreateIndexBuffer(TextureData& data_, ID3D11Device* device_
 	if (FAILED(device_->CreateBuffer(
 		&buffer_desc,			// バッファ情報
 		&init_data,			// リソース情報
-		&data_.IndexBuffer)))	// 作成されたバッファの格納先
+		data_.IndexBuffer.GetAddressOf())))	// 作成されたバッファの格納先
 	{
 		return false;
 	}
@@ -252,13 +260,13 @@ bool TextureManager::CreateIndexBuffer(TextureData& data_, ID3D11Device* device_
 
 bool TextureManager::CreateShader(ID3D11Device* device_)
 {
-	m_VertexShader = new VertexShader();
+	m_VertexShader = std::make_unique<VertexShader>();
 	if (m_VertexShader->Create(device_, "Res/Shader/Tex2DVertexShader.cso") == false)
 	{
 		return false;
 	}
 
-	m_PixelShader = new PixelShader();
+	m_PixelShader = std::make_unique<PixelShader>();
 	if (m_PixelShader->Create(device_, "Res/Shader/Tex2DPixelShader.cso") == false)
 	{
 		return false;
@@ -280,7 +288,7 @@ bool TextureManager::CreateInputLayout(ID3D11Device* device_)
 		ARRAYSIZE(vertex_desc),		// 配列サイズ
 		m_VertexShader->GetData(),	// レイアウトと関連付ける頂点シェーダのデータ
 		m_VertexShader->GetSize(),	// レイアウトと関連付ける頂点シェーダのサイズ
-		&m_InputLayout)))			// 作成された頂点レイアウトの格納先
+		m_InputLayout.GetAddressOf())))			// 作成された頂点レイアウトの格納先
 	{
 		return false;
 	}
@@ -298,7 +306,7 @@ bool TextureManager::CreateConstantBuffer(ID3D11Device* device_)
 	buffer_desc.MiscFlags			= 0;
 	buffer_desc.StructureByteStride = 0;
 
-	if (FAILED(device_->CreateBuffer(&buffer_desc, nullptr, &m_ConstantBuffer)))
+	if (FAILED(device_->CreateBuffer(&buffer_desc, nullptr, m_ConstantBuffer.GetAddressOf())))
 	{
 		return false;
 	}
@@ -324,7 +332,7 @@ bool TextureManager::CreateSamplerState(ID3D11Device* device_)
 	sampler_desc.MaxLOD		    = D3D11_FLOAT32_MAX;
 
 	// 作成
-	if (FAILED(device_->CreateSamplerState(&sampler_desc, &m_SamplerState)))
+	if (FAILED(device_->CreateSamplerState(&sampler_desc, m_SamplerState.GetAddressOf())))
 	{
 		return false;
 	}

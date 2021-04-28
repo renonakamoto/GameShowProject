@@ -11,6 +11,7 @@
 #include "../../Graphics/DirectGraphics.h"
 #include "../Model.h"
 
+
 /**
 * @brief ボーン情報を保持する構造体
 */
@@ -54,12 +55,7 @@ public:
 	* @brief デストラクタ
 	*/
 	~FbxModel()
-	{
-		if (m_InputLayout != nullptr)
-		{
-			m_InputLayout->Release();
-		}
-	}
+	{}
 
 	/**
 	* @fn bool LoadModel(const char*　fileName_)
@@ -223,16 +219,16 @@ private:
 	bool CreateInputLayout(ID3D11Device* device_, VertexShader* vertexShader_);
 
 private:
-	std::map<std::string, ObjMaterial>				 m_Materials;		//! マテリアル
-	std::map<std::string, ID3D11ShaderResourceView*> m_MaterialLinks;	
-	std::map<std::string, ID3D11ShaderResourceView*> m_Textures;		//! テクスチャ
-	std::map<std::string, Motion>					 m_Motion;			//! モーション
+	std::map<std::string, ObjMaterial>						m_Materials;		//! マテリアル
+	std::map<std::string, ComPtr<ID3D11ShaderResourceView>> m_MaterialLinks;	//! 
+	std::map<std::string, ComPtr<ID3D11ShaderResourceView>>	m_Textures;			//! テクスチャ
+	std::map<std::string, Motion>							m_Motion;			//! モーション
 	
-	Bone m_Bone[BONE_MAX];
-	UINT m_BoneNum;														//! ボーンの数
-	int   m_StartFrame;													//! モーションの開始フレームを保存する変数
+	Bone  m_Bone[BONE_MAX];														//! ボーンの姿勢行列を保存する変数
+	UINT  m_BoneNum;															//! ボーンの数
+	int   m_StartFrame;															//! モーションの開始フレームを保存する変数
 
-	ID3D11InputLayout* m_InputLayout;									//! 入力レイアウト
+	ComPtr<ID3D11InputLayout> m_InputLayout;									//! 入力レイアウト
 };
 
 #endif

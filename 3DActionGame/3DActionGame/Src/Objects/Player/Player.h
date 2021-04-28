@@ -51,7 +51,7 @@ public:
 		m_AttackVolumLength(3.f, 2.5f, 2.2f),
 		m_AttackForwardDistance(3.f),
 		m_PlayerSize(2.8f, 8.f, 2.2f),
-		m_RotateSpeed(12.f),
+		m_RotateSpeed(6.f),
 		m_Hp(10),
 		m_IsHit(false),
 		m_IsDeath(false),
@@ -146,9 +146,9 @@ private:
 	void Move(float x_, float z_);
 
 private:
-	SkeletalModel*		m_Model;				//! モデル
-	PlayerState*		m_State;				//! プレイヤーの状態管理クラス
-	ShapeOBB*			m_AttackVolume;			//! 攻撃範囲用のOBB
+	std::unique_ptr<SkeletalModel> m_Model;			//! モデル
+	PlayerState*				   m_State;			//! プレイヤーの状態管理クラス
+	std::unique_ptr<ShapeOBB>	   m_AttackVolume;	//! 攻撃範囲用のOBB
 	DirectX::XMFLOAT3	m_AttackVolumLength;	//! 攻撃範囲のサイズ
 	float				m_AttackForwardDistance;//! 攻撃の際のボリューム生成距離
 	DirectX::XMFLOAT3	m_PlayerSize;			//! プレイヤーの大きさ
@@ -158,15 +158,15 @@ private:
 	DirectX::XMFLOAT3	m_OldPos;				//! 1フレーム前の座標
 	int					m_AttackPower;			//! 攻撃力
 	float				m_RotateSpeed;			//! 回転速度
-	float				m_Speed;				//! 移動速度さ
+	float				m_Speed;				//! 移動速度
 	float				m_Angle;				//!	Y軸の角度(度数法)
 	int					m_Hp;					//! ヒットポイント
 	bool				m_IsHit;				//! 攻撃をくらったかどうか
 	bool				m_IsDeath;				//! 死んでいるかどうか
 
-	float				m_CameraDistance;
-	float				m_CameraHeight;
-	DirectX::XMFLOAT3	m_CameraLookAtOffset;
+	float				m_CameraDistance;		//! カメラとの距離
+	float				m_CameraHeight;			//! カメラの高さ
+	DirectX::XMFLOAT3	m_CameraLookAtOffset;	//! カメラが自身を見るときの原点からのオフセット値
 
 	ShapeOBB*			m_OBB;					//! 当たり判定用
 	Stage*				m_Stage;				//! ステージ参照用変数

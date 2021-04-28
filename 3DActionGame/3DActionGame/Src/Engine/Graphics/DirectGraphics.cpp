@@ -1,5 +1,4 @@
 ﻿#include <stdio.h>
-
 #include "DirectGraphics.h"
 #include "../Engine.h"
 #include "../../Utility/Utility.h"
@@ -81,116 +80,6 @@ bool DirectGraphics::Init()
 
 void DirectGraphics::Release()
 {
-    if (m_Device != nullptr)
-    {
-        m_Device->Release();
-        m_Device = nullptr;
-    }
-
-    if (m_Context != nullptr)
-    {
-        m_Context->ClearState();
-        m_Context->Release();
-        m_Context = nullptr;
-    }
-
-    if (m_SwapChain != nullptr)
-    {
-        m_SwapChain->Release();
-        m_SwapChain = nullptr;
-    }
-
-    if (m_RenderTargetView != nullptr)
-    {
-        m_RenderTargetView->Release();
-        m_RenderTargetView = nullptr;
-    }
-
-    if (m_DepthStencilTexture != nullptr)
-    {
-        m_DepthStencilTexture->Release();
-        m_DepthStencilTexture = nullptr;
-    }
-
-    if (m_DepthStencilView != nullptr)
-    {
-        m_DepthStencilView->Release();
-        m_DepthStencilView = nullptr;
-    }
-
-    if (m_SamplerState != nullptr)
-    {
-        m_SamplerState->Release();
-        m_SamplerState = nullptr;
-    }
-
-    if (m_ConstantBuffer != nullptr)
-    {
-        m_ConstantBuffer->Release();
-        m_ConstantBuffer = nullptr;
-    }
-
-    if (m_ConstBoneBuffer != nullptr)
-    {
-        m_ConstBoneBuffer->Release();
-        m_ConstBoneBuffer = nullptr;
-    }
-
-    if (m_ShadowSamplerState != nullptr)
-    {
-        m_ShadowSamplerState->Release();
-        m_ShadowSamplerState = nullptr;
-    }
-
-    for (int i = 0; i < static_cast<int>(RasterizerMode::MODE_NUM); ++i)
-    {
-        if (m_RasterizerState[i] == nullptr) continue;
-        m_RasterizerState[i]->Release();
-        m_RasterizerState[i] = nullptr;
-    }
-
-    if (m_DepthTextureView != nullptr)
-    {
-        m_DepthTextureView->Release();
-        m_DepthTextureView = nullptr;
-    }
-
-    if (m_DepthRenderTargetView != nullptr)
-    {
-        m_DepthRenderTargetView->Release();
-        m_DepthRenderTargetView = nullptr;
-    }
-
-    if (m_DepthDepthStencilView != nullptr)
-    {
-        m_DepthDepthStencilView->Release();
-        m_DepthDepthStencilView = nullptr;
-    }
-
-    if (m_DepthDepthStencilTexture != nullptr)
-    {
-        m_DepthDepthStencilTexture->Release();
-        m_DepthDepthStencilTexture = nullptr;
-    }
-
-    if (m_DepthTexture != nullptr)
-    {
-        m_DepthTexture->Release();
-        m_DepthTexture = nullptr;
-    }
-
-    if (m_ShadowSamplerState != nullptr)
-    {
-        m_ShadowSamplerState->Release();
-        m_ShadowSamplerState = nullptr;
-    }
-
-    SAFE_DELETE(m_VertexShader);
-    SAFE_DELETE(m_SimpleVertexShader);
-    SAFE_DELETE(m_PixelShader);
-    SAFE_DELETE(m_DepthSkinningVertexShader);
-    SAFE_DELETE(m_DepthVertexShader);
-    SAFE_DELETE(m_DepthPixelShader);
 }
 
 /*
@@ -207,13 +96,13 @@ void DirectGraphics::StartRendering()
 
     // レンダーターゲットビューのクリア
     m_Context->ClearRenderTargetView(
-                m_RenderTargetView, // 対象のレンダーターゲットビュー
+                m_RenderTargetView.Get(), // 対象のレンダーターゲットビュー
                 clear_color         // クリアするビューのカラー
                 );
 
     // 深度ステンシルビューのクリア
     m_Context->ClearDepthStencilView(
-                m_DepthStencilView,                      // 対象のビュー
+                m_DepthStencilView.Get(),                      // 対象のビュー
                 D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, // クリアフラグ
                 1.0f,                                    // 深度クリア値
                 0U                                       // ステンシルクリア値
@@ -222,7 +111,7 @@ void DirectGraphics::StartRendering()
     /*
        出力先の設定
     */
-    m_Context->OMSetRenderTargets(1U, &m_RenderTargetView, m_DepthStencilView);
+    m_Context->OMSetRenderTargets(1U, m_RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
 
 
     // ビューポートの設定
@@ -249,19 +138,19 @@ void DirectGraphics::FinishRendering()
 void DirectGraphics::StartShadwMapRendering()
 {    
     // レンダーターゲットの設定
-    m_Context->OMSetRenderTargets(1U, &m_DepthRenderTargetView, m_DepthDepthStencilView);
+    m_Context->OMSetRenderTargets(1U, m_DepthRenderTargetView.GetAddressOf(), m_DepthDepthStencilView.Get());
     float clear_color[4] = { 0.f,0.f,0.f,1.f };
 
     // レンダーターゲットのクリア
-    m_Context->ClearRenderTargetView(m_DepthRenderTargetView, clear_color);
+    m_Context->ClearRenderTargetView(m_DepthRenderTargetView.Get(), clear_color);
 
     // 深度ステンシルのクリア
-    m_Context->ClearDepthStencilView(m_DepthDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+    m_Context->ClearDepthStencilView(m_DepthDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
     // ビューポートの設定
     D3D11_VIEWPORT vp;
-    vp.Width = WINDOW->GetClientWidth() * 2;
-    vp.Height = WINDOW->GetClientHeight() * 2;
+    vp.Width    = WINDOW->GetClientWidth()  * 2;
+    vp.Height   = WINDOW->GetClientHeight() * 2;
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0.0f;
@@ -271,7 +160,7 @@ void DirectGraphics::StartShadwMapRendering()
 
 void DirectGraphics::SetRasterizerMode(RasterizerMode mode_)
 {
-    m_Context->RSSetState(m_RasterizerState[static_cast<int>(mode_)]);
+    m_Context->RSSetState(m_RasterizerState->GetAddressOf()[static_cast<int>(mode_)]);
 }
 
 void DirectGraphics::SetTexture(ID3D11ShaderResourceView* texture_)
@@ -279,7 +168,7 @@ void DirectGraphics::SetTexture(ID3D11ShaderResourceView* texture_)
     m_Context->PSSetSamplers(
         0U,
         1U,
-        &m_SamplerState);
+        m_SamplerState.GetAddressOf());
 
     m_Context->PSSetShaderResources(
         0U,
@@ -530,7 +419,7 @@ bool DirectGraphics::CreateRenderTargetView()
     }
     
     // RenderTargetViewの作成
-    if (FAILED(m_Device->CreateRenderTargetView(back_buffer, nullptr, &m_RenderTargetView)))
+    if (FAILED(m_Device->CreateRenderTargetView(back_buffer, nullptr, m_RenderTargetView.GetAddressOf())))
     {
         return false;
     }
@@ -603,52 +492,52 @@ bool DirectGraphics::CreateDepthAndStencilView()
     
     // DepthStencilViewの作成
     if (FAILED(m_Device->CreateDepthStencilView(
-        m_DepthStencilTexture,
+        m_DepthStencilTexture.Get(),
         &dsv_desc,
         &m_DepthStencilView)))
     {
         return false;
     }
 
-    m_Context->OMSetRenderTargets(1U, &m_RenderTargetView, m_DepthStencilView);
+    m_Context->OMSetRenderTargets(1U, m_RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
 
     return true;
 }
 
 bool DirectGraphics::CreateShader()
 {
-    m_VertexShader = new VertexShader();
-    if (m_VertexShader->Create(m_Device, "Res/Shader/VertexShader.cso") == false)
+    m_VertexShader = std::make_unique<VertexShader>();
+    if (m_VertexShader->Create(m_Device.Get(), "Res/Shader/VertexShader.cso") == false)
     {
         return false;
     }
 
-    m_PixelShader = new PixelShader();
-    if (m_PixelShader->Create(m_Device, "Res/Shader/PixelShader.cso") == false)
+    m_PixelShader = std::make_unique<PixelShader>();
+    if (m_PixelShader->Create(m_Device.Get(), "Res/Shader/PixelShader.cso") == false)
     {
         return false;
     }
 
-    m_SimpleVertexShader = new VertexShader();
-    if (m_SimpleVertexShader->Create(m_Device, "Res/Shader/SimpleVertexShader.cso") == false)
+    m_SimpleVertexShader = std::make_unique<VertexShader>();
+    if (m_SimpleVertexShader->Create(m_Device.Get(), "Res/Shader/SimpleVertexShader.cso") == false)
     {
         return false;
     }
 
-    m_DepthVertexShader = new VertexShader();
-    if (m_DepthVertexShader->Create(m_Device, "Res/Shader/DepthVertexShader.cso") == false)
+    m_DepthVertexShader = std::make_unique<VertexShader>();
+    if (m_DepthVertexShader->Create(m_Device.Get(), "Res/Shader/DepthVertexShader.cso") == false)
     {
         return false;
     }
 
-    m_DepthPixelShader = new PixelShader();
-    if (m_DepthPixelShader->Create(m_Device, "Res/Shader/DepthPixelShader.cso") == false)
+    m_DepthPixelShader = std::make_unique<PixelShader>();
+    if (m_DepthPixelShader->Create(m_Device.Get(), "Res/Shader/DepthPixelShader.cso") == false)
     {
         return false;
     }
 
-    m_DepthSkinningVertexShader = new VertexShader();
-    if (m_DepthSkinningVertexShader->Create(m_Device, "Res/Shader/DpthSkinningVertexShader.cso") == false)
+    m_DepthSkinningVertexShader = std::make_unique<VertexShader>();
+    if (m_DepthSkinningVertexShader->Create(m_Device.Get(), "Res/Shader/DpthSkinningVertexShader.cso") == false)
     {
         return false;
     }
@@ -666,13 +555,13 @@ bool DirectGraphics::CreateConstantBuffer()
     buffer_desc.MiscFlags           = 0U;
     buffer_desc.StructureByteStride = 0U;
 
-    if (FAILED(m_Device->CreateBuffer(&buffer_desc, nullptr, &m_ConstantBuffer)))
+    if (FAILED(m_Device->CreateBuffer(&buffer_desc, nullptr, m_ConstantBuffer.GetAddressOf())))
     {
         return false;
     }
 
     buffer_desc.ByteWidth = sizeof(ConstBoneBuffer);
-    if (FAILED(m_Device->CreateBuffer(&buffer_desc, nullptr, &m_ConstBoneBuffer)))
+    if (FAILED(m_Device->CreateBuffer(&buffer_desc, nullptr, m_ConstBoneBuffer.GetAddressOf())))
     {
         return false;
     }    
@@ -692,7 +581,7 @@ bool DirectGraphics::CreateTextureSampler()
     sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 
 
-    if (FAILED(m_Device->CreateSamplerState(&sampler_desc, &m_SamplerState)))
+    if (FAILED(m_Device->CreateSamplerState(&sampler_desc, m_SamplerState.GetAddressOf())))
     {
         return false;
     }
@@ -711,7 +600,7 @@ bool DirectGraphics::CreateTextureSampler()
     //sampler_desc.MinLOD         = -FLT_MAX;
     //sampler_desc.MaxLOD         = +FLT_MAX;
 
-    if (FAILED(m_Device->CreateSamplerState(&sampler_desc, &m_ShadowSamplerState)))
+    if (FAILED(m_Device->CreateSamplerState(&sampler_desc, m_ShadowSamplerState.GetAddressOf())))
     {
         return false;
     }
@@ -731,7 +620,7 @@ bool DirectGraphics::CreateRasterizer()
     ras_desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;  //! レンダリングするポリゴンを塗りつぶす
     ras_desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;   //! カリングなし
     ras_desc.FrontCounterClockwise = FALSE;                 //! 時計周りが表、反時計回りが裏
-    if (FAILED(m_Device->CreateRasterizerState(&ras_desc, &m_RasterizerState[static_cast<int>(RasterizerMode::MODE_CULL_NONE)])))
+    if (FAILED(m_Device->CreateRasterizerState(&ras_desc, &m_RasterizerState->GetAddressOf()[static_cast<int>(RasterizerMode::MODE_CULL_NONE)])))
     {
         return false;
     }
@@ -740,7 +629,7 @@ bool DirectGraphics::CreateRasterizer()
         背面カリング
     */
     ras_desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;   //! 背面カリング
-    if (FAILED(m_Device->CreateRasterizerState(&ras_desc, &m_RasterizerState[static_cast<int>(RasterizerMode::MODE_CULL_BACK)])))
+    if (FAILED(m_Device->CreateRasterizerState(&ras_desc, &m_RasterizerState->GetAddressOf()[static_cast<int>(RasterizerMode::MODE_CULL_BACK)])))
     {
         return false;
     }
@@ -749,7 +638,7 @@ bool DirectGraphics::CreateRasterizer()
         ワイヤーフレーム
     */
     ras_desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;  //! ポリゴンを塗りつぶさない
-    if (FAILED(m_Device->CreateRasterizerState(&ras_desc, &m_RasterizerState[static_cast<int>(RasterizerMode::MODE_WIREFRAME)])))
+    if (FAILED(m_Device->CreateRasterizerState(&ras_desc, &m_RasterizerState->GetAddressOf()[static_cast<int>(RasterizerMode::MODE_WIREFRAME)])))
     {
         return false;
     }
@@ -776,7 +665,7 @@ bool DirectGraphics::CreateDepthDSVAndRTV()
     texture_desc.BindFlags          = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
     texture_desc.CPUAccessFlags     = 0U;
 
-    if (FAILED(m_Device->CreateTexture2D(&texture_desc, nullptr, &m_DepthTexture)))
+    if (FAILED(m_Device->CreateTexture2D(&texture_desc, nullptr, m_DepthTexture.GetAddressOf())))
     {
         return false;
     }
@@ -787,18 +676,18 @@ bool DirectGraphics::CreateDepthDSVAndRTV()
     rtv_desc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
     rtv_desc.Texture2D.MipSlice = 0U;
 
-    if (FAILED(m_Device->CreateRenderTargetView(m_DepthTexture, &rtv_desc, &m_DepthRenderTargetView)))
+    if (FAILED(m_Device->CreateRenderTargetView(m_DepthTexture.Get(), &rtv_desc, m_DepthRenderTargetView.GetAddressOf())))
     {
         return false;
     }
     
     texture_desc.Format    = DXGI_FORMAT_D32_FLOAT;
     texture_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-    if (FAILED(m_Device->CreateTexture2D(&texture_desc, nullptr, &m_DepthDepthStencilTexture)))
+    if (FAILED(m_Device->CreateTexture2D(&texture_desc, nullptr, m_DepthDepthStencilTexture.GetAddressOf())))
     {
         return false;
     }
-    if (FAILED(m_Device->CreateDepthStencilView(m_DepthDepthStencilTexture, nullptr, &m_DepthDepthStencilView)))
+    if (FAILED(m_Device->CreateDepthStencilView(m_DepthDepthStencilTexture.Get(), nullptr, m_DepthDepthStencilView.GetAddressOf())))
     {
         return false;
     }
@@ -809,7 +698,7 @@ bool DirectGraphics::CreateDepthDSVAndRTV()
     srv_desc.ViewDimension       = D3D11_SRV_DIMENSION_TEXTURE2D;
     srv_desc.Texture2D.MipLevels = 1U;
 
-    if (FAILED(m_Device->CreateShaderResourceView(m_DepthTexture, &srv_desc, &m_DepthTextureView)))
+    if (FAILED(m_Device->CreateShaderResourceView(m_DepthTexture.Get(), &srv_desc, m_DepthTextureView.GetAddressOf())))
     {
         return false;
     }

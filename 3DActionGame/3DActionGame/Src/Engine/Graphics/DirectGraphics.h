@@ -2,9 +2,14 @@
 #define DIRECTGRAPHICS_H_
 
 #include <d3d11.h>
+#include <wrl.h>
+#include <memory>
 #include "VertexShader.h"
 #include "PixelShader.h"
 #include "../../Utility/GraphicsUtility.h"
+
+
+using namespace Microsoft::WRL;
 
 /**
 * @brief ラスタライズのモード
@@ -42,7 +47,7 @@ public:
 		m_VertexShader(nullptr),
 		m_PixelShader(nullptr),
 		m_SimpleVertexShader(nullptr),
-		m_FeatureLevel(D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_10_0),
+		m_FeatureLevel(D3D_FEATURE_LEVEL_9_1),
 		m_SamplerState(nullptr),
 		m_SampleDesc{ 0 },
 		m_RasterizerState{ nullptr },
@@ -100,14 +105,14 @@ public:
 	* @brief Device取得関数
 	* @return ID3D11Device* Deviceポインタ
 	*/
-	ID3D11Device* GetDevice() { return m_Device; }
+	ID3D11Device* GetDevice() { return m_Device.Get(); }
 
 	/**
 	* @fn ID3D11DeviceContext* GetContext()
 	* @brief Context取得関数
 	* @return ID3D11DeviceContext* Contextのポインタ
 	*/
-	ID3D11DeviceContext* GetContext() { return m_Context; }
+	ID3D11DeviceContext* GetContext() { return m_Context.Get(); }
 
 	/**
 	* @fn void SetRasterizerMode(RasterizerMode mode_)
@@ -123,42 +128,42 @@ public:
 	* @brief スキンメッシュ用のVertexShader取得関数
 	* @return VertexShader* VertexShaderのポインタ
 	*/
-	VertexShader* GetVertexShader()	{ return m_VertexShader; }
+	VertexShader* GetVertexShader()	{ return m_VertexShader.get(); }
 
 	/**
 	* @fn PixelShader* GetPixelShader()
 	* @brief PixelShader取得関数
 	* @return PixelShader* PixelShaderのポインタ
 	*/
-	PixelShader* GetPixelShader() { return m_PixelShader; }
+	PixelShader* GetPixelShader() { return m_PixelShader.get(); }
 
 	/**
 	* @fn VertexShader* GetSimpleVertexShader()
 	* @brief スタティックメッシュ用のVertexShader取得関数
 	* @return VertexShader* VertexShaderのポインタ
 	*/
-	VertexShader* GetSimpleVertexShader() { return m_SimpleVertexShader; }
+	VertexShader* GetSimpleVertexShader() { return m_SimpleVertexShader.get(); }
 
 	/**
 	* @fn VertexShader* GetDepthVertexShader()
 	* @brief シャドウマップ用のVertexShader取得関数
 	* @return VertexShader* VertexShaderのポインタ
 	*/
-	VertexShader* GetDepthVertexShader() { return m_DepthVertexShader; }
+	VertexShader* GetDepthVertexShader() { return m_DepthVertexShader.get(); }
 
 	/**
 	* @fn PixelShader* GetDepthPixelShader()
 	* @brief シャドウマップ用のPixelShader取得関数
 	* @return PixelShader* PixelShaderのポインタ
 	*/
-	PixelShader* GetDepthPixelShader() { return m_DepthPixelShader; }
+	PixelShader* GetDepthPixelShader() { return m_DepthPixelShader.get(); }
 
 	/**
 	* @fn VertexShader* GetDepthSkinningVertexShader()
 	* @brief スキニングするシャドウマップ用のVertexShader取得関数
 	* @return VertexShader* VertexShaderのポインタ
 	*/
-	VertexShader* GetDepthSkinningVertexShader() { return m_DepthSkinningVertexShader; }
+	VertexShader* GetDepthSkinningVertexShader() { return m_DepthSkinningVertexShader.get(); }
 
 public:
 
@@ -167,7 +172,7 @@ public:
 	* @brief モデル毎に必要な汎用バッファの取得関数
 	* @return ID3D11Buffer* ID3D11Bufferのポインタ
 	*/
-	ID3D11Buffer* GetConstantBuffer()  { return m_ConstantBuffer; }
+	ID3D11Buffer* GetConstantBuffer()  { return m_ConstantBuffer.Get(); }
 	
 	/**
 	* @fn ConstantBuffer* GetConstantBufferData()
@@ -181,7 +186,7 @@ public:
 	* @brief 姿勢行列格納用の汎用バッファ取得関数
 	* @return ID3D11Buffer* ID3D11Bufferのポインタ
 	*/
-	ID3D11Buffer* GetConstBoneBuffer() { return m_ConstBoneBuffer; }
+	ID3D11Buffer* GetConstBoneBuffer() { return m_ConstBoneBuffer.Get(); }
 
 	/**
 	* @fn ConstBoneBuffer* GetConstBoneBufferData()
@@ -206,8 +211,8 @@ public:
 	*/
 	void SetMaterial(ObjMaterial* material_);
 
-	ID3D11ShaderResourceView* GetDepthTextureView() { return m_DepthTextureView; }
-	ID3D11SamplerState* GetShadowMapSamplerState() { return m_ShadowSamplerState; }
+	ID3D11ShaderResourceView* GetDepthTextureView() { return m_DepthTextureView.Get(); }
+	ID3D11SamplerState* GetShadowMapSamplerState() { return m_ShadowSamplerState.Get(); }
 
 private:
 	/**
@@ -288,40 +293,39 @@ private:
 	* @brief ライトを設定する関数
 	*/
 	void SetUpLight();
-
+	
 private:
-	ID3D11Device*			m_Device;				//! デバイス
-	ID3D11DeviceContext*	m_Context;				//! コンテキスト
-	D3D_FEATURE_LEVEL 		m_FeatureLevel;			//! フューチャーレベル
-	IDXGISwapChain*			m_SwapChain;			//! スワップチェイン
-	ID3D11RenderTargetView* m_RenderTargetView;		//! レンダーターゲットビュー
-	ID3D11Texture2D*		m_DepthStencilTexture;	//! 深度ステンシル用のテクスチャ
-	ID3D11DepthStencilView* m_DepthStencilView;		//! 深度ステンシルビュー
-	DXGI_SAMPLE_DESC		m_SampleDesc;			//! MSAA使用時に使うマルチサンプリングのパラメータ変数
-
-	ID3D11RasterizerState* m_RasterizerState[static_cast<int>(RasterizerMode::MODE_NUM)];
+	ComPtr<ID3D11Device>			m_Device;				//! デバイス
+	ComPtr<ID3D11DeviceContext>		m_Context;				//! コンテキスト
+	ComPtr<IDXGISwapChain>			m_SwapChain;			//! スワップチェイン
+	ComPtr<ID3D11RenderTargetView>	m_RenderTargetView;		//! レンダーターゲットビュー
+	ComPtr<ID3D11Texture2D>			m_DepthStencilTexture;	//! 深度ステンシル用のテクスチャ
+	ComPtr<ID3D11DepthStencilView>  m_DepthStencilView;		//! 深度ステンシルビュー
+	D3D_FEATURE_LEVEL 				m_FeatureLevel;			//! フューチャーレベル
+	DXGI_SAMPLE_DESC				m_SampleDesc;			//! MSAA使用時に使うマルチサンプリングのパラメータ変数
+	ComPtr<ID3D11RasterizerState>   m_RasterizerState[static_cast<int>(RasterizerMode::MODE_NUM)];	//! ラスタライザ配列
 	
-	ID3D11SamplerState*		m_SamplerState;			//! モデルのテクスチャ用のテクスチャサンプラー
+	ComPtr<ID3D11SamplerState>		m_SamplerState;			//! モデルのテクスチャ用のテクスチャサンプラー
 
-	ID3D11Buffer*			m_ConstantBuffer;		//! モデル用のコンストバッファ
-	ConstantBuffer			m_ConstantBufferData;	//!	モデル用のコンストバッファ
-	ID3D11Buffer*			m_ConstBoneBuffer;		//! ボーン用のコンストバッファ
-	ConstBoneBuffer			m_ConstBoneBufferData;	//! ボーン用のコンストバッファ
+	ComPtr<ID3D11Buffer>			m_ConstantBuffer;		//! モデル用のコンストバッファ
+	ConstantBuffer					m_ConstantBufferData;	//!	モデル用のコンストバッファ
+	ComPtr<ID3D11Buffer>			m_ConstBoneBuffer;		//! ボーン用のコンストバッファ
+	ConstBoneBuffer					m_ConstBoneBufferData;	//! ボーン用のコンストバッファ
 	
-	VertexShader*			m_VertexShader;			//! スキンメッシュ用の頂点シェーダ
-	VertexShader*			m_SimpleVertexShader;	//!	スタティックメッシュ用の頂点シェーダ
-	PixelShader*			m_PixelShader;			//! 通常描画用のピクセルシェーダ
+	std::unique_ptr<VertexShader>   m_VertexShader;			//! スキンメッシュ用の頂点シェーダ
+	std::unique_ptr<VertexShader>   m_SimpleVertexShader;	//!	スタティックメッシュ用の頂点シェーダ
+	std::unique_ptr<PixelShader>	m_PixelShader;			//! 通常描画用のピクセルシェーダ
 
 	/* シャドウマップ用 */
-	ID3D11ShaderResourceView* m_DepthTextureView;			//! 
-	ID3D11RenderTargetView*   m_DepthRenderTargetView;
-	ID3D11DepthStencilView*   m_DepthDepthStencilView;
-	ID3D11Texture2D*		  m_DepthDepthStencilTexture;
-	ID3D11Texture2D*		  m_DepthTexture;				//! 
-	ID3D11SamplerState*		  m_ShadowSamplerState;			//! シャドウマップ用のテクスチャサンプラー
-	VertexShader*			  m_DepthSkinningVertexShader;	//! 頂点シェーダ
-	VertexShader*			  m_DepthVertexShader;			//! 頂点シェーダ
-	PixelShader*			  m_DepthPixelShader;			//! ピクセルシェーダ
+	ComPtr<ID3D11ShaderResourceView> m_DepthTextureView;			//! 
+	ComPtr<ID3D11RenderTargetView>   m_DepthRenderTargetView;
+	ComPtr<ID3D11DepthStencilView>   m_DepthDepthStencilView;
+	ComPtr<ID3D11Texture2D>			 m_DepthDepthStencilTexture;
+	ComPtr<ID3D11Texture2D>		     m_DepthTexture;				//! 
+	ComPtr<ID3D11SamplerState>		 m_ShadowSamplerState;			//! シャドウマップ用のテクスチャサンプラー
+	std::unique_ptr<VertexShader>    m_DepthSkinningVertexShader;	//! 頂点シェーダ
+	std::unique_ptr<VertexShader>	 m_DepthVertexShader;			//! 頂点シェーダ
+	std::unique_ptr<PixelShader>     m_DepthPixelShader;			//! ピクセルシェーダ
 
 };
 

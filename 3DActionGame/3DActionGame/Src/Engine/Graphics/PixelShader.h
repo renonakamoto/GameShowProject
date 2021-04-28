@@ -2,7 +2,9 @@
 #define PIXELSHADER_H_
 
 #include <d3d11.h>
+#include <wrl.h>
 #include "ShaderBase.h"
+
 
 /**
 * @brief ピクセルシェーダ扱うクラス
@@ -21,12 +23,7 @@ public:
 	* @brief デストラクタ
 	*/
 	~PixelShader() final
-	{
-		if (m_Interface != nullptr)
-		{
-			m_Interface->Release();
-		}
-	}
+	{}
 
 	/**
 	* @fn bool Create(ID3D11Device* device_, const char* fileName_))
@@ -45,11 +42,11 @@ public:
 	*/
 	ID3D11PixelShader* GetShaderInterface()
 	{
-		return m_Interface;
+		return m_Interface.Get();
 	}
 
 private:
-	ID3D11PixelShader* m_Interface;	//! ピクセルシェーダーインターフェース
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> m_Interface;	//! ピクセルシェーダーインターフェース
 };
 
 #endif

@@ -242,7 +242,7 @@ void FbxModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
 {
 	DirectGraphics*      graphics = GRAPHICS;
 	ID3D11DeviceContext* context  = graphics->GetContext();
-	context->IASetInputLayout(m_InputLayout);
+	context->IASetInputLayout(m_InputLayout.Get());
 
 	// ワールド行列の作成
 	DirectX::XMMATRIX mat_world, mat_trans, mat_rot_x, mat_rot_y, mat_rot_z, mat_scale;
@@ -263,9 +263,9 @@ void FbxModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
 	for (auto& mesh : m_MeshList)
 	{
 		// 頂点バッファをバインド
-		context->IASetVertexBuffers(0U, 1U, &mesh.VertexBuffer, &strides, &offsets);
+		context->IASetVertexBuffers(0U, 1U, mesh.VertexBuffer.GetAddressOf(), &strides, &offsets);
 		// インデックスバッファをバインド
-		context->IASetIndexBuffer(mesh.IndexBuffer, DXGI_FORMAT_R32_UINT, 0U);
+		context->IASetIndexBuffer(mesh.IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0U);
 
 		// ボーン行列
 		Motion* motion = &m_Motion[motionName_];
@@ -289,7 +289,7 @@ void FbxModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
 
 		if (m_MaterialLinks.count(mesh.MaterialName) > 0)
 		{
-			graphics->SetTexture(m_MaterialLinks[mesh.MaterialName]);
+			graphics->SetTexture(m_MaterialLinks[mesh.MaterialName].Get());
 			// コンスタントバッファにマテリアル情報を保存する
 			graphics->SetMaterial(nullptr);
 		}
@@ -885,7 +885,7 @@ bool FbxModel::LoadTexute(ID3D11Device* device_, FbxFileTexture* texture_, std::
 		image.GetImages(),
 		image.GetImageCount(),
 		metadata,
-		&m_Textures[file_name])))
+		m_Textures[file_name].GetAddressOf())))
 	{
 		FbxFree(file_name);
 		return false;
@@ -933,7 +933,7 @@ bool FbxModel::CreateVertexBuffer(ID3D11Device* device_)
 		if (FAILED(device_->CreateBuffer(
 			&buffer_desc,										// バッファ情報
 			&init_data,										    // リソース情報
-			&mesh.VertexBuffer)))								// 作成されたバッファの格納先
+			mesh.VertexBuffer.GetAddressOf())))								// 作成されたバッファの格納先
 		{
 			return false;
 		}
@@ -964,7 +964,7 @@ bool FbxModel::CreateIndexBuffer(ID3D11Device* device_)
 		if (FAILED(device_->CreateBuffer(
 			&buffer_desc,			// バッファ情報
 			&sub_resource,			// リソース情報
-			&mesh.IndexBuffer)))	// 作成されたバッファの格納先
+			mesh.IndexBuffer.GetAddressOf())))	// 作成されたバッファの格納先
 		{
 			return false;
 		}
@@ -990,7 +990,7 @@ bool FbxModel::CreateInputLayout(ID3D11Device* device_, VertexShader* vertexShad
 		ARRAYSIZE(vertex_desc),		// 配列サイズ
 		vertexShader_->GetData(),	// レイアウトと関連付ける頂点シェーダのデータ
 		vertexShader_->GetSize(),	// レイアウトと関連付ける頂点シェーダのサイズ
-		&m_InputLayout)))			// 作成された頂点レイアウトの格納先
+		m_InputLayout.ReleaseAndGetAddressOf())))			// 作成された頂点レイアウトの格納先
 	{
 		return false;
 	}

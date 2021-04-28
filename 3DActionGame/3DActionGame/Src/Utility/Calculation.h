@@ -163,6 +163,22 @@ public:
 	static float Length(DirectX::XMFLOAT3 vec_);
 
 	/**
+	* @fn DirectX::XMFLOAT3 InvVec(DirectX::XMFLOAT3 vec_)
+	* @brief 逆ベクトルを返す関数
+	* @param[in] vec_ ベクトル
+	* @return float 逆ベクトル
+	*/
+	static DirectX::XMFLOAT3 InvVec(DirectX::XMFLOAT3 vec_);
+	
+	/**
+	* @fn DirectX::XMFLOAT2 InvVec(DirectX::XMFLOAT2 vec_)
+	* @brief 逆ベクトルを返す関数
+	* @param[in] vec_ ベクトル
+	* @return float 逆ベクトル
+	*/
+	static DirectX::XMFLOAT2 InvVec(DirectX::XMFLOAT2 vec_);
+
+	/**
 	* @fn void Clamp(float& value_, float min_, float max_)
 	* @brief value_を最小値から最大値以内に収める関数
 	* @param[out] value_ クランプを掛ける値

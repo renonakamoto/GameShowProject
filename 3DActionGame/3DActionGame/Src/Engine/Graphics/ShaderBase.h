@@ -3,6 +3,7 @@
 
 #include <d3d11.h>
 
+
 /**
 * @brief シェーダーの基底クラス
 */
@@ -21,7 +22,12 @@ public:
 	* @brief デストラクタ
 	*/
 	virtual ~ShaderBase()
-	{}
+	{
+		if (m_Data)
+		{
+			delete[] m_Data;
+		}
+	}
 
 	/**
 	* @fn bool Create(ID3D11Device* device_, const char* fileName_)

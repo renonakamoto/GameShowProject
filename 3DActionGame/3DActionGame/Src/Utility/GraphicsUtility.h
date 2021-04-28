@@ -5,6 +5,9 @@
 #include <DirectXMath.h>
 #include <string>
 #include <vector>
+#include <wrl.h>
+
+using namespace Microsoft::WRL;
 
 static const int BONE_MAX = 255;
 
@@ -139,8 +142,8 @@ struct ObjMaterial
 */
 struct MeshData
 {
-    ID3D11Buffer*        VertexBuffer;  //! バーテックスバッファ(シェーダーに送る用)
-    ID3D11Buffer*        IndexBuffer;   //! インデックスバッファ(シェーダーに送る用)
+    ComPtr<ID3D11Buffer> VertexBuffer;  //! バーテックスバッファ(シェーダーに送る用)
+    ComPtr<ID3D11Buffer> IndexBuffer;   //! インデックスバッファ(シェーダーに送る用)
     std::vector<CVertex> Vertices;      //! バーテックスバッファ
     std::vector<UINT>	 Indices;       //! インデックスバッファ
     std::string			 MaterialName;  //! マテリアル名
@@ -152,8 +155,14 @@ struct MeshData
         VertexBuffer(nullptr),
         IndexBuffer(nullptr)
     {
-        if (VertexBuffer)VertexBuffer->Release();
-        if (IndexBuffer) IndexBuffer->Release();
+    }
+
+    ~MeshData()
+    {
+#ifdef _DEBUG
+        VertexBuffer.Reset();
+        IndexBuffer.Reset();
+#endif
     }
 };
 
@@ -162,11 +171,11 @@ struct MeshData
 */
 struct TextureData
 {
-    ID3D11Buffer*             VertexBuffer; //! 頂点バッファ
-    ID3D11Buffer*             IndexBuffer;  //! インデックスバッファ
-    ID3D11ShaderResourceView* Texture;      //! テクスチャデータ
-    UINT                      Width;        //! 横幅
-    UINT                      Height;       //! 縦幅
+    ComPtr<ID3D11Buffer>             VertexBuffer; //! 頂点バッファ
+    ComPtr<ID3D11Buffer>             IndexBuffer;  //! インデックスバッファ
+    ComPtr<ID3D11ShaderResourceView> Texture;      //! テクスチャデータ
+    UINT                             Width;        //! 横幅
+    UINT                             Height;       //! 縦幅
 
     /**
     * @brief コンストラクタ
@@ -181,9 +190,11 @@ struct TextureData
     */
     ~TextureData()
     {
-        if (VertexBuffer)VertexBuffer->Release();
-        if (IndexBuffer) IndexBuffer->Release();
-        if (Texture)     Texture->Release();
+#ifdef _DEBUG
+        VertexBuffer.Reset();
+        IndexBuffer.Reset();
+        Texture.Reset();
+#endif
     }
 };
 

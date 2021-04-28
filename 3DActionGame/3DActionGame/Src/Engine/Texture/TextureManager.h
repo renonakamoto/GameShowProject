@@ -30,9 +30,6 @@ public:
 	~TextureManager()
 	{
 		AllRelease();
-		if (m_InputLayout)m_InputLayout->Release();
-		if (m_SamplerState)m_SamplerState->Release();
-		if (m_ConstantBuffer)m_ConstantBuffer->Release();
 	}
 	
 	/**
@@ -133,11 +130,11 @@ private:
 
 private:
 	std::map<std::string, TextureData>  m_Textures;				//! テクスチャ保存用マップ
-	VertexShader*						m_VertexShader;			//! 頂点シェーダー
-	PixelShader*						m_PixelShader;			//! ピクセルシェーダ
-	ID3D11InputLayout*					m_InputLayout;			//! 入力レイアウト
-	ID3D11SamplerState*					m_SamplerState;			//! サンプラーステート
-	ID3D11Buffer*						m_ConstantBuffer;		//! 定数バッファオブジェクト
+	std::unique_ptr<VertexShader>		m_VertexShader;			//! 頂点シェーダー
+	std::unique_ptr<PixelShader>		m_PixelShader;			//! ピクセルシェーダ
+	ComPtr<ID3D11InputLayout>			m_InputLayout;			//! 入力レイアウト
+	ComPtr<ID3D11SamplerState>			m_SamplerState;			//! サンプラーステート
+	ComPtr<ID3D11Buffer>				m_ConstantBuffer;		//! 定数バッファオブジェクト
 	ConstantBuffer2D					m_ConstantBufferData;	//! 定数バッファ
 
 };

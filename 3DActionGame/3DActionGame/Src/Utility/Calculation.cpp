@@ -122,6 +122,21 @@ float Calculation::Length(DirectX::XMFLOAT3 vec_)
 	return sqrtf(x_squared + y_squared + z_squared);
 }
 
+DirectX::XMFLOAT3 Calculation::InvVec(DirectX::XMFLOAT3 vec_)
+{
+	float inv_x = -vec_.x;
+	float inv_y = -vec_.y;
+	float inv_z = -vec_.z;
+	return DirectX::XMFLOAT3(inv_x, inv_y, inv_z);
+}
+
+DirectX::XMFLOAT2 Calculation::InvVec(DirectX::XMFLOAT2 vec_)
+{
+	float inv_x = -vec_.x;
+	float inv_y = -vec_.y;
+	return DirectX::XMFLOAT2(inv_x, inv_y);
+}
+
 void Calculation::Clamp(float& value_, float min_, float max_)
 {
 	if (value_ > max_) {

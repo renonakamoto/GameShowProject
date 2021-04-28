@@ -7,8 +7,8 @@ bool VertexShader::Create(ID3D11Device* device_, const char* fileName_)
 		return false;
 	}
 
-
-	if (FAILED(device_->CreateVertexShader(m_Data, m_Size, nullptr, &m_Interface)))
+	
+	if (FAILED(device_->CreateVertexShader(m_Data, m_Size, nullptr, m_Interface.GetAddressOf())))
 	{
 		return false;
 	}

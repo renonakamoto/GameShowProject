@@ -95,10 +95,9 @@ private:
 	{}
 
 private:
+	ObjModel*			 m_Model;											//! ステージのモデル
 	std::vector<CVertex> m_MapData[STAGE_SPLITNUM + 1][STAGE_SPLITNUM + 1];	//! 分割したポリゴンを保存する変数
-	float m_CellSize;	//! ステージを分割した際の1マスのサイズ
-
-	ObjModel* m_Model;	//! ステージのモデル
+	float				 m_CellSize;										//! ステージを分割した際の1マスのサイズ
 };
 
 #endif

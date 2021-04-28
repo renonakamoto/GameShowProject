@@ -89,14 +89,14 @@ private:
 	void Release()override;
 
 private:
-	SkeletalModel* m_Model;	//! モデル
-	EnemyState* m_State;	//! ステートクラス
-	int m_Hp;				//! ヒットポイント
-	bool m_IsHit;			//! 攻撃をくらったかどうか
-	bool m_IsDeath;			//! 死んでいるかどうか
-	DirectX::XMFLOAT3	m_EnemySize; //! エネミーの大きさ
+	std::unique_ptr<SkeletalModel> m_Model;		//! モデル
+	EnemyState*					   m_State;		//! ステートクラス
+	int							   m_Hp;		//! ヒットポイント
+	bool						   m_IsHit;		//! 攻撃をくらったかどうか
+	bool						   m_IsDeath;	//! 死んでいるかどうか
+	DirectX::XMFLOAT3			   m_EnemySize; //! エネミーの大きさ
 
-	Stage* m_Stage;			//! ステージの参照用変数
+	Stage*						   m_Stage;		//! ステージの参照用変数
 };
 
 #endif

@@ -8,7 +8,7 @@ EnemyState* EnemyDeathState::CheckState(Enemy* enemy_)
 
 void EnemyDeathState::Update(Enemy* enemy_)
 {
-	SkeletalModel* model = enemy_->m_Model;
+	SkeletalModel* model = enemy_->m_Model.get();
 
 	// 死亡モーションが終了したら死亡フラグをtrueにする
 	if (model->GetCurrentFrame() >= model->GetModel()->GetMotionData("Death")->FrameNum - 2) {

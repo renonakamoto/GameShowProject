@@ -19,6 +19,7 @@ public:
 
 	/**
 	* @brief コンストラクタ
+	* @param[in] model_ モデルデータ
 	*/
 	SkeletalModel(FbxModel* model_) :
 		SkeletalModel(model_, "")
@@ -26,6 +27,8 @@ public:
 
 	/**
 	* @brief コンストラクタ
+	* @param[in] model_ モデルデータ
+	* @param[in] motionName_ 初期化モーション名
 	*/
 	SkeletalModel(FbxModel* model_, std::string motionName_) :
 		m_Model(model_),
@@ -89,7 +92,6 @@ public:
 	* @fn FbxModel* GetModel()
 	* @brief モデルデータの取得関数
 	* @return FbxModel* モデルデータのポインタ
-	* @details nullptrの可能性もあるので、注意
 	*/
 	FbxModel* GetModel() { return m_Model; }
 	

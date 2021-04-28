@@ -2,7 +2,9 @@
 #define VERTEX_SHADER_H_
 
 #include <d3d11.h>
+#include <wrl.h>
 #include "ShaderBase.h"
+
 
 /**
 * @brief バーテックスシェーダーを扱うクラス
@@ -21,12 +23,7 @@ public:
 	* @brief デストラクタ
 	*/
 	~VertexShader() final
-	{
-		if (m_Interface)
-		{
-			m_Interface->Release();
-		}
-	}
+	{}
 
 	/**
 	* @fn bool Create(ID3D11Device* device_, const char* fileName_))
@@ -45,11 +42,11 @@ public:
 	*/
 	ID3D11VertexShader* GetShaderInterface()
 	{
-		return m_Interface;
+		return m_Interface.Get();
 	}
 
 private:
-	ID3D11VertexShader* m_Interface;	//! バーテックスシェーダーインターフェース
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_Interface;	//! バーテックスシェーダーインターフェース
 	
 };
 

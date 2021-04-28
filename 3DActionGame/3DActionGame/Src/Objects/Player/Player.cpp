@@ -10,7 +10,7 @@
 void Player::Init()
 {
 	// モデル情報の取得
-	m_Model = new SkeletalModel(FbxStorage::GetInstance()->GetModel("Ekard"));
+	m_Model = std::make_unique<SkeletalModel>(FbxStorage::GetInstance()->GetModel("Ekard"));
 	
 	// プレイヤーステートの初期化
 	m_State = PlayerIdleState::GetInstance();
@@ -45,7 +45,7 @@ void Player::Init()
 	// コリジョンマネージャーに登録
 	CollisionManager::GetInstance()->Register(this);
 
-	m_AttackVolume = new ShapeOBB(shape_pos, m_AttackVolumLength.x, m_AttackVolumLength.y, m_AttackVolumLength.z);
+	m_AttackVolume = std::make_unique<ShapeOBB>(shape_pos, m_AttackVolumLength.x, m_AttackVolumLength.y, m_AttackVolumLength.z);
 }
 
 void Player::Update()
@@ -130,12 +130,14 @@ void Player::Damage(int damageNum_)
 
 void Player::Release()
 {
-	delete m_AttackVolume;
-	m_AttackVolume = nullptr;
+	// 登録解除
+	CollisionManager::GetInstance()->Release(this);
 }
 
 void Player::Attack()
 {
+	if (!m_AttackVolume) return;
+
 	// 当たり判定の更新
 	DirectX::XMFLOAT3 shape_pos = Calculation::Add(m_Pos, Calculation::Mul(m_DirectionVec, m_AttackForwardDistance));
 	shape_pos.y = m_Pos.y + (m_PlayerSize.y / 2.f);
@@ -147,14 +149,14 @@ void Player::Attack()
 	std::vector<Object3D*> hit_list;
 	CollisionManager::GetInstance()->CheckHitObjects(*m_AttackVolume, &hit_list);
 	for (auto obj : hit_list) {
-		// 敵に当たっていたら
-		if (obj->GetTag() == "Enemy") {
-			// 敵にダウンキャスト
-			Enemy* enemy = dynamic_cast<Enemy*>(obj);
-			if (enemy) {
-				// 敵にダメージを与える
-				enemy->Damage(m_AttackPower);
-			}
+		if (obj->GetTag() != "Enemy") continue;
+		
+		// tagがEnemyの時
+		// Enemyにダウンキャスト
+		Enemy* enemy = dynamic_cast<Enemy*>(obj);
+		if (enemy) {
+			// 敵にダメージを与える
+			enemy->Damage(m_AttackPower);
 		}
 	}
 }
@@ -177,6 +179,7 @@ void Player::Move(float x_, float z_)
 	{
 		// 移動する前に座標を保存する
 		m_OldPos = m_Pos;
+
 		// 移動方向を算出
 		float angle = atan2f(m_Velocity.x, m_Velocity.z);
 		m_Rot.y = DirectX::XMConvertToDegrees(angle);

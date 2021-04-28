@@ -71,7 +71,7 @@ void Enemy::Damage(int damageNum_)
 void Enemy::Init()
 {
 	// モデル情報の取得
-	m_Model = new SkeletalModel(FbxStorage::GetInstance()->GetModel("Enemy"));
+	m_Model = std::make_unique<SkeletalModel>(FbxStorage::GetInstance()->GetModel("Enemy"));
 	
 	// ステートの初期化
 	m_State = EnemyIdleState::GetInstance();
@@ -97,6 +97,4 @@ void Enemy::Init()
 void Enemy::Release()
 {
 	CollisionManager::GetInstance()->Release(this);	
-	delete m_Model;
-	m_Model = nullptr;
 }

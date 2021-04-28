@@ -158,23 +158,23 @@ void ObjModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
     DirectX::XMStoreFloat4x4(&graphics->GetConstantBufferData()->World, DirectX::XMMatrixTranspose(world_matrix));
 
     // 入力レイアウトのバインド
-    context->IASetInputLayout(m_InputLayout);    
+    context->IASetInputLayout(m_InputLayout.Get());    
 
     UINT strides = sizeof(CVertex);
     UINT offsets = 0U;
     for (MeshData& mesh : m_MeshList)
     {
         // 頂点バッファをバインド
-        context->IASetVertexBuffers(0U, 1U, &mesh.VertexBuffer, &strides, &offsets);
+        context->IASetVertexBuffers(0U, 1U, mesh.VertexBuffer.GetAddressOf(), &strides, &offsets);
         // インデックスバッファをバインド
-        context->IASetIndexBuffer(mesh.IndexBuffer, DXGI_FORMAT_R32_UINT, 0U);
+        context->IASetIndexBuffer(mesh.IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0U);
 
         // マテリアル設定
         graphics->SetMaterial(&m_Materials[mesh.MaterialName]);
 
         if (m_Textures.count(m_Materials[mesh.MaterialName].TextureKeyWord) > 0)
         {
-            graphics->SetTexture(m_Textures[m_Materials[mesh.MaterialName].TextureKeyWord]);
+            graphics->SetTexture(m_Textures[m_Materials[mesh.MaterialName].TextureKeyWord].Get());
         }
         else
         {
@@ -503,7 +503,7 @@ bool ObjModel::CreateVertexBuffer(ID3D11Device* device_)
         /*
         * D3D11_BUFFER_DESCとD3D11_SUBRESOURCE_DATAの情報をもとにバッファを作成する
         */
-        if (FAILED(device_->CreateBuffer(&buffer_desc, &sub_resource_data, &mesh.VertexBuffer)))
+        if (FAILED(device_->CreateBuffer(&buffer_desc, &sub_resource_data, mesh.VertexBuffer.GetAddressOf())))
         {
             return false;
         }
@@ -530,7 +530,7 @@ bool ObjModel::CreateIndexBuffer(ID3D11Device* device_)
         index_init_data.SysMemSlicePitch = 0;
 
 
-        if (FAILED(device_->CreateBuffer(&index_buffer_desc, &index_init_data, &mesh.IndexBuffer)))
+        if (FAILED(device_->CreateBuffer(&index_buffer_desc, &index_init_data, mesh.IndexBuffer.GetAddressOf())))
         {
             return false;
         }
@@ -553,7 +553,7 @@ bool ObjModel::CreateInputLayout(ID3D11Device* device, VertexShader* vertex_shad
         ARRAYSIZE(vertex_desc),		// 配列サイズ
         vertex_shader->GetData(),	// レイアウトと関連付ける頂点シェーダのデータ
         vertex_shader->GetSize(),	// レイアウトと関連付ける頂点シェーダのサイズ
-        &m_InputLayout)))			// 作成された頂点レイアウトの格納先
+        m_InputLayout.GetAddressOf())))			// 作成された頂点レイアウトの格納先
     {
         return false;
     }

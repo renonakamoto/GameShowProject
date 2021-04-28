@@ -25,19 +25,7 @@ public:
 	* @brief デストラクタ
 	*/
 	~ObjModel()
-	{
-		if (m_InputLayout)m_InputLayout->Release();
-		if (!m_Textures.empty())
-		{
-			for (auto tex : m_Textures)
-			{
-				if (tex.second == nullptr) continue;
-				tex.second->Release();
-				tex.second = nullptr;
-			}
-			m_Textures.clear();
-		}
-	}
+	{}
 
 	/**
 	* @fn bool LoadTexute(ID3D11Device* device_, FbxFileTexture* texture_, std::string& keyword_)
@@ -79,9 +67,9 @@ private:
 	bool CreateInputLayout(ID3D11Device* device, VertexShader* vertex_shader);
 
 private:
-	ID3D11InputLayout*								 m_InputLayout;	//! 入力レイアウト
-	std::map <std::string, ObjMaterial>			     m_Materials;	//! マテリアル
-	std::map<std::string, ID3D11ShaderResourceView*> m_Textures;	//! テクスチャ
+	ComPtr<ID3D11InputLayout>								m_InputLayout;	//! 入力レイアウト
+	std::map <std::string, ObjMaterial>						m_Materials;	//! マテリアル
+	std::map<std::string, ComPtr<ID3D11ShaderResourceView>> m_Textures;		//! テクスチャ
 };
 
 #endif
