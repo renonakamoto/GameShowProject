@@ -317,15 +317,16 @@ private:
 	std::unique_ptr<PixelShader>	m_PixelShader;			//! 通常描画用のピクセルシェーダ
 
 	/* シャドウマップ用 */
-	ComPtr<ID3D11ShaderResourceView> m_DepthTextureView;			//! 
-	ComPtr<ID3D11RenderTargetView>   m_DepthRenderTargetView;
-	ComPtr<ID3D11DepthStencilView>   m_DepthDepthStencilView;
-	ComPtr<ID3D11Texture2D>			 m_DepthDepthStencilTexture;
-	ComPtr<ID3D11Texture2D>		     m_DepthTexture;				//! 
+	ComPtr<ID3D11RenderTargetView>   m_DepthRenderTargetView;		//! マルチレンダリング用レンダーターゲットビュー
+	ComPtr<ID3D11Texture2D>		     m_DepthTexture;				//! マルチレンダリング用レンダーターゲットテクスチャ
+	ComPtr<ID3D11ShaderResourceView> m_DepthTextureView;			//! マルチレンダリング用テクスチャ
+	ComPtr<ID3D11Texture2D>			 m_DepthDepthStencilTexture;	//! 深度ステンシル用テクスチャ
+	ComPtr<ID3D11DepthStencilView>   m_DepthDepthStencilView;		//! 深度ステンシルビュー
 	ComPtr<ID3D11SamplerState>		 m_ShadowSamplerState;			//! シャドウマップ用のテクスチャサンプラー
-	std::unique_ptr<VertexShader>    m_DepthSkinningVertexShader;	//! 頂点シェーダ
-	std::unique_ptr<VertexShader>	 m_DepthVertexShader;			//! 頂点シェーダ
-	std::unique_ptr<PixelShader>     m_DepthPixelShader;			//! ピクセルシェーダ
+	
+	std::unique_ptr<VertexShader>    m_DepthSkinningVertexShader;	//! シャドウマップ用スキニング頂点シェーダ
+	std::unique_ptr<VertexShader>	 m_DepthVertexShader;			//! シャドウマップ用通常頂点シェーダ
+	std::unique_ptr<PixelShader>     m_DepthPixelShader;			//! シャドウマップ用ピクセルシェーダ
 
 };
 

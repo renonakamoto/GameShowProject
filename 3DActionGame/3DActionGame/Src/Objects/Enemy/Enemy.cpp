@@ -88,7 +88,7 @@ void Enemy::Init()
 	// 当たり判定用OBBの初期化
 	DirectX::XMFLOAT3 shape_pos = m_Pos;
 	shape_pos.y = m_Pos.y + m_EnemySize.y / 2;
-	m_Shape = new ShapeOBB(shape_pos, m_EnemySize.x / 2, m_EnemySize.y / 2, m_EnemySize.z / 2);
+	m_Shape = std::make_shared<ShapeOBB>(shape_pos, m_EnemySize.x / 2, m_EnemySize.y / 2, m_EnemySize.z / 2);
 	
 	// コリジョンマネージャーに登録
 	CollisionManager::GetInstance()->Register(this);

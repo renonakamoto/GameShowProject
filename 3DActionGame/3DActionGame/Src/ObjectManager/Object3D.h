@@ -1,6 +1,7 @@
 ﻿#ifndef OBJECT3D_H_
 #define OBJECT3D_H_
 
+#include <memory>
 #include "GameObject.h"
 #include "../CollisionManager/Shape/3D/Shape3D.h"
 
@@ -42,9 +43,7 @@ public:
 	* @brief デストラクタ
 	*/
 	virtual ~Object3D()
-	{
-		Release();
-	}
+	{}
 
 	/**
 	* @fn void Init()
@@ -74,14 +73,7 @@ protected:
 	* @brief 解放関数
 	* @details 継承先で定義し、解放処理を行う
 	*/
-	virtual void Release()
-	{
-		if (m_Shape)
-		{
-			delete m_Shape;
-			m_Shape = nullptr;
-		}
-	}
+	virtual void Release() = 0;
 	
 public:
 	/**
@@ -89,10 +81,10 @@ public:
 	* @brief 形状を返す関数
 	* @return Shape3D* 形状クラスのポインタ
 	*/
-	Shape3D* GetShape() { return m_Shape; }
+	Shape3D* GetShape() { return m_Shape.get(); }
 
 protected:
-	Shape3D* m_Shape;	//! 形状の基底クラス
+	std::shared_ptr<Shape3D> m_Shape;	//! 形状の基底クラス
 	
 };
 

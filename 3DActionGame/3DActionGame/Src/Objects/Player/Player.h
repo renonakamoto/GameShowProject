@@ -89,6 +89,10 @@ public:
 	*/
 	void Draw()override;
 
+	/**
+	* @fn void Draw()
+	* @brief シャドウマップ描画関数
+	*/
 	void DrawShadowMap() override;
 
 	void SetMotion(std::string keyword) { m_Model->Play(keyword); }

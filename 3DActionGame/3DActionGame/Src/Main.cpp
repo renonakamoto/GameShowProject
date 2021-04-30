@@ -10,6 +10,11 @@ int APIENTRY WinMain(
 	LPSTR     lpCmpLine,
 	INT       nCmdShow)
 {
+#ifdef _DEBUG
+	// メモリリークチェック
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
 	//　Engineの初期化
 	if (Engine::GetInstance()->Init(1280, 720, "3DActionGame", hInstance) == false)
 	{

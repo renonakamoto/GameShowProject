@@ -39,8 +39,8 @@ void Player::Init()
 	
 	DirectX::XMFLOAT3 shape_pos = m_Pos;
 	shape_pos.y = m_Pos.y + (m_PlayerSize.y / 2.f);
-	m_Shape = new ShapeOBB(shape_pos, m_PlayerSize.x / 2.f, m_PlayerSize.y / 2.f, m_PlayerSize.z / 2.f);
-	m_OBB = dynamic_cast<ShapeOBB*>(m_Shape);
+	m_Shape = std::make_shared<ShapeOBB>(shape_pos, m_PlayerSize.x / 2.f, m_PlayerSize.y / 2.f, m_PlayerSize.z / 2.f);
+	m_OBB = dynamic_cast<ShapeOBB*>(m_Shape.get());
 
 	// コリジョンマネージャーに登録
 	CollisionManager::GetInstance()->Register(this);

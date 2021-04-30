@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 
-#define SAFE_DELETE(p)  {delete p; p = nullptr;}
 
 /**
 * @fn std::vector<std::string> Split(std::string str_, char del_)

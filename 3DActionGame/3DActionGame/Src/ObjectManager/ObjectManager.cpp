@@ -6,9 +6,9 @@ void ObjectManager::Init()
 	{
 		if (m_ObjectList[i])m_ObjectList[i]->Init();
 	}
-	for (size_t i = 0; i < m_ShadowMapObject.size(); ++i)
+	for (size_t i = 0; i < m_ShadowMapObjectList.size(); ++i)
 	{
-		if (m_ShadowMapObject[i])m_ShadowMapObject[i]->Init();
+		if (m_ShadowMapObjectList[i])m_ShadowMapObjectList[i]->Init();
 	}
 }
 
@@ -18,9 +18,9 @@ void ObjectManager::Update()
 	{
 		if (m_ObjectList[i])m_ObjectList[i]->Update();
 	}
-	for (size_t i = 0; i < m_ShadowMapObject.size(); ++i)
+	for (size_t i = 0; i < m_ShadowMapObjectList.size(); ++i)
 	{
-		if (m_ShadowMapObject[i])m_ShadowMapObject[i]->Update();
+		if (m_ShadowMapObjectList[i])m_ShadowMapObjectList[i]->Update();
 	}
 }
 
@@ -30,17 +30,17 @@ void ObjectManager::Draw()
 	{
 		if (m_ObjectList[i])m_ObjectList[i]->Draw();
 	}
-	for (size_t i = 0; i < m_ShadowMapObject.size(); ++i)
+	for (size_t i = 0; i < m_ShadowMapObjectList.size(); ++i)
 	{
-		if (m_ShadowMapObject[i])m_ShadowMapObject[i]->Draw();
+		if (m_ShadowMapObjectList[i])m_ShadowMapObjectList[i]->Draw();
 	}
 }
 
 void ObjectManager::DrawShadowMapObj()
 {
-	for (size_t i = 0; i < m_ShadowMapObject.size(); ++i)
+	for (size_t i = 0; i < m_ShadowMapObjectList.size(); ++i)
 	{
-		if (m_ShadowMapObject[i])m_ShadowMapObject[i]->DrawShadowMap();
+		if (m_ShadowMapObjectList[i])m_ShadowMapObjectList[i]->DrawShadowMap();
 	}
 }
 
@@ -53,7 +53,7 @@ void ObjectManager::Register(ObjectBase* object_)
 void ObjectManager::ResisterShadowMap(ShadowMapObject* object_)
 {
 	if (object_ == nullptr) return;
-	m_ShadowMapObject.push_back(object_);
+	m_ShadowMapObjectList.push_back(object_);
 }
 
 void ObjectManager::Release(ObjectBase* object_)
@@ -77,14 +77,14 @@ void ObjectManager::Release(ObjectBase* object_)
 
 void ObjectManager::Release(ShadowMapObject* object_)
 {
-	if (!object_ || m_ShadowMapObject.empty())return;
-	for (auto itr = std::begin(m_ShadowMapObject); itr != std::end(m_ShadowMapObject); ++itr)
+	if (!object_ || m_ShadowMapObjectList.empty())return;
+	for (auto itr = std::begin(m_ShadowMapObjectList); itr != std::end(m_ShadowMapObjectList); ++itr)
 	{
 		if (*itr == object_) {
 			// リストから削除
-			m_ShadowMapObject.erase(itr);
+			m_ShadowMapObjectList.erase(itr);
 			// 領域を切り詰める
-			m_ShadowMapObject.shrink_to_fit();
+			m_ShadowMapObjectList.shrink_to_fit();
 			// 解放する
 			delete object_;
 			object_ = nullptr;
@@ -104,7 +104,7 @@ ObjectBase* ObjectManager::GetObj(std::string tag_)
 		}
 	}
 
-	for (auto* object : m_ShadowMapObject)
+	for (auto* object : m_ShadowMapObjectList)
 	{
 		if (object->GetTag() == tag_)
 		{
@@ -129,15 +129,15 @@ void ObjectManager::AllRelease()
 	// 領域を切り詰める
 	m_ObjectList.shrink_to_fit();
 
-	if (m_ShadowMapObject.empty()) return;
-	for (ObjectBase* object : m_ShadowMapObject)
+	if (m_ShadowMapObjectList.empty()) return;
+	for (ObjectBase* object : m_ShadowMapObjectList)
 	{
 		delete object;
 		object = nullptr;
 	}
 
-	m_ShadowMapObject.clear();
+	m_ShadowMapObjectList.clear();
 	// 領域を切り詰める
-	m_ShadowMapObject.shrink_to_fit();
+	m_ShadowMapObjectList.shrink_to_fit();
 
 }

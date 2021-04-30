@@ -40,15 +40,24 @@ public:
 	*/
 	void Draw();
 
+	/**
+	* @fn void Draw()
+	* @brief シャドウマップを行うオブジェクトDrawShadowMapの関数を呼ぶ関数
+	*/
 	void DrawShadowMapObj();
 
 	/**
 	* @fn void Register(Object3D* object_)
 	* @brief オブジェクトリストに追加する関数
-	* @param[in] object_ ゲームオブジェクト
+	* @param[in] object_ オブジェクト
 	*/
 	void Register(ObjectBase* object_);
 
+	/**
+	* @fn void ResisterShadowMap(ShadowMapObject* object_)
+	* @brief シャドウマップを行うオブジェクをリストに追加する関数
+	* @param[in] object_ オブジェクト
+	*/
 	void ResisterShadowMap(ShadowMapObject* object_);
 
 	/**
@@ -59,6 +68,12 @@ public:
 	*/
 	void Release(ObjectBase* object_);
 
+	/**
+	* @fn void Release(ShadowMapObject* object_)
+	* @brief リストから指定したシャドウマップオブジェクトを削除する関数
+	* @param[in] object_ 削除したいオブジェクト
+	* @details 確保されているメモリも一緒に解放する
+	*/
 	void Release(ShadowMapObject* object_);
 
 	/**
@@ -92,8 +107,8 @@ private:
 	}
 
 private:
-	std::vector<ObjectBase*> m_ObjectList;	//! ゲームオブジェクトリスト
-	std::vector<ShadowMapObject*> m_ShadowMapObject;
+	std::vector<ObjectBase*> m_ObjectList;					//! ゲームオブジェクトリスト
+	std::vector<ShadowMapObject*> m_ShadowMapObjectList;	//! シャドウマップを行うオブジェクトリスト
 	
 };
 

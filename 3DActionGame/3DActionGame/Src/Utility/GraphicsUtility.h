@@ -157,13 +157,11 @@ struct MeshData
     {
     }
 
+    /**
+    * @brief デストラクタ
+    */
     ~MeshData()
-    {
-#ifdef _DEBUG
-        VertexBuffer.Reset();
-        IndexBuffer.Reset();
-#endif
-    }
+    {}
 };
 
 /**
@@ -189,13 +187,7 @@ struct TextureData
     * @brief デストラクタ
     */
     ~TextureData()
-    {
-#ifdef _DEBUG
-        VertexBuffer.Reset();
-        IndexBuffer.Reset();
-        Texture.Reset();
-#endif
-    }
+    {}
 };
 
 #endif

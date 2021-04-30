@@ -98,6 +98,12 @@ public:
 	*/
 	void Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_, std::string motionName_ = "", float frameNum_ = 0.f);
 
+	/**
+	* @fn const Motion* GetMotionData(std::string motionKeyword_)
+	* @brief モーションデータ取得関数
+	* @param[in] motionKeyword_ モーションに紐づけられているキーワード
+	* @return const Motion* モーションのデータ
+	*/
 	const Motion* GetMotionData(std::string motionKeyword_) { return &m_Motion[motionKeyword_]; }
 
 private:
@@ -220,7 +226,7 @@ private:
 
 private:
 	std::map<std::string, ObjMaterial>						m_Materials;		//! マテリアル
-	std::map<std::string, ComPtr<ID3D11ShaderResourceView>> m_MaterialLinks;	//! 
+	std::map<std::string, ComPtr<ID3D11ShaderResourceView>> m_MaterialLinks;	//!	
 	std::map<std::string, ComPtr<ID3D11ShaderResourceView>>	m_Textures;			//! テクスチャ
 	std::map<std::string, Motion>							m_Motion;			//! モーション
 	
