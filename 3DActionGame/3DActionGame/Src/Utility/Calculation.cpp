@@ -200,7 +200,7 @@ bool Calculation::HitTriangleAndPoint(DirectX::XMFLOAT2 a_, DirectX::XMFLOAT2 b_
 	float c3 = Calculation::Cross(c_to_a, a_to_p);
 
 	// 外積の結果がすべて同じ符号なら三角形の中にある
-	return ( (c1 >= 0 && c2 >= 0 && c3 >= 0) || (c1 < 0 && c2 < 0 && c3 < 0) );
+	return ( (c1 >= 0 && c2 >= 0 && c3 >= 0) || (c1 <= 0 && c2 <= 0 && c3 <= 0) );
 }
 
 bool Calculation::HitRayAndPlane(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, DirectX::XMFLOAT3 pA_, DirectX::XMFLOAT3 pB_)

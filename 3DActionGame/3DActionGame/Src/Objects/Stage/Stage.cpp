@@ -9,7 +9,7 @@ void Stage::Draw()
 	ID3D11DeviceContext* context = GRAPHICS->GetContext();
 
 	// ラスタラスザの設定
-	graphics->SetRasterizerMode(RasterizerMode::MODE_CULL_NONE);
+	graphics->SetRasterizerMode(RasterizerMode::MODE_CULL_BACK);
 	// 頂点シェーダの設定
 	context->VSSetShader(graphics->GetSimpleVertexShader()->GetShaderInterface(), NULL, 0U);
 	// ピクセルシェーダの設定
@@ -32,7 +32,7 @@ void Stage::DrawShadowMap()
 	ID3D11DeviceContext* context = GRAPHICS->GetContext();
 
 	// ラスタラスザの設定
-	graphics->SetRasterizerMode(RasterizerMode::MODE_CULL_NONE);
+	graphics->SetRasterizerMode(RasterizerMode::MODE_CULL_BACK);
 	// 頂点シェーダの設定
 	context->VSSetShader(graphics->GetDepthVertexShader()->GetShaderInterface(), NULL, 0U);
 	// ピクセルシェーダの設定
@@ -43,17 +43,25 @@ void Stage::DrawShadowMap()
 
 float Stage::GetPolygonHeight(DirectX::XMFLOAT3 pos_)const
 {
-	// ステージ外なら
-	if (m_Pos.x > (STAGE_WIETH / 2) || m_Pos.x <  -(STAGE_WIETH / 2) ||
-		m_Pos.z > (STAGE_HEIGHT / 2)  || m_Pos.z < -(STAGE_HEIGHT / 2))
+	// ステージ外なら早期リターン
+	if (pos_.x > (STAGE_WIETH / 2) || pos_.x <  -(STAGE_WIETH / 2) 
+		|| pos_.z > (STAGE_HEIGHT / 2)  || pos_.z < -(STAGE_HEIGHT / 2))
 	{
 		return -100.f;
 	}
 
-	UINT idx_x = static_cast<UINT>((pos_.x + STAGE_WIETH / 2) / m_CellSize);
-	UINT idx_y = static_cast<UINT>((pos_.z + STAGE_HEIGHT / 2) / m_CellSize);
-	float height = -100.f;
+	// ポジションをステージの座標系と合わせる
 
+	DirectX::XMFLOAT3 hoge = pos_;
+	hoge.x += (STAGE_WIETH  / 2);
+	hoge.z += (STAGE_HEIGHT / 2);
+	hoge.x /= m_CellSize;
+	hoge.z /= m_CellSize;
+
+	int idx_x = static_cast<int>(hoge.x);
+	int idx_y = static_cast<int>(hoge.z);
+	float height = -100.f;
+	
 	for (size_t v = 0; v < m_MapData[idx_y][idx_x].size(); v+=3)
 	{
 		DirectX::XMFLOAT3 vtx_a = m_MapData[idx_y][idx_x][v].Pos;
@@ -86,20 +94,21 @@ bool Stage::IntersectRayAndStage(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3
 	// レイの終点のインデックスを算出
 	Vec2I re_idx;
 	DirectX::XMFLOAT3 ray_end = Calculation::Add(rayOrigin_, rayDistance_);
-	re_idx.X = static_cast<UINT>((ray_end.x + STAGE_WIETH / 2) / m_CellSize);
-	re_idx.Y = static_cast<UINT>((ray_end.z + STAGE_HEIGHT / 2) / m_CellSize);
+	re_idx.X = static_cast<UINT>((ray_end.x + STAGE_WIETH  / 2)  / m_CellSize);
+	re_idx.Y = static_cast<UINT>((ray_end.z + STAGE_HEIGHT / 2)  / m_CellSize);
 
-	for (size_t v = 0; v < m_MapData[re_idx.Y][re_idx.X].size(); v += 3)
+	std::vector<CVertex>* vertices = &m_MapData[re_idx.Y][re_idx.X];
+	for (size_t v = 0; v < vertices->size(); v += 3)
 	{
 		// ポリゴン
-		DirectX::XMFLOAT3 vtx_a = m_MapData[re_idx.Y][re_idx.X][v].Pos;
-		DirectX::XMFLOAT3 vtx_b = m_MapData[re_idx.Y][re_idx.X][v + 1].Pos;
-		DirectX::XMFLOAT3 vtx_c = m_MapData[re_idx.Y][re_idx.X][v + 2].Pos;
+		DirectX::XMFLOAT3 vtx_a = vertices->at(v+0).Pos;
+		DirectX::XMFLOAT3 vtx_b = vertices->at(v+1).Pos;
+		DirectX::XMFLOAT3 vtx_c = vertices->at(v+2).Pos;
 		
 		// XZ平面で見た時に三角形のなかに入っているかを調べる
-		DirectX::XMFLOAT2 a(vtx_a.x, vtx_a.z);
-		DirectX::XMFLOAT2 b(vtx_b.x, vtx_b.z);
-		DirectX::XMFLOAT2 c(vtx_c.x, vtx_c.z);
+		DirectX::XMFLOAT2 a(vtx_a.x,   vtx_a.z);
+		DirectX::XMFLOAT2 b(vtx_b.x,   vtx_b.z);
+		DirectX::XMFLOAT2 c(vtx_c.x,   vtx_c.z);
 		DirectX::XMFLOAT2 p(ray_end.x, ray_end.z);
 		// 三角形に点が含まれているか
 		if (Calculation::HitTriangleAndPoint(a, b, c, p) == false) continue;
@@ -128,38 +137,42 @@ void Stage::CreateSplitMapData()
 	// ステージのメッシュ情報を取得
 	const std::vector<MeshData>* mesh    = m_Model->GetMeshData();
 	const std::vector<CVertex>* vertices = &mesh->at(0).Vertices;
+	const std::vector<UINT>*    indices	 = &mesh->at(0).Indices;
+	const size_t				i_num	 = indices->size();
 	
-	for (size_t i = 0; i < vertices->size(); i += 3)
+	DirectX::XMFLOAT3 v_pos[3] = { {0.f,0.f,0.f},{0.f,0.f,0.f},{0.f,0.f,0.f} };
+	for (size_t i = 0; i < i_num; i += 3)
 	{
-		DirectX::XMFLOAT3 v[3];
-
 		// ポリゴンの頂点座標を取得
-		v[0] = vertices->at(i).Pos;
-		v[1] = vertices->at(i+1).Pos;
-		v[2] = vertices->at(i+2).Pos;
+		v_pos[0] = vertices->at( indices->at(i+0) ).Pos;
+		v_pos[1] = vertices->at( indices->at(i+1) ).Pos;
+		v_pos[2] = vertices->at( indices->at(i+2) ).Pos;
 
 		// ステージの真ん中が原点になっているので左上原点にするために頂点座標をずらす
 		for (int j = 0; j < 3; ++j)
 		{
-			v[j].x += (STAGE_WIETH / 2);
-			v[j].z += (STAGE_HEIGHT / 2);
+			v_pos[j].x += (STAGE_WIETH  / 2);
+			v_pos[j].z += (STAGE_HEIGHT / 2);
 		}
 		
 		// 分割するサイズで割って配列のサイズにする
 		for (int j = 0; j < 3; ++j)
 		{
-			v[j] = DirectX::XMFLOAT3(v[j].x / m_CellSize, v[j].y, v[j].z / m_CellSize);
+			v_pos[j].x /= m_CellSize;
+			v_pos[j].z /= m_CellSize;
 		}
 		
 		// 配列のどの要素にいれるかを算出	
-		std::vector<Vec2I> add_index;	// 追加する要素番号を保存する変数
+		std::vector<Vec2I> add_indices;	// 追加する要素番号を保存する変数
 		for (int j = 0; j < 3; ++j)
 		{
 			bool can_add = true;
-			Vec2I index(static_cast<int>(v[j].x), static_cast<int>(v[j].z));
-			for (int k = 0; k < add_index.size(); ++k)
+
+			// intにキャストし配列の
+			Vec2I index(static_cast<int>(v_pos[j].x), static_cast<int>(v_pos[j].z));
+			for (int k = 0; k < add_indices.size(); ++k)
 			{
-				if (add_index[k] == index)
+				if (add_indices[k] == index)
 				{
 					can_add = false;
 					break;
@@ -168,15 +181,15 @@ void Stage::CreateSplitMapData()
 
 			if (can_add)
 			{
-				add_index.push_back(index);
+				add_indices.push_back(index);
 			}
 		}
 
-		for (size_t j = 0; j < add_index.size(); ++j)
+		for (size_t j = 0; j < add_indices.size(); ++j)
 		{
-			m_MapData[add_index[j].Y][add_index[j].X].push_back(vertices->at(i));
-			m_MapData[add_index[j].Y][add_index[j].X].push_back(vertices->at(i + 1));
-			m_MapData[add_index[j].Y][add_index[j].X].push_back(vertices->at(i + 2));
+			m_MapData[add_indices[j].Y][add_indices[j].X].push_back( vertices->at( indices->at(i+0) ) );
+			m_MapData[add_indices[j].Y][add_indices[j].X].push_back( vertices->at( indices->at(i+1) ) );
+			m_MapData[add_indices[j].Y][add_indices[j].X].push_back( vertices->at( indices->at(i+2) ) );
 		}
 	}
 }

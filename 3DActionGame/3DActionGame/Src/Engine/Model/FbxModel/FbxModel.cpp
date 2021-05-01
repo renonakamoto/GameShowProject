@@ -63,6 +63,8 @@ bool FbxModel::LoadModel(const char* fileName_)
 	// インポートが完了したらインポーターは不要なので破棄する
 	importer->Destroy();
 
+#ifdef _DEBUG
+
 	// ジオメトリコンバーターを作成
 	FbxGeometryConverter geometry_converter(manager);
 	// メッシュに使われているマテリアル単位でメッシュを分割する
@@ -74,9 +76,7 @@ bool FbxModel::LoadModel(const char* fileName_)
 	{
 		FbxSystemUnit::cm.ConvertScene(fbx_scene);
 	}
-	// ポリゴンが三角形よりも多いと困るので三角形に変換する
-	geometry_converter.Triangulate(fbx_scene, true);
-
+#endif
 #pragma endregion
 
 	

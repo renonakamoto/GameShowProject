@@ -58,9 +58,6 @@ bool DirectGraphics::Init()
         return false;
     }
 
-    // ビューポート設定
-    SetUpViewPort();
-
     // ライト設定
     SetUpLight();
     
@@ -72,8 +69,6 @@ bool DirectGraphics::Init()
         0.5f, 0.5f, 0.0f, 1.0f);
 
     DirectX::XMStoreFloat4x4(&m_ConstantBufferData.ClipUV, DirectX::XMMatrixTranspose(tex_uv));
-
-    
     
     return true;
 }
@@ -149,8 +144,8 @@ void DirectGraphics::StartShadwMapRendering()
 
     // ビューポートの設定
     D3D11_VIEWPORT vp;
-    vp.Width    = WINDOW->GetClientWidth()  * 2;
-    vp.Height   = WINDOW->GetClientHeight() * 2;
+    vp.Width    = WINDOW->GetClientWidth()  * 10;
+    vp.Height   = WINDOW->GetClientHeight() * 10;
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0.0f;
@@ -653,8 +648,8 @@ bool DirectGraphics::CreateDepthDSVAndRTV()
     // 深度ステンシルビューの作成
     D3D11_TEXTURE2D_DESC texture_desc;
     ZeroMemory(&texture_desc, sizeof(texture_desc));
-    texture_desc.Width              = static_cast<UINT>(WINDOW->GetClientWidth() * 2);
-    texture_desc.Height             = static_cast<UINT>(WINDOW->GetClientHeight() * 2);
+    texture_desc.Width              = static_cast<UINT>(WINDOW->GetClientWidth()  * 10);
+    texture_desc.Height             = static_cast<UINT>(WINDOW->GetClientHeight() * 10);
     texture_desc.MipLevels          = 1U;
     texture_desc.ArraySize          = 1U;
     texture_desc.MiscFlags          = 0U;
@@ -728,7 +723,7 @@ void DirectGraphics::SetUpViewPort()
 
 void DirectGraphics::SetUpLight()
 {
-    DirectX::XMFLOAT3 light_pos(0.0f, 200.0f, -1.0f);
+    DirectX::XMFLOAT3 light_pos(0.0f, 1189.0f, -394.0f);
     DirectX::XMStoreFloat4(&m_ConstantBufferData.Light, DirectX::XMVector3Normalize(DirectX::XMVectorSet(light_pos.x, light_pos.y, light_pos.z, 0.0f)));
 
     DirectX::XMMATRIX light_view = DirectX::XMMatrixLookAtLH(

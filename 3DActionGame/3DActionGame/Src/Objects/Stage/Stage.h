@@ -12,7 +12,7 @@ class Stage : public ShadowMapObject
 {
 	static const int STAGE_WIETH     = 1200; //! ステージの横幅
 	static const int STAGE_HEIGHT    = 1200; //! ステージの縦幅
-	static const int STAGE_SPLITNUM  = 10;	 //! ステージの分割数
+	static const int STAGE_SPLITNUM  = 15;	 //! ステージの分割数
 
 public:
 	/**

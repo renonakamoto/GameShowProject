@@ -223,7 +223,7 @@ public:
 	* @param[in] a_ 三角形の頂点A
 	* @param[in] b_ 三角形の頂点B
 	* @param[in] c_ 三角形の頂点C
-	* @param[in] p_ 点軸座標
+	* @param[in] p_ 点の座標
 	* @return bool 当たったかどうかを真偽で返す
 	*/
 	static bool HitTriangleAndPoint(DirectX::XMFLOAT2 a_, DirectX::XMFLOAT2 b_, DirectX::XMFLOAT2 c_, DirectX::XMFLOAT2 p_);

@@ -43,7 +43,7 @@ void GameScene::Load()
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
         // リソースの読み込みが終了したら、各オブジェクトのインスタンスを作成
-        ObjectManager::GetInstance()->ResisterShadowMap(new Player(DirectX::XMFLOAT3(0.f, 100.f, 0.f)));
+        ObjectManager::GetInstance()->ResisterShadowMap(new Player(DirectX::XMFLOAT3(0.f, 0.f, 0.f)));
         ObjectManager::GetInstance()->ResisterShadowMap(new EnemyManager());
 
         ObjectManager::GetInstance()->Register(new Stage());
@@ -60,6 +60,8 @@ void GameScene::Load()
 
 DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 {
+    FbxStorage::GetInstance()->LoadModel("Res/Models/sister_texture.fbx", "hoge");
+
     // プレイヤーモデルの読み込み
     FbxStorage::GetInstance()->LoadModel("Res/Models/Player/Ekard.fbx",                  "Ekard");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Player/Ekard_Run_01.fbx",          "Ekard", "Run");
@@ -76,7 +78,7 @@ DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierMeleeAttack.fbx", "Enemy", "Attack");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierDeath.fbx",       "Enemy", "Death" );
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierHit.fbx",         "Enemy", "Hit"   );
-
+    
     // ステージモデルの読み込み
     ObjFileStrage::GetInstance()->LoadModel("Res/Models/Ground.obj",     "Stage");
 
@@ -92,8 +94,6 @@ void GameScene::Main()
     
     
 #ifdef _DEBUG
-    static DirectX::XMFLOAT3 light_pos(0.0f, 162.0f, -133.0f);
-
     // Escキーで入力モード切替
     if (INPUT_MANAGER->GetKeyDown(KeyInfo::Key_ESC))
     {
@@ -107,56 +107,6 @@ void GameScene::Main()
         }
 
     }
-
-    if (INPUT_MANAGER->GetKey(KeyInfo::Key_Left)) {
-        light_pos.z++;
-    }
-
-    if (INPUT_MANAGER->GetKey(KeyInfo::Key_Right)) {
-        light_pos.z--;
-    }
-
-    if (INPUT_MANAGER->GetKey(KeyInfo::Key_Up)) {
-        light_pos.y++;
-    }
-
-    if (INPUT_MANAGER->GetKey(KeyInfo::Key_Down)) {
-        light_pos.y--;
-    }
-
-#endif
-
-#ifdef _DEBUG
-   
-    DirectX::XMStoreFloat4(&GRAPHICS->GetConstantBufferData()->Light, DirectX::XMVector3Normalize(DirectX::XMVectorSet(light_pos.x, light_pos.y, light_pos.z, 0.0f)));
-
-    ObjectBase* o = ObjectManager::GetInstance()->GetObj("Player");
-    GameObject* g = (GameObject*)o;
-    DirectX::XMFLOAT3 p(0.f, 0.f, 0.f);
-    if (g) {
-        p = g->GetPos();
-    }
-    
-    
-    DirectX::XMMATRIX light_view = DirectX::XMMatrixLookAtLH(
-        DirectX::XMVectorSet(light_pos.x + p.x, light_pos.y + p.y, light_pos.z + p.z, 0.0f),
-        DirectX::XMVectorSet(p.x, p.y, p.z, 0.0f),
-        DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
-
-    DirectX::XMStoreFloat4x4(&GRAPHICS->GetConstantBufferData()->LightView, DirectX::XMMatrixTranspose(light_view));
-    
-    // プロジェクション行列設定
-    // 視野角
-    constexpr float fov = DirectX::XMConvertToRadians(65.0f);
-    // アスペクト比
-    float aspect = static_cast<float>(WINDOW->GetClientWidth()) / static_cast<float>(WINDOW->GetClientHeight());
-    // Near
-    float near_z = 0.1f;
-    // Far
-    float far_z = 500000.f;
-    // プロジェクション行列の作成
-    DirectX::XMMATRIX proj_mat = DirectX::XMMatrixPerspectiveFovLH(fov, aspect, near_z, far_z);
-    DirectX::XMStoreFloat4x4(&GRAPHICS->GetConstantBufferData()->LightProjection, DirectX::XMMatrixTranspose(proj_mat));
 #endif
 }
 

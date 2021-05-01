@@ -55,6 +55,17 @@ void Player::Update()
 	{
 		Damage(5);
 	}
+
+	if (INPUT_MANAGER->GetKeyDown(KeyInfo::Key_1))
+	{
+		if (m_Stage) m_Pos.y = m_Stage->GetPolygonHeight(m_Pos);
+	}
+
+	if (INPUT_MANAGER->GetKeyDown(KeyInfo::Key_2))
+	{
+		m_Pos = DirectX::XMFLOAT3(0.f, 0.f, 0.f);
+	}
+
 #endif
 
 	// もし死亡したらゲームマネージャーに伝える
@@ -180,9 +191,9 @@ void Player::Move(float x_, float z_)
 		// 移動する前に座標を保存する
 		m_OldPos = m_Pos;
 
-		// 移動方向を算出
+		// 向きを算出
 		float angle = atan2f(m_Velocity.x, m_Velocity.z);
-		m_Rot.y = DirectX::XMConvertToDegrees(angle);
+		m_Rot.y     = DirectX::XMConvertToDegrees(angle);
 
 		// 移動する
 		m_Pos.x += m_Velocity.x * m_Speed * (1.f / 60.f);

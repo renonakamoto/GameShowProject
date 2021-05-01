@@ -64,7 +64,7 @@ float4 ps_main(PS_IN input) : SV_Target
     float max_depth_slope = max(abs(ddx(input.light_tex_coord.z)), abs(ddy(input.light_tex_coord.z)));
     float tex_value = TextureDepth.Sample(ShadowSampler, input.light_tex_coord).r;
     float light_length = input.light_view_pos.z / input.light_view_pos.w;
-    if ((tex_value + 0.005) > light_length)
+    if ((tex_value + 0.0005) > light_length)
     {
         color /= 3;
     }
