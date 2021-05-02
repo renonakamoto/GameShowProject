@@ -197,6 +197,8 @@ public:
 	*/
 	static DirectX::XMFLOAT3 Lerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, float t);
 
+	static DirectX::XMFLOAT3 SLerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, float t);
+
 	/**
 	* @fn bool HitRectAndPoint(Rect rect_, float x_, float y_)
 	* @brief 矩形と点の当たり判定行う関数

@@ -51,7 +51,7 @@ public:
 		m_AttackVolumLength(3.f, 2.5f, 2.2f),
 		m_AttackForwardDistance(3.f),
 		m_PlayerSize(2.8f, 8.f, 2.2f),
-		m_RotateSpeed(6.f),
+		m_RotateSpeed(10.f),
 		m_Hp(10),
 		m_IsHit(false),
 		m_IsDeath(false),

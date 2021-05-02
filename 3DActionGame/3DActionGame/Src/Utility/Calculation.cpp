@@ -163,6 +163,44 @@ DirectX::XMFLOAT3 Calculation::Lerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, 
 	return ret;
 }
 
+DirectX::XMFLOAT3 Calculation::SLerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, float t)
+{
+	DirectX::XMFLOAT3 s = a_;
+	DirectX::XMFLOAT3 e = b_;
+
+	// ベクトルの正規化
+	if (s.x != 0.f || s.y != 0.0f || s.z != 0.0f)
+	{
+		s = Normalize(s);
+	}
+	if (e.x != 0.f || e.y != 0.0f || e.z != 0.0f)
+	{
+		e = Normalize(e);
+	}
+	else
+	{
+		return Lerp(a_, b_, t);
+	}
+
+	// 二つのベクトルの角度を算出
+	float dot = Dot(s, e);
+
+	// -1 ~ 1の間に収める
+	Clamp(dot, -1.f, 1.f);
+
+	float angle = acosf(dot);
+	float sin_th = sinf(angle);
+	
+	float ps = sinf(angle * (1.f - t));
+	float pe = sinf(angle * t);
+	
+	DirectX::XMFLOAT3 ret = Add(Mul(s, ps), Mul(e, pe));
+	
+	ret = Div(ret, sin_th);
+
+	return Normalize(ret);
+}
+
 float Calculation::CalcPointToPlaneDistance(DirectX::XMFLOAT3 p_, DirectX::XMFLOAT3 pA_, DirectX::XMFLOAT3 pB_)
 {
 	// 面の法線

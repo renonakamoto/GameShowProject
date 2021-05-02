@@ -181,8 +181,18 @@ void Player::Move(float x_, float z_)
 		m_Velocity = Calculation::Normalize(m_Velocity);
 	}
 
-	// 前回の速度と今回の速度で線形補間を行う
-	m_Velocity    = Calculation::Lerp(m_OldVelocity, m_Velocity, (m_RotateSpeed / 60.0f));
+	// 二つのベクトルの角度を算出
+	float dot = Calculation::Dot(m_OldVelocity, m_Velocity);
+	float s_to_e_angle = acosf(dot);
+	if (s_to_e_angle > DirectX::XMConvertToRadians(90.f))
+	{
+		m_Velocity = Calculation::SLerp(m_OldVelocity, m_Velocity, (m_RotateSpeed / 60.0f));
+	}
+	else
+	{
+		m_Velocity = Calculation::Lerp(m_OldVelocity, m_Velocity, (m_RotateSpeed / 60.0f));
+	}
+
 	// 今回の速度を保存する
 	m_OldVelocity = m_Velocity;
 
