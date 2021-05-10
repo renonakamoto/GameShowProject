@@ -118,26 +118,30 @@ ObjectBase* ObjectManager::GetObj(std::string tag_)
 
 void ObjectManager::AllRelease()
 {
-	if (m_ObjectList.empty()) return;
-	for (ObjectBase* object : m_ObjectList)
+	if (!m_ObjectList.empty())
 	{
-		delete object;
-		object = nullptr;
+		for (ObjectBase* object : m_ObjectList)
+		{
+			delete object;
+			object = nullptr;
+		}
+		m_ObjectList.clear();
+		// 領域を切り詰める
+		m_ObjectList.shrink_to_fit();
 	}
 
-	m_ObjectList.clear();
-	// 領域を切り詰める
-	m_ObjectList.shrink_to_fit();
 
-	if (m_ShadowMapObjectList.empty()) return;
-	for (ObjectBase* object : m_ShadowMapObjectList)
+
+	if (!m_ShadowMapObjectList.empty())
 	{
-		delete object;
-		object = nullptr;
+		for (ObjectBase* object : m_ShadowMapObjectList)
+		{
+			delete object;
+			object = nullptr;
+		}
+
+		m_ShadowMapObjectList.clear();
+		// 領域を切り詰める
+		m_ShadowMapObjectList.shrink_to_fit();
 	}
-
-	m_ShadowMapObjectList.clear();
-	// 領域を切り詰める
-	m_ShadowMapObjectList.shrink_to_fit();
-
 }

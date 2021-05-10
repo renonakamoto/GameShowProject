@@ -211,7 +211,18 @@ public:
 	*/
 	void SetMaterial(ObjMaterial* material_);
 
+	/**
+	* @fn ID3D11ShaderResourceView* GetDepthTextureView()
+	* @brief シャドウマップ用テクスチャデータ取得関数
+	* @return ID3D11ShaderResourceView* m_DepthTextureViewのポインタ
+	*/
 	ID3D11ShaderResourceView* GetDepthTextureView() { return m_DepthTextureView.Get(); }
+
+	/**
+	* @fn ID3D11SamplerState* GetShadowMapSamplerState()
+	* @brief シャドウマップ用サンプラーステート取得関数
+	* @return ID3D11SamplerState* m_ShadowSamplerStateのポインタ
+	*/
 	ID3D11SamplerState* GetShadowMapSamplerState() { return m_ShadowSamplerState.Get(); }
 
 private:

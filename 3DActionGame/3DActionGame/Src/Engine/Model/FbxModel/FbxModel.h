@@ -226,7 +226,7 @@ private:
 
 private:
 	std::map<std::string, ObjMaterial>						m_Materials;		//! マテリアル
-	std::map<std::string, ComPtr<ID3D11ShaderResourceView>> m_MaterialLinks;	//!	
+	std::map<std::string, ComPtr<ID3D11ShaderResourceView>> m_MaterialLinks;	//!	マテリアル名で紐づけるテクスチャ
 	std::map<std::string, ComPtr<ID3D11ShaderResourceView>>	m_Textures;			//! テクスチャ
 	std::map<std::string, Motion>							m_Motion;			//! モーション
 	

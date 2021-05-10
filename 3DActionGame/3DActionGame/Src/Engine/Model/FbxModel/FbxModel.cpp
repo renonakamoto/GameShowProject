@@ -62,21 +62,20 @@ bool FbxModel::LoadModel(const char* fileName_)
 	}
 	// インポートが完了したらインポーターは不要なので破棄する
 	importer->Destroy();
-
-#ifdef _DEBUG
-
+	
 	// ジオメトリコンバーターを作成
 	FbxGeometryConverter geometry_converter(manager);
 	// メッシュに使われているマテリアル単位でメッシュを分割する
 	geometry_converter.SplitMeshesPerMaterial(fbx_scene, true);
+	// ポリゴンを三角形に変換
+	geometry_converter.Triangulate(fbx_scene, true);
 
 	// センチメートル単位にコンバートする
 	FbxSystemUnit scene_system_unit = fbx_scene->GetGlobalSettings().GetSystemUnit();
-	if (scene_system_unit.GetScaleFactor() != 1.0f)
+	if (scene_system_unit.GetScaleFactor() != 1.0)
 	{
 		FbxSystemUnit::cm.ConvertScene(fbx_scene);
 	}
-#endif
 #pragma endregion
 
 	
@@ -123,6 +122,7 @@ bool FbxModel::LoadModel(const char* fileName_)
 	{
 		// マネージャーのDestroyを呼べばその他のFBXオブジェクトも破棄される
 		manager->Destroy();
+		manager = nullptr;
 	}
 
 	ID3D11Device* device = GRAPHICS->GetDevice();
@@ -183,7 +183,6 @@ bool FbxModel::LoadMotion(std::string keyword_, const char* fileName_)
 	if (importer->Initialize(fileName_) == false) {
 		// 読み込み失敗
 		manager->Destroy();
-
 		return false;
 	}
 
@@ -193,7 +192,7 @@ bool FbxModel::LoadMotion(std::string keyword_, const char* fileName_)
 		manager->Destroy();
 		return false;
 	}
-	importer->Destroy();
+	FBX_SAFE_DESTROY(importer);
 
 	// モーション情報取得
 	FbxArray<FbxString*> names;
@@ -211,7 +210,7 @@ bool FbxModel::LoadMotion(std::string keyword_, const char* fileName_)
 
 	// モーションの開始時間と終了時間を60Fpsで求める
 	FbxLongLong start = take_info->mLocalTimeSpan.GetStart().Get();
-	FbxLongLong stop = take_info->mLocalTimeSpan.GetStop().Get();
+	FbxLongLong stop  = take_info->mLocalTimeSpan.GetStop().Get();
 	FbxLongLong fps60 = FbxTime::GetOneFrameValue(FbxTime::eFrames60);
 	m_StartFrame = static_cast<int>(start / fps60);
 	m_Motion[keyword_].FrameNum = static_cast<UINT>((stop - start) / fps60);
@@ -231,7 +230,16 @@ bool FbxModel::LoadMotion(std::string keyword_, const char* fileName_)
 		LoadKeyFrame(keyword_, b, bone);
 	}
 	
-	manager->Destroy();
+	// マネージャーの破棄
+	if (manager != nullptr)
+	{
+		names.Clear();
+		FBX_SAFE_DESTROY(importer);
+		FBX_SAFE_DESTROY(ios);
+		FBX_SAFE_DESTROY(fbx_scene);
+		// マネージャーのDestroyを呼べばその他のFBXオブジェクトも破棄される
+		FBX_SAFE_DESTROY(manager);
+	}
 
 	// 読み込み成功
 	return true;
@@ -255,7 +263,6 @@ void FbxModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
 
 	// ワールド行列をコンスタントバッファに設定
 	DirectX::XMStoreFloat4x4(&graphics->GetConstantBufferData()->World, DirectX::XMMatrixTranspose(mat_world));
-
 	
 	UINT strides = sizeof(CVertex);
 	UINT offsets = 0U;
@@ -279,7 +286,6 @@ void FbxModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
 				{
 					if (motion->Key[b].empty()) { continue; }
 
-					//m_Bone[b].Transform = motion->Key[b][f] * (1.0f - (frame - static_cast<int>(frame))) + motion->Key[b][(size_t)f + 1] * (frame - static_cast<int>(frame));
 					m_Bone[b].Transform = motion->Key[b][f];
 					DirectX::XMMATRIX mat = m_Bone[b].Offset * m_Bone[b].Transform;
 					graphics->GetConstBoneBufferData()->Bone[b] = DirectX::XMMatrixTranspose(mat);
@@ -300,17 +306,18 @@ void FbxModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX:
 			graphics->SetTexture(nullptr);
 		}
 
-		// コンスタントバッファの更新
-		graphics->GetContext()->UpdateSubresource(graphics->GetConstantBuffer(), 0U, NULL, graphics->GetConstantBufferData(), 0U, 0U);
-		graphics->GetContext()->UpdateSubresource(graphics->GetConstBoneBuffer(), 0U, NULL, graphics->GetConstBoneBufferData(), 0U, 0U);
-
 		// シェーダーにコンスタントバッファの情報を送る
 		ID3D11Buffer* constant_buffer = graphics->GetConstantBuffer();
 		context->VSSetConstantBuffers(0U, 1U, &constant_buffer);
-		context->PSSetConstantBuffers(0U, 1, &constant_buffer);
+		context->PSSetConstantBuffers(0U, 1U, &constant_buffer);
 
+		// ボーン情報を定数バッファにセット
 		constant_buffer = graphics->GetConstBoneBuffer();
 		context->VSSetConstantBuffers(1U, 1U, &constant_buffer);
+
+		// コンスタントバッファの更新
+		graphics->GetContext()->UpdateSubresource(graphics->GetConstantBuffer(), 0U, NULL, graphics->GetConstantBufferData(), 0U, 0U);
+		graphics->GetContext()->UpdateSubresource(graphics->GetConstBoneBuffer(), 0U, NULL, graphics->GetConstBoneBufferData(), 0U, 0U);
 
 		// 描画
 		context->DrawIndexed(static_cast<UINT>(mesh.Indices.size()), 0U, 0U);
@@ -806,15 +813,15 @@ void FbxModel::LoadKeyFrame(std::string keyword_, UINT bone_, FbxNode* boneNode_
 		m.mData[3][0] *= -1; // _41
 
 		// FbxDoubleからfloatにキャストする関数オブジェクト
-		auto ToFloat = [](FbxDouble d_)->float {return static_cast<float>(d_); };
+		auto to_float = [](FbxDouble d_)->float {return static_cast<float>(d_); };
 		
 		// キーフレームをマトリックスに保存
 		FbxDouble* mat = static_cast<FbxDouble*>(m);
 		motion->Key[bone_][f] = DirectX::XMMatrixSet(
-			ToFloat(mat[0]),  ToFloat(mat[1]),  ToFloat(mat[2]),  ToFloat(mat[3]),
-			ToFloat(mat[4]),  ToFloat(mat[5]),  ToFloat(mat[6]),  ToFloat(mat[7]),
-			ToFloat(mat[8]),  ToFloat(mat[9]),  ToFloat(mat[10]), ToFloat(mat[11]),
-			ToFloat(mat[12]), ToFloat(mat[13]), ToFloat(mat[14]), ToFloat(mat[15]));
+			to_float(mat[0]),  to_float(mat[1]),  to_float(mat[2]),  to_float(mat[3]),
+			to_float(mat[4]),  to_float(mat[5]),  to_float(mat[6]),  to_float(mat[7]),
+			to_float(mat[8]),  to_float(mat[9]),  to_float(mat[10]), to_float(mat[11]),
+			to_float(mat[12]), to_float(mat[13]), to_float(mat[14]), to_float(mat[15]));
 
 		// フレームを進める
 		time += 1.0 / 60.0;

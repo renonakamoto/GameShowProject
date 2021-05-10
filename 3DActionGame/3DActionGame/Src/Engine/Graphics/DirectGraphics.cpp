@@ -127,7 +127,7 @@ void DirectGraphics::StartRendering()
 void DirectGraphics::FinishRendering()
 {
     // バックバッファをフロントバッファに送信する   
-    m_SwapChain->Present(1, 0);
+    m_SwapChain->Present(1U, 0U);
 }
 
 void DirectGraphics::StartShadwMapRendering()
@@ -581,19 +581,10 @@ bool DirectGraphics::CreateTextureSampler()
         return false;
     }
 
-    sampler_desc.Filter         = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    sampler_desc.AddressU       = D3D11_TEXTURE_ADDRESS_CLAMP;
-    sampler_desc.AddressV       = D3D11_TEXTURE_ADDRESS_CLAMP;
-    sampler_desc.AddressW       = D3D11_TEXTURE_ADDRESS_CLAMP;
-    //sampler_desc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
-    //sampler_desc.BorderColor[0] = 1.f;
-    //sampler_desc.BorderColor[1] = 1.f;
-    //sampler_desc.BorderColor[2] = 1.f;
-    //sampler_desc.BorderColor[3] = 1.f;
-    //sampler_desc.MaxAnisotropy  = 1U;
-    //sampler_desc.MipLODBias     = 0.f;
-    //sampler_desc.MinLOD         = -FLT_MAX;
-    //sampler_desc.MaxLOD         = +FLT_MAX;
+    sampler_desc.Filter   = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+    sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+    sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 
     if (FAILED(m_Device->CreateSamplerState(&sampler_desc, m_ShadowSamplerState.GetAddressOf())))
     {

@@ -25,6 +25,8 @@ void Enemy::Update()
 
 void Enemy::Draw()
 {
+	if (!m_Model) return;
+
 	DirectGraphics* graphics = GRAPHICS;
 	ID3D11DeviceContext* context = GRAPHICS->GetContext();
 
@@ -41,12 +43,12 @@ void Enemy::Draw()
 	ID3D11SamplerState* sampler_state = graphics->GetShadowMapSamplerState();
 	context->PSSetSamplers(1U, 1U, &sampler_state);
 
-	if (m_Model)m_Model->Render( m_Pos, m_Scale, m_Rot);
+	m_Model->Render( m_Pos, m_Scale, m_Rot);
 }
 
 void Enemy::DrawShadowMap()
 {
-	if (m_Model == nullptr) return;
+	if (!m_Model) return;
 
 	DirectGraphics* graphics = GRAPHICS;
 	ID3D11DeviceContext* context = GRAPHICS->GetContext();

@@ -55,17 +55,6 @@ void Player::Update()
 	{
 		Damage(5);
 	}
-
-	if (INPUT_MANAGER->GetKeyDown(KeyInfo::Key_1))
-	{
-		if (m_Stage) m_Pos.y = m_Stage->GetPolygonHeight(m_Pos);
-	}
-
-	if (INPUT_MANAGER->GetKeyDown(KeyInfo::Key_2))
-	{
-		m_Pos = DirectX::XMFLOAT3(0.f, 0.f, 0.f);
-	}
-
 #endif
 
 	// もし死亡したらゲームマネージャーに伝える
@@ -85,14 +74,16 @@ void Player::Update()
 	}
 
 	// ステートの更新
-	m_State->Update(this);
+	if (m_State)m_State->Update(this);
 	
 	// モーションのフレームを進める
-	m_Model->Animate();
+	if (m_Model)m_Model->Animate();
 }
 
 void Player::Draw()
 {	
+	if (!m_Model) return;
+
 	DirectGraphics*      graphics = GRAPHICS;
 	ID3D11DeviceContext* context  = GRAPHICS->GetContext();
 
@@ -117,7 +108,7 @@ void Player::Draw()
 
 void Player::DrawShadowMap()
 {
-	if (m_Model == nullptr) return;
+	if (!m_Model) return;
 
 	DirectGraphics*		 graphics = GRAPHICS;
 	ID3D11DeviceContext* context  = GRAPHICS->GetContext();

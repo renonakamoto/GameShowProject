@@ -21,6 +21,7 @@ public:
 	virtual ~Model()
 	{
 		m_MeshList.clear();
+		m_MeshList.shrink_to_fit();
 	}
 	
 	/**
