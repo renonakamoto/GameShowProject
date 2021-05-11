@@ -31,7 +31,7 @@ bool FbxModel::LoadModel(const char* fileName_)
 	FbxImporter* importer = FbxImporter::Create(manager, "");
 	if (importer == nullptr) {
 		// Importerの作成失敗
-		manager->Destroy();
+		FBX_SAFE_DESTROY(manager);
 		return false;
 	}
 
@@ -40,7 +40,7 @@ bool FbxModel::LoadModel(const char* fileName_)
 	FbxScene* fbx_scene = FbxScene::Create(manager, "");
 	if (fbx_scene == nullptr) {
 		// Sceneの作成失敗
-		manager->Destroy();
+		FBX_SAFE_DESTROY(manager);
 		return false;
 	}
 
@@ -48,7 +48,7 @@ bool FbxModel::LoadModel(const char* fileName_)
 	if (importer->Initialize(fileName_) == false)
 	{
 		// 読み込み失敗
-		manager->Destroy();
+		FBX_SAFE_DESTROY(manager);
 
 		return false;
 	}
@@ -56,12 +56,12 @@ bool FbxModel::LoadModel(const char* fileName_)
 	// ImporterでFbxデータを分解してSceneにインポートする
 	if (importer->Import(fbx_scene) == false) {
 		// インポート失敗
-		manager->Destroy();
+		FBX_SAFE_DESTROY(manager);
 
 		return false;
 	}
 	// インポートが完了したらインポーターは不要なので破棄する
-	importer->Destroy();
+	FBX_SAFE_DESTROY(importer);
 	
 	// ジオメトリコンバーターを作成
 	FbxGeometryConverter geometry_converter(manager);
@@ -121,8 +121,7 @@ bool FbxModel::LoadModel(const char* fileName_)
 	if (manager != nullptr)
 	{
 		// マネージャーのDestroyを呼べばその他のFBXオブジェクトも破棄される
-		manager->Destroy();
-		manager = nullptr;
+		FBX_SAFE_DESTROY(manager);
 	}
 
 	ID3D11Device* device = GRAPHICS->GetDevice();
@@ -152,6 +151,8 @@ bool FbxModel::LoadModel(const char* fileName_)
 
 bool FbxModel::LoadMotion(std::string keyword_, const char* fileName_)
 {
+#pragma region Fbxオブジェクトの作成
+
 	// SDKを管理しているマネージャークラスの生成
 	FbxManager* manager = FbxManager::Create();
 	if (manager == nullptr) {
@@ -192,51 +193,51 @@ bool FbxModel::LoadMotion(std::string keyword_, const char* fileName_)
 		manager->Destroy();
 		return false;
 	}
-	FBX_SAFE_DESTROY(importer);
+#pragma endregion
 
-	// モーション情報取得
-	FbxArray<FbxString*> names;
-	fbx_scene->FillAnimStackNameArray(names);
 
-	// モーションが存在しないとき
-	if (names == nullptr)
-	{
-		manager->Destroy();
+	// アニメーション数を取得
+	int anim_count = importer->GetAnimStackCount();
+
+	if (anim_count == 0) {
+		FBX_SAFE_DESTROY(importer);
+		FBX_SAFE_DESTROY(manager);
 		return false;
 	}
 
-	// モーション情報を取得
-	FbxTakeInfo* take_info = fbx_scene->GetTakeInfo(names[0]->Buffer());
-
-	// モーションの開始時間と終了時間を60Fpsで求める
-	FbxLongLong start = take_info->mLocalTimeSpan.GetStart().Get();
-	FbxLongLong stop  = take_info->mLocalTimeSpan.GetStop().Get();
-	FbxLongLong fps60 = FbxTime::GetOneFrameValue(FbxTime::eFrames60);
-	m_StartFrame = static_cast<int>(start / fps60);
-	m_Motion[keyword_].FrameNum = static_cast<UINT>((stop - start) / fps60);
-
-	FbxNode* root = fbx_scene->GetRootNode();
-
-	for (UINT b = 0; b < m_BoneNum; ++b)
+	for (int i = 0; i < anim_count; ++i)
 	{
-		// ボーンノードを検索
-		FbxNode* bone = root->FindChild(m_Bone[b].Name);
-		if (bone == nullptr)
-		{
-			continue;
-		}
+		// モーション情報を取得
+		FbxTakeInfo* take_info = importer->GetTakeInfo(i);
+		if (!take_info) continue;
 
-		// キーフレーム読み込み
-		LoadKeyFrame(keyword_, b, bone);
+		// モーションの開始時間と終了時間を60Fpsで求める
+		FbxLongLong start = take_info->mLocalTimeSpan.GetStart().Get();
+		FbxLongLong stop  = take_info->mLocalTimeSpan.GetStop().Get();
+		FbxLongLong fps60 = FbxTime::GetOneFrameValue(FbxTime::eFrames60);
+		m_StartFrame = static_cast<int>(start / fps60);
+		m_Motion[keyword_].FrameNum = static_cast<UINT>((stop - start) / fps60);
+
+		FbxNode* root = fbx_scene->GetRootNode();
+
+		for (UINT b = 0; b < m_BoneNum; ++b)
+		{
+			// ボーンノードを検索
+			FbxNode* bone = root->FindChild(m_Bone[b].Name);
+			if (bone == nullptr)
+			{
+				continue;
+			}
+
+			// キーフレーム読み込み
+			LoadKeyFrame(keyword_, b, bone);
+		}
 	}
 	
 	// マネージャーの破棄
 	if (manager != nullptr)
 	{
-		names.Clear();
 		FBX_SAFE_DESTROY(importer);
-		FBX_SAFE_DESTROY(ios);
-		FBX_SAFE_DESTROY(fbx_scene);
 		// マネージャーのDestroyを呼べばその他のFBXオブジェクトも破棄される
 		FBX_SAFE_DESTROY(manager);
 	}
@@ -723,13 +724,13 @@ void FbxModel::LoadBones(MeshData& meshData_, FbxMesh* mesh_)
 			FbxDouble* offset_mat = (FbxDouble*)offset;
 
 			// FbxDoubleからfloatにキャストする関数オブジェクト
-			auto ToFloat = [](FbxDouble d_)->float {return static_cast<float>(d_); };
+			auto to_float = [](FbxDouble d_)->float {return static_cast<float>(d_); };
 
 			bone->Offset = DirectX::XMMatrixSet(
-				ToFloat(offset_mat[0]),  ToFloat(offset_mat[1]),  ToFloat(offset_mat[2]),  ToFloat(offset_mat[3]),
-				ToFloat(offset_mat[4]),  ToFloat(offset_mat[5]),  ToFloat(offset_mat[6]),  ToFloat(offset_mat[7]),
-				ToFloat(offset_mat[8]),  ToFloat(offset_mat[9]),  ToFloat(offset_mat[10]), ToFloat(offset_mat[11]),
-				ToFloat(offset_mat[12]), ToFloat(offset_mat[13]), ToFloat(offset_mat[14]), ToFloat(offset_mat[15]));
+				to_float(offset_mat[0]),  to_float(offset_mat[1]),  to_float(offset_mat[2]),  to_float(offset_mat[3]),
+				to_float(offset_mat[4]),  to_float(offset_mat[5]),  to_float(offset_mat[6]),  to_float(offset_mat[7]),
+				to_float(offset_mat[8]),  to_float(offset_mat[9]),  to_float(offset_mat[10]), to_float(offset_mat[11]),
+				to_float(offset_mat[12]), to_float(offset_mat[13]), to_float(offset_mat[14]), to_float(offset_mat[15]));
 		}
 
 		// ウェイトの読み込み
@@ -766,7 +767,7 @@ void FbxModel::LoadBones(MeshData& meshData_, FbxMesh* mesh_)
 				{
 					continue;
 				}
-				meshData_.Vertices[vtx_i].Index[weight_count] = static_cast<UINT>(bone_no);
+				meshData_.Vertices[vtx_i].Index[weight_count]  = static_cast<UINT>(bone_no);
 				meshData_.Vertices[vtx_i].Weight[weight_count] = static_cast<float>(weight[i]);
 			}
 		}
@@ -797,7 +798,7 @@ void FbxModel::LoadKeyFrame(std::string keyword_, UINT bone_, FbxNode* boneNode_
 	Motion* motion = &m_Motion[keyword_];
 	motion->Key[bone_].resize(motion->FrameNum);
 
-	double time = static_cast<double>(m_StartFrame * (1.0 / 60.0));
+	double time = static_cast<double>(m_StartFrame * (1.f / 60.f));
 	FbxTime t;
 	for (UINT f = 0; f < motion->FrameNum; ++f)
 	{

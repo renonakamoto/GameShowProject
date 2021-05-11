@@ -27,6 +27,7 @@ cbuffer ConstantBuffer : register(b0)
     float4   MaterialDiffuse;   //! ディヒューズ光
     float4   MaterialSpecular;  //! スペキュラー光
 };
+
 VS_OUT vs_main( VS_IN input )
 {
     VS_OUT output = (VS_OUT)0;

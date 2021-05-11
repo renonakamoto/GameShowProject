@@ -1,6 +1,8 @@
-﻿#define _CRTDBG_MAP_ALLOC
+﻿#ifdef _DEBUG
+#define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
+#endif
 
 #include "Engine/Engine.h"
 #include "Scene/SceneManager.h"
@@ -9,10 +11,10 @@
 #pragma comment(lib, "winmm.lib")
 
 int APIENTRY WinMain(
-	HINSTANCE hInstance,
-	HINSTANCE hPrevInstance,
-	LPSTR     lpCmpLine,
-	INT       nCmdShow)
+	_In_	  HINSTANCE hInstance,
+	_In_opt_  HINSTANCE hPrevInstance,
+	_In_	  LPSTR     lpCmpLine,
+	_In_	  INT       nCmdShow)
 {
 #ifdef _DEBUG
 	// メモリリークチェック
@@ -27,7 +29,7 @@ int APIENTRY WinMain(
 	
 	while (!GameManager::GetInstance()->HasQuit())
 	{
-		MSG msg = { 0 };
+		MSG msg{ 0 };
 
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
@@ -50,7 +52,6 @@ int APIENTRY WinMain(
 			SceneManager::GetInstance()->Draw();
 		}
 	}
-	
 	
 	// Enigineの解放
 	Engine::GetInstance()->Release();

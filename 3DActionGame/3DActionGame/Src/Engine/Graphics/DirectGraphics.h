@@ -8,7 +8,6 @@
 #include "PixelShader.h"
 #include "../../Utility/GraphicsUtility.h"
 
-
 using namespace Microsoft::WRL;
 
 /**

@@ -77,9 +77,6 @@ void DirectGraphics::Release()
 {
 }
 
-/*
-    描画開始関数
-*/
 void DirectGraphics::StartRendering()
 {
     /*
@@ -110,20 +107,16 @@ void DirectGraphics::StartRendering()
 
 
     // ビューポートの設定
-    D3D11_VIEWPORT vp;
-    vp.Width    = WINDOW->GetClientWidth();
-    vp.Height   = WINDOW->GetClientHeight();
+    D3D11_VIEWPORT vp{ 0 };
+    vp.Width    = static_cast<FLOAT>(WINDOW->GetClientWidth());
+    vp.Height   = static_cast<FLOAT>(WINDOW->GetClientHeight());
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0.0f;
     vp.TopLeftY = 0.0f;
-    m_Context->RSSetViewports(1, &vp);
+    m_Context->RSSetViewports(1U, &vp);
 }
 
-/*
-    描画終了関数
-    バックバッファに書き込んだ情報をフロントバッファに渡す
-*/
 void DirectGraphics::FinishRendering()
 {
     // バックバッファをフロントバッファに送信する   
@@ -143,14 +136,14 @@ void DirectGraphics::StartShadwMapRendering()
     m_Context->ClearDepthStencilView(m_DepthDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
     // ビューポートの設定
-    D3D11_VIEWPORT vp;
-    vp.Width    = WINDOW->GetClientWidth()  * 10;
-    vp.Height   = WINDOW->GetClientHeight() * 10;
+    D3D11_VIEWPORT vp{ 0 };
+    vp.Width    = static_cast<FLOAT>(WINDOW->GetClientWidth()  * 10);
+    vp.Height   = static_cast<FLOAT>(WINDOW->GetClientHeight() * 10);
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0.0f;
     vp.TopLeftY = 0.0f;
-    m_Context->RSSetViewports(1, &vp);
+    m_Context->RSSetViewports(1U, &vp);
 }
 
 void DirectGraphics::SetRasterizerMode(RasterizerMode mode_)
@@ -407,7 +400,7 @@ bool DirectGraphics::CreateRenderTargetView()
 
     // RenderViewはSwapChainがもつバッファを使用して作成するので
     // GetBufferを使用してバッファを取得する
-    ID3D11Texture2D* back_buffer;
+    ID3D11Texture2D* back_buffer = nullptr;
     if (FAILED(m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&back_buffer)))
     {
         return false;
@@ -542,7 +535,7 @@ bool DirectGraphics::CreateShader()
 
 bool DirectGraphics::CreateConstantBuffer()
 {
-    D3D11_BUFFER_DESC buffer_desc;
+    D3D11_BUFFER_DESC buffer_desc{ 0 };
     buffer_desc.ByteWidth           = sizeof(ConstantBuffer);
     buffer_desc.Usage               = D3D11_USAGE_DEFAULT;
     buffer_desc.BindFlags           = D3D11_BIND_CONSTANT_BUFFER;
@@ -601,7 +594,7 @@ bool DirectGraphics::CreateRasterizer()
     */
     // ラスタライザ
     D3D11_RASTERIZER_DESC ras_desc;
-    ID3D11RasterizerState* RasBackCulling;
+    ID3D11RasterizerState* RasBackCulling = nullptr;
     ZeroMemory(&ras_desc, sizeof(ras_desc));
     ras_desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;  //! レンダリングするポリゴンを塗りつぶす
     ras_desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;   //! カリングなし
@@ -694,7 +687,7 @@ bool DirectGraphics::CreateDepthDSVAndRTV()
 
 void DirectGraphics::SetUpViewPort()
 {
-    D3D11_VIEWPORT view_port;
+    D3D11_VIEWPORT view_port{ 0 };
     // 画面左上のX座標
     view_port.TopLeftX = 0.f;
     // 画面左上のY座標

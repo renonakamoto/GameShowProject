@@ -95,7 +95,13 @@ public:
 	*/
 	void DrawShadowMap() override;
 
-	void SetMotion(std::string keyword) { m_Model->Play(keyword); }
+	/**
+	* @fn void SetMotion(std::string keyword_)
+	* @brief プレイヤーのモーションを設定関数
+	* @param[in] keyword_ モーションに紐づけているキーワード
+	* @details 現在のモーションと違うモーションをセットした場合、フレームは1になる
+	*/
+	void SetMotion(std::string keyword_) { m_Model->Play(keyword_); }
 
 	/**
 	* @fn DirectX::XMFLOAT3 GetVelocity()
