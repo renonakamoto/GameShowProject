@@ -9,14 +9,14 @@ struct VS_IN
 // VertexShaderから出力するデータ構造
 struct VS_OUT
 {
-    float4 pos                  : SV_POSITION;
+    float4 pos                  : SV_POSITION;   
     float4 posw                 : POSITION0;
     float3 norw                 : NORMAL0;
     float2 texture_pos          : TEXCOORD0;
-    float3 light                : TEXCOORD1;
-    float3 eye_vec              : TEXCOORD2;
-    float4 light_tex_coord      : TEXCOORD3;
-    float4 light_view_pos       : TEXCOORD4;
+    float3 light                : LIGHT0;
+    float3 eye_vec              : EYE0;
+    float4 light_tex_coord      : TEXCOORD1;
+    float4 light_view_pos       : LIGHT_VIEW_POS0;
 };
  
 cbuffer ConstantBuffer : register(b0)

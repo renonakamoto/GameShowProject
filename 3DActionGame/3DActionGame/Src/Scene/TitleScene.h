@@ -17,6 +17,7 @@ private:
 	void Main() override;
 	void Load() override;
 	void NextScene();
+	void ChangeControlScene();
 };
 
 #endif // !TITLESCENE_H_

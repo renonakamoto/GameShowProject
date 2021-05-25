@@ -8,10 +8,10 @@ struct PS_IN
     float4 posw             : POSITION0;
     float3 norw             : NORMAL0;
     float2 texture_pos      : TEXCOORD0;
-    float3 light            : TEXCOORD1;
-    float3 eye_vec          : TEXCOORD2;
-    float4 light_tex_coord  : TEXCOORD3;
-    float4 light_view_pos   : TEXCOORD4;
+    float3 light            : LIGHT0;
+    float3 eye_vec          : EYE0;
+    float4 light_tex_coord  : TEXCOORD1;
+    float4 light_view_pos   : LIGHT_VIEW_POS0;
 };
  
 cbuffer ConstantBuffer : register(b0)
@@ -60,9 +60,9 @@ float4 ps_main(PS_IN input) : SV_Target
 
     
     // ‰e
-    input.light_tex_coord /= input.light_tex_coord.w;
+    input.light_tex_coord.xyz /= input.light_tex_coord.w;
     float max_depth_slope = max(abs(ddx(input.light_tex_coord.z)), abs(ddy(input.light_tex_coord.z)));
-    float tex_value = TextureDepth.Sample(ShadowSampler, input.light_tex_coord).r;
+    float tex_value = TextureDepth.Sample(ShadowSampler, input.light_tex_coord.xy).r;
     float light_length = input.light_view_pos.z / input.light_view_pos.w;
     if ((tex_value + 0.0005) > light_length)
     {

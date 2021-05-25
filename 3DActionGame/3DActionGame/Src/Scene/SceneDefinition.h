@@ -9,6 +9,7 @@ enum class SceneID
 	Clear,
 	Gameover,
 	Debug,
+	Control,
 
 	MaxSceneID,
 };

@@ -4,6 +4,7 @@
 #include "GameScene.h"
 #include "ClearScene.h"
 #include "GameoverScene.h"
+#include "ControlScene.h"
 #include "../Engine/Engine.h"
 
 using namespace std;
@@ -49,6 +50,9 @@ void SceneManager::ChangeScene(SceneID id_)
 	case SceneID::Debug:
 		m_SceneStack.push(make_shared<DebugScene>(this));
 		break;
+	case SceneID::Control:
+		m_SceneStack.push(make_shared<ControlScene>(this));
+		break;
 	case SceneID::MaxSceneID:
 		break;
 	default:
@@ -71,6 +75,9 @@ void SceneManager::PushScene(SceneID id_)
 		break;
 	case SceneID::Gameover:
 		m_SceneStack.push(make_shared<GameoverScene>(this));
+		break;
+	case SceneID::Control:
+		m_SceneStack.push(make_shared<ControlScene>(this));
 		break;
 	case SceneID::MaxSceneID:
 		break;

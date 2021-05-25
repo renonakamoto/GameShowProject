@@ -61,6 +61,7 @@
     <ClCompile Include="Src\Objects\Player\PlayerState\PlayerRunState.cpp" />
     <ClCompile Include="Src\Objects\Stage\Stage.cpp" />
     <ClCompile Include="Src\Scene\ClearScene.cpp" />
+    <ClCompile Include="Src\Scene\ControlScene.cpp" />
     <ClCompile Include="Src\Scene\DebugScene.cpp" />
     <ClCompile Include="Src\Scene\GameoverScene.cpp" />
     <ClCompile Include="Src\Scene\GameScene.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="Src\Objects\Player\PlayerState\PlayerRunState.h" />
     <ClInclude Include="Src\Objects\Stage\Stage.h" />
     <ClInclude Include="Src\Scene\ClearScene.h" />
+    <ClInclude Include="Src\Scene\ControlScene.h" />
     <ClInclude Include="Src\Scene\DebugScene.h" />
     <ClInclude Include="Src\Scene\GameoverScene.h" />
     <ClInclude Include="Src\Scene\GameScene.h" />

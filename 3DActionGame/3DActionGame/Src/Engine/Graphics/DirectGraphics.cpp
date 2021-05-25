@@ -2,6 +2,7 @@
 #include "DirectGraphics.h"
 #include "../Engine.h"
 #include "../../Utility/Utility.h"
+#include "../Engine.h"
 
 #pragma comment(lib,"d3d11.lib")
 
@@ -707,7 +708,7 @@ void DirectGraphics::SetUpViewPort()
 
 void DirectGraphics::SetUpLight()
 {
-    DirectX::XMFLOAT3 light_pos(0.0f, 1189.0f, -394.0f);
+    DirectX::XMFLOAT3 light_pos(0.0f, 1000, 1000);
     DirectX::XMStoreFloat4(&m_ConstantBufferData.Light, DirectX::XMVector3Normalize(DirectX::XMVectorSet(light_pos.x, light_pos.y, light_pos.z, 0.0f)));
 
     DirectX::XMMATRIX light_view = DirectX::XMMatrixLookAtLH(
@@ -718,6 +719,8 @@ void DirectGraphics::SetUpLight()
     DirectX::XMStoreFloat4x4(&m_ConstantBufferData.LightView, DirectX::XMMatrixTranspose(light_view));
 
     // プロジェクション行列設定
+    DirectX::XMMATRIX proj_mat = DirectX::XMMatrixOrthographicLH(WINDOW->GetClientWidth() * 2, WINDOW->GetClientHeight() * 2, -1, 500000.f);
+
     // 視野角
     constexpr float fov = DirectX::XMConvertToRadians(45.0f);
     // アスペクト比
@@ -725,8 +728,8 @@ void DirectGraphics::SetUpLight()
     // Near
     float near_z = 0.1f;
     // Far
-    float far_z = 500000.f;
+    float far_z  = 500000.f;
     // プロジェクション行列の作成
-    DirectX::XMMATRIX proj_mat = DirectX::XMMatrixPerspectiveFovLH(fov, aspect, near_z, far_z);
+    //DirectX::XMMATRIX proj_mat = DirectX::XMMatrixPerspectiveFovLH(fov, aspect, near_z, far_z);
     DirectX::XMStoreFloat4x4(&GRAPHICS->GetConstantBufferData()->LightProjection, DirectX::XMMatrixTranspose(proj_mat));
 }

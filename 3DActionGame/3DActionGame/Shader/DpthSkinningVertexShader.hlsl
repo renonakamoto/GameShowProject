@@ -5,18 +5,18 @@
 // VertexShaderに送られてくるデータ構造
 struct VS_IN
 {
-    float4 pos : POSITION0;
-    float4 nor : NORMAL0;
-    float4 color : COLOR0;
-    float2 texture_pos : TEXCOORD0;
-    uint4 bones : BONE_INDEX;
-    float4 weights : BONE_WEIGHT;
+    float4 pos          : POSITION0;
+    float4 nor          : NORMAL0;
+    float4 color        : COLOR0;
+    float2 texture_pos  : TEXCOORD0;
+    uint4 bones         : BONE_INDEX;
+    float4 weights      : BONE_WEIGHT;
 };
 
 // VertexShaderから出力するデータ構造
 struct VS_OUT
 {
-    float4 pos : SV_POSITION;
+    float4 pos   : SV_POSITION;
     float4 depth : POSITION0;
 };
 

@@ -37,6 +37,8 @@ void TitleScene::Load()
         ObjectManager::GetInstance()->Register(new Background("bg", DirectX::XMFLOAT3(0.f, 0.f, 1.f)));
         ObjectManager::GetInstance()->Register(new Button<TitleScene>("start_ui_normal", "start_ui_hover", DirectX::XMFLOAT3(200.f, 400.f, 0.f), this, &TitleScene::NextScene));
         ObjectManager::GetInstance()->Register(new Button<GameManager>("quit_ui_normal", "quit_ui_hover", DirectX::XMFLOAT3(800.f, 400.f, 0.f), GameManager::GetInstance(), &GameManager::QuitGame));
+        
+       ObjectManager::GetInstance()->Register(new Button<TitleScene>("control_ui_normal", "control_ui_hover", DirectX::XMFLOAT3(500.f, 500.f, 0.f), this, &TitleScene::ChangeControlScene));
 
         // オブジェクトの初期化
         ObjectManager::GetInstance()->Init();
@@ -52,6 +54,11 @@ void TitleScene::NextScene()
     m_SceneChanger->ChangeScene(SceneID::Game);
 }
 
+void TitleScene::ChangeControlScene()
+{
+    m_SceneChanger->ChangeScene(SceneID::Control);
+}
+
 DWORD WINAPI TitleScene::LoadResources(LPVOID lpParam_)
 {
     TEX_MANAGER->Load("Res/Textures/title_bg.png", "bg");
@@ -59,6 +66,8 @@ DWORD WINAPI TitleScene::LoadResources(LPVOID lpParam_)
     TEX_MANAGER->Load("Res/Textures/title_ui_start_hover.png", "start_ui_hover");
     TEX_MANAGER->Load("Res/Textures/title_ui_quit_normal.png", "quit_ui_normal");
     TEX_MANAGER->Load("Res/Textures/title_ui_quit_hover.png", "quit_ui_hover");
+    TEX_MANAGER->Load("Res/Textures/title_ui_control_normal.png", "control_ui_normal");
+    TEX_MANAGER->Load("Res/Textures/title_ui_control_hover.png", "control_ui_hover");
 
     return 0;
 }
