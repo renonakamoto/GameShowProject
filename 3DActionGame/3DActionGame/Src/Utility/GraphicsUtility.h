@@ -104,8 +104,11 @@ struct CVertex {
     DirectX::XMFLOAT4 Color;        //! 頂点カラー
     DirectX::XMFLOAT2 TexturePos;   //! テクスチャ座標
 
-    UINT  Index[4];                 //! ボーンのインデックス番号
-    float Weight[4];                //! ボーンの影響度
+    UINT              Index[4];     //! ボーンのインデックス番号
+    float             Weight[4];    //! ボーンの影響度
+
+    DirectX::XMFLOAT3 Tangent;      //! 頂点座標
+    DirectX::XMFLOAT3 Binormal;     //! 頂点座標
 
     /**
     * @brief コンストラクタ
@@ -117,7 +120,7 @@ struct CVertex {
 };
 
 /**
-* @brief 3D用の頂点データ
+* @brief 3D用のマテリアルデータ
 */
 struct ObjMaterial
 {
@@ -189,5 +192,12 @@ struct TextureData
     ~TextureData()
     {}
 };
+
+
+void CalcTangentAndBinormal(DirectX::XMFLOAT3& p0_, DirectX::XMFLOAT2& uv0_, 
+                            DirectX::XMFLOAT3& p1_, DirectX::XMFLOAT2& uv1_, 
+                            DirectX::XMFLOAT3& p2_, DirectX::XMFLOAT2& uv2_, 
+                            DirectX::XMFLOAT3* outTangent_, DirectX::XMFLOAT3* outBinormal_);
+
 
 #endif

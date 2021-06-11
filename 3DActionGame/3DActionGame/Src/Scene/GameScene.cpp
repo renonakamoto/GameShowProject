@@ -70,7 +70,7 @@ DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
     FbxStorage::GetInstance()->GetModel("Ekard")->AddMesh("Res/Models/Player/Sword_12.fbx", DirectX::XMFLOAT3(22.9f, 0.0f, 40.0f), "Bip001 R Hand");
 
     // エネミーモデルの読み込み
-    FbxStorage::GetInstance()->LoadModel("Res/Models/Enemy/Grenadier.fbx",              "Enemy");
+    FbxStorage::GetInstance()->LoadModel("Res/Models/Enemy/Grenadier.fbx", "Enemy");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierWalk.fbx",        "Enemy", "Walk"  );
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierIdle.fbx",        "Enemy", "Idle"  );
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Enemy/@GrenadierMeleeAttack.fbx", "Enemy", "Attack");
@@ -82,6 +82,9 @@ DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 
     // 当たり判定用のキューブモデルの読み込み
     ObjFileStrage::GetInstance()->LoadModel("Res/Models/Shape/Cube.obj", "Cube" );
+    
+    TEX_MANAGER->Load("Res/Textures/Grenadier_Normal.png", "GrenadierNormalTex");
+
     return 0;
 }
 

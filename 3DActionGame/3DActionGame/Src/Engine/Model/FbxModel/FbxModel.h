@@ -163,6 +163,13 @@ private:
 	void LoadUV(MeshData& meshData_, FbxMesh* mesh_);
 
 	/**
+	* @fn void CreateTangentAndBinormal(MeshData& meshData_)
+	* @brief 接空間ベクトル作成関数
+	* @param[inout] meshData_ メッシュデータ
+	*/
+	void CreateTangentAndBinormal(MeshData& meshData_);
+	
+	/**
 	* @fn void LoadBones(MeshData& meshData_, FbxMesh* mesh_)
 	* @brief テクスチャ座標を読み込む作成関数
 	* @param[out] meshData_ 取得したテクスチャ座標を保存する変数

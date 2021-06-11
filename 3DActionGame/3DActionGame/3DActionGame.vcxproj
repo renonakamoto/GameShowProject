@@ -68,6 +68,7 @@
     <ClCompile Include="Src\Scene\SceneManager.cpp" />
     <ClCompile Include="Src\Scene\TitleScene.cpp" />
     <ClCompile Include="Src\Utility\Calculation.cpp" />
+    <ClCompile Include="Src\Utility\GraphicsUtility.cpp" />
     <ClCompile Include="Src\Utility\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>

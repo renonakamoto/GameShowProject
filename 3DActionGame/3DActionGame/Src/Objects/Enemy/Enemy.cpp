@@ -33,17 +33,25 @@ void Enemy::Draw()
 	// ラスタラスザの設定
 	graphics->SetRasterizerMode(RasterizerMode::MODE_CULL_NONE);
 	// 頂点シェーダの設定
-	context->VSSetShader(graphics->GetVertexShader()->GetShaderInterface(), NULL, 0U);
+	context->VSSetShader(graphics->GetVertexShader()->GetShaderInterface(), nullptr, 0U);
 	// ピクセルシェーダの設定
-	context->PSSetShader(graphics->GetPixelShader()->GetShaderInterface(), NULL, 0U);
+	context->PSSetShader(graphics->GetPixelShader()->GetShaderInterface(), nullptr, 0U);
 
 	ID3D11ShaderResourceView* depth_tex = graphics->GetDepthTextureView();
 	context->PSSetShaderResources(1U, 1U, &depth_tex);
-
 	ID3D11SamplerState* sampler_state = graphics->GetShadowMapSamplerState();
 	context->PSSetSamplers(1U, 1U, &sampler_state);
 
+	ID3D11ShaderResourceView* normal_tex = TEX_MANAGER->GetTexture("GrenadierNormalTex")->Texture.Get();
+	context->PSSetShaderResources(2U, 1U, &depth_tex);
+
 	m_Model->Render( m_Pos, m_Scale, m_Rot);
+
+	context->VSSetShader(nullptr, nullptr, 0U);
+	context->PSSetShader(nullptr, nullptr, 0U);
+	ID3D11ShaderResourceView* nullSRV[1] = { nullptr };
+	context->PSSetShaderResources(2U, 1U, nullSRV);
+
 }
 
 void Enemy::DrawShadowMap()

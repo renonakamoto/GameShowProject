@@ -95,7 +95,7 @@ void DirectGraphics::StartRendering()
 
     // 深度ステンシルビューのクリア
     m_Context->ClearDepthStencilView(
-                m_DepthStencilView.Get(),                      // 対象のビュー
+                m_DepthStencilView.Get(),                // 対象のビュー
                 D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, // クリアフラグ
                 1.0f,                                    // 深度クリア値
                 0U                                       // ステンシルクリア値

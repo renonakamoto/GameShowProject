@@ -1,4 +1,5 @@
-﻿#include "Player.h"
+﻿
+#include "Player.h"
 #include "../../Engine/Engine.h"
 #include "../../Utility/Calculation.h"
 #include "PlayerState/PlayerIdleState.h"

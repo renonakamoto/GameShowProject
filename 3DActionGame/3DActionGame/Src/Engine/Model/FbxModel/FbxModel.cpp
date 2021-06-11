@@ -108,6 +108,8 @@ bool FbxModel::LoadModel(const char* fileName_)
 		LoadUV(mesh_data, mesh);
 		// 頂点カラーの取得
 		LoadVertexColors(mesh_data, mesh);
+		// 接空間ベクトルの作成
+		CreateTangentAndBinormal(mesh_data);
 		// マテリアル名の取得
 		LoadMaterialNames(mesh_data, mesh);
 		// ボーンの取得
@@ -671,6 +673,26 @@ void FbxModel::LoadUV(MeshData& meshData_, FbxMesh* mesh_)
 	}
 }
 
+void FbxModel::CreateTangentAndBinormal(MeshData& meshData_)
+{
+	DirectX::XMFLOAT3 tangent, binormal;
+
+	for (size_t i = 0; i < meshData_.Vertices.size(); i+=3)
+	{
+		CalcTangentAndBinormal(meshData_.Vertices[i].Pos, meshData_.Vertices[i].TexturePos,
+							   meshData_.Vertices[i+1].Pos, meshData_.Vertices[i+1].TexturePos,
+							   meshData_.Vertices[i+2].Pos, meshData_.Vertices[i+2].TexturePos,
+							   &tangent, &binormal);
+
+		for (size_t j = i; j < (i + 3); ++j)
+		{
+			meshData_.Vertices[j].Tangent  = tangent;
+			meshData_.Vertices[j].Binormal = binormal;
+		}
+	}
+	
+}
+
 void FbxModel::LoadBones(MeshData& meshData_, FbxMesh* mesh_)
 {
 	int skin_num = mesh_->GetDeformerCount(FbxDeformer::eSkin);
@@ -990,6 +1012,8 @@ bool FbxModel::CreateInputLayout(ID3D11Device* device_, VertexShader* vertexShad
 		{ "TEXCOORD",   0, DXGI_FORMAT_R32G32_FLOAT,        0,  D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "BONE_INDEX", 0, DXGI_FORMAT_R32G32B32A32_UINT,   0,  D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "BONE_WEIGHT",0, DXGI_FORMAT_R32G32B32A32_FLOAT,  0,  D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TANGENT",	0, DXGI_FORMAT_R32G32B32_FLOAT,		0,  D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "BINORMAL",	0, DXGI_FORMAT_R32G32B32_FLOAT,		0,  D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
 	//頂点レイアウト作成
