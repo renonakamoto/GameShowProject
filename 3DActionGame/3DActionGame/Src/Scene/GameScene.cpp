@@ -52,6 +52,14 @@ void GameScene::Load()
         // 各オブジェクトの生成後、各オブジェクトのInitを行う
         ObjectManager::GetInstance()->Init();
         
+        m_OffScreenSprite.Init(
+            GRAPHICS->GetOffScreenTextureView(), 
+            WINDOW->GetClientWidth(), 
+            WINDOW->GetClientHeight(),
+            GRAPHICS->GetSpriteVertexShader(),
+            GRAPHICS->GetBlurPixelShader()
+        );
+
         // 入力モードを変更
         INPUT_MANAGER->SetInputMode(InputMode::MODE_GAME);
         m_CurrentState = SceneState::Main;
@@ -60,6 +68,8 @@ void GameScene::Load()
 
 DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 {
+    FbxStorage::GetInstance()->LoadModel("Res/Models/unitychan.fbx", "unitychan");
+
     // プレイヤーモデルの読み込み
     FbxStorage::GetInstance()->LoadModel("Res/Models/Player/Ekard.fbx",                  "Ekard");
     FbxStorage::GetInstance()->LoadMotion("Res/Models/Player/Ekard_Run_01.fbx",          "Ekard", "Run");
@@ -83,7 +93,8 @@ DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
     // 当たり判定用のキューブモデルの読み込み
     ObjFileStrage::GetInstance()->LoadModel("Res/Models/Shape/Cube.obj", "Cube" );
     
-    TEX_MANAGER->Load("Res/Textures/Grenadier_Normal.png", "GrenadierNormalTex");
+    TEX_MANAGER->Load("Res/Textures/normal.png", "GrenadierNormalTex");
+    TEX_MANAGER->Load("Res/Textures/blur_map.png", "BlurMap");
 
     return 0;
 }
@@ -131,7 +142,7 @@ void GameScene::Draw()
     switch (m_CurrentState)
     {
     case SceneState::Load:
-        GRAPHICS->StartRendering();
+        GRAPHICS->RenderingPostEffect();
         {
             TEX_MANAGER->Render("NowLoading", DirectX::XMFLOAT3(0.f, 0.f, 0.f));
         }
@@ -163,7 +174,12 @@ void GameScene::Draw()
 
         GRAPHICS->FinishRendering();
     }
-        
+        // 3パス目
+    {
+        GRAPHICS->RenderingPostEffect();
+        m_OffScreenSprite.Draw(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
+    }
+
         break;
     default:
         break;

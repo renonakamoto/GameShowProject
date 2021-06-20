@@ -193,14 +193,22 @@ void Player::Move(float x_, float z_)
 		// 移動する前に座標を保存する
 		m_OldPos = m_Pos;
 
-		// 向きを算出
-		float angle = atan2f(m_Velocity.x, m_Velocity.z);
-		m_Rot.y     = DirectX::XMConvertToDegrees(angle);
-
+		//// 移動後の座標を一時保存
+		//DirectX::XMFLOAT3 after_pos = Calculation::Add(m_Pos, m_Velocity);
+		//// Yを少し上に
+		//after_pos.y += 20.0f;
+		//
+		//float height = 0.0f;
+		//if (m_Stage->IntersectRayAndStage(after_pos, DirectX::XMFLOAT3(0.0f, -60.0f, 0.0f), height) == true)
+		//{
+		//	m_Pos = m_Velocity;
+		//	m_Pos.y = height;
+		//}
+		
 		// 移動する
 		m_Pos.x += m_Velocity.x * m_Speed * (1.f / 60.f);
 		m_Pos.z += m_Velocity.z * m_Speed * (1.f / 60.f);
-
+		
 		// 移動地点でのステージのポリゴンの高さを算出
 		m_Pos.y = m_Stage->GetPolygonHeight(m_Pos);
 
@@ -211,7 +219,11 @@ void Player::Move(float x_, float z_)
 		m_OBB->m_NormalDirect[0] = Calculation::Normalize(DirectX::XMFLOAT3(m_Velocity.z, m_Velocity.y, -m_Velocity.x));
 		m_OBB->m_NormalDirect[2] = Calculation::Normalize(m_Velocity);
 
-		// 移動
+		// 移動方向を保存
 		m_DirectionVec = Calculation::Normalize(m_Velocity);
+
+		// 向きを算出
+		float angle = atan2f(m_Velocity.x, m_Velocity.z);
+		m_Rot.y = DirectX::XMConvertToDegrees(angle);
 	}
 }

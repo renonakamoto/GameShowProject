@@ -35,6 +35,8 @@ public:
 	*/
 	bool Create(ID3D11Device* device_, const char* fileName_)override;
 
+	bool Create(ID3D11Device* device_, const char* fileName_, ID3D11ClassLinkage* classLinkage_);
+
 	/**
 	* @fn ID3D11VertexShader* GetShaderInterface()
 	* @brief シェーダーのインターフェースを返す関数

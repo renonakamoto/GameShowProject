@@ -94,7 +94,7 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-    GRAPHICS->StartRendering();
+    GRAPHICS->RenderingPostEffect();
     switch (m_CurrentState)
     {
     case SceneState::Load:

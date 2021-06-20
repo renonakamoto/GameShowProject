@@ -1,7 +1,4 @@
 
-// ƒVƒF[ƒ_[‚É‘—‚ê‚éƒ{[ƒ“s—ñ‚ÌÅ‘å”
-#define MAX_BONE_MATRIX 255
-
 /****************************************
            “ü—Íƒpƒ‰ƒ[ƒ^
 ****************************************/
@@ -17,7 +14,6 @@ struct PS_IN
     float3 eye_vec          : EYE0;
     float4 light_tex_coord  : TEXCOORD1;
     float4 light_view_pos   : LIGHT_VIEW_POS0;
-    float4 light_tangent_direct : TANGENT_LIGHT;
 };
 
 /****************************************
@@ -47,113 +43,85 @@ Texture2D    Texture       : register(t0); // Texture‚ðƒXƒƒbƒg0‚Ì0”Ô–Ú‚ÌƒeƒNƒXƒ
 SamplerState Sampler       : register(s0); // Sampler‚ðƒXƒƒbƒg0‚Ì0”Ô–Ú‚ÌƒTƒ“ƒvƒ‰ƒŒƒWƒXƒ^‚ÉÝ’è
 Texture2D    TextureDepth  : register(t1);
 SamplerState ShadowSampler : register(s1);
-Texture2D    NormalTexture : register(t2);
 
 
 /****************************************
           ‹¤’ÊŠÖ”
 ****************************************/
 
-float4 HalfLambert(float ndl)
+float HalfLambert(float3 lig_dir, float3 normal)
 {
+    float ndl = saturate(dot(normal, lig_dir));
+    
     float half_ndl = ndl * 0.5 + 0.5;
     float square_ndl = half_ndl * half_ndl;
 	
-    return MaterialDiffuse * square_ndl;
+    return square_ndl;
 }
 
-float4 Phong(float3 nw, float3 eye_vec, float3 light)
+float4 Phong(float3 normal, float3 eye_vec, float3 lig_dir)
 {
-    // –@üƒxƒNƒgƒ‹
-    float4 N = float4(nw, 0.0);
-    // ƒ‰ƒCƒgƒxƒNƒgƒ‹
-    float4 L = float4(light, 0.0);
-    // –@ü‚Æƒ‰ƒCƒg‚Ì“àÏ‚ÅŒõ‚Ì“–‚½‚è‹ï‡‚ðŽZo
-    float NL = dot(N, L);
-    // ”½ŽËƒxƒNƒgƒ‹‚ðŽZo
-    float4 R = normalize(-L + 2.0 * N * NL);
+    // ƒ‰ƒCƒg‚Ì”½ŽËƒxƒNƒgƒ‹‚ð‹‚ß‚é
+    float ndl = saturate(dot(normal, lig_dir));
+    float3 ref_vec = normalize(-lig_dir + 2.0 * normal * ndl);
     
-    return pow(saturate(dot(R.xyz, eye_vec)), 60);
+    // ‹¾–Ê”½ŽË‚Ì‹­‚³‚ðŽZo
+    float t = saturate(dot(ref_vec, eye_vec));
+    
+    // ‹­‚³‚ði‚é
+    t = pow(t, 60.0);
+    
+    return MaterialSpecular * t * MaterialSpecular.z;
+    
+    //// –@üƒxƒNƒgƒ‹
+    //float4 n = float4(nw, 0.0);
+    //// ƒ‰ƒCƒgƒxƒNƒgƒ‹
+    //float4 l = float4(light, 0.0);
+    //// –@ü‚Æƒ‰ƒCƒg‚Ì“àÏ‚ÅŒõ‚Ì“–‚½‚è‹ï‡‚ðŽZo
+    //float  ndl = dot(n, l);
+    //// ”½ŽËƒxƒNƒgƒ‹‚ðŽZo
+    //float4 reflect = normalize(-l + 2.0 * n * ndl);
+    //
+    //return MaterialSpecular * pow(saturate(dot(reflect.xyz, eye_vec)), 60) * MaterialSpecular.z;
 }
-
-
-/****************************************
-          ƒCƒ“ƒ^[ƒtƒF[ƒX
-****************************************/
-
-/*
-    ƒ‰ƒCƒeƒBƒ“ƒO‚ÌƒCƒ“ƒ^[ƒtƒF[ƒX
-*/
-interface BaseLight
-{
-    float4 GetColor(PS_IN input);
-};
-
-/****************************************
-          ƒNƒ‰ƒX
-****************************************/
-
-class PhongShading : BaseLight
-{
-    float4 GetColor(PS_IN input)
-    {
-        float ndl = saturate(dot(input.norw, input.light));
-        float4 diffuse = HalfLambert(ndl);
-        
-        float4 specular = Phong(input.norw, input.eye_vec, input.light);
-        
-        return diffuse + specular;
-
-    }
-};
-
-
 
 /****************************************
             ƒGƒ“ƒgƒŠ[ŠÖ”
 ****************************************/
 float4 ps_main(PS_IN input) : SV_Target
 {
-    // –@üƒxƒNƒgƒ‹
+   // –@üƒxƒNƒgƒ‹
     float4 N = float4(input.norw, 0.0);
-    // ƒ‰ƒCƒgƒxƒNƒgƒ‹
+   // ƒ‰ƒCƒgƒxƒNƒgƒ‹
     float4 L = float4(input.light, 0.0);
-    // –@ü‚Æƒ‰ƒCƒg‚Ì“àÏ‚ÅŒõ‚Ì“–‚½‚è‹ï‡‚ðŽZo
+   // –@ü‚Æƒ‰ƒCƒg‚Ì“àÏ‚ÅŒõ‚Ì“–‚½‚è‹ï‡‚ðŽZo
     float NL = dot(N, L);
-    // ”½ŽËƒxƒNƒgƒ‹‚ðŽZo
+   // ”½ŽËƒxƒNƒgƒ‹‚ðŽZo
     float4 R = normalize(-L + 2.0 * N * NL);
-    
+   
     // ‹¾–Ê”½ŽËŒõ
-    float4 specular = pow(saturate(dot(R, input.eye_vec)), 60);
+    //float4 specular = pow(saturate(dot(R, input.eye_vec)), 60);
     
-   // float4 specular = Phong(input.norw, input.eye_vec, input.light);
-
-    float3 normal_color = NormalTexture.Sample(Sampler, input.texture_pos);
-    float3 normal_vec = 2 * normal_color - 1.0f;
-    normal_vec = normalize(normal_vec);
-    
-    float3 bright = dot(input.light_tangent_direct.xyz, normal_vec);
-    bright = max(0.0, bright);
-    
-    // ŠgŽUŒõ
+    float4 specular = Phong(input.norw, input.eye_vec, input.light);
+   
+   // ŠgŽUŒõ
     float4 tex_color = Texture.Sample(Sampler, input.texture_pos);
-    float4 diffuse = HalfLambert(saturate(NL)) + tex_color;
-    
-    // ŠÂ‹«Œõ
+    float4 diffuse = tex_color * HalfLambert(input.light, input.norw);
+   
+   // ŠÂ‹«Œõ
     float4 ambient = diffuse / 2.0;
-
-    float4 color = ambient + diffuse + specular;
-
+   
+    float4 color = diffuse + specular + ambient;
     
     // ‰e
-   //input.light_tex_coord.xyz /= input.light_tex_coord.w;
-   //float max_depth_slope = max(abs(ddx(input.light_tex_coord.z)), abs(ddy(input.light_tex_coord.z)));
-   //float tex_value = TextureDepth.Sample(ShadowSampler, input.light_tex_coord.xy).r;
-   //float light_length = input.light_view_pos.z / input.light_view_pos.w;
-   //if ((tex_value + 0.0005) > light_length)
-   //{
-   //    color /= 3;
-   //}
+    //input.light_tex_coord.xyz /= input.light_tex_coord.w;
+    //float max_depth_slope = max(abs(ddx(input.light_tex_coord.z)), abs(ddy(input.light_tex_coord.z)));
+    //float tex_value = TextureDepth.Sample(ShadowSampler, input.light_tex_coord.xy).r;
+    //float light_length = input.light_view_pos.z / input.light_view_pos.w;
+    //if ((tex_value + 0.0005) > light_length)
+    //{
+    //    color /= 3;
+    //}
 
     return color;
 }

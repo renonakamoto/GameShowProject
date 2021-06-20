@@ -239,7 +239,7 @@ public:
 	* @param[in] pB_ 面を表すベクトルB
 	* @return bool 当たっているかどうかを真偽で返す
 	*/
-	static bool HitRayAndPlane(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, DirectX::XMFLOAT3 pA_, DirectX::XMFLOAT3 pB_);
+	static bool HitRayAndPlane(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, DirectX::XMFLOAT3 pA_, DirectX::XMFLOAT3 pB_, DirectX::XMFLOAT3 pC_);
 
 	/**
 	* @fn bool IntersectRayAndTriangle(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, DirectX::XMFLOAT3 c_, DirectX::XMFLOAT3& intersectPos_)

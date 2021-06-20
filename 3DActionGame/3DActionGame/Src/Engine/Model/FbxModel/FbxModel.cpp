@@ -454,9 +454,15 @@ void FbxModel::LoadMaterial(FbxSurfaceMaterial* material_)
 	entry_material.Ambient[3]  = static_cast<float>(factors[static_cast<int>(MaterialList::Ambient)]);
 	entry_material.Diffuse[3]  = static_cast<float>(factors[static_cast<int>(MaterialList::Diffuse)]);
 	entry_material.Specular[3] = static_cast<float>(factors[static_cast<int>(MaterialList::Specular)]);
+
+	prop = material_->FindProperty(FbxSurfaceMaterial::sShininess);
+	if (prop.IsValid())
+	{
+		entry_material.Shininess = static_cast<float>(prop.Get<FbxDouble>());
+	}
+	
 	// マテリアルを追加
 	m_Materials[material_->GetName()] = entry_material;
-
 
 	/*
 		テクスチャの取得

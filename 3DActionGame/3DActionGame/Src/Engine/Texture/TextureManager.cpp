@@ -229,7 +229,6 @@ bool TextureManager::CreateIndexBuffer(TextureData& data_, ID3D11Device* device_
 {
 	if (device_ == nullptr) return false;
 
-	
 	WORD index[]{
 		0, 1, 2,
 		2, 1, 3

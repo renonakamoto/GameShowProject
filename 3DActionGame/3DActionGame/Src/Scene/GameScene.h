@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "../Engine/Model/FbxModel/FbxModel.h"
 #include "../ObjectManager/ObjectManager.h"
+#include "../Objects/Sprite/Sprite.h"
 
 class GameScene : public Scene
 {
@@ -20,6 +21,7 @@ private:
 	static DWORD WINAPI LoadResources(LPVOID lpParam_);
 
 private:
+	Sprite m_OffScreenSprite;
 
 };
 

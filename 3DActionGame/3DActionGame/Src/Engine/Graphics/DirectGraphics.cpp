@@ -23,6 +23,11 @@ bool DirectGraphics::Init()
         return false;
     }
 
+    if (CreateOffScreenDSVAndRTV() == false)
+    {
+        return false;
+    }
+
     // デプスビューとステンシルビューの作成
     if (CreateDepthAndStencilView() == false)
     {
@@ -84,18 +89,16 @@ void DirectGraphics::StartRendering()
         DirectX11は描画の開始を宣言する必要はないがビューのクリアを毎フレーム
         行わないと描画内容がおかしいことになる
     */
-
-    float clear_color[4] = { 0.0f,0.0f,1.0f,1.0f };
-
     // レンダーターゲットビューのクリア
+    float clear_color[4] = { 0.0f,0.0f,1.0f,1.0f };
     m_Context->ClearRenderTargetView(
-                m_RenderTargetView.Get(), // 対象のレンダーターゲットビュー
-                clear_color         // クリアするビューのカラー
+        m_OffScreenRenderTargetView.Get(), // 対象のレンダーターゲットビュー
+                clear_color               // クリアするビューのカラー
                 );
 
     // 深度ステンシルビューのクリア
     m_Context->ClearDepthStencilView(
-                m_DepthStencilView.Get(),                // 対象のビュー
+                m_OffScreenDSTV.Get(),                // 対象のビュー
                 D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, // クリアフラグ
                 1.0f,                                    // 深度クリア値
                 0U                                       // ステンシルクリア値
@@ -104,7 +107,7 @@ void DirectGraphics::StartRendering()
     /*
        出力先の設定
     */
-    m_Context->OMSetRenderTargets(1U, m_RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
+    m_Context->OMSetRenderTargets(1U, m_OffScreenRenderTargetView.GetAddressOf(), m_OffScreenDSTV.Get());
 
 
     // ビューポートの設定
@@ -126,20 +129,49 @@ void DirectGraphics::FinishRendering()
 
 void DirectGraphics::StartShadwMapRendering()
 {    
-    // レンダーターゲットの設定
-    m_Context->OMSetRenderTargets(1U, m_DepthRenderTargetView.GetAddressOf(), m_DepthDepthStencilView.Get());
-    float clear_color[4] = { 0.f,0.f,0.f,1.f };
-
     // レンダーターゲットのクリア
+    float clear_color[4] = { 0.f,0.f,0.f,1.f };
     m_Context->ClearRenderTargetView(m_DepthRenderTargetView.Get(), clear_color);
 
     // 深度ステンシルのクリア
     m_Context->ClearDepthStencilView(m_DepthDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
+    // レンダーターゲットの設定
+    m_Context->OMSetRenderTargets(1U, m_RenderTargetView.GetAddressOf(), m_DepthDepthStencilView.Get());
+
     // ビューポートの設定
     D3D11_VIEWPORT vp{ 0 };
-    vp.Width    = static_cast<FLOAT>(WINDOW->GetClientWidth()  * 10);
-    vp.Height   = static_cast<FLOAT>(WINDOW->GetClientHeight() * 10);
+    vp.Width    = static_cast<FLOAT>(WINDOW->GetClientWidth()  * 2);
+    vp.Height   = static_cast<FLOAT>(WINDOW->GetClientHeight() * 2);
+    vp.MinDepth = 0.0f;
+    vp.MaxDepth = 1.0f;
+    vp.TopLeftX = 0.0f;
+    vp.TopLeftY = 0.0f;
+    m_Context->RSSetViewports(1U, &vp);
+}
+
+void DirectGraphics::RenderingPostEffect()
+{
+    // レンダーターゲットビューのクリア
+    float clear_color[4] = { 0.0f,0.0f,1.0f,1.0f };
+    m_Context->ClearRenderTargetView(m_RenderTargetView.Get(), clear_color);
+
+    // 深度ステンシルビューのクリア
+    m_Context->ClearDepthStencilView(
+        m_DepthStencilView.Get(),
+        D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+        1.0f,
+        0U);
+
+    /*
+       出力先の設定
+    */
+    m_Context->OMSetRenderTargets(1U, m_RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
+
+    // ビューポートの設定
+    D3D11_VIEWPORT vp{ 0 };
+    vp.Width  = static_cast<FLOAT>(WINDOW->GetClientWidth());
+    vp.Height = static_cast<FLOAT>(WINDOW->GetClientHeight());
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0.0f;
@@ -438,8 +470,6 @@ bool DirectGraphics::CreateDepthAndStencilView()
     // テクスチャ配列のサイズ
     texture_desc.ArraySize = 1U;
     // テクスチャのフォーマット
-    // DXGI_FORMAT_D24_UNORM_S8_UINT
-    // Depth24bit, Stencil8bitとなる
     texture_desc.Format = DXGI_FORMAT_D32_FLOAT;
     // 
 #ifdef ENABLE_MSAA
@@ -488,8 +518,6 @@ bool DirectGraphics::CreateDepthAndStencilView()
         return false;
     }
 
-    m_Context->OMSetRenderTargets(1U, m_RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
-
     return true;
 }
 
@@ -527,6 +555,30 @@ bool DirectGraphics::CreateShader()
 
     m_DepthSkinningVertexShader = std::make_unique<VertexShader>();
     if (m_DepthSkinningVertexShader->Create(m_Device.Get(), "Res/Shader/DpthSkinningVertexShader.cso") == false)
+    {
+        return false;
+    }
+
+    m_NormalMapPS = std::make_unique<PixelShader>();
+    if (m_NormalMapPS->Create(m_Device.Get(), "Res/Shader/NormalMapPS.cso") == false)
+    {
+        return false;
+    }
+
+    m_GroundPS = std::make_unique<PixelShader>();
+    if (m_GroundPS->Create(m_Device.Get(), "Res/Shader/GroundPS.cso") == false)
+    {
+        return false;
+    }
+
+    m_SpriteVertexShader = std::make_unique<VertexShader>();
+    if (m_SpriteVertexShader->Create(m_Device.Get(), "Res/Shader/Tex2DVertexShader.cso") == false)
+    {
+        return false;
+    }
+
+    m_BlurPixelShader = std::make_unique<PixelShader>();
+    if (m_BlurPixelShader->Create(m_Device.Get(), "Res/Shader/BlurPS.cso") == false)
     {
         return false;
     }
@@ -630,11 +682,11 @@ bool DirectGraphics::CreateRasterizer()
 
 bool DirectGraphics::CreateDepthDSVAndRTV()
 {
-    // 深度ステンシルビューの作成
+    // 深度テクスチャの作成
     D3D11_TEXTURE2D_DESC texture_desc;
     ZeroMemory(&texture_desc, sizeof(texture_desc));
-    texture_desc.Width              = static_cast<UINT>(WINDOW->GetClientWidth()  * 10);
-    texture_desc.Height             = static_cast<UINT>(WINDOW->GetClientHeight() * 10);
+    texture_desc.Width              = static_cast<UINT>(WINDOW->GetClientWidth()  * 2);
+    texture_desc.Height             = static_cast<UINT>(WINDOW->GetClientHeight() * 2);
     texture_desc.MipLevels          = 1U;
     texture_desc.ArraySize          = 1U;
     texture_desc.MiscFlags          = 0U;
@@ -650,6 +702,7 @@ bool DirectGraphics::CreateDepthDSVAndRTV()
         return false;
     }
 
+    // レンダーターゲットの作成
     D3D11_RENDER_TARGET_VIEW_DESC rtv_desc;
     ZeroMemory(&rtv_desc, sizeof(rtv_desc));
     rtv_desc.Format             = texture_desc.Format;
@@ -679,6 +732,63 @@ bool DirectGraphics::CreateDepthDSVAndRTV()
     srv_desc.Texture2D.MipLevels = 1U;
 
     if (FAILED(m_Device->CreateShaderResourceView(m_DepthTexture.Get(), &srv_desc, m_DepthTextureView.GetAddressOf())))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool DirectGraphics::CreateOffScreenDSVAndRTV()
+{
+    D3D11_TEXTURE2D_DESC texture_desc;
+    ZeroMemory(&texture_desc, sizeof(texture_desc));
+    texture_desc.Width              = static_cast<UINT>(WINDOW->GetClientWidth());
+    texture_desc.Height             = static_cast<UINT>(WINDOW->GetClientHeight());
+    texture_desc.MipLevels          = 1U;
+    texture_desc.ArraySize          = 1U;
+    texture_desc.MiscFlags          = 0U;
+    texture_desc.Format             = DXGI_FORMAT_R8G8B8A8_UNORM;
+    texture_desc.SampleDesc.Count   = 1U;
+    texture_desc.SampleDesc.Quality = 0U;
+    texture_desc.Usage              = D3D11_USAGE_DEFAULT;
+    texture_desc.BindFlags          = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+    texture_desc.CPUAccessFlags     = 0U;
+
+    if (FAILED(m_Device->CreateTexture2D(&texture_desc, nullptr, m_OffScreenTexture.GetAddressOf())))
+    {
+        return false;
+    }
+
+    D3D11_RENDER_TARGET_VIEW_DESC rtv_desc;
+    ZeroMemory(&rtv_desc, sizeof(rtv_desc));
+    rtv_desc.Format              = texture_desc.Format;
+    rtv_desc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
+    rtv_desc.Texture2D.MipSlice = 0U;
+
+    if (FAILED(m_Device->CreateRenderTargetView(m_OffScreenTexture.Get(), &rtv_desc, m_OffScreenRenderTargetView.GetAddressOf())))
+    {
+        return false;
+    }
+
+    texture_desc.Format    = DXGI_FORMAT_D32_FLOAT;
+    texture_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+    if (FAILED(m_Device->CreateTexture2D(&texture_desc, nullptr, m_OffScreenDST.GetAddressOf())))
+    {
+        return false;
+    }
+    if (FAILED(m_Device->CreateDepthStencilView(m_OffScreenDST.Get(), nullptr, m_OffScreenDSTV.GetAddressOf())))
+    {
+        return false;
+    }
+
+    D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc;
+    ZeroMemory(&srv_desc, sizeof(srv_desc));
+    srv_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    srv_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    srv_desc.Texture2D.MipLevels = 1U;
+
+    if (FAILED(m_Device->CreateShaderResourceView(m_OffScreenTexture.Get(), &srv_desc, m_OffScreenTextureView.GetAddressOf())))
     {
         return false;
     }
@@ -719,17 +829,17 @@ void DirectGraphics::SetUpLight()
     DirectX::XMStoreFloat4x4(&m_ConstantBufferData.LightView, DirectX::XMMatrixTranspose(light_view));
 
     // プロジェクション行列設定
-    DirectX::XMMATRIX proj_mat = DirectX::XMMatrixOrthographicLH(WINDOW->GetClientWidth() * 2, WINDOW->GetClientHeight() * 2, -1, 500000.f);
+    //DirectX::XMMATRIX proj_mat = DirectX::XMMatrixOrthographicLH(WINDOW->GetClientWidth() * 2, WINDOW->GetClientHeight() * 2, -1, 500000.f);
 
     // 視野角
     constexpr float fov = DirectX::XMConvertToRadians(45.0f);
     // アスペクト比
-    float aspect = static_cast<float>(WINDOW->GetClientWidth()) / static_cast<float>(WINDOW->GetClientHeight());
+    float aspect = static_cast<float>(WINDOW->GetClientWidth() * 2) / static_cast<float>(WINDOW->GetClientHeight() * 2);
     // Near
     float near_z = 0.1f;
     // Far
     float far_z  = 500000.f;
     // プロジェクション行列の作成
-    //DirectX::XMMATRIX proj_mat = DirectX::XMMatrixPerspectiveFovLH(fov, aspect, near_z, far_z);
+    DirectX::XMMATRIX proj_mat = DirectX::XMMatrixPerspectiveFovLH(fov, 1, near_z, far_z);
     DirectX::XMStoreFloat4x4(&GRAPHICS->GetConstantBufferData()->LightProjection, DirectX::XMMatrixTranspose(proj_mat));
 }

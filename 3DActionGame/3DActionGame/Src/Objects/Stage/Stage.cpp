@@ -15,7 +15,7 @@ void Stage::Draw()
 	// 頂点シェーダの設定
 	context->VSSetShader(graphics->GetSimpleVertexShader()->GetShaderInterface(), NULL, 0U);
 	// ピクセルシェーダの設定
-	context->PSSetShader(graphics->GetPixelShader()->GetShaderInterface(), NULL, 0U);
+	context->PSSetShader(graphics->GetGroundPS()->GetShaderInterface(), NULL, 0U);
 
 	ID3D11ShaderResourceView* depth_tex = graphics->GetDepthTextureView();
 	context->PSSetShaderResources(1U, 1U, &depth_tex);
@@ -99,13 +99,15 @@ bool Stage::IntersectRayAndStage(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3
 	re_idx.X = static_cast<UINT>((ray_end.x + STAGE_WIETH  / 2)  / m_CellSize);
 	re_idx.Y = static_cast<UINT>((ray_end.z + STAGE_HEIGHT / 2)  / m_CellSize);
 
+	// 頂点データの取得
 	std::vector<CVertex>* vertices = &m_MapData[re_idx.Y][re_idx.X];
+	
 	for (size_t v = 0; v < vertices->size(); v += 3)
 	{
-		// ポリゴン
-		DirectX::XMFLOAT3 vtx_a = vertices->at(v+0).Pos;
-		DirectX::XMFLOAT3 vtx_b = vertices->at(v+1).Pos;
-		DirectX::XMFLOAT3 vtx_c = vertices->at(v+2).Pos;
+		// ポリゴンの各頂点の座標を取得
+		DirectX::XMFLOAT3 vtx_a = vertices->at(v).Pos;// 頂点a
+		DirectX::XMFLOAT3 vtx_b = vertices->at(v+1).Pos;// 頂点b
+		DirectX::XMFLOAT3 vtx_c = vertices->at(v+2).Pos;// 頂点c
 		
 		// XZ平面で見た時に三角形のなかに入っているかを調べる
 		DirectX::XMFLOAT2 a(vtx_a.x,   vtx_a.z);
@@ -113,15 +115,28 @@ bool Stage::IntersectRayAndStage(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3
 		DirectX::XMFLOAT2 c(vtx_c.x,   vtx_c.z);
 		DirectX::XMFLOAT2 p(ray_end.x, ray_end.z);
 		// 三角形に点が含まれているか
-		if (Calculation::HitTriangleAndPoint(a, b, c, p) == false) continue;
+		if (Calculation::HitTriangleAndPoint(a, b, c, p) == false){
+			continue;
+		}
 
+		DirectX::XMFLOAT3 a_to_b = Calculation::Sub(vtx_b, vtx_a);
+		DirectX::XMFLOAT3 a_to_c = Calculation::Sub(vtx_c, vtx_a);
+		// レイがポリゴンを貫通しているかを判定
+		if (Calculation::HitRayAndPlane(rayOrigin_, rayDistance_, vtx_a, vtx_b, vtx_c) == false){
+			continue;
+		}
+
+		DirectX::XMFLOAT3 n = m_MapData[re_idx.Y][re_idx.X][v].Normal;
+		height_ = (vtx_a.x * (1.f / n.y) * n.x) - (ray_end.x * (1.f / n.y) * n.x) + (n.z * vtx_a.z * (1.f / n.y)) - (n.z * ray_end.z * (1.f / n.y)) + vtx_a.y;
+		return true;
 		// ポリゴンと線分の当たり判定
 		DirectX::XMFLOAT3 intersect_pos;
 		if (Calculation::IntersectRayAndTriangle(rayOrigin_, rayDistance_, vtx_a, vtx_b, vtx_c, intersect_pos) == true)
 		{
 			// ポリゴンの1頂点から法線を取得する
-			DirectX::XMFLOAT3 n = m_MapData[re_idx.Y][re_idx.X][v].Normal;
+			//DirectX::XMFLOAT3 n = m_MapData[re_idx.Y][re_idx.X][v].Normal;
 			height_ = (vtx_a.x * (1.f / n.y) * n.x) - (ray_end.x * (1.f / n.y) * n.x) + (n.z * vtx_a.z * (1.f / n.y)) - (n.z * ray_end.z * (1.f / n.y)) + vtx_a.y;
+			height_ = intersect_pos.y;
 			return true;
 		}
 		else {

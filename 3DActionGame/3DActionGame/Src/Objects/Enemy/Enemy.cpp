@@ -27,15 +27,15 @@ void Enemy::Draw()
 {
 	if (!m_Model) return;
 
-	DirectGraphics* graphics = GRAPHICS;
-	ID3D11DeviceContext* context = GRAPHICS->GetContext();
+	DirectGraphics*      graphics = GRAPHICS;
+	ID3D11DeviceContext* context  = graphics->GetContext();
 
 	// ラスタラスザの設定
 	graphics->SetRasterizerMode(RasterizerMode::MODE_CULL_NONE);
 	// 頂点シェーダの設定
 	context->VSSetShader(graphics->GetVertexShader()->GetShaderInterface(), nullptr, 0U);
 	// ピクセルシェーダの設定
-	context->PSSetShader(graphics->GetPixelShader()->GetShaderInterface(), nullptr, 0U);
+	context->PSSetShader(graphics->GetNormalMapPS()->GetShaderInterface(), nullptr, 0U);
 
 	ID3D11ShaderResourceView* depth_tex = graphics->GetDepthTextureView();
 	context->PSSetShaderResources(1U, 1U, &depth_tex);
@@ -43,7 +43,7 @@ void Enemy::Draw()
 	context->PSSetSamplers(1U, 1U, &sampler_state);
 
 	ID3D11ShaderResourceView* normal_tex = TEX_MANAGER->GetTexture("GrenadierNormalTex")->Texture.Get();
-	context->PSSetShaderResources(2U, 1U, &depth_tex);
+	context->PSSetShaderResources(2U, 1U, &normal_tex);
 
 	m_Model->Render( m_Pos, m_Scale, m_Rot);
 

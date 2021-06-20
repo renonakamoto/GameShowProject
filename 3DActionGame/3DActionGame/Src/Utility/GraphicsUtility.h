@@ -127,6 +127,7 @@ struct ObjMaterial
     float       Ambient[4];        //! アンビエント光
     float       Diffuse[4];        //! ディヒューズ光
     float       Specular[4];       //! スペキュラー光
+    float       Shininess;
     std::string TextureKeyWord;    //! テクスチャキーワード
     std::string TextureName;       //! テクスチャのパス
 

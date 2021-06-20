@@ -58,7 +58,8 @@ public:
 		m_ShadowSamplerState(nullptr),
 		m_DepthVertexShader(nullptr),
 		m_DepthPixelShader(nullptr),
-		m_DepthSkinningVertexShader(nullptr)
+		m_DepthSkinningVertexShader(nullptr),
+		m_NormalMapPS(nullptr)
 #pragma endregion
 	{}
 
@@ -97,6 +98,8 @@ public:
 	void FinishRendering();
 
 	void StartShadwMapRendering();
+	
+	void RenderingPostEffect();
 
 public:
 	/**
@@ -164,6 +167,34 @@ public:
 	*/
 	VertexShader* GetDepthSkinningVertexShader() { return m_DepthSkinningVertexShader.get(); }
 
+	/**
+	* @fn PixelShader* GetNormalMapPS()
+	* @brief ノーマルマップ用のPixelShader取得関数
+	* @return PixelShader* PixelShaderのポインタ
+	*/
+	PixelShader* GetNormalMapPS() { return m_NormalMapPS.get(); }
+
+	/**
+	* @fn PixelShader* GetNormalMapPS()
+	* @brief ノーマルマップ用のPixelShader取得関数
+	* @return PixelShader* PixelShaderのポインタ
+	*/
+	PixelShader* GetGroundPS() { return m_GroundPS.get(); }
+
+	/**
+	* @fn VertexShader* GetSpriteVertexShader()
+	* @brief VertexShader取得関数
+	* @return VertexShader* VertexShaderのポインタ
+	*/
+	VertexShader* GetSpriteVertexShader() { return m_SpriteVertexShader.get(); }
+
+	/**
+	* @fn PixelShader* GetBlurPixelShader()
+	* @brief PixelShader取得関数
+	* @return PixelShader* PixelShaderのポインタ
+	*/
+	PixelShader* GetBlurPixelShader() { return m_BlurPixelShader.get(); }
+
 public:
 
 	/**
@@ -211,6 +242,13 @@ public:
 	void SetMaterial(ObjMaterial* material_);
 
 	/**
+	* @fn ID3D11SamplerState* GetSSamplerState()
+	* @brief サンプラーステート取得関数
+	* @return ID3D11SamplerState* m_SamplerStateのポインタ
+	*/
+	ID3D11SamplerState* GetSSamplerState() { return m_SamplerState.Get(); }
+
+	/**
 	* @fn ID3D11ShaderResourceView* GetDepthTextureView()
 	* @brief シャドウマップ用テクスチャデータ取得関数
 	* @return ID3D11ShaderResourceView* m_DepthTextureViewのポインタ
@@ -223,6 +261,13 @@ public:
 	* @return ID3D11SamplerState* m_ShadowSamplerStateのポインタ
 	*/
 	ID3D11SamplerState* GetShadowMapSamplerState() { return m_ShadowSamplerState.Get(); }
+
+	/**
+	* @fn ID3D11ShaderResourceView* GetOffScreenTextureView()
+	* @brief オフスクリーン用テクスチャデータ取得関数
+	* @return ID3D11ShaderResourceView* m_OffScreenTextureViewのポインタ
+	*/
+	ID3D11ShaderResourceView* GetOffScreenTextureView() { return m_OffScreenTextureView.Get(); }
 
 private:
 	/**
@@ -292,6 +337,8 @@ private:
 	*/
 	bool CreateDepthDSVAndRTV();
 
+	bool CreateOffScreenDSVAndRTV();
+
 	/**
 	* @fn void SetUpViewPort()
 	* @brief ビューポートを設定する関数
@@ -314,17 +361,27 @@ private:
 	D3D_FEATURE_LEVEL 				m_FeatureLevel;			//! フューチャーレベル
 	DXGI_SAMPLE_DESC				m_SampleDesc;			//! MSAA使用時に使うマルチサンプリングのパラメータ変数
 	ComPtr<ID3D11RasterizerState>   m_RasterizerState[static_cast<int>(RasterizerMode::MODE_NUM)];	//! ラスタライザ配列
-	
-	ComPtr<ID3D11SamplerState>		m_SamplerState;			//! モデルのテクスチャ用のテクスチャサンプラー
+	ComPtr<ID3D11SamplerState>		m_SamplerState;			//! 通常テクスチャ用のテクスチャサンプラー
 
 	ComPtr<ID3D11Buffer>			m_ConstantBuffer;		//! モデル用のコンストバッファ
 	ConstantBuffer					m_ConstantBufferData;	//!	モデル用のコンストバッファ
 	ComPtr<ID3D11Buffer>			m_ConstBoneBuffer;		//! ボーン用のコンストバッファ
 	ConstBoneBuffer					m_ConstBoneBufferData;	//! ボーン用のコンストバッファ
-	
+
 	std::unique_ptr<VertexShader>   m_VertexShader;			//! スキンメッシュ用の頂点シェーダ
 	std::unique_ptr<VertexShader>   m_SimpleVertexShader;	//!	スタティックメッシュ用の頂点シェーダ
 	std::unique_ptr<PixelShader>	m_PixelShader;			//! 通常描画用のピクセルシェーダ
+
+	/* OffScreen用 */
+	ComPtr<ID3D11RenderTargetView>   m_OffScreenRenderTargetView;
+	ComPtr<ID3D11Texture2D>		     m_OffScreenTexture;
+	ComPtr<ID3D11ShaderResourceView> m_OffScreenTextureView;
+	ComPtr<ID3D11Texture2D>			 m_OffScreenDST;
+	ComPtr<ID3D11DepthStencilView>   m_OffScreenDSTV;
+	
+	std::unique_ptr<VertexShader>   m_SpriteVertexShader;	//!	スタティックメッシュ用の頂点シェーダ
+	std::unique_ptr<PixelShader>	m_BlurPixelShader;      //! 通常描画用のピクセルシェーダ
+	
 
 	/* シャドウマップ用 */
 	ComPtr<ID3D11RenderTargetView>   m_DepthRenderTargetView;		//! マルチレンダリング用レンダーターゲットビュー
@@ -337,7 +394,8 @@ private:
 	std::unique_ptr<VertexShader>    m_DepthSkinningVertexShader;	//! シャドウマップ用スキニング頂点シェーダ
 	std::unique_ptr<VertexShader>	 m_DepthVertexShader;			//! シャドウマップ用通常頂点シェーダ
 	std::unique_ptr<PixelShader>     m_DepthPixelShader;			//! シャドウマップ用ピクセルシェーダ
-
+	std::unique_ptr<PixelShader>	 m_NormalMapPS;					//! 法線マップ用ピクセルシェーダ
+	std::unique_ptr<PixelShader>	 m_GroundPS;					//! 地面用のシェーダー
 };
 
 #endif

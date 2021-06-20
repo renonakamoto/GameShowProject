@@ -91,6 +91,12 @@
     <Filter Include="Src\GameManager">
       <UniqueIdentifier>{6ffc4e15-9d83-402b-a6e8-1e4543e2a1c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Engine\Shader">
+      <UniqueIdentifier>{d84a616b-bdad-4dee-8ec2-201a3e1393d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Objects\Sprite">
+      <UniqueIdentifier>{6910a26d-07bb-40dd-b4b8-2b0a42708840}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -245,6 +251,12 @@
     </ClCompile>
     <ClCompile Include="Src\Utility\GraphicsUtility.cpp">
       <Filter>Src\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\Shader\BaseShading.cpp">
+      <Filter>Src\Engine\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Objects\Sprite\Sprite.cpp">
+      <Filter>Src\Objects\Sprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -422,6 +434,12 @@
     <ClInclude Include="Src\Scene\ControlScene.h">
       <Filter>Src\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Engine\Shader\BaseShading.h">
+      <Filter>Src\Engine\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Objects\Sprite\Sprite.h">
+      <Filter>Src\Objects\Sprite</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\VertexShader.hlsl">
@@ -446,6 +464,15 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\DpthSkinningVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\NormalMapPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\GroundPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\BlurPS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

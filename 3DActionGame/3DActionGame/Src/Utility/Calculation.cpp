@@ -241,10 +241,13 @@ bool Calculation::HitTriangleAndPoint(DirectX::XMFLOAT2 a_, DirectX::XMFLOAT2 b_
 	return ( (c1 >= 0 && c2 >= 0 && c3 >= 0) || (c1 <= 0 && c2 <= 0 && c3 <= 0) );
 }
 
-bool Calculation::HitRayAndPlane(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, DirectX::XMFLOAT3 pA_, DirectX::XMFLOAT3 pB_)
+bool Calculation::HitRayAndPlane(DirectX::XMFLOAT3 rayOrigin_, DirectX::XMFLOAT3 rayDistance_, DirectX::XMFLOAT3 pA_, DirectX::XMFLOAT3 pB_, DirectX::XMFLOAT3 pC_)
 {
+	DirectX::XMFLOAT3 a_to_b = Sub(pB_, pA_);
+	DirectX::XMFLOAT3 a_to_c = Sub(pC_, pA_);
 	// 平面の法線を算出
-	DirectX::XMFLOAT3 n		  = Cross(pA_, pB_);
+	DirectX::XMFLOAT3 n		 = Cross(a_to_b, a_to_c);
+	
 	// レイの終点を算出
 	DirectX::XMFLOAT3 ray_end = Add(rayOrigin_, rayDistance_);
 	
