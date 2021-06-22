@@ -6,8 +6,8 @@ GameScene::GameScene(SceneChanger* sceneChanger_) : Scene(sceneChanger_)
 {
     THE_OBJECTMANAGER->Entry(Objectmanager::ObjectType::Player);
     THE_OBJECTMANAGER->Entry(Objectmanager::ObjectType::Enemy);
-
 	ObjectManager::Create();
+
 
     m_ThreadHandle = CreateThread(
         nullptr,                    // セキュリティ属性
@@ -37,13 +37,12 @@ void GameScene::Load()
 
 DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
 {
-	THE_FBXMANAGER->LoadFBXMesh("Player", "assets/models/player/tenko01.fbx");
-
-    THE_FBXMANAGER->LoadFBXMesh("Ebiten", "assets/models/enemies/ebiten/Shrimp.fbx");
-    THE_FBXMANAGER->LoadFBXMesh("Ikaten", "assets/models/enemies/ikaten/Ikaten.fbx");
-    THE_FBXMANAGER->LoadFBXMesh("Kabochaten", "assets/models/enemies/kabochaten/pumpkin_animation.fbx");
-    THE_FBXMANAGER->LoadFBXMesh("Sitaketen", "assets/models/enemies/sitaketen/siitake01.fbx");
-    THE_FBXMANAGER->LoadFBXMesh("Tikuwaten", "assets/models/enemies/tikuwaten/chikuwa_animation.fbx");
+	THE_FBXMANAGER->LoadFBXMesh("Player",    "assets/models/player/tenko01.fbx"                      );
+    THE_FBXMANAGER->LoadFBXMesh("Ebiten",    "assets/models/enemies/ebiten/Shrimp.fbx"               );
+    THE_FBXMANAGER->LoadFBXMesh("Ikaten",    "assets/models/enemies/ikaten/Ikaten.fbx"               );
+    THE_FBXMANAGER->LoadFBXMesh("Kabochaten","assets/models/enemies/kabochaten/pumpkin_animation.fbx");
+    THE_FBXMANAGER->LoadFBXMesh("Sitaketen", "assets/models/enemies/sitaketen/siitake01.fbx"         );
+    THE_FBXMANAGER->LoadFBXMesh("Tikuwaten", "assets/models/enemies/tikuwaten/chikuwa_animation.fbx" );
     
     return 0;
 }
