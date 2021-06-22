@@ -28,7 +28,7 @@ FBXMeshData* FbxLoader::LoadFBXMesh(const char* pFileName_)
 
 	fbxsdk::FbxGeometryConverter converter(pManager);
 	// マテリアルと1メッシュ毎に分ける
-	converter.SplitMeshesPerMaterial(pScene, true);
+	//converter.SplitMeshesPerMaterial(pScene, true);
 	// 全てを三角形にする
 	converter.Triangulate(pScene, true);
 

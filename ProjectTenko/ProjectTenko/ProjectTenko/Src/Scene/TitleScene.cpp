@@ -58,7 +58,7 @@ DWORD WINAPI TitleScene::LoadResources(LPVOID lpParam_)
 	THE_FBXMANAGER->LoadFBXMesh("FerrisWheel1",	"assets/objects/ferris_wheel/dodai.fbx");
 	THE_FBXMANAGER->LoadFBXMesh("FerrisWheel2",	"assets/objects/ferris_wheel/mawaru.fbx");
 	THE_FBXMANAGER->LoadFBXMesh("Floor",		"assets/objects/floor/floor.fbx");
-	THE_FBXMANAGER->LoadFBXMesh("Gate",			"assets/objects/gate/gate2.fbx");
+	//THE_FBXMANAGER->LoadFBXMesh("Gate",			"assets/objects/gate/gate2.fbx");
 
 	THE_FBXMANAGER->LoadFBXMesh("Merrygoland1",	"assets/objects/merrygoland/merrygoland_Foundation.fbx");
 	THE_FBXMANAGER->LoadFBXMesh("Merrygoland2",  "assets/objects/merrygoland/merrygoland_Paul.fbx");

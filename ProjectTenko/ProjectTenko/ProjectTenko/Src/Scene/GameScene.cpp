@@ -30,6 +30,7 @@ void GameScene::Load()
 {
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
+        ShowCursor(FALSE);
         m_CurrentState = SceneState::Main;
     }
 }

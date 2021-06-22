@@ -152,7 +152,6 @@ void Player::Move()
 		{
 			m_Speed.z = 0.0f;
 		}
-
 	}
 
 	// “®‚¢‚Ä‚¢‚½‚ç

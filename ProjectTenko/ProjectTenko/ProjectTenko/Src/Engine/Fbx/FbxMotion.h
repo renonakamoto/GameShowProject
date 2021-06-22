@@ -49,7 +49,6 @@ public:
 	void Motion(T motionID_, std::string fbxKey_, bool isLoop_ = true, bool* isEnd_ = nullptr);
 
 private:
-	//! using
 	using KeyStart = int;
 	using KeyEnd   = int;
 	
