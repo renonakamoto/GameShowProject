@@ -46,7 +46,7 @@ void GameScene::Load()
         ObjectManager::GetInstance()->ResisterShadowMap(new Player(DirectX::XMFLOAT3(0.f, 0.f, 0.f)));
         ObjectManager::GetInstance()->ResisterShadowMap(new EnemyManager());
 
-        ObjectManager::GetInstance()->Register(new Stage());
+        ObjectManager::GetInstance()->ResisterShadowMap(new Stage());
         ObjectManager::GetInstance()->Register(new FollowCamera());
         
         // 各オブジェクトの生成後、各オブジェクトのInitを行う
@@ -93,7 +93,7 @@ DWORD WINAPI GameScene::LoadResources(LPVOID lpParam_)
     // 当たり判定用のキューブモデルの読み込み
     ObjFileStrage::GetInstance()->LoadModel("Res/Models/Shape/Cube.obj", "Cube" );
     
-    TEX_MANAGER->Load("Res/Textures/normal.png", "GrenadierNormalTex");
+    TEX_MANAGER->Load("Res/Textures/normal.png",   "GrenadierNormalTex");
     TEX_MANAGER->Load("Res/Textures/blur_map.png", "BlurMap");
 
     return 0;
@@ -104,6 +104,7 @@ void GameScene::Main()
     // オブジェクトの更新
     ObjectManager::GetInstance()->Update();
     
+    GRAPHICS->UpdateLight();
     
 #ifdef _DEBUG
     // Escキーで入力モード切替
@@ -171,14 +172,14 @@ void GameScene::Draw()
 #endif
 
         ObjectManager::GetInstance()->Draw();
-
-        GRAPHICS->FinishRendering();
     }
         // 3パス目
     {
         GRAPHICS->RenderingPostEffect();
         m_OffScreenSprite.Draw(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
     }
+
+    GRAPHICS->FinishRendering();
 
         break;
     default:

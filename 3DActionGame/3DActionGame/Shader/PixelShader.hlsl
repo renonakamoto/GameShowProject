@@ -42,7 +42,7 @@ cbuffer ConstantBuffer : register(b0)
 Texture2D    Texture       : register(t0); // Textureをスロット0の0番目のテクスチャレジスタに設定
 SamplerState Sampler       : register(s0); // Samplerをスロット0の0番目のサンプラレジスタに設定
 Texture2D    TextureDepth  : register(t1);
-SamplerState ShadowSampler : register(s1);
+SamplerComparisonState ShadowSampler : register(s1);
 
 
 /****************************************
@@ -62,7 +62,7 @@ float HalfLambert(float3 lig_dir, float3 normal)
 float4 Phong(float3 normal, float3 eye_vec, float3 lig_dir)
 {
     // ライトの反射ベクトルを求める
-    float ndl = saturate(dot(normal, lig_dir));
+    float  ndl = saturate(dot(normal, lig_dir));
     float3 ref_vec = normalize(-lig_dir + 2.0 * normal * ndl);
     
     // 鏡面反射の強さを算出
@@ -71,7 +71,7 @@ float4 Phong(float3 normal, float3 eye_vec, float3 lig_dir)
     // 強さを絞る
     t = pow(t, 60.0);
     
-    return MaterialSpecular * t * MaterialSpecular.z;
+    return MaterialSpecular * t;
     
     //// 法線ベクトル
     //float4 n = float4(nw, 0.0);
@@ -106,7 +106,7 @@ float4 ps_main(PS_IN input) : SV_Target
    
    // 拡散光
     float4 tex_color = Texture.Sample(Sampler, input.texture_pos);
-    float4 diffuse = tex_color * HalfLambert(input.light, input.norw);
+    float4 diffuse   = tex_color * HalfLambert(input.light, input.norw);
    
    // 環境光
     float4 ambient = diffuse / 2.0;
@@ -115,13 +115,24 @@ float4 ps_main(PS_IN input) : SV_Target
     
     // 影
     //input.light_tex_coord.xyz /= input.light_tex_coord.w;
-    //float max_depth_slope = max(abs(ddx(input.light_tex_coord.z)), abs(ddy(input.light_tex_coord.z)));
     //float tex_value = TextureDepth.Sample(ShadowSampler, input.light_tex_coord.xy).r;
     //float light_length = input.light_view_pos.z / input.light_view_pos.w;
-    //if ((tex_value + 0.0005) > light_length)
+    //if ((tex_value + 0.003) < light_length)
     //{
     //    color /= 3;
     //}
 
+    float2 sm_uv = input.light_tex_coord.xy / input.light_tex_coord.w;
+    if (sm_uv.x > 0.0 && sm_uv.x < 1.0
+        && sm_uv.y > 0.0 && sm_uv.y < 1.0)
+    {
+        float light_length = input.light_view_pos.z / input.light_view_pos.w;
+        float shadow = TextureDepth.SampleCmpLevelZero(ShadowSampler, sm_uv, light_length - 0.0003);
+        float4 shadow_color = color / 3.0;
+        
+        color = lerp(color, shadow_color, shadow);
+    }
+    
+    
     return color;
 }

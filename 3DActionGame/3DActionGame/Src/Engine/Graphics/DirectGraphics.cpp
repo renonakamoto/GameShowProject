@@ -9,6 +9,8 @@
 // MSAAの有効
 //#define ENABLE_MSAA
 
+int g_Fact = 2;
+
 bool DirectGraphics::Init()
 {
     // デバイスとスワップチェインの作成 
@@ -92,7 +94,7 @@ void DirectGraphics::StartRendering()
     // レンダーターゲットビューのクリア
     float clear_color[4] = { 0.0f,0.0f,1.0f,1.0f };
     m_Context->ClearRenderTargetView(
-        m_OffScreenRenderTargetView.Get(), // 対象のレンダーターゲットビュー
+                m_OffScreenRenderTargetView.Get(), // 対象のレンダーターゲットビュー
                 clear_color               // クリアするビューのカラー
                 );
 
@@ -130,19 +132,19 @@ void DirectGraphics::FinishRendering()
 void DirectGraphics::StartShadwMapRendering()
 {    
     // レンダーターゲットのクリア
-    float clear_color[4] = { 0.f,0.f,0.f,1.f };
+    float clear_color[4] = { 1.f,1.f,1.f,1.f };
     m_Context->ClearRenderTargetView(m_DepthRenderTargetView.Get(), clear_color);
 
     // 深度ステンシルのクリア
     m_Context->ClearDepthStencilView(m_DepthDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
     // レンダーターゲットの設定
-    m_Context->OMSetRenderTargets(1U, m_RenderTargetView.GetAddressOf(), m_DepthDepthStencilView.Get());
+    m_Context->OMSetRenderTargets(1U, m_DepthRenderTargetView.GetAddressOf(), m_DepthDepthStencilView.Get());
 
     // ビューポートの設定
     D3D11_VIEWPORT vp{ 0 };
-    vp.Width    = static_cast<FLOAT>(WINDOW->GetClientWidth()  * 2);
-    vp.Height   = static_cast<FLOAT>(WINDOW->GetClientHeight() * 2);
+    vp.Width    = 1024 * g_Fact;
+    vp.Height   = 1024 * g_Fact;
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0.0f;
@@ -170,13 +172,53 @@ void DirectGraphics::RenderingPostEffect()
 
     // ビューポートの設定
     D3D11_VIEWPORT vp{ 0 };
-    vp.Width  = static_cast<FLOAT>(WINDOW->GetClientWidth());
-    vp.Height = static_cast<FLOAT>(WINDOW->GetClientHeight());
+    vp.Width    = static_cast<FLOAT>(WINDOW->GetClientWidth());
+    vp.Height   = static_cast<FLOAT>(WINDOW->GetClientHeight());
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0.0f;
     vp.TopLeftY = 0.0f;
     m_Context->RSSetViewports(1U, &vp);
+}
+
+void DirectGraphics::UpdateLight()
+{
+    DirectX::XMFLOAT3 move_vec = DirectX::XMFLOAT3(0.f, 0.f, 0.f);
+
+    if (INPUT_MANAGER->GetKey(KeyInfo::Key_Down)) {
+        move_vec.y++;
+    }
+    else if (INPUT_MANAGER->GetKey(KeyInfo::Key_Up)) {
+        move_vec.y--;
+    }
+
+    if (INPUT_MANAGER->GetKey(KeyInfo::Key_Left)) {
+        move_vec.z++;
+    }
+    else if (INPUT_MANAGER->GetKey(KeyInfo::Key_Right)) {
+        move_vec.z--;
+    }
+
+    if (move_vec.y != 0.f || move_vec.z != 0.f)
+    {
+        //m_LightPos.y += move_vec.y;
+        //m_LightPos.z += move_vec.z;
+        //DirectX::XMStoreFloat4(&m_ConstantBufferData.Light, DirectX::XMVector3Normalize(DirectX::XMVectorSet(m_LightPos.x, m_LightPos.y, m_LightPos.z, 0.0f)));
+        //
+        //DirectX::XMMATRIX light_view = DirectX::XMMatrixLookAtLH(
+        //    DirectX::XMVectorSet(m_LightPos.x, m_LightPos.y, m_LightPos.z, 0.0f),
+        //    DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),
+        //    DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
+        //
+        //DirectX::XMStoreFloat4x4(&m_ConstantBufferData.LightView, DirectX::XMMatrixTranspose(light_view));
+
+        DepthViewSize += move_vec.y;
+
+        // プロジェクション行列設定
+        DirectX::XMMATRIX proj_mat = DirectX::XMMatrixOrthographicLH(DepthViewSize, DepthViewSize, -1, 5000.f);
+        // プロジェクション行列の作成
+        DirectX::XMStoreFloat4x4(&GRAPHICS->GetConstantBufferData()->LightProjection, DirectX::XMMatrixTranspose(proj_mat));
+    }
 }
 
 void DirectGraphics::SetRasterizerMode(RasterizerMode mode_)
@@ -627,10 +669,12 @@ bool DirectGraphics::CreateTextureSampler()
         return false;
     }
 
-    sampler_desc.Filter   = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-    sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-    sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+    sampler_desc.Filter         = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+    sampler_desc.ComparisonFunc = D3D11_COMPARISON_GREATER;
+    sampler_desc.MaxAnisotropy  = 1;
+    sampler_desc.AddressU       = D3D11_TEXTURE_ADDRESS_CLAMP;
+    sampler_desc.AddressV       = D3D11_TEXTURE_ADDRESS_CLAMP;
+    sampler_desc.AddressW       = D3D11_TEXTURE_ADDRESS_CLAMP;
 
     if (FAILED(m_Device->CreateSamplerState(&sampler_desc, m_ShadowSamplerState.GetAddressOf())))
     {
@@ -667,6 +711,15 @@ bool DirectGraphics::CreateRasterizer()
     }
 
     /*
+     背面カリング
+    */
+    ras_desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_FRONT;   //! 背面カリング
+    if (FAILED(m_Device->CreateRasterizerState(&ras_desc, &m_RasterizerState->GetAddressOf()[static_cast<int>(RasterizerMode::MODE_CULL_FRONT)])))
+    {
+        return false;
+    }
+
+    /*
         ワイヤーフレーム
     */
     ras_desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;  //! ポリゴンを塗りつぶさない
@@ -685,8 +738,8 @@ bool DirectGraphics::CreateDepthDSVAndRTV()
     // 深度テクスチャの作成
     D3D11_TEXTURE2D_DESC texture_desc;
     ZeroMemory(&texture_desc, sizeof(texture_desc));
-    texture_desc.Width              = static_cast<UINT>(WINDOW->GetClientWidth()  * 2);
-    texture_desc.Height             = static_cast<UINT>(WINDOW->GetClientHeight() * 2);
+    texture_desc.Width              = 1024 * g_Fact;
+    texture_desc.Height             = 1024 * g_Fact;
     texture_desc.MipLevels          = 1U;
     texture_desc.ArraySize          = 1U;
     texture_desc.MiscFlags          = 0U;
@@ -818,18 +871,18 @@ void DirectGraphics::SetUpViewPort()
 
 void DirectGraphics::SetUpLight()
 {
-    DirectX::XMFLOAT3 light_pos(0.0f, 1000, 1000);
-    DirectX::XMStoreFloat4(&m_ConstantBufferData.Light, DirectX::XMVector3Normalize(DirectX::XMVectorSet(light_pos.x, light_pos.y, light_pos.z, 0.0f)));
+    m_LightPos = DirectX::XMFLOAT3(0.0f, 500, 500);
+    DirectX::XMStoreFloat4(&m_ConstantBufferData.Light, DirectX::XMVector3Normalize(DirectX::XMVectorSet(m_LightPos.x, m_LightPos.y, m_LightPos.z, 0.0f)));
 
     DirectX::XMMATRIX light_view = DirectX::XMMatrixLookAtLH(
-        DirectX::XMVectorSet(light_pos.x, light_pos.y, light_pos.z, 0.0f),
+        DirectX::XMVectorSet(m_LightPos.x, m_LightPos.y, m_LightPos.z, 0.0f),
         DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),
         DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 
     DirectX::XMStoreFloat4x4(&m_ConstantBufferData.LightView, DirectX::XMMatrixTranspose(light_view));
 
     // プロジェクション行列設定
-    //DirectX::XMMATRIX proj_mat = DirectX::XMMatrixOrthographicLH(WINDOW->GetClientWidth() * 2, WINDOW->GetClientHeight() * 2, -1, 500000.f);
+    DirectX::XMMATRIX proj_mat = DirectX::XMMatrixOrthographicLH(50.f, 50.f, -1, 5000.f);
 
     // 視野角
     constexpr float fov = DirectX::XMConvertToRadians(45.0f);
@@ -840,6 +893,6 @@ void DirectGraphics::SetUpLight()
     // Far
     float far_z  = 500000.f;
     // プロジェクション行列の作成
-    DirectX::XMMATRIX proj_mat = DirectX::XMMatrixPerspectiveFovLH(fov, 1, near_z, far_z);
+    //DirectX::XMMATRIX proj_mat = DirectX::XMMatrixPerspectiveFovLH(fov, 1, near_z, far_z);
     DirectX::XMStoreFloat4x4(&GRAPHICS->GetConstantBufferData()->LightProjection, DirectX::XMMatrixTranspose(proj_mat));
 }

@@ -16,6 +16,7 @@ using namespace Microsoft::WRL;
 enum class RasterizerMode
 {
 	MODE_CULL_BACK,	// 背面カリングモード
+	MODE_CULL_FRONT,
 	MODE_CULL_NONE,	// カリングなしモード
 	MODE_WIREFRAME,	// ワイヤーフレームモード
 
@@ -59,7 +60,8 @@ public:
 		m_DepthVertexShader(nullptr),
 		m_DepthPixelShader(nullptr),
 		m_DepthSkinningVertexShader(nullptr),
-		m_NormalMapPS(nullptr)
+		m_NormalMapPS(nullptr),
+		DepthViewSize(50.f)
 #pragma endregion
 	{}
 
@@ -100,6 +102,8 @@ public:
 	void StartShadwMapRendering();
 	
 	void RenderingPostEffect();
+
+	void UpdateLight();
 
 public:
 	/**
@@ -396,6 +400,11 @@ private:
 	std::unique_ptr<PixelShader>     m_DepthPixelShader;			//! シャドウマップ用ピクセルシェーダ
 	std::unique_ptr<PixelShader>	 m_NormalMapPS;					//! 法線マップ用ピクセルシェーダ
 	std::unique_ptr<PixelShader>	 m_GroundPS;					//! 地面用のシェーダー
+
+	// ライト
+	DirectX::XMFLOAT3 m_LightPos;
+	float DepthViewSize;
+
 };
 
 #endif

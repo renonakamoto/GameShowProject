@@ -24,13 +24,13 @@ float4 ps_main(PS_IN input) : SV_TARGET
     //offset_u = 0.0;
     //offset_v = 0.0;
     
-    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(offset_u, 0.0));
-    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(-offset_u, 0.0));
-    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(0.0, offset_v));
-    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(0.0, -offset_v));
-    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(offset_u, offset_v));
-    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(offset_u, -offset_v));
-    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(-offset_u, offset_v));
+    blur_color += Texture.Sample(Sampler, input.texture_pos + float2( offset_u,       0.0));
+    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(-offset_u,       0.0));
+    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(      0.0,  offset_v));
+    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(      0.0, -offset_v));
+    blur_color += Texture.Sample(Sampler, input.texture_pos + float2( offset_u,  offset_v));
+    blur_color += Texture.Sample(Sampler, input.texture_pos + float2( offset_u, -offset_v));
+    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(-offset_u,  offset_v));
     blur_color += Texture.Sample(Sampler, input.texture_pos + float2(-offset_u, -offset_v));
     
     blur_color /= 9.0;

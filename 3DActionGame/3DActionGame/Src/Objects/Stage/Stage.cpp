@@ -39,7 +39,7 @@ void Stage::DrawShadowMap()
 	context->VSSetShader(graphics->GetDepthVertexShader()->GetShaderInterface(), NULL, 0U);
 	// ピクセルシェーダの設定
 	context->PSSetShader(graphics->GetDepthPixelShader()->GetShaderInterface(), NULL, 0U);
-	
+
 	m_Model->Render(m_Pos, m_Scale, m_Rot);
 }
 
@@ -84,7 +84,16 @@ float Stage::GetPolygonHeight(DirectX::XMFLOAT3 pos_)const
 		DirectX::XMFLOAT3 n = m_MapData[idx_y][idx_x][v].Normal;
 
 		// ポリゴンの高さを調べる
-		height = (vtx_a.x * (1.f / n.y) * n.x) - (pos_.x * (1.f / n.y) * n.x) + (n.z * vtx_a.z * (1.f / n.y)) - (n.z * pos_.z * (1.f / n.y)) + vtx_a.y;
+		/*
+			参考 : http://marucpeke296.com/COL_3D_No8_HightOfFloor.html
+			Oy = Ay - 1 / Ny{Nx(Ox - Ax) + Nz(Oz - Az)}
+			
+			O -> 逆さを調べたいポリゴンに含まれる一点
+			A -> ポリゴンの頂点
+			N -> ポリゴンの法線
+		*/
+		height = vtx_a.y - ( ( (n.x * pos_.x) - (n.x * vtx_a.x) ) + ( (n.z * pos_.z) - (n.z * vtx_a.z) ) / n.y);
+
 		break;
 	}
 	

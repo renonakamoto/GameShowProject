@@ -174,5 +174,5 @@ float4 ps_main(PS_IN input) : SV_Target
     //    color /= 3;
     //}
     
-    return color;
+    return color + float4(0.7, 0.0, 0.0, 0.0);
 }

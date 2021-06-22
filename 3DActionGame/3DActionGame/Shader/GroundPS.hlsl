@@ -39,10 +39,10 @@ cbuffer ConstantBuffer : register(b0)
           テクスチャ
 ****************************************/
 
-Texture2D Texture : register(t0); // Textureをスロット0の0番目のテクスチャレジスタに設定
-SamplerState Sampler : register(s0); // Samplerをスロット0の0番目のサンプラレジスタに設定
-Texture2D TextureDepth : register(t1);
-SamplerState ShadowSampler : register(s1);
+Texture2D    Texture        : register(t0);
+SamplerState Sampler        : register(s0);
+Texture2D    TextureDepth   : register(t1);
+SamplerComparisonState ShadowSampler  : register(s1);
 
 
 /****************************************
@@ -111,17 +111,35 @@ float4 ps_main(PS_IN input) : SV_Target
     float4 ambient = diffuse / 2.0;
    
     float4 color = ambient + diffuse + specular;
-
     
-    // 影
+   // 影
+   //input.light_tex_coord.xyz /= input.light_tex_coord.w;
+   //float max_depth_slope = max(abs(ddx(input.light_tex_coord.z)), abs(ddy(input.light_tex_coord.z)));
+   //float tex_value = TextureDepth.Sample(ShadowSampler, input.light_tex_coord.xy).r;
+   //float light_length = input.light_view_pos.z / input.light_view_pos.w;
+   //if ((tex_value) < light_length - 0.00003)
+   //{
+   //    color /= 3;
+   //}
+   
     //input.light_tex_coord.xyz /= input.light_tex_coord.w;
-    //float max_depth_slope = max(abs(ddx(input.light_tex_coord.z)), abs(ddy(input.light_tex_coord.z)));
-    //float tex_value = TextureDepth.Sample(ShadowSampler, input.light_tex_coord.xy).r;
     //float light_length = input.light_view_pos.z / input.light_view_pos.w;
-    //if ((tex_value + 0.0005) > light_length)
-    //{
-    //    color /= 3;
-    //}
+    //float shadow = TextureDepth.SampleCmpLevelZero(ShadowSampler, input.light_tex_coord.xy, light_length);
+    //
+    //float4 shadow_color = color / 3.0;
+    //
+    //color = lerp(color, shadow_color, shadow);
+
+    float2 sm_uv = input.light_tex_coord.xy / input.light_tex_coord.w;
+    if (sm_uv.x > 0.0 && sm_uv.x < 1.0
+        && sm_uv.y > 0.0 && sm_uv.y < 1.0)
+    {   
+        float light_length = input.light_view_pos.z / input.light_view_pos.w;
+        float shadow = TextureDepth.SampleCmpLevelZero(ShadowSampler, sm_uv, light_length - 0.0003);
+        float4 shadow_color = color / 3.0;
+        
+        color = lerp(color, shadow_color, shadow);
+    }
     
     return color;
 }
