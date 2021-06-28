@@ -143,7 +143,7 @@ void GameScene::Draw()
     switch (m_CurrentState)
     {
     case SceneState::Load:
-        GRAPHICS->RenderingPostEffect();
+        GRAPHICS->StartOnScreenRendering();
         {
             TEX_MANAGER->Render("NowLoading", DirectX::XMFLOAT3(0.f, 0.f, 0.f));
         }
@@ -159,7 +159,7 @@ void GameScene::Draw()
     }
         // 2パス目
     {
-        GRAPHICS->StartRendering();
+        GRAPHICS->StartOffScreenRendering();
 
 #ifdef _DEBUG
         {
@@ -175,7 +175,7 @@ void GameScene::Draw()
     }
         // 3パス目
     {
-        GRAPHICS->RenderingPostEffect();
+        GRAPHICS->StartOnScreenRendering();
         m_OffScreenSprite.Draw(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
     }
 

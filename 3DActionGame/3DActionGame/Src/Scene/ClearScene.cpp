@@ -76,7 +76,7 @@ void ClearScene::Update()
 
 void ClearScene::Draw()
 {
-    GRAPHICS->StartRendering();
+    GRAPHICS->StartOnScreenRendering();
     switch (m_CurrentState)
     {
     case SceneState::Load:

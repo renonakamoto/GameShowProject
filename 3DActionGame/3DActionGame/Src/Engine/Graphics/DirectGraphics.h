@@ -84,13 +84,27 @@ public:
 	* @details ゲーム終了時に行う
 	*/
 	void Release();
+
+	/**
+	* @fn void StartOnScreenRendering()
+	* @brief オフスクリーンへの描画開始関数
+	* @details オフスクリーンバッファ情報をクリアしレンダーターゲットに設定する
+	*/
+	void StartOnScreenRendering();
 	
 	/**
-	* @fn void StartRendering()
-	* @brief 描画開始関数
-	* @details バックバッファの情報をクリアする
+	* @fn void StartOffScreenRendering()
+	* @brief オフスクリーンへの描画開始関数
+	* @details オフスクリーンバッファ情報をクリアしレンダーターゲットに設定する
 	*/
-	void StartRendering();
+	void StartOffScreenRendering();
+
+	/**
+	* @fn void StartShadwMapRendering()
+	* @brief オフスクリーンへの描画開始関数
+	* @details オフスクリーンバッファ情報をクリアしレンダーターゲットに設定する
+	*/
+	void StartShadwMapRendering();
 
 	/**
 	* @fn void FinishRendering()
@@ -98,10 +112,7 @@ public:
 	* @details バックバッファの情報をフロントバッファに送る
 	*/
 	void FinishRendering();
-
-	void StartShadwMapRendering();
 	
-	void RenderingPostEffect();
 
 	void UpdateLight();
 

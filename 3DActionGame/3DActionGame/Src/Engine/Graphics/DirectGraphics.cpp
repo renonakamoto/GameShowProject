@@ -88,7 +88,7 @@ void DirectGraphics::Release()
 {
 }
 
-void DirectGraphics::StartRendering()
+void DirectGraphics::StartOffScreenRendering()
 {
     /*
         DirectX11は描画の開始を宣言する必要はないがビューのクリアを毎フレーム
@@ -126,12 +126,6 @@ void DirectGraphics::StartRendering()
     m_Context->RSSetViewports(1U, &vp);
 }
 
-void DirectGraphics::FinishRendering()
-{
-    // バックバッファをフロントバッファに送信する   
-    m_SwapChain->Present(1U, 0U);
-}
-
 void DirectGraphics::StartShadwMapRendering()
 {    
     // レンダーターゲットのクリア
@@ -155,7 +149,7 @@ void DirectGraphics::StartShadwMapRendering()
     m_Context->RSSetViewports(1U, &vp);
 }
 
-void DirectGraphics::RenderingPostEffect()
+void DirectGraphics::StartOnScreenRendering()
 {
     // レンダーターゲットビューのクリア
     float clear_color[4] = { 0.0f,0.0f,1.0f,1.0f };
@@ -183,6 +177,13 @@ void DirectGraphics::RenderingPostEffect()
     vp.TopLeftY = 0.0f;
     m_Context->RSSetViewports(1U, &vp);
 }
+
+void DirectGraphics::FinishRendering()
+{
+    // バックバッファをフロントバッファに送信する   
+    m_SwapChain->Present(1U, 0U);
+}
+
 
 void DirectGraphics::UpdateLight()
 {

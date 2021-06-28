@@ -73,7 +73,7 @@ void ControlScene::Update()
 
 void ControlScene::Draw()
 {
-    GRAPHICS->StartRendering();
+    GRAPHICS->StartOnScreenRendering();
     switch (m_CurrentState)
     {
     case SceneState::Load:

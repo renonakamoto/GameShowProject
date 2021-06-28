@@ -48,7 +48,7 @@ void DebugScene::Update()
 
 void DebugScene::Draw()
 {
-    GRAPHICS->RenderingPostEffect();
+    GRAPHICS->StartOnScreenRendering();
     switch (m_CurrentState)
     {
     case SceneState::Load:
