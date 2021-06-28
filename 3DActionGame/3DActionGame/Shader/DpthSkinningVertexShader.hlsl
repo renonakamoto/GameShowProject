@@ -2,6 +2,9 @@
 // シェーダーに送れるボーン行列の最大数
 #define MAX_BONE_MATRIX 255
 
+/****************************************
+           入力パラメータ
+****************************************/
 // VertexShaderに送られてくるデータ構造
 struct VS_IN
 {
@@ -13,12 +16,20 @@ struct VS_IN
     float4 weights      : BONE_WEIGHT;
 };
 
+/****************************************
+           出力パラメータ
+****************************************/
+
 // VertexShaderから出力するデータ構造
 struct VS_OUT
 {
     float4 pos   : SV_POSITION;
     float4 depth : POSITION0;
 };
+
+/****************************************
+          定数バッファ
+****************************************/
 
 cbuffer ConstantBuffer : register(b0)
 {
@@ -46,45 +57,51 @@ struct Skin
     float3 nor; // 法線ベクトル
 };
 
+/****************************************
+          共通関数
+****************************************/
 
 Skin SkinVert(VS_IN input)
 {
     Skin output = (Skin) 0;
     
     float4 pos = input.pos;
-    float3 nor = input.nor.xyz;
+    //float3 nor = input.nor.xyz;
 
     // ボーン0
     uint bone = input.bones.x;
     float weight = input.weights.x;
     matrix m = BoneWorld[bone];
     output.pos += weight * mul(pos, m);
-    output.nor += weight * mul(nor, (float3x3) m);
+    //output.nor += weight * mul(nor, (float3x3) m);
 
     // ボーン1
     bone = input.bones.y;
     weight = input.weights.y;
     m = BoneWorld[bone];
     output.pos += weight * mul(pos, m);
-    output.nor += weight * mul(nor, (float3x3) m);
+   // output.nor += weight * mul(nor, (float3x3) m);
 
     // ボーン2
     bone = input.bones.z;
     weight = input.weights.z;
     m = BoneWorld[bone];
     output.pos += weight * mul(pos, m);
-    output.nor += weight * mul(nor, (float3x3) m);
+    //output.nor += weight * mul(nor, (float3x3) m);
 
     // ボーン3
     bone = input.bones.w;
     weight = input.weights.w;
     m = BoneWorld[bone];
     output.pos += weight * mul(pos, m);
-    output.nor += weight * mul(nor, (float3x3) m);
+    //output.nor += weight * mul(nor, (float3x3) m);
 
     return output;
 }
 
+/****************************************
+            エントリー関数
+****************************************/
 
 VS_OUT vs_main(VS_IN input)
 {

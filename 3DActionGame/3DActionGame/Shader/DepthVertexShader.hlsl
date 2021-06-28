@@ -1,3 +1,7 @@
+/****************************************
+           入力パラメータ
+****************************************/
+
 // VertexShaderに送られてくるデータ構造
 struct VS_IN
 {
@@ -6,12 +10,20 @@ struct VS_IN
     float2 texture_pos  : TEXCOORD0;
 };
 
+/****************************************
+           出力パラメータ
+****************************************/
+
 // VertexShaderから出力するデータ構造
 struct VS_OUT
 {
     float4 pos   : SV_POSITION;
     float4 depth : POSITION0;
 };
+
+/****************************************
+          定数バッファ
+****************************************/
 
 cbuffer ConstantBuffer : register(b0)
 {
@@ -28,6 +40,9 @@ cbuffer ConstantBuffer : register(b0)
     float4   MaterialSpecular;  //! スペキュラー光
 };
 
+/****************************************
+            エントリー関数
+****************************************/
 
 VS_OUT vs_main( VS_IN input )
 {

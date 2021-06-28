@@ -7,8 +7,9 @@
 #pragma comment(lib,"d3d11.lib")
 
 // MSAAの有効
-#define ENABLE_MSAA
+//#define ENABLE_MSAA
 
+// シャドウマップのサイズ
 const float DEPTH_TEXTURE_SIZE = 2048;
 
 bool DirectGraphics::Init()
