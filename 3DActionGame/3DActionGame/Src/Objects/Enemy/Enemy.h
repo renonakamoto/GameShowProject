@@ -26,7 +26,7 @@ public:
 	* @param[in] pos_ 座標
 	*/
 	Enemy(DirectX::XMFLOAT3 pos_) :
-		ShadowMapObject(pos_, { 0.f, 0.f, 0.f }, { 0.1f, 0.1f, 0.1f }),
+		ShadowMapObject(pos_, { 0.f, 0.f, 0.f }, { 0.05f, 0.05f, 0.05f }),
 		m_Model(nullptr),
 		m_Stage(nullptr),
 		m_State(nullptr),

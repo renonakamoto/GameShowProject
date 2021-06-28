@@ -10,11 +10,12 @@ void FollowCamera::Update()
 {
     // マウスのX軸の移動量をY軸回転に加算
     m_Yaw -= INPUT_MANAGER->GetMouseMovementX();
+    m_Pitch -= INPUT_MANAGER->GetMouseMovementY();
 
     if (m_FollowObject)SetLookAtPos(m_FollowObject->GetPos());
 
     m_Pos.x = ((m_LookAt.x + m_Offset.x) + m_Distance *  sinf(DirectX::XMConvertToRadians(m_Yaw)));
-    m_Pos.y = ((m_LookAt.y + m_Offset.y));
+    m_Pos.y = ((m_LookAt.y + m_Offset.y) + m_Pitch);
     m_Pos.z = ((m_LookAt.z + m_Offset.z) + m_Distance * -cosf(DirectX::XMConvertToRadians(m_Yaw)));
 
     

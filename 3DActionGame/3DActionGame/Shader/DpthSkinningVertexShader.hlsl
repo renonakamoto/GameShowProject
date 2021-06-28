@@ -88,14 +88,15 @@ Skin SkinVert(VS_IN input)
 
 VS_OUT vs_main(VS_IN input)
 {
-    VS_OUT output = (VS_OUT) 0;
+    VS_OUT output = (VS_OUT)0;
     
-    // スキンメッシュを行う
+    // スキンメッシュ
     Skin skinned = SkinVert(input);
 
-    output.pos = mul(skinned.pos, World);
-    output.pos = mul(output.pos, LightView);
-    output.pos = mul(output.pos, LightProjection);
+    // 頂点変換
+    output.pos   = mul(skinned.pos, World);
+    output.pos   = mul(output.pos,  LightView);
+    output.pos   = mul(output.pos,  LightProjection);
     output.depth = output.pos;
 
     return output;

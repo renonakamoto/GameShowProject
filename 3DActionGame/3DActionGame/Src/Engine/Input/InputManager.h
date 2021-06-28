@@ -420,6 +420,7 @@ private:
 	int m_MovementX;
 	int m_MovementY;
 	float m_MouseSensitivity;
+
 };
 
 #endif INPUT_MANAGER

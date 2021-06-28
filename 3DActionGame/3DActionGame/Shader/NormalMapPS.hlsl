@@ -138,7 +138,7 @@ float4 ps_main(PS_IN input) : SV_Target
     float4 R = normalize(-L + 2.0 * N * NL);
    
     // ‹¾–Ê”½ŽËŒõ
-    float4 specular = pow(saturate(dot(R, input.eye_vec)), 60);
+    float4 specular = pow(saturate(dot(R, input.eye_vec)), 50);
     
     //float4 specular = Phong(input.norw, input.eye_vec, input.light);
    
@@ -157,10 +157,10 @@ float4 ps_main(PS_IN input) : SV_Target
     float4 ambient = diffuse / 2.0;
     
     float3 normal_in_view = mul(input.norw, (float3x3) View);
-    float power1 = 1.0 - max(0.0, dot((float3) Light, input.norw));
-    float power2 = 1.0 - max(0.0, normal_in_view.z * -1.0);
-    float lim_power = power1 * power2;
-    lim_power = pow(lim_power, 9.0);
+    float  power1 = 1.0 - max(0.0, dot((float3)-Light, input.norw));
+    float  power2 = 1.0 - max(0.0, normal_in_view.z * -1.0);
+    float  lim_power = power1 * power2;
+    lim_power = pow(lim_power, 4.0);
    
     float4 color = ambient + diffuse + specular + lim_power;
     
@@ -173,6 +173,8 @@ float4 ps_main(PS_IN input) : SV_Target
     //{
     //    color /= 3;
     //}
+
     
-    return color + float4(0.7, 0.0, 0.0, 0.0);
+    return color + float4(0.1, 0.1, 0.1, 0.0);
+    //return color;
 }

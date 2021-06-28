@@ -7,9 +7,9 @@
 #pragma comment(lib,"d3d11.lib")
 
 // MSAAの有効
-//#define ENABLE_MSAA
+#define ENABLE_MSAA
 
-int g_Fact = 2;
+const float DEPTH_TEXTURE_SIZE = 2048;
 
 bool DirectGraphics::Init()
 {
@@ -69,14 +69,16 @@ bool DirectGraphics::Init()
     // ライト設定
     SetUpLight();
     
-    // UV変換行列の設定
-    DirectX::XMMATRIX tex_uv = DirectX::XMMatrixSet(
+    // シャドウマップをサンプリングする際のUV変換行列の設定
+    DirectX::XMMATRIX mat_depth_bias = DirectX::XMMatrixSet
+    (
         0.5f, 0.0f, 0.0f, 0.0f,
         0.0f,-0.5f, 0.0f, 0.0f,
-        0.0f, 0.0f, 1.0f, 0.0f,
-        0.5f, 0.5f, 0.0f, 1.0f);
+        0.0f, 0.0f, 0.5f, 0.0f,
+        0.5f, 0.5f, 0.0f, 1.0f
+    );
 
-    DirectX::XMStoreFloat4x4(&m_ConstantBufferData.ClipUV, DirectX::XMMatrixTranspose(tex_uv));
+    DirectX::XMStoreFloat4x4(&m_ConstantBufferData.ClipUV, DirectX::XMMatrixTranspose(mat_depth_bias));
     
     return true;
 }
@@ -143,8 +145,8 @@ void DirectGraphics::StartShadwMapRendering()
 
     // ビューポートの設定
     D3D11_VIEWPORT vp{ 0 };
-    vp.Width    = 1024 * g_Fact;
-    vp.Height   = 1024 * g_Fact;
+    vp.Width    = DEPTH_TEXTURE_SIZE;
+    vp.Height   = DEPTH_TEXTURE_SIZE;
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0.0f;
@@ -215,7 +217,7 @@ void DirectGraphics::UpdateLight()
         DepthViewSize += move_vec.y;
 
         // プロジェクション行列設定
-        DirectX::XMMATRIX proj_mat = DirectX::XMMatrixOrthographicLH(DepthViewSize, DepthViewSize, -1, 5000.f);
+        DirectX::XMMATRIX proj_mat = DirectX::XMMatrixOrthographicLH(DepthViewSize, DepthViewSize, -1, 1500.f);
         // プロジェクション行列の作成
         DirectX::XMStoreFloat4x4(&GRAPHICS->GetConstantBufferData()->LightProjection, DirectX::XMMatrixTranspose(proj_mat));
     }
@@ -405,7 +407,7 @@ bool DirectGraphics::CreateDeviceAndSwapChain()
     // フルスクリーンとウィンドウモードの切り替えが可能
     swap_chain_desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-    if (FAILED(factory->CreateSwapChain(m_Device, &swap_chain_desc, &m_SwapChain)))
+    if (FAILED(factory->CreateSwapChain(m_Device.Get(), &swap_chain_desc, &m_SwapChain)))
     {
         return false;
     }
@@ -738,8 +740,8 @@ bool DirectGraphics::CreateDepthDSVAndRTV()
     // 深度テクスチャの作成
     D3D11_TEXTURE2D_DESC texture_desc;
     ZeroMemory(&texture_desc, sizeof(texture_desc));
-    texture_desc.Width              = 1024 * g_Fact;
-    texture_desc.Height             = 1024 * g_Fact;
+    texture_desc.Width              = static_cast<UINT>(DEPTH_TEXTURE_SIZE);
+    texture_desc.Height             = static_cast<UINT>(DEPTH_TEXTURE_SIZE);
     texture_desc.MipLevels          = 1U;
     texture_desc.ArraySize          = 1U;
     texture_desc.MiscFlags          = 0U;
@@ -882,17 +884,6 @@ void DirectGraphics::SetUpLight()
     DirectX::XMStoreFloat4x4(&m_ConstantBufferData.LightView, DirectX::XMMatrixTranspose(light_view));
 
     // プロジェクション行列設定
-    DirectX::XMMATRIX proj_mat = DirectX::XMMatrixOrthographicLH(50.f, 50.f, -1, 5000.f);
-
-    // 視野角
-    constexpr float fov = DirectX::XMConvertToRadians(45.0f);
-    // アスペクト比
-    float aspect = static_cast<float>(WINDOW->GetClientWidth() * 2) / static_cast<float>(WINDOW->GetClientHeight() * 2);
-    // Near
-    float near_z = 0.1f;
-    // Far
-    float far_z  = 500000.f;
-    // プロジェクション行列の作成
-    //DirectX::XMMATRIX proj_mat = DirectX::XMMatrixPerspectiveFovLH(fov, 1, near_z, far_z);
+    DirectX::XMMATRIX proj_mat = DirectX::XMMatrixOrthographicLH(50.f, 50.f, -1, 1500.f);
     DirectX::XMStoreFloat4x4(&GRAPHICS->GetConstantBufferData()->LightProjection, DirectX::XMMatrixTranspose(proj_mat));
 }

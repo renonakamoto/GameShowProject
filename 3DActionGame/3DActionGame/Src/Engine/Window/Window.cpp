@@ -9,6 +9,20 @@ LRESULT Window::WindowProc(HWND windowHandle_, UINT messageId_, WPARAM wparam_, 
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		break;
+
+	case WM_MOUSEWHEEL:
+	{
+		int wheel_param = GET_WHEEL_DELTA_WPARAM(wparam_);
+		// 上方向
+		if (wheel_param > 0)
+		{
+		}
+		// 下方向
+		else if (wheel_param < 0)
+		{
+		}
+	}
+		break;
 	default:
 		return DefWindowProc(windowHandle_, messageId_, wparam_, lparam_);
 		break;

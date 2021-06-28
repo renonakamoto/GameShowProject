@@ -173,9 +173,9 @@ VS_OUT vs_main( VS_IN input )
     /* シャドウマップ処理 */    
     
     // ライト視点でのビュー座標変換
-    output.light_view_pos = mul(output.posw, LightView);
+    output.light_view_pos  = mul(output.posw,           LightView);
     // ライト視点でのプロジェクション座標変換
-    output.light_view_pos = mul(output.light_view_pos, LightProjection);
+    output.light_view_pos  = mul(output.light_view_pos, LightProjection);
     // テクスチャUVの変換
     output.light_tex_coord = mul(output.light_view_pos, ClipUV);
 

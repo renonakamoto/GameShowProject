@@ -7,37 +7,57 @@ struct PS_IN
 };
 
 // テクスチャ情報
-Texture2D Texture : register(t0);
-SamplerState Sampler : register(s0);
+Texture2D SceneTexture : register(t0);
+SamplerState Sampler   : register(s0);
 
-Texture2D BlurTexture : register(t1);
+Texture2D BlurMap : register(t1);
 
 // エントリーポイント
 float4 ps_main(PS_IN input) : SV_TARGET
-{
-    float4 base_color = Texture.Sample(Sampler, input.texture_pos);
-    float4 blur_color = Texture.Sample(Sampler, input.texture_pos);
+{    
+    // スクリーンの横幅
+    float SCREEN_WIDTH  = 1280.0;
+    // スクリーンの縦幅
+    float SCREEN_HEIGHT = 720.0;
+    // ずらすピクセル数
+    float OFFSET_PIXEL  = 1.5;
     
-    float offset_u = 1.5 / 1280.0;
-    float offset_v = 1.5 / 720.0;
+    // ピクセルのオフセット値を計算
+    float offset_u = OFFSET_PIXEL / SCREEN_WIDTH;
+    float offset_v = OFFSET_PIXEL / SCREEN_HEIGHT;
     
-    //offset_u = 0.0;
-    //offset_v = 0.0;
+    // ずらさない基準となるテクセルをサンプル
+    float4 base_color = SceneTexture.Sample(Sampler, input.texture_pos);
+    float4 color      = base_color;
     
-    blur_color += Texture.Sample(Sampler, input.texture_pos + float2( offset_u,       0.0));
-    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(-offset_u,       0.0));
-    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(      0.0,  offset_v));
-    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(      0.0, -offset_v));
-    blur_color += Texture.Sample(Sampler, input.texture_pos + float2( offset_u,  offset_v));
-    blur_color += Texture.Sample(Sampler, input.texture_pos + float2( offset_u, -offset_v));
-    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(-offset_u,  offset_v));
-    blur_color += Texture.Sample(Sampler, input.texture_pos + float2(-offset_u, -offset_v));
+    // 右にオフセット値分ずらしたテクセルをサンプル
+    color += SceneTexture.Sample(Sampler, input.texture_pos + float2( offset_u,       0.0));
+    // 左にオフセット値分ずらしたテクセルをサンプル                                 
+    color += SceneTexture.Sample(Sampler, input.texture_pos + float2(-offset_u,       0.0));
+    // 下にオフセット値分ずらしたテクセルをサンプル
+    color += SceneTexture.Sample(Sampler, input.texture_pos + float2(      0.0,  offset_v));
+    // 上にオフセット値分ずらしたテクセルをサンプル                      
+    color += SceneTexture.Sample(Sampler, input.texture_pos + float2(      0.0, -offset_v));
+    // 右下にオフセット値分ずらしたテクセルをサンプル
+    color += SceneTexture.Sample(Sampler, input.texture_pos + float2( offset_u,  offset_v));
+    // 右上にオフセット値分ずらしたテクセルをサンプル                     
+    color += SceneTexture.Sample(Sampler, input.texture_pos + float2( offset_u, -offset_v));
+    // 左下にオフセット値分ずらしたテクセルをサンプル
+    color += SceneTexture.Sample(Sampler, input.texture_pos + float2(-offset_u,  offset_v));
+    // 左上にオフセット値分ずらしたテクセルをサンプル
+    color += SceneTexture.Sample(Sampler, input.texture_pos + float2(-offset_u, -offset_v));
     
-    blur_color /= 9.0;
+    // サンプルした色の平均のを計算
+    color /= 9.0;
     
-    float t = BlurTexture.Sample(Sampler, input.texture_pos).r;
+    // BlurMapからテクセルをサンプリングし[r]成分を保存
+    float t = BlurMap.Sample(Sampler, input.texture_pos).r;
+    /*
+        ベースのピクセルカラーとブラーのピクセルカラーを
+        BlurMapから取得した値を使い補間する
+    */
+    color = lerp(base_color, color, t);
     
-    float4 color = lerp(base_color, blur_color, t);
-    
+    // 出力
     return color;
 }

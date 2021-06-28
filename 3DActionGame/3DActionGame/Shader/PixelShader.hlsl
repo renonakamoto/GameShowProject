@@ -42,7 +42,7 @@ cbuffer ConstantBuffer : register(b0)
 Texture2D    Texture       : register(t0); // Textureをスロット0の0番目のテクスチャレジスタに設定
 SamplerState Sampler       : register(s0); // Samplerをスロット0の0番目のサンプラレジスタに設定
 Texture2D    TextureDepth  : register(t1);
-SamplerComparisonState ShadowSampler : register(s1);
+SamplerState ShadowSampler : register(s1);
 
 
 /****************************************
@@ -59,6 +59,11 @@ float HalfLambert(float3 lig_dir, float3 normal)
     return square_ndl;
 }
 
+float Lambert(float3 lig_dir, float3 normal)
+{
+    return saturate(dot(normal, lig_dir));
+}
+
 float4 Phong(float3 normal, float3 eye_vec, float3 lig_dir)
 {
     // ライトの反射ベクトルを求める
@@ -71,7 +76,7 @@ float4 Phong(float3 normal, float3 eye_vec, float3 lig_dir)
     // 強さを絞る
     t = pow(t, 60.0);
     
-    return MaterialSpecular * t;
+    return t;
     
     //// 法線ベクトル
     //float4 n = float4(nw, 0.0);
@@ -90,49 +95,27 @@ float4 Phong(float3 normal, float3 eye_vec, float3 lig_dir)
 ****************************************/
 float4 ps_main(PS_IN input) : SV_Target
 {
-   // 法線ベクトル
-    float4 N = float4(input.norw, 0.0);
-   // ライトベクトル
-    float4 L = float4(input.light, 0.0);
-   // 法線とライトの内積で光の当たり具合を算出
-    float NL = dot(N, L);
-   // 反射ベクトルを算出
-    float4 R = normalize(-L + 2.0 * N * NL);
+   // ディフューズカラー
+   float4 diffuse_color = Texture.Sample(Sampler, input.texture_pos);
    
-    // 鏡面反射光
-    //float4 specular = pow(saturate(dot(R, input.eye_vec)), 60);
+   // 法線とライトのベクトルの内積を計算し0～1に補正する -> 反射率
+   float ndl = saturate(dot(input.norw, Light.xyz));
+   // 0.0～1.0に1/2を乗算し1/2を加算することで0.5～1.0に値を補正する
+   float half_ndl = ndl * 0.5 + 0.5;
+   // 二乗することで、0.5～1.0の滑らかなカーブになる
+   float square_ndl = half_ndl * half_ndl;
+   
+   // ディフューズカラーと乗算し反射した色を算出
+   diffuse_color *= square_ndl;
     
-    float4 specular = Phong(input.norw, input.eye_vec, input.light);
-   
-   // 拡散光
-    float4 tex_color = Texture.Sample(Sampler, input.texture_pos);
-    float4 diffuse   = tex_color * HalfLambert(input.light, input.norw);
-   
+   // スペキュラーカラー
+   float4 specular_color = Phong(input.norw, input.eye_vec, input.light);
+    
    // 環境光
-    float4 ambient = diffuse / 2.0;
+   float4 ambient_color = diffuse_color / 2.0;
    
-    float4 color = diffuse + specular + ambient;
+   float4 final_color = diffuse_color + specular_color + ambient_color;
     
-    // 影
-    //input.light_tex_coord.xyz /= input.light_tex_coord.w;
-    //float tex_value = TextureDepth.Sample(ShadowSampler, input.light_tex_coord.xy).r;
-    //float light_length = input.light_view_pos.z / input.light_view_pos.w;
-    //if ((tex_value + 0.003) < light_length)
-    //{
-    //    color /= 3;
-    //}
-
-    float2 sm_uv = input.light_tex_coord.xy / input.light_tex_coord.w;
-    if (sm_uv.x > 0.0 && sm_uv.x < 1.0
-        && sm_uv.y > 0.0 && sm_uv.y < 1.0)
-    {
-        float light_length = input.light_view_pos.z / input.light_view_pos.w;
-        float shadow = TextureDepth.SampleCmpLevelZero(ShadowSampler, sm_uv, light_length - 0.0003);
-        float4 shadow_color = color / 3.0;
-        
-        color = lerp(color, shadow_color, shadow);
-    }
-    
-    
-    return color;
+    // 出力
+    return final_color;
 }

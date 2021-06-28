@@ -392,9 +392,6 @@
     <ClInclude Include="Src\Engine\Graphics\PixelShader.h">
       <Filter>Src\Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Engine\Input\InputManager.h">
-      <Filter>Src\Engine\Input</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Engine\Sound\SoundManager.h">
       <Filter>Src\Engine\Sound</Filter>
     </ClInclude>
@@ -439,6 +436,9 @@
     </ClInclude>
     <ClInclude Include="Src\Objects\Sprite\Sprite.h">
       <Filter>Src\Objects\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Input\InputManager.h">
+      <Filter>Src\Engine\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

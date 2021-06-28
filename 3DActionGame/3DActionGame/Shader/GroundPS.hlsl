@@ -42,104 +42,124 @@ cbuffer ConstantBuffer : register(b0)
 Texture2D    Texture        : register(t0);
 SamplerState Sampler        : register(s0);
 Texture2D    TextureDepth   : register(t1);
-SamplerComparisonState ShadowSampler  : register(s1);
+SamplerState ShadowSampler : register(s1);
 
 
 /****************************************
           共通関数
 ****************************************/
 
-float4 HalfLambert(float ndl)
+float HalfLambert(float3 lig_dir, float3 normal)
 {
+    float ndl = saturate(dot(normal, lig_dir));
+    
     float half_ndl = ndl * 0.5 + 0.5;
     float square_ndl = half_ndl * half_ndl;
 	
-    return MaterialDiffuse * square_ndl * MaterialDiffuse.w;
+    return square_ndl;
 }
 
-float4 Phong(float3 nw, float3 eye_vec, float3 light)
+float4 Phong(float3 normal, float3 eye_vec, float3 lig_dir)
 {
-    // 法線ベクトル
-    float4 n = float4(nw, 0.0);
-    // ライトベクトル
-    float4 l = float4(light, 0.0);
-    // 法線とライトの内積で光の当たり具合を算出
-    float ndl = dot(n, l);
-    // 反射ベクトルを算出
-    float4 reflect = normalize(-l + 2.0 * n * ndl);
+    // ライトの反射ベクトルを求める
+    float ndl = saturate(dot(normal, lig_dir));
+    float3 ref_vec = normalize(-lig_dir + 2.0 * normal * ndl);
     
-    return MaterialSpecular * pow(saturate(dot(reflect.xyz, eye_vec)), 60) * MaterialSpecular.z;
+    // 鏡面反射の強さを算出
+    float t = saturate(dot(ref_vec, eye_vec));
+    
+    // 強さを絞る
+    t = pow(t, 60.0);
+    
+    return t;
 }
-
 /****************************************
             エントリー関数
 ****************************************/
 float4 ps_main(PS_IN input) : SV_Target
-{
-   // 法線ベクトル
-    float4 N = float4(input.norw, 0.0);
-   // ライトベクトル
-    float4 L = float4(input.light, 0.0);
-   // 法線とライトの内積で光の当たり具合を算出
-    float NL = dot(N, L);
-   // 反射ベクトルを算出
-    float4 R = normalize(-L + 2.0 * N * NL);
-   
-    // 鏡面反射光
-    float4 specular = pow(saturate(dot(R, input.eye_vec)), 60);
+{    
+    // 上向きの単位ベクトル
+    float3 up_n = float3(0.0, 1.0, 0.0);
+    // 上向きのベクトルと法線の内積を行う
+    float v_d_n = saturate(dot(up_n, input.norw));
     
-    //float4 specular = Phong(input.norw, input.eye_vec, input.light);
-    
-    float4 vertical = float4(0.0, 1.0, 0.0, 0.0);
-    float v_d_n = saturate(dot(vertical, N));
-    
-    // 茶色
-    float4 brown = float4(0.45, 0.31, 0.18, 1.0);
+    // 茶
+    float3 brown = float3(0.45, 0.31, 0.18);
     // 緑
-    float4 green = float4(0.54, 0.67, 0.22, 1.0);
-    
-   // 拡散光
-    float4 diffuse   = lerp(brown, green, v_d_n);
-    float half_ndl   = NL * 0.5 + 0.5;
-    float square_ndl = half_ndl * half_ndl;
-    diffuse *= square_ndl;
-    
-    //float4 tex_color = Texture.Sample(Sampler, input.texture_pos);
-    //float4 diffuse = HalfLambert(saturate(NL)) + tex_color;
-   
-   // 環境光
-    float4 ambient = diffuse / 2.0;
-   
-    float4 color = ambient + diffuse + specular;
-    
-   // 影
-   //input.light_tex_coord.xyz /= input.light_tex_coord.w;
-   //float max_depth_slope = max(abs(ddx(input.light_tex_coord.z)), abs(ddy(input.light_tex_coord.z)));
-   //float tex_value = TextureDepth.Sample(ShadowSampler, input.light_tex_coord.xy).r;
-   //float light_length = input.light_view_pos.z / input.light_view_pos.w;
-   //if ((tex_value) < light_length - 0.00003)
-   //{
-   //    color /= 3;
-   //}
-   
-    //input.light_tex_coord.xyz /= input.light_tex_coord.w;
-    //float light_length = input.light_view_pos.z / input.light_view_pos.w;
-    //float shadow = TextureDepth.SampleCmpLevelZero(ShadowSampler, input.light_tex_coord.xy, light_length);
-    //
-    //float4 shadow_color = color / 3.0;
-    //
-    //color = lerp(color, shadow_color, shadow);
+    float3 green = float3(0.54, 0.67, 0.22);
 
+    /*
+        今回の場合、内積の結果は
+        斜面に近いほど[0.0]になる
+        平面に近いほど[1.0]になる
+        その補間値に使用することで、
+        平面では、[緑]
+        斜面では、[茶]
+        になる。
+    */
+    float3 diffuse = lerp(brown, green, v_d_n);
+    
+    // 反射率を求める
+    float t = HalfLambert(Light.xyz, input.norw);
+    diffuse *= t;  
+   
+    // 環境光
+    float3 ambient = diffuse / 2.0;
+    
+    // スペキュラーカラー
+    float3 specular = Phong(input.norw, input.eye_vec, Light.xyz);
+   
+    float3 color = ambient + diffuse + specular;
+    
+    // スクリーンの横幅
+    float SCREEN_WIDTH  = 1280.0;
+    // スクリーンの縦幅
+    float SCREEN_HEIGHT = 720.0;
+    // ずらすピクセル数
+    float OFFSET_PIXEL  = 1.0;
+    
+    // 影
     float2 sm_uv = input.light_tex_coord.xy / input.light_tex_coord.w;
-    if (sm_uv.x > 0.0 && sm_uv.x < 1.0
-        && sm_uv.y > 0.0 && sm_uv.y < 1.0)
+    if (sm_uv.x >= 0.0 && sm_uv.x <= 1.0
+        && sm_uv.y >= 0.0 && sm_uv.y <= 1.0)
     {   
-        float light_length = input.light_view_pos.z / input.light_view_pos.w;
-        float shadow = TextureDepth.SampleCmpLevelZero(ShadowSampler, sm_uv, light_length - 0.0003);
-        float4 shadow_color = color / 3.0;
+        // シャドウアクネ対策でバイアスを掛ける
+        float bias = 0.0003;
         
-        color = lerp(color, shadow_color, shadow);
+        // 今回のライトから見た深度値を算出
+        float z_light_view = input.light_view_pos.z;
+        
+        // ピクセルのオフセット値を計算
+        float offset_u = OFFSET_PIXEL / SCREEN_WIDTH;
+        float offset_v = OFFSET_PIXEL / SCREEN_HEIGHT;
+        
+        // 基準となるテクセル含む近くのテクセルをサンプリングする
+        float z_shadow_map_0 = TextureDepth.Sample(ShadowSampler, sm_uv).r;                                                    
+        float z_shadow_map_1 = TextureDepth.Sample(ShadowSampler, sm_uv + float2(offset_u,      0.0)).r;
+        float z_shadow_map_2 = TextureDepth.Sample(ShadowSampler, sm_uv + float2(offset_u, offset_v)).r;
+        float z_shadow_map_3 = TextureDepth.Sample(ShadowSampler, sm_uv + float2(     0.0, offset_v)).r;
+        
+        // シャドウマップに保存されている深度値よりも長い場合、影になるので射影率を 1 加算する        
+        float shadow_rate = 0.0;
+        if (z_light_view > z_shadow_map_0 + bias){
+            shadow_rate += 1.0;
+        }
+        if (z_light_view > z_shadow_map_1 + bias){
+            shadow_rate += 1.0;
+        }
+        if (z_light_view > z_shadow_map_2 + bias){
+            shadow_rate += 1.0;
+        }
+        if (z_light_view > z_shadow_map_3 + bias){
+            shadow_rate += 1.0;
+        }
+        // 射影率の平均を求める 0 ～ 1 (0% ～ 100%)になる
+        shadow_rate /= 4.0;
+        
+        // 線形補間で射影率に応じて色を滑らかに変化させる
+        float3 shadow_color = color / 3.0;
+        color = lerp(color, shadow_color, shadow_rate);
     }
     
-    return color;
+    return float4(color, 1.0);
 }

@@ -15,6 +15,7 @@ public:
 	FollowCamera() :
 		m_Distance(0.f),
 		m_Yaw(0.f),
+		m_Pitch(0.f),
 		m_Height(0.f),
 		m_Offset(DirectX::XMFLOAT3(0.f, 0.f, 0.f)),
 		m_FollowObject(nullptr)
@@ -75,6 +76,7 @@ public:
 private:
 	float m_Distance;				//! オブジェクトとの距離
 	float m_Yaw;					//! Y軸回転の角度
+	float m_Pitch;					//! 横軸の回転角度
 	float m_Height;					//! カメラの高さ
 	DirectX::XMFLOAT3 m_Offset;		//! オブジェクトの原点が注視点になるのでそれを移動させるオフセット値
 	GameObject* m_FollowObject;		//! 追従するオブジェクト
