@@ -164,17 +164,5 @@ float4 ps_main(PS_IN input) : SV_Target
    
     float4 color = ambient + diffuse + specular + lim_power;
     
-    // ‰e
-    //input.light_tex_coord.xyz /= input.light_tex_coord.w;
-    //float max_depth_slope = max(abs(ddx(input.light_tex_coord.z)), abs(ddy(input.light_tex_coord.z)));
-    //float tex_value = TextureDepth.Sample(ShadowSampler, input.light_tex_coord.xy).r;
-    //float light_length = input.light_view_pos.z / input.light_view_pos.w;
-    //if ((tex_value + 0.0005) > light_length)
-    //{
-    //    color /= 3;
-    //}
-
-    
     return color + float4(0.1, 0.1, 0.1, 0.0);
-    //return color;
 }

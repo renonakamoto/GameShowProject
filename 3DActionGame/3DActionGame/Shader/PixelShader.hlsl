@@ -64,7 +64,7 @@ float Lambert(float3 lig_dir, float3 normal)
     return saturate(dot(normal, lig_dir));
 }
 
-float4 Phong(float3 normal, float3 eye_vec, float3 lig_dir)
+float Phong(float3 normal, float3 eye_vec, float3 lig_dir)
 {
     // ライトの反射ベクトルを求める
     float  ndl = saturate(dot(normal, lig_dir));
@@ -77,17 +77,6 @@ float4 Phong(float3 normal, float3 eye_vec, float3 lig_dir)
     t = pow(t, 60.0);
     
     return t;
-    
-    //// 法線ベクトル
-    //float4 n = float4(nw, 0.0);
-    //// ライトベクトル
-    //float4 l = float4(light, 0.0);
-    //// 法線とライトの内積で光の当たり具合を算出
-    //float  ndl = dot(n, l);
-    //// 反射ベクトルを算出
-    //float4 reflect = normalize(-l + 2.0 * n * ndl);
-    //
-    //return MaterialSpecular * pow(saturate(dot(reflect.xyz, eye_vec)), 60) * MaterialSpecular.z;
 }
 
 /****************************************

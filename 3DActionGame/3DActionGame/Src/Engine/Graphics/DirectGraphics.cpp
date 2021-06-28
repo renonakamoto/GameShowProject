@@ -10,7 +10,7 @@
 //#define ENABLE_MSAA
 
 // シャドウマップのサイズ
-const float DEPTH_TEXTURE_SIZE = 2048;
+const float DEPTH_TEXTURE_SIZE = 1024;
 
 bool DirectGraphics::Init()
 {
@@ -181,42 +181,24 @@ void DirectGraphics::StartOnScreenRendering()
 void DirectGraphics::FinishRendering()
 {
     // バックバッファをフロントバッファに送信する   
-    m_SwapChain->Present(1U, 0U);
+    m_SwapChain->Present(0U, 0U);
 }
 
 
 void DirectGraphics::UpdateLight()
 {
-    DirectX::XMFLOAT3 move_vec = DirectX::XMFLOAT3(0.f, 0.f, 0.f);
+    float width = 0.0f;
 
     if (INPUT_MANAGER->GetKey(KeyInfo::Key_Down)) {
-        move_vec.y++;
+        width++;
     }
     else if (INPUT_MANAGER->GetKey(KeyInfo::Key_Up)) {
-        move_vec.y--;
+        width--;
     }
 
-    if (INPUT_MANAGER->GetKey(KeyInfo::Key_Left)) {
-        move_vec.z++;
-    }
-    else if (INPUT_MANAGER->GetKey(KeyInfo::Key_Right)) {
-        move_vec.z--;
-    }
-
-    if (move_vec.y != 0.f || move_vec.z != 0.f)
+    if (width != 0.f)
     {
-        //m_LightPos.y += move_vec.y;
-        //m_LightPos.z += move_vec.z;
-        //DirectX::XMStoreFloat4(&m_ConstantBufferData.Light, DirectX::XMVector3Normalize(DirectX::XMVectorSet(m_LightPos.x, m_LightPos.y, m_LightPos.z, 0.0f)));
-        //
-        //DirectX::XMMATRIX light_view = DirectX::XMMatrixLookAtLH(
-        //    DirectX::XMVectorSet(m_LightPos.x, m_LightPos.y, m_LightPos.z, 0.0f),
-        //    DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),
-        //    DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
-        //
-        //DirectX::XMStoreFloat4x4(&m_ConstantBufferData.LightView, DirectX::XMMatrixTranspose(light_view));
-
-        DepthViewSize += move_vec.y;
+        DepthViewSize += width;
 
         // プロジェクション行列設定
         DirectX::XMMATRIX proj_mat = DirectX::XMMatrixOrthographicLH(DepthViewSize, DepthViewSize, -1, 1500.f);
@@ -886,6 +868,6 @@ void DirectGraphics::SetUpLight()
     DirectX::XMStoreFloat4x4(&m_ConstantBufferData.LightView, DirectX::XMMatrixTranspose(light_view));
 
     // プロジェクション行列設定
-    DirectX::XMMATRIX proj_mat = DirectX::XMMatrixOrthographicLH(50.f, 50.f, -1, 1500.f);
+    DirectX::XMMATRIX proj_mat = DirectX::XMMatrixOrthographicLH(DepthViewSize, DepthViewSize, -1, 1500.f);
     DirectX::XMStoreFloat4x4(&GRAPHICS->GetConstantBufferData()->LightProjection, DirectX::XMMatrixTranspose(proj_mat));
 }

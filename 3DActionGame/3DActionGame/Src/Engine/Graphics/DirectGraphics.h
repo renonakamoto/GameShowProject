@@ -113,7 +113,10 @@ public:
 	*/
 	void FinishRendering();
 	
-
+	/**
+	* @fn void UpdateLight()
+	* @brief ライトの更新関数
+	*/
 	void UpdateLight();
 
 public:
@@ -347,11 +350,16 @@ private:
 
 	/**
 	* @fn bool CreateDepthDSVAndRTV()
-	* @brief マルチパスで使用するレンダーターゲットの作成をおこなう関数
+	* @brief シャドウマップで使用するレンダーターゲットの作成をおこなう関数
 	* @return bool 成功したかどうかを真偽で返す
 	*/
 	bool CreateDepthDSVAndRTV();
 
+	/**
+	* @fn bool CreateDepthDSVAndRTV()
+	* @brief オフスクリーンで使用するレンダーターゲットの作成をおこなう関数
+	* @return bool 成功したかどうかを真偽で返す
+	*/
 	bool CreateOffScreenDSVAndRTV();
 
 	/**
@@ -388,14 +396,14 @@ private:
 	std::unique_ptr<PixelShader>	m_PixelShader;			//! 通常描画用のピクセルシェーダ
 
 	/* OffScreen用 */
-	ComPtr<ID3D11RenderTargetView>   m_OffScreenRenderTargetView;
-	ComPtr<ID3D11Texture2D>		     m_OffScreenTexture;
-	ComPtr<ID3D11ShaderResourceView> m_OffScreenTextureView;
-	ComPtr<ID3D11Texture2D>			 m_OffScreenDST;
-	ComPtr<ID3D11DepthStencilView>   m_OffScreenDSTV;
+	ComPtr<ID3D11RenderTargetView>   m_OffScreenRenderTargetView; //! オフスクリーン用レンダーターゲットビュー
+	ComPtr<ID3D11Texture2D>		     m_OffScreenTexture;		  //! オフスクリーン用レンダーターゲットテクスチャ
+	ComPtr<ID3D11ShaderResourceView> m_OffScreenTextureView;	  //! シェーダーに送る為のオフスクリーンテクスチャ
+	ComPtr<ID3D11Texture2D>			 m_OffScreenDST;			  //! オフスクリーン用深度ステンシルテクスチャ
+	ComPtr<ID3D11DepthStencilView>   m_OffScreenDSTV;			  //! オフスクリーン用深度ステンシルビュー
 	
-	std::unique_ptr<VertexShader>   m_SpriteVertexShader;	//!	スタティックメッシュ用の頂点シェーダ
-	std::unique_ptr<PixelShader>	m_BlurPixelShader;      //! 通常描画用のピクセルシェーダ
+	std::unique_ptr<VertexShader>   m_SpriteVertexShader;		  //!	スプライト用頂点シェーダー
+	std::unique_ptr<PixelShader>	m_BlurPixelShader;			  //! ぼかしシェーダー用ピクセルシェーダー
 	
 
 	/* シャドウマップ用 */
@@ -413,8 +421,8 @@ private:
 	std::unique_ptr<PixelShader>	 m_GroundPS;					//! 地面用のシェーダー
 
 	// ライト
-	DirectX::XMFLOAT3 m_LightPos;
-	float DepthViewSize;
+	DirectX::XMFLOAT3 m_LightPos;	//! ライトの座標
+	float DepthViewSize;			//! シャドウマップの適応範囲のサイズ
 
 };
 
