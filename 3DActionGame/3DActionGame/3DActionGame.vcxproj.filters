@@ -258,6 +258,9 @@
     <ClCompile Include="Src\Objects\Sprite\Sprite.cpp">
       <Filter>Src\Objects\Sprite</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Engine\Graphics\RenderTarget.cpp">
+      <Filter>Src\Engine\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Utility\GraphicsUtility.h">
@@ -438,6 +441,9 @@
       <Filter>Src\Objects\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="Src\Engine\Input\InputManager.h">
+      <Filter>Src\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Graphics\RenderTarget.h">
       <Filter>Src\Engine\Graphics</Filter>
     </ClInclude>
   </ItemGroup>

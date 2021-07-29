@@ -25,6 +25,7 @@
     <ClCompile Include="Src\Engine\Engine.cpp" />
     <ClCompile Include="Src\Engine\Graphics\DirectGraphics.cpp" />
     <ClCompile Include="Src\Engine\Graphics\PixelShader.cpp" />
+    <ClCompile Include="Src\Engine\Graphics\RenderTarget.cpp" />
     <ClCompile Include="Src\Engine\Graphics\ShaderBase.cpp" />
     <ClCompile Include="Src\Engine\Graphics\VertexShader.cpp" />
     <ClCompile Include="Src\Engine\Input\InputManager.cpp" />
@@ -81,6 +82,7 @@
     <ClInclude Include="Src\Engine\Engine.h" />
     <ClInclude Include="Src\Engine\Graphics\DirectGraphics.h" />
     <ClInclude Include="Src\Engine\Graphics\PixelShader.h" />
+    <ClInclude Include="Src\Engine\Graphics\RenderTarget.h" />
     <ClInclude Include="Src\Engine\Graphics\ShaderBase.h" />
     <ClInclude Include="Src\Engine\Graphics\VertexShader.h" />
     <ClInclude Include="Src\Engine\Input\InputManager.h" />

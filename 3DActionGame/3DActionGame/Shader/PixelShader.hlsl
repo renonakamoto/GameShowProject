@@ -71,12 +71,12 @@ float Phong(float3 normal, float3 eye_vec, float3 lig_dir)
     float3 ref_vec = normalize(-lig_dir + 2.0 * normal * ndl);
     
     // ‹¾–Ê”½Ë‚Ì‹­‚³‚ğZo
-    float t = saturate(dot(ref_vec, eye_vec));
+    float r_d_e = saturate(dot(ref_vec, eye_vec));
     
     // ‹­‚³‚ği‚é
-    t = pow(t, 60.0);
+    r_d_e = pow(r_d_e, 60.0);
     
-    return t;
+    return r_d_e;
 }
 
 /****************************************

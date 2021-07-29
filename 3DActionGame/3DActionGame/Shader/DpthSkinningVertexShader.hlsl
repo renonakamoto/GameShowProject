@@ -66,35 +66,30 @@ Skin SkinVert(VS_IN input)
     Skin output = (Skin) 0;
     
     float4 pos = input.pos;
-    //float3 nor = input.nor.xyz;
 
     // ボーン0
     uint bone = input.bones.x;
     float weight = input.weights.x;
     matrix m = BoneWorld[bone];
     output.pos += weight * mul(pos, m);
-    //output.nor += weight * mul(nor, (float3x3) m);
 
     // ボーン1
     bone = input.bones.y;
     weight = input.weights.y;
     m = BoneWorld[bone];
     output.pos += weight * mul(pos, m);
-   // output.nor += weight * mul(nor, (float3x3) m);
 
     // ボーン2
     bone = input.bones.z;
     weight = input.weights.z;
     m = BoneWorld[bone];
     output.pos += weight * mul(pos, m);
-    //output.nor += weight * mul(nor, (float3x3) m);
 
     // ボーン3
     bone = input.bones.w;
     weight = input.weights.w;
     m = BoneWorld[bone];
     output.pos += weight * mul(pos, m);
-    //output.nor += weight * mul(nor, (float3x3) m);
 
     return output;
 }

@@ -59,110 +59,45 @@ float4 HalfLambert(float ndl)
     return MaterialDiffuse * square_ndl * MaterialDiffuse.w;
 }
 
-float4 Phong(float3 nw, float3 eye_vec, float3 light)
+float Phong(float3 normal, float3 eye_vec, float3 lig_dir)
 {
-    // 法線ベクトル
-    float4 n = float4(nw, 0.0);
-    // ライトベクトル
-    float4 l = float4(light, 0.0);
-    // 法線とライトの内積で光の当たり具合を算出
-    float ndl = dot(n, l);
-    // 反射ベクトルを算出
-    float4 reflect = normalize(-l + 2.0 * n * ndl);
+    // ライトの反射ベクトルを求める
+    float ndl = saturate(dot(normal, lig_dir));
+    float3 ref_vec = normalize(-lig_dir + 2.0 * normal * ndl);
     
-    return MaterialSpecular * pow(saturate(dot(reflect.xyz, eye_vec)), 60) * MaterialSpecular.z;
+    // 鏡面反射の強さを算出
+    float r_d_e = saturate(dot(ref_vec, eye_vec));
+    
+    // 強さを絞る
+    r_d_e = pow(r_d_e, 60.0);
+    
+    return r_d_e;
 }
-
-
-/****************************************
-          インターフェース
-****************************************/
-
-/*
-    ライティングのインターフェース
-*/
-interface BaseLight
-{
-    float4 GetColor(PS_IN input);
-};
-
-/****************************************
-          クラス
-****************************************/
-
-class SimpleShading : BaseLight
-{
-    float4 GetColor(PS_IN input)
-    {
-        /* AmbientColor */
-        float4 ambient = MaterialAmbient * MaterialAmbient.w;
-        
-        /* DiffuseColor */
-        float4 tex_color = Texture.Sample(Sampler, input.texture_pos);
-        float ndl = saturate(dot(input.norw, input.light));
-        float4 diffuse = HalfLambert(saturate(ndl)) + tex_color;
-        
-        /* SpecularColor */
-        float4 specular = Phong(input.norw, input.eye_vec, input.light);
-        
-        return ambient + diffuse + specular;
-    }
-};
-
-class PhongShading : BaseLight
-{
-    float4 GetColor(PS_IN input)
-    {
-        float ndl = saturate(dot(input.norw, input.light));
-        float4 diffuse = HalfLambert(ndl);
-        
-        float4 specular = Phong(input.norw, input.eye_vec, input.light);
-        
-        return diffuse + specular;
-
-    }
-};
-
 /****************************************
             エントリー関数
 ****************************************/
 float4 ps_main(PS_IN input) : SV_Target
 {
-   // 法線ベクトル
-    float4 N = float4(input.norw, 0.0);
-   // ライトベクトル
-    float4 L = float4(input.light, 0.0);
-   // 法線とライトの内積で光の当たり具合を算出
-    float NL = dot(N, L);
-   // 反射ベクトルを算出
-    float4 R = normalize(-L + 2.0 * N * NL);
-   
     // 鏡面反射光
-    float4 specular = pow(saturate(dot(R, input.eye_vec)), 50);
-    
-    //float4 specular = Phong(input.norw, input.eye_vec, input.light);
-   
-    float3 normal_color = NormalTexture.Sample(Sampler, input.texture_pos);
-    float3 normal_vec = 2 * normal_color - 1.0f;
-    normal_vec = normalize(normal_vec);
-   
-    float3 bright = dot(input.light_tangent_direct.xyz, normal_vec);
-    bright = max(0.0, bright);
+    float4 specular = Phong(input.norw, input.eye_vec, input.light);
    
    // 拡散光
+    float n_d_l = saturate(dot(input.norw, input.light));
     float4 tex_color = Texture.Sample(Sampler, input.texture_pos);
-    float4 diffuse = HalfLambert(saturate(NL)) + tex_color;
+    float4 diffuse = HalfLambert(n_d_l) + tex_color;
    
    // 環境光
     float4 ambient = diffuse / 2.0;
     
+    // リムライト
     float3 normal_in_view = mul(input.norw, (float3x3) View);
-    float  power1 = 1.0 - max(0.0, dot((float3)-Light, input.norw));
-    float  power2 = 1.0 - max(0.0, normal_in_view.z * -1.0);
+    float  power1         = 1.0 - max(0.0, dot((float3)-Light, input.norw));
+    float  power2         = 1.0 - max(0.0, normal_in_view.z * -1.0);
     float  lim_power = power1 * power2;
     lim_power = pow(lim_power, 4.0);
    
     float4 color = ambient + diffuse + specular + lim_power;
     
+    // 出力
     return color + float4(0.1, 0.1, 0.1, 0.0);
 }

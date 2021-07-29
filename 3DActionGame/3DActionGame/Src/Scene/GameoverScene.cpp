@@ -75,7 +75,7 @@ void GameoverScene::Update()
 
 void GameoverScene::Draw()
 {
-    GRAPHICS->StartOnScreenRendering();
+    GRAPHICS->StartRendering(KindRT::RT_ON_SCREEN);
     switch (m_CurrentState)
     {
     case SceneState::Load:

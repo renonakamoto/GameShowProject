@@ -13,6 +13,7 @@ struct PS_IN
 Texture2D SceneTexture : register(t0);
 SamplerState Sampler   : register(s0);
 
+// ブラーマップ
 Texture2D BlurMap : register(t1);
 
 
@@ -33,7 +34,7 @@ float4 ps_main(PS_IN input) : SV_TARGET
     float offset_u = OFFSET_PIXEL / SCREEN_WIDTH;
     float offset_v = OFFSET_PIXEL / SCREEN_HEIGHT;
     
-    // ずらさない基準となるテクセルをサンプル
+    // 基準となるテクセルをサンプル
     float4 base_color = SceneTexture.Sample(Sampler, input.texture_pos);
     float4 color      = base_color;
     

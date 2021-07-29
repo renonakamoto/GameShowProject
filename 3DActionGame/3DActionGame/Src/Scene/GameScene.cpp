@@ -53,7 +53,7 @@ void GameScene::Load()
         ObjectManager::GetInstance()->Init();
         
         m_OffScreenSprite.Init(
-            GRAPHICS->GetOffScreenTextureView(), 
+            GRAPHICS->GetRenderTarget(KindRT::RT_OFF_SCREEM)->GetTexture(),
             WINDOW->GetClientWidth(), 
             WINDOW->GetClientHeight(),
             GRAPHICS->GetSpriteVertexShader(),
@@ -143,7 +143,7 @@ void GameScene::Draw()
     switch (m_CurrentState)
     {
     case SceneState::Load:
-        GRAPHICS->StartOnScreenRendering();
+        GRAPHICS->StartRendering(KindRT::RT_ON_SCREEN);
         {
             TEX_MANAGER->Render("NowLoading", DirectX::XMFLOAT3(0.f, 0.f, 0.f));
         }
@@ -153,13 +153,13 @@ void GameScene::Draw()
     case SceneState::Main:
         // 1パス目
     {
-        GRAPHICS->StartShadwMapRendering();
+        GRAPHICS->StartRendering(KindRT::RT_SHADOWMAP);
 
         ObjectManager::GetInstance()->DrawShadowMapObj();
     }
         // 2パス目
     {
-        GRAPHICS->StartOffScreenRendering();
+        GRAPHICS->StartRendering(KindRT::RT_OFF_SCREEM);
 
 #ifdef _DEBUG
         {
@@ -175,7 +175,7 @@ void GameScene::Draw()
     }
         // 3パス目
     {
-        GRAPHICS->StartOnScreenRendering();
+        GRAPHICS->StartRendering(KindRT::RT_ON_SCREEN);
         m_OffScreenSprite.Draw(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
     }
 

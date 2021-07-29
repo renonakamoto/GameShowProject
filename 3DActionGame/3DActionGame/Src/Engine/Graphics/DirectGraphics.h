@@ -7,6 +7,7 @@
 #include "VertexShader.h"
 #include "PixelShader.h"
 #include "../../Utility/GraphicsUtility.h"
+#include "RenderTarget.h"
 
 using namespace Microsoft::WRL;
 
@@ -15,12 +16,24 @@ using namespace Microsoft::WRL;
 */
 enum class RasterizerMode
 {
-	MODE_CULL_BACK,	// 背面カリングモード
-	MODE_CULL_FRONT,
-	MODE_CULL_NONE,	// カリングなしモード
-	MODE_WIREFRAME,	// ワイヤーフレームモード
+	MODE_CULL_BACK,	 //! 背面カリングモード
+	MODE_CULL_FRONT, //! 正面カリングモード
+	MODE_CULL_NONE,	 //! カリングなしモード
+	MODE_WIREFRAME,	 //! ワイヤーフレームモード
 
-	MODE_NUM,		// モードの数
+	MODE_NUM,		 //! モードの数
+};
+
+/**
+* @brief レンダーターゲットの種類
+*/
+enum class KindRT
+{
+	RT_ON_SCREEN,	//! オンスクリーン
+	RT_OFF_SCREEM,	//! オフスクリーン
+	RT_SHADOWMAP,	//! シャドウマップ
+
+	RT_NUM,			//! 種類の数
 };
 
 /**
@@ -37,9 +50,6 @@ public:
 		m_Device(nullptr),
 		m_Context(nullptr),
 		m_SwapChain(nullptr),
-		m_RenderTargetView(nullptr),
-		m_DepthStencilTexture(nullptr),
-		m_DepthStencilView(nullptr),
 		m_ConstantBuffer(nullptr),
 		m_ConstantBufferData(),
 		m_ConstBoneBuffer(nullptr),
@@ -51,11 +61,6 @@ public:
 		m_SamplerState(nullptr),
 		m_SampleDesc{ 0 },
 		m_RasterizerState{ nullptr },
-		m_DepthTextureView(nullptr),
-		m_DepthRenderTargetView(nullptr),
-		m_DepthDepthStencilView(nullptr),
-		m_DepthDepthStencilTexture(nullptr),
-		m_DepthTexture(nullptr),
 		m_ShadowSamplerState(nullptr),
 		m_DepthVertexShader(nullptr),
 		m_DepthPixelShader(nullptr),
@@ -86,25 +91,11 @@ public:
 	void Release();
 
 	/**
-	* @fn void StartOnScreenRendering()
-	* @brief オフスクリーンへの描画開始関数
-	* @details オフスクリーンバッファ情報をクリアしレンダーターゲットに設定する
+	* @fn void StartRendering(KindRT rt_)
+	* @brief 描画開始関数
+	* @param[in] rt_ レンダリングターゲットの種類
 	*/
-	void StartOnScreenRendering();
-	
-	/**
-	* @fn void StartOffScreenRendering()
-	* @brief オフスクリーンへの描画開始関数
-	* @details オフスクリーンバッファ情報をクリアしレンダーターゲットに設定する
-	*/
-	void StartOffScreenRendering();
-
-	/**
-	* @fn void StartShadwMapRendering()
-	* @brief オフスクリーンへの描画開始関数
-	* @details オフスクリーンバッファ情報をクリアしレンダーターゲットに設定する
-	*/
-	void StartShadwMapRendering();
+	void StartRendering(KindRT rt_);
 
 	/**
 	* @fn void FinishRendering()
@@ -271,7 +262,7 @@ public:
 	* @brief シャドウマップ用テクスチャデータ取得関数
 	* @return ID3D11ShaderResourceView* m_DepthTextureViewのポインタ
 	*/
-	ID3D11ShaderResourceView* GetDepthTextureView() { return m_DepthTextureView.Get(); }
+	ID3D11ShaderResourceView* GetDepthTextureView() { return GetRenderTarget(KindRT::RT_SHADOWMAP)->GetTexture(); }
 
 	/**
 	* @fn ID3D11SamplerState* GetShadowMapSamplerState()
@@ -281,11 +272,12 @@ public:
 	ID3D11SamplerState* GetShadowMapSamplerState() { return m_ShadowSamplerState.Get(); }
 
 	/**
-	* @fn ID3D11ShaderResourceView* GetOffScreenTextureView()
-	* @brief オフスクリーン用テクスチャデータ取得関数
-	* @return ID3D11ShaderResourceView* m_OffScreenTextureViewのポインタ
+	* @fn RenderTarget* GetRenderTarget(KindRT rt_)
+	* @brief レンダーターゲットオブジェクトの取得関数
+	* @param[in] rt_ レンダーターゲットの種類
+	* @return RenderTarget* GetRenderTargetのポインタ
 	*/
-	ID3D11ShaderResourceView* GetOffScreenTextureView() { return m_OffScreenTextureView.Get(); }
+	RenderTarget* GetRenderTarget(KindRT rt_) { return &m_RenderTargets[static_cast<int>(rt_)]; }
 
 private:
 	/**
@@ -308,13 +300,6 @@ private:
 	* @return bool 成功したかどうかを真偽で返す
 	*/
 	bool CreateRenderTargetView();
-
-	/**
-	* @fn bool CreateDepthAndStencilView()
-	* @brief 深度ステンシルビューの作成関数
-	* @return bool 成功したかどうかを真偽で返す
-	*/
-	bool CreateDepthAndStencilView();
 
 	/**
 	* @fn bool CreateShader()
@@ -349,26 +334,6 @@ private:
 	bool CreateRasterizer();
 
 	/**
-	* @fn bool CreateDepthDSVAndRTV()
-	* @brief シャドウマップで使用するレンダーターゲットの作成をおこなう関数
-	* @return bool 成功したかどうかを真偽で返す
-	*/
-	bool CreateDepthDSVAndRTV();
-
-	/**
-	* @fn bool CreateDepthDSVAndRTV()
-	* @brief オフスクリーンで使用するレンダーターゲットの作成をおこなう関数
-	* @return bool 成功したかどうかを真偽で返す
-	*/
-	bool CreateOffScreenDSVAndRTV();
-
-	/**
-	* @fn void SetUpViewPort()
-	* @brief ビューポートを設定する関数
-	*/
-	void SetUpViewPort();
-
-	/**
 	* @fn void SetUpLight()
 	* @brief ライトを設定する関数
 	*/
@@ -378,40 +343,25 @@ private:
 	ComPtr<ID3D11Device>			m_Device;				//! デバイス
 	ComPtr<ID3D11DeviceContext>		m_Context;				//! コンテキスト
 	ComPtr<IDXGISwapChain>			m_SwapChain;			//! スワップチェイン
-	ComPtr<ID3D11RenderTargetView>	m_RenderTargetView;		//! レンダーターゲットビュー
-	ComPtr<ID3D11Texture2D>			m_DepthStencilTexture;	//! 深度ステンシル用のテクスチャ
-	ComPtr<ID3D11DepthStencilView>  m_DepthStencilView;		//! 深度ステンシルビュー
 	D3D_FEATURE_LEVEL 				m_FeatureLevel;			//! フューチャーレベル
 	DXGI_SAMPLE_DESC				m_SampleDesc;			//! MSAA使用時に使うマルチサンプリングのパラメータ変数
-	ComPtr<ID3D11RasterizerState>   m_RasterizerState[static_cast<int>(RasterizerMode::MODE_NUM)];	//! ラスタライザ配列
 	ComPtr<ID3D11SamplerState>		m_SamplerState;			//! 通常テクスチャ用のテクスチャサンプラー
 
-	ComPtr<ID3D11Buffer>			m_ConstantBuffer;		//! モデル用のコンストバッファ
+	ComPtr<ID3D11Buffer>			m_ConstantBuffer;		//! モデル用のコンストバッファ(シェーダに送る用)
 	ConstantBuffer					m_ConstantBufferData;	//!	モデル用のコンストバッファ
-	ComPtr<ID3D11Buffer>			m_ConstBoneBuffer;		//! ボーン用のコンストバッファ
+	ComPtr<ID3D11Buffer>			m_ConstBoneBuffer;		//! ボーン用のコンストバッファ(シェーダに送る用)
 	ConstBoneBuffer					m_ConstBoneBufferData;	//! ボーン用のコンストバッファ
 
 	std::unique_ptr<VertexShader>   m_VertexShader;			//! スキンメッシュ用の頂点シェーダ
 	std::unique_ptr<VertexShader>   m_SimpleVertexShader;	//!	スタティックメッシュ用の頂点シェーダ
 	std::unique_ptr<PixelShader>	m_PixelShader;			//! 通常描画用のピクセルシェーダ
-
-	/* OffScreen用 */
-	ComPtr<ID3D11RenderTargetView>   m_OffScreenRenderTargetView; //! オフスクリーン用レンダーターゲットビュー
-	ComPtr<ID3D11Texture2D>		     m_OffScreenTexture;		  //! オフスクリーン用レンダーターゲットテクスチャ
-	ComPtr<ID3D11ShaderResourceView> m_OffScreenTextureView;	  //! シェーダーに送る為のオフスクリーンテクスチャ
-	ComPtr<ID3D11Texture2D>			 m_OffScreenDST;			  //! オフスクリーン用深度ステンシルテクスチャ
-	ComPtr<ID3D11DepthStencilView>   m_OffScreenDSTV;			  //! オフスクリーン用深度ステンシルビュー
 	
-	std::unique_ptr<VertexShader>   m_SpriteVertexShader;		  //!	スプライト用頂点シェーダー
-	std::unique_ptr<PixelShader>	m_BlurPixelShader;			  //! ぼかしシェーダー用ピクセルシェーダー
-	
+	RenderTarget m_RenderTargets[static_cast<int>(KindRT::RT_NUM)];									//! レンダーターゲット
+	ComPtr<ID3D11RasterizerState>   m_RasterizerState[static_cast<int>(RasterizerMode::MODE_NUM)];	//! ラスタライザ配列
 
-	/* シャドウマップ用 */
-	ComPtr<ID3D11RenderTargetView>   m_DepthRenderTargetView;		//! マルチレンダリング用レンダーターゲットビュー
-	ComPtr<ID3D11Texture2D>		     m_DepthTexture;				//! マルチレンダリング用レンダーターゲットテクスチャ
-	ComPtr<ID3D11ShaderResourceView> m_DepthTextureView;			//! マルチレンダリング用テクスチャ
-	ComPtr<ID3D11Texture2D>			 m_DepthDepthStencilTexture;	//! 深度ステンシル用テクスチャ
-	ComPtr<ID3D11DepthStencilView>   m_DepthDepthStencilView;		//! 深度ステンシルビュー
+	std::unique_ptr<VertexShader>   m_SpriteVertexShader;		    //!	スプライト用頂点シェーダー
+	std::unique_ptr<PixelShader>	m_BlurPixelShader;			    //! ぼかしシェーダー用ピクセルシェーダー
+	
 	ComPtr<ID3D11SamplerState>		 m_ShadowSamplerState;			//! シャドウマップ用のテクスチャサンプラー
 	
 	std::unique_ptr<VertexShader>    m_DepthSkinningVertexShader;	//! シャドウマップ用スキニング頂点シェーダ

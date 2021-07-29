@@ -54,7 +54,6 @@ public:
 	* @brief テクスチャ描画関数
 	* @param[in] keyword_ ファイル名(パス付き)
 	* @param[in] pos_ テクスチャに紐づいているキーワード
-	* @details 対応形式 : dds, tga, bmp, jpg, png
 	*/
 	void Render(std::string keyword_, DirectX::XMFLOAT3 pos_);
 

@@ -6,11 +6,8 @@
 
 #pragma comment(lib,"d3d11.lib")
 
-// MSAAの有効
-//#define ENABLE_MSAA
-
 // シャドウマップのサイズ
-const float DEPTH_TEXTURE_SIZE = 1024;
+const int DEPTH_TEXTURE_SIZE = 1024;
 
 bool DirectGraphics::Init()
 {
@@ -22,17 +19,6 @@ bool DirectGraphics::Init()
 
     // レンダーターゲットビューの作成
     if (CreateRenderTargetView() == false)
-    {
-        return false;
-    }
-
-    if (CreateOffScreenDSVAndRTV() == false)
-    {
-        return false;
-    }
-
-    // デプスビューとステンシルビューの作成
-    if (CreateDepthAndStencilView() == false)
     {
         return false;
     }
@@ -61,12 +47,6 @@ bool DirectGraphics::Init()
         return false;
     }
 
-    // シャドウマップ用
-    if (CreateDepthDSVAndRTV() == false)
-    {
-        return false;
-    }
-
     // ライト設定
     SetUpLight();
     
@@ -88,89 +68,26 @@ void DirectGraphics::Release()
 {
 }
 
-void DirectGraphics::StartOffScreenRendering()
+void DirectGraphics::StartRendering(KindRT rt_)
 {
-    /*
-        DirectX11は描画の開始を宣言する必要はないがビューのクリアを毎フレーム
-        行わないと描画内容がおかしいことになる
-    */
-    // レンダーターゲットビューのクリア
-    float clear_color[4] = { 0.0f,0.0f,1.0f,1.0f };
-    m_Context->ClearRenderTargetView(
-                m_OffScreenRenderTargetView.Get(), // 対象のレンダーターゲットビュー
-                clear_color               // クリアするビューのカラー
-                );
+    RenderTarget* rt = &m_RenderTargets[static_cast<int>(rt_)];
+    ID3D11RenderTargetView* rtv = rt->GetRenderTargetView();
 
-    // 深度ステンシルビューのクリア
-    m_Context->ClearDepthStencilView(
-                m_OffScreenDSTV.Get(),                // 対象のビュー
-                D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, // クリアフラグ
-                1.0f,                                    // 深度クリア値
-                0U                                       // ステンシルクリア値
-                );
-
-    /*
-       出力先の設定
-    */
-    m_Context->OMSetRenderTargets(1U, m_OffScreenRenderTargetView.GetAddressOf(), m_OffScreenDSTV.Get());
-
-
-    // ビューポートの設定
-    D3D11_VIEWPORT vp{ 0 };
-    vp.Width    = static_cast<FLOAT>(WINDOW->GetClientWidth());
-    vp.Height   = static_cast<FLOAT>(WINDOW->GetClientHeight());
-    vp.MinDepth = 0.0f;
-    vp.MaxDepth = 1.0f;
-    vp.TopLeftX = 0.0f;
-    vp.TopLeftY = 0.0f;
-    m_Context->RSSetViewports(1U, &vp);
-}
-
-void DirectGraphics::StartShadwMapRendering()
-{    
     // レンダーターゲットのクリア
-    float clear_color[4] = { 1.f,1.f,1.f,1.f };
-    m_Context->ClearRenderTargetView(m_DepthRenderTargetView.Get(), clear_color);
+    m_Context->ClearRenderTargetView(rtv, rt->GetColor());
+
+    ID3D11DepthStencilView* dsv = rt->GetDepthStencilView();
 
     // 深度ステンシルのクリア
-    m_Context->ClearDepthStencilView(m_DepthDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+    m_Context->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
     // レンダーターゲットの設定
-    m_Context->OMSetRenderTargets(1U, m_DepthRenderTargetView.GetAddressOf(), m_DepthDepthStencilView.Get());
+    m_Context->OMSetRenderTargets(1U, &rtv, dsv);
 
     // ビューポートの設定
     D3D11_VIEWPORT vp{ 0 };
-    vp.Width    = DEPTH_TEXTURE_SIZE;
-    vp.Height   = DEPTH_TEXTURE_SIZE;
-    vp.MinDepth = 0.0f;
-    vp.MaxDepth = 1.0f;
-    vp.TopLeftX = 0.0f;
-    vp.TopLeftY = 0.0f;
-    m_Context->RSSetViewports(1U, &vp);
-}
-
-void DirectGraphics::StartOnScreenRendering()
-{
-    // レンダーターゲットビューのクリア
-    float clear_color[4] = { 0.0f,0.0f,1.0f,1.0f };
-    m_Context->ClearRenderTargetView(m_RenderTargetView.Get(), clear_color);
-
-    // 深度ステンシルビューのクリア
-    m_Context->ClearDepthStencilView(
-        m_DepthStencilView.Get(),
-        D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
-        1.0f,
-        0U);
-
-    /*
-       出力先の設定
-    */
-    m_Context->OMSetRenderTargets(1U, m_RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
-
-    // ビューポートの設定
-    D3D11_VIEWPORT vp{ 0 };
-    vp.Width    = static_cast<FLOAT>(WINDOW->GetClientWidth());
-    vp.Height   = static_cast<FLOAT>(WINDOW->GetClientHeight());
+    vp.Width    = m_RenderTargets[static_cast<int>(rt_)].GetWidth();
+    vp.Height   = m_RenderTargets[static_cast<int>(rt_)].GetHeight();
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0.0f;
@@ -180,8 +97,9 @@ void DirectGraphics::StartOnScreenRendering()
 
 void DirectGraphics::FinishRendering()
 {
-    // バックバッファをフロントバッファに送信する   
-    m_SwapChain->Present(0U, 0U);
+    // バックバッファをフロントバッファに送信する
+    // 垂直同期で、モニターのリフレッシュレートに合わせる
+    m_SwapChain->Present(1U, 0U);
 }
 
 
@@ -293,161 +211,41 @@ void DirectGraphics::SetUpDxgiSwapChanDesc(DXGI_SWAP_CHAIN_DESC* dxgi_)
 
 bool DirectGraphics::CreateDeviceAndSwapChain()
 {
-#ifdef ENABLE_MSAA
-    if (FAILED(D3D11CreateDevice(
+    DXGI_SWAP_CHAIN_DESC swap_chain_desc;
+    SetUpDxgiSwapChanDesc(&swap_chain_desc);
+    
+    // 適応されたFutureレベルも取得できる
+    if (FAILED(D3D11CreateDeviceAndSwapChain(
+        // デバイス作成時に使用するビデオアダプタの指定
+        // nullptrで既定のアダプタを使用する
         nullptr,
+        // ドライバのタイプ
+        // D3D_DRIVER_TYPEのいずれかを指定
+        // 通常はD3D_DRIVER_TYPE_HARDWAREで問題ない
         D3D_DRIVER_TYPE_HARDWARE,
+        // D3D_DRIVER_TYPE_SOFTWARE指定時に使用
         nullptr,
+        // ランタイムレイヤーのフラグ指定
         0,
+        // D3D_FEATURE_LEVEL指定で自分で定義した配列を指定可能
         nullptr,
+        // 上のD3D_FEATURE_LEVEL配列の要素数
         0,
+        // SDKバージョン
         D3D11_SDK_VERSION,
+        // 設定済みのDXGI_SWAP_CHAIN_DESC
+        &swap_chain_desc,
+        // 初期化が完了したSwapChainの出力先 
+        &m_SwapChain,
+        // 初期化が完了したDeviceの出力先 
         &m_Device,
-        nullptr,
+        // 最終的に決定したFutureレベルの出力先
+        &m_FeatureLevel,
+        // 作成されたコンテキストを受け取るためのID3D11DeviceContextポインタアドレス
         &m_Context)))
     {
         return false;
     }
-
-
-    // 使用できるサンプルレベルを調べる
-    for (int i = 0; i <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; ++i)
-    {
-        UINT quality;
-        if (SUCCEEDED(m_Device->CheckMultisampleQualityLevels(DXGI_FORMAT_D24_UNORM_S8_UINT, i, &quality)))
-        {
-            if (0 < quality)
-            {
-                m_SampleDesc.Count = i;
-                m_SampleDesc.Quality = quality - 1;
-            }
-        }
-    }
-
-    // インターフェースを取得
-    IDXGIDevice1* dxgi = nullptr;
-    if (FAILED(m_Device->QueryInterface(__uuidof(IDXGIDevice1), (void**)&dxgi)))
-    {
-        return false;
-    }
-
-    // アダプターを取得
-    IDXGIAdapter* adapter = nullptr;
-    if (FAILED(dxgi->GetAdapter(&adapter)))
-    {
-        return false;
-    }
-
-    // ファクトリーを取得
-    IDXGIFactory* factory = nullptr;
-    adapter->GetParent(__uuidof(IDXGIFactory), (void**)&factory);
-    if (factory == nullptr)
-    {
-        return false;
-    }
-
-    DXGI_SWAP_CHAIN_DESC swap_chain_desc;
-
-    HWND window_handle = FindWindow(Window::ClassName, nullptr);
-    RECT rect;
-    GetClientRect(window_handle, &rect);
-
-    // スワップチェイン作成時に必要な設定
-    ZeroMemory(&swap_chain_desc, sizeof(DXGI_SWAP_CHAIN_DESC));
-
-    // バッファの数
-    swap_chain_desc.BufferCount = 1;
-    // バッファの横幅
-    swap_chain_desc.BufferDesc.Width = static_cast<UINT>(rect.right - rect.left);
-    // バッファの縦幅
-    swap_chain_desc.BufferDesc.Height = static_cast<UINT>(rect.bottom - rect.top);
-    // バッファのカラーフォーマット
-    swap_chain_desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    // リフレッシュレートの分子
-    swap_chain_desc.BufferDesc.RefreshRate.Numerator = 60;
-    // リフレッシュレートの分母
-    swap_chain_desc.BufferDesc.RefreshRate.Denominator = 1;
-    // スキャンラインの方法
-    // バックバッファをフリップしたときにハードウェアがパソコンのモニターに
-    // 点をどう描くかを設定する
-    // 特に理由がなければデフォルト値であるDXGI_MODE_SCANLINE_ORDER_UNSPECIFIEDでOK
-    swap_chain_desc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-    // ウィンドウのサイズに応じてスケーリングするかどうかの設定
-    // スケーリングする場合   DXGI_MODE_SCALING_STRETCHED 
-    // スケーリングしない場合 DXGI_MODE_SCALING_CENTERED
-    swap_chain_desc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-    // バッファの使用方法
-    // レンダーターゲットとして使用する場合は、DXGI_USAGE_RENDER_TARGET_OUTPUT 
-    // シェーダー入力用として使用する場合はDXGI_USAGE_SHADER_INPUT
-    swap_chain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    // 出力対象のウィンドウハンドル
-    swap_chain_desc.OutputWindow = window_handle;
-    swap_chain_desc.SampleDesc = m_SampleDesc;
-    swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-    // ウィンドウモード指定
-    swap_chain_desc.Windowed = true;
-    // スワップチェインの動作オプション
-    // DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCHを指定した場合
-    // フルスクリーンとウィンドウモードの切り替えが可能
-    swap_chain_desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-
-    if (FAILED(factory->CreateSwapChain(m_Device.Get(), &swap_chain_desc, &m_SwapChain)))
-    {
-        return false;
-    }
-#else
-DXGI_SWAP_CHAIN_DESC swap_chain_desc;
-SetUpDxgiSwapChanDesc(&swap_chain_desc);
-
-// 適応されたFutureレベルも取得できる
-if (FAILED(D3D11CreateDeviceAndSwapChain(
-    // デバイス作成時に使用するビデオアダプタの指定
-    // nullptrで既定のアダプタを使用する
-    nullptr,
-    // ドライバのタイプ
-    // D3D_DRIVER_TYPEのいずれかを指定
-    // 通常はD3D_DRIVER_TYPE_HARDWAREで問題ない
-    D3D_DRIVER_TYPE_HARDWARE,
-    // D3D_DRIVER_TYPE_SOFTWARE指定時に使用
-    nullptr,
-    // ランタイムレイヤーのフラグ指定
-    0,
-    // D3D_FEATURE_LEVEL指定で自分で定義した配列を指定可能
-    nullptr,
-    // 上のD3D_FEATURE_LEVEL配列の要素数
-    0,
-    // SDKバージョン
-    D3D11_SDK_VERSION,
-    // 設定済みのDXGI_SWAP_CHAIN_DESC
-    &swap_chain_desc,
-    // 初期化が完了したSwapChainの出力先 
-    &m_SwapChain,
-    // 初期化が完了したDeviceの出力先 
-    &m_Device,
-    // 最終的に決定したFutureレベルの出力先
-    &m_FeatureLevel,
-    // 作成されたコンテキストを受け取るためのID3D11DeviceContextポインタアドレス
-    &m_Context)))
-{
-    return false;
-}
-
-#endif
-
-
-    /*
-        D3D11CreateDeviceAndSwapChainを使用するとレンダリング用のContextが作成される
-        Contextは描画コマンドの追加、送信などの処理を行う
-        CPU側で追加された描画コマンドをGPU側に送信するのが主な役目
-        Contextnには「Immediate」と「Deferred」の2種類あり
-        Immediateは生成したコマンドを即時実行する
-        Deferredは生成した描画コマンドをバッファにためておき、
-        実行命令を受けたらたまっているコマンドを実行する
-        マルチスレッドによる描画処理に有効とされている
-
-        D3D11CreateDeviceAndSwapChainで作成した場合、Immediateで作成される
-    */
-
     
     return true;
 }
@@ -466,85 +264,36 @@ bool DirectGraphics::CreateRenderTargetView()
     {
         return false;
     }
-    
-    // RenderTargetViewの作成
-    if (FAILED(m_Device->CreateRenderTargetView(back_buffer, nullptr, m_RenderTargetView.GetAddressOf())))
-    {
-        return false;
-    }
+
+    float color[4]{ 0.f,0.f,1.f,1.f };
+    m_RenderTargets[static_cast<int>(KindRT::RT_ON_SCREEN)].Create(
+        WINDOW->GetClientWidth(),
+        WINDOW->GetClientHeight(),
+        back_buffer,
+        DXGI_FORMAT_D32_FLOAT,
+        color
+    );
 
     // これ以降バッファを使用しないので、解放しておく
     back_buffer->Release();
-    
-    return true;
-}
 
-bool DirectGraphics::CreateDepthAndStencilView()
-{
-    /*
-        CreateTexture2Dで作成されたテクスチャをバッファとして使用するので
-        D3D11_TEXTURE2D_DESCでテクスチャの設定を行う
-    */
-    
-    // 深度ステンシルバッファの作成
-    D3D11_TEXTURE2D_DESC texture_desc;
-    ZeroMemory(&texture_desc, sizeof(texture_desc));
-    // バッファの横幅
-    texture_desc.Width  = static_cast<UINT>(WINDOW->GetClientWidth());
-    // バッファの横幅
-    texture_desc.Height = static_cast<UINT>(WINDOW->GetClientHeight());
-    // ミップマップレベル
-    texture_desc.MipLevels = 1U;
-    // テクスチャ配列のサイズ
-    texture_desc.ArraySize = 1U;
-    // テクスチャのフォーマット
-    texture_desc.Format = DXGI_FORMAT_D32_FLOAT;
-    // 
-#ifdef ENABLE_MSAA
-    texture_desc.SampleDesc = m_SampleDesc;
-#else
-    texture_desc.SampleDesc.Count   = 1U;
-    texture_desc.SampleDesc.Quality = 0U;
-#endif
-    // テクスチャの使用方法
-    texture_desc.Usage = D3D11_USAGE_DEFAULT;
-    // Bind設定
-    // D3D11_BIND_DEPTH_STENCILで問題ない
-    texture_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-    // リソースへのCPUのアクセス権限
-    // 0で問題ない
-    texture_desc.CPUAccessFlags = 0U;
-    // リソースオプションのフラグ
-    // 必要なければ0
-    texture_desc.MiscFlags = 0U;
-    
-    // テクスチャの作成
-    if (FAILED(m_Device->CreateTexture2D(&texture_desc, NULL, &m_DepthStencilTexture)))
-    {
-        return false;
-    }
 
-    // DepthStencilViewの設定を行う
-    D3D11_DEPTH_STENCIL_VIEW_DESC dsv_desc;
-    ZeroMemory(&dsv_desc, sizeof(dsv_desc));
-    // Viewのフォーマット
-    dsv_desc.Format = texture_desc.Format;
-    // テクスチャの種類
-#ifdef ENABLE_MSAA
-    dsv_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
-#else
-    dsv_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-#endif
-    dsv_desc.Texture2D.MipSlice = 0U;
-    
-    // DepthStencilViewの作成
-    if (FAILED(m_Device->CreateDepthStencilView(
-        m_DepthStencilTexture.Get(),
-        &dsv_desc,
-        &m_DepthStencilView)))
-    {
-        return false;
-    }
+    m_RenderTargets[static_cast<int>(KindRT::RT_OFF_SCREEM)].Create(
+        WINDOW->GetClientWidth(), 
+        WINDOW->GetClientHeight(), 
+        DXGI_FORMAT_R8G8B8A8_UNORM, 
+        DXGI_FORMAT_D32_FLOAT, 
+        color
+    );
+
+    color[0] = color[1] = color[2] = 1.0f;
+    m_RenderTargets[static_cast<int>(KindRT::RT_SHADOWMAP)].Create(
+        DEPTH_TEXTURE_SIZE,
+        DEPTH_TEXTURE_SIZE,
+        DXGI_FORMAT_R32_FLOAT,
+        DXGI_FORMAT_D32_FLOAT,
+        color
+    );
 
     return true;
 }
@@ -717,142 +466,6 @@ bool DirectGraphics::CreateRasterizer()
     // デフォルトは背面カリング
     SetRasterizerMode(RasterizerMode::MODE_CULL_BACK);
     return true;
-}
-
-bool DirectGraphics::CreateDepthDSVAndRTV()
-{
-    // 深度テクスチャの作成
-    D3D11_TEXTURE2D_DESC texture_desc;
-    ZeroMemory(&texture_desc, sizeof(texture_desc));
-    texture_desc.Width              = static_cast<UINT>(DEPTH_TEXTURE_SIZE);
-    texture_desc.Height             = static_cast<UINT>(DEPTH_TEXTURE_SIZE);
-    texture_desc.MipLevels          = 1U;
-    texture_desc.ArraySize          = 1U;
-    texture_desc.MiscFlags          = 0U;
-    texture_desc.Format             = DXGI_FORMAT_R32_FLOAT;
-    texture_desc.SampleDesc.Count   = 1U;
-    texture_desc.SampleDesc.Quality = 0U;
-    texture_desc.Usage              = D3D11_USAGE_DEFAULT;
-    texture_desc.BindFlags          = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-    texture_desc.CPUAccessFlags     = 0U;
-
-    if (FAILED(m_Device->CreateTexture2D(&texture_desc, nullptr, m_DepthTexture.GetAddressOf())))
-    {
-        return false;
-    }
-
-    // レンダーターゲットの作成
-    D3D11_RENDER_TARGET_VIEW_DESC rtv_desc;
-    ZeroMemory(&rtv_desc, sizeof(rtv_desc));
-    rtv_desc.Format             = texture_desc.Format;
-    rtv_desc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
-    rtv_desc.Texture2D.MipSlice = 0U;
-
-    if (FAILED(m_Device->CreateRenderTargetView(m_DepthTexture.Get(), &rtv_desc, m_DepthRenderTargetView.GetAddressOf())))
-    {
-        return false;
-    }
-    
-    texture_desc.Format    = DXGI_FORMAT_D32_FLOAT;
-    texture_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-    if (FAILED(m_Device->CreateTexture2D(&texture_desc, nullptr, m_DepthDepthStencilTexture.GetAddressOf())))
-    {
-        return false;
-    }
-    if (FAILED(m_Device->CreateDepthStencilView(m_DepthDepthStencilTexture.Get(), nullptr, m_DepthDepthStencilView.GetAddressOf())))
-    {
-        return false;
-    }
-
-    D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc;
-    ZeroMemory(&srv_desc, sizeof(srv_desc));
-    srv_desc.Format              = DXGI_FORMAT_R32_FLOAT;
-    srv_desc.ViewDimension       = D3D11_SRV_DIMENSION_TEXTURE2D;
-    srv_desc.Texture2D.MipLevels = 1U;
-
-    if (FAILED(m_Device->CreateShaderResourceView(m_DepthTexture.Get(), &srv_desc, m_DepthTextureView.GetAddressOf())))
-    {
-        return false;
-    }
-
-    return true;
-}
-
-bool DirectGraphics::CreateOffScreenDSVAndRTV()
-{
-    D3D11_TEXTURE2D_DESC texture_desc;
-    ZeroMemory(&texture_desc, sizeof(texture_desc));
-    texture_desc.Width              = static_cast<UINT>(WINDOW->GetClientWidth());
-    texture_desc.Height             = static_cast<UINT>(WINDOW->GetClientHeight());
-    texture_desc.MipLevels          = 1U;
-    texture_desc.ArraySize          = 1U;
-    texture_desc.MiscFlags          = 0U;
-    texture_desc.Format             = DXGI_FORMAT_R8G8B8A8_UNORM;
-    texture_desc.SampleDesc.Count   = 1U;
-    texture_desc.SampleDesc.Quality = 0U;
-    texture_desc.Usage              = D3D11_USAGE_DEFAULT;
-    texture_desc.BindFlags          = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-    texture_desc.CPUAccessFlags     = 0U;
-
-    if (FAILED(m_Device->CreateTexture2D(&texture_desc, nullptr, m_OffScreenTexture.GetAddressOf())))
-    {
-        return false;
-    }
-
-    D3D11_RENDER_TARGET_VIEW_DESC rtv_desc;
-    ZeroMemory(&rtv_desc, sizeof(rtv_desc));
-    rtv_desc.Format              = texture_desc.Format;
-    rtv_desc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
-    rtv_desc.Texture2D.MipSlice = 0U;
-
-    if (FAILED(m_Device->CreateRenderTargetView(m_OffScreenTexture.Get(), &rtv_desc, m_OffScreenRenderTargetView.GetAddressOf())))
-    {
-        return false;
-    }
-
-    texture_desc.Format    = DXGI_FORMAT_D32_FLOAT;
-    texture_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-    if (FAILED(m_Device->CreateTexture2D(&texture_desc, nullptr, m_OffScreenDST.GetAddressOf())))
-    {
-        return false;
-    }
-    if (FAILED(m_Device->CreateDepthStencilView(m_OffScreenDST.Get(), nullptr, m_OffScreenDSTV.GetAddressOf())))
-    {
-        return false;
-    }
-
-    D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc;
-    ZeroMemory(&srv_desc, sizeof(srv_desc));
-    srv_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    srv_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-    srv_desc.Texture2D.MipLevels = 1U;
-
-    if (FAILED(m_Device->CreateShaderResourceView(m_OffScreenTexture.Get(), &srv_desc, m_OffScreenTextureView.GetAddressOf())))
-    {
-        return false;
-    }
-
-    return true;
-}
-
-void DirectGraphics::SetUpViewPort()
-{
-    D3D11_VIEWPORT view_port{ 0 };
-    // 画面左上のX座標
-    view_port.TopLeftX = 0.f;
-    // 画面左上のY座標
-    view_port.TopLeftY = 0.f;
-    // 横幅
-    view_port.Width  = static_cast<FLOAT>(WINDOW->GetClientWidth());
-    // 縦幅
-    view_port.Height = static_cast<FLOAT>(WINDOW->GetClientHeight());
-    // 深度値の最小値
-    view_port.MinDepth = 0.f;
-    // 深度値の最大値
-    view_port.MaxDepth = 1.f;
-
-    // ViewPortの設定
-    m_Context->RSSetViewports(1U, &view_port);
 }
 
 void DirectGraphics::SetUpLight()

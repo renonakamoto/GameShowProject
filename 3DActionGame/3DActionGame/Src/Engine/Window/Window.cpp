@@ -104,7 +104,7 @@ bool Window::EntryWindowClass()
 
 void Window::SetCenterWindow(HWND windowHandle_)
 {
-	int screen_width = GetSystemMetrics(SM_CXFULLSCREEN);
+	int screen_width  = GetSystemMetrics(SM_CXFULLSCREEN);
 	int screen_height = GetSystemMetrics(SM_CYFULLSCREEN);
 
 	int x = (screen_width  - m_ClientWidth)  / 2;
