@@ -18,15 +18,17 @@
 #pragma comment(lib, "Src/DirectXTex/x64/Release/DirectXTex.lib")
 #endif
 
-
 bool ObjModel::Load(const char* fileName_)
 {
     // ファイルを開く
-    FILE* fp = nullptr;
-    fopen_s(&fp, fileName_, "r");
+    std::unique_ptr<FILE, decltype(&fclose)> fp(fopen(fileName_, "r"), fclose);
 
-    // 読み込みが成功しているかを調べる
-    if (fp == nullptr) { return false; }
+    // ファイルオープンが成功したかどうかを調べる
+    if (!fp)
+    {
+        // 失敗
+        return false;
+    }
 
     // 頂点座標リスト
     std::vector<DirectX::XMFLOAT3> vertices;
@@ -45,7 +47,7 @@ bool ObjModel::Load(const char* fileName_)
     char line_buffer[line_buffer_length];
 
     // 1行取得する
-    while (fgets(line_buffer, line_buffer_length, fp) != nullptr)
+    while (fgets(line_buffer, line_buffer_length, fp.get()) != nullptr)
     {
         // コメントなら無視する
         if (line_buffer[0] == '#') continue;
@@ -118,7 +120,7 @@ bool ObjModel::Load(const char* fileName_)
     }
 
     // ファイルを閉じる
-    fclose(fp);
+    fp.reset();
 
     // マテリアルファイルが保存されているフォルダまでのパスを保存
     char   flie_path[256];

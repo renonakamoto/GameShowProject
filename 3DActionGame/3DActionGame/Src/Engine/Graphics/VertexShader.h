@@ -22,7 +22,7 @@ public:
 	/**
 	* @brief デストラクタ
 	*/
-	~VertexShader() final
+	~VertexShader()
 	{}
 
 	/**

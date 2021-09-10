@@ -22,7 +22,7 @@ public:
 	/**
 	* @brief デストラクタ
 	*/
-	~PixelShader() final
+	~PixelShader()
 	{}
 
 	/**
@@ -33,9 +33,7 @@ public:
 	* @return bool 成功したかどうかを真偽で返す
 	* @details すでにコンパイルされているcsoファイルを指定する
 	*/
-	bool Create(ID3D11Device* device_, const char* fileName_)override;
-
-	bool Create(ID3D11Device* device_, const char* fileName_, ID3D11ClassLinkage* classLinkage_);
+	bool Create(ID3D11Device* device_, const char* fileName_) override;
 
 	/**
 	* @fn ID3D11VertexShader* GetShaderInterface()

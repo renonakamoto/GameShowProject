@@ -148,22 +148,22 @@ void Calculation::Clamp(float& value_, float min_, float max_)
 	}
 }
 
-DirectX::XMFLOAT3 Calculation::Lerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, float t)
+DirectX::XMFLOAT3 Calculation::Lerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, float t_)
 {
 	//0 ～ 1に収める
-	Clamp(t, 0.f, 1.f);
+	Clamp(t_, 0.f, 1.f);
 
 	DirectX::XMFLOAT3 ret;
 	
 	// 線形補間
-	ret.x = a_.x * (1.0f - t) + b_.x * t;
-	ret.y = a_.y * (1.0f - t) + b_.y * t;
-	ret.z = a_.z * (1.0f - t) + b_.z * t;
+	ret.x = a_.x * (1.0f - t_) + b_.x * t_;
+	ret.y = a_.y * (1.0f - t_) + b_.y * t_;
+	ret.z = a_.z * (1.0f - t_) + b_.z * t_;
 
 	return ret;
 }
 
-DirectX::XMFLOAT3 Calculation::SLerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, float t)
+DirectX::XMFLOAT3 Calculation::SLerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, float t_)
 {
 	DirectX::XMFLOAT3 s = a_;
 	DirectX::XMFLOAT3 e = b_;
@@ -179,7 +179,7 @@ DirectX::XMFLOAT3 Calculation::SLerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_,
 	}
 	else
 	{
-		return Lerp(a_, b_, t);
+		return Lerp(a_, b_, t_);
 	}
 
 	// 二つのベクトルの角度を算出
@@ -191,8 +191,8 @@ DirectX::XMFLOAT3 Calculation::SLerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_,
 	float angle = acosf(dot);
 	float sin_th = sinf(angle);
 	
-	float ps = sinf(angle * (1.f - t));
-	float pe = sinf(angle * t);
+	float ps = sinf(angle * (1.f - t_));
+	float pe = sinf(angle * t_);
 	
 	DirectX::XMFLOAT3 ret = Add(Mul(s, ps), Mul(e, pe));
 	

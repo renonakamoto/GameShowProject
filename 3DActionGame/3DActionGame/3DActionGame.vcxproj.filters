@@ -91,9 +91,6 @@
     <Filter Include="Src\GameManager">
       <UniqueIdentifier>{6ffc4e15-9d83-402b-a6e8-1e4543e2a1c9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Engine\Shader">
-      <UniqueIdentifier>{d84a616b-bdad-4dee-8ec2-201a3e1393d8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Objects\Sprite">
       <UniqueIdentifier>{6910a26d-07bb-40dd-b4b8-2b0a42708840}</UniqueIdentifier>
     </Filter>
@@ -251,9 +248,6 @@
     </ClCompile>
     <ClCompile Include="Src\Utility\GraphicsUtility.cpp">
       <Filter>Src\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Engine\Shader\BaseShading.cpp">
-      <Filter>Src\Engine\Shader</Filter>
     </ClCompile>
     <ClCompile Include="Src\Objects\Sprite\Sprite.cpp">
       <Filter>Src\Objects\Sprite</Filter>
@@ -434,17 +428,14 @@
     <ClInclude Include="Src\Scene\ControlScene.h">
       <Filter>Src\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Engine\Shader\BaseShading.h">
-      <Filter>Src\Engine\Shader</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Objects\Sprite\Sprite.h">
       <Filter>Src\Objects\Sprite</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Engine\Input\InputManager.h">
-      <Filter>Src\Engine\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Engine\Graphics\RenderTarget.h">
       <Filter>Src\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\Input\InputManager.h">
+      <Filter>Src\Engine\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

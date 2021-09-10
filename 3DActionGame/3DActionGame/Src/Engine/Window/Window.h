@@ -31,11 +31,14 @@ public:
 	~Window(){}
 
 	/**
-	* @fn bool Create()
+	* @fn bool Create(int windowWidth_, int windowHeight_, const char* titleName_)
 	* @brief ウィンドウ作成する関数
+	* @param[in] windowWidth_ Windowの横幅
+	* @param[in] windowHeight_ Windowの縦幅
+	* @param[in] titleName_ Windowに表示させる名前
 	* @return bool 成功したかどうかを真偽で返す
 	*/
-	bool Create(int windowWidth_, int windowHeight, const char* titleName_);
+	bool Create(int windowWidth_, int windowHeight_, const char* titleName_);
 
 public:
 	/**

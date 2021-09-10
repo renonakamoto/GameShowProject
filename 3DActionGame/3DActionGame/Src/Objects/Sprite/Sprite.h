@@ -8,9 +8,15 @@
 class Sprite
 {
 public:
+	/**
+	* @brief コンストラクタ
+	*/
 	Sprite()
 	{}
 
+	/**
+	* @brief デストラクタ
+	*/
 	~Sprite()
 	{}
 

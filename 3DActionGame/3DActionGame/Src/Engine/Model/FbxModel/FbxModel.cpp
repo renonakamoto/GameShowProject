@@ -249,7 +249,7 @@ bool FbxModel::LoadMotion(std::string keyword_, const char* fileName_)
 }
 
 
-void FbxModel::RenderS(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_, std::string motionName_, float frameNum_)
+void FbxModel::Render(DirectX::XMFLOAT3 pos_, DirectX::XMFLOAT3 scale_, DirectX::XMFLOAT3 degree_, std::string motionName_, float frameNum_)
 {
 	DirectGraphics*      graphics = GRAPHICS;
 	ID3D11DeviceContext* context  = graphics->GetContext();

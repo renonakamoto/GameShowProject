@@ -6,6 +6,9 @@
 
 class Scene;
 
+/**
+* @biref シーン切替の管理を行うクラス
+*/
 class SceneChanger
 {
 public:

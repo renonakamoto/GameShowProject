@@ -19,7 +19,7 @@ public:
 	/**
 	* @brief デストラクタ
 	*/
-	~EnemyManager() final
+	~EnemyManager()
 	{
 		Release();
 	}
@@ -41,10 +41,15 @@ public:
 	/**
 	* @fn void Draw()
 	* @brief 描画関数
-	* @details エネミーリストの描画を行う
+	* @details 管理されているエネミーの描画を行う
 	*/
 	void Draw() override;
 
+	/**
+	* @fn void Draw()
+	* @brief シャドウマップ描画関数
+	* @details 管理されているエネミーのシャドウマップ描画を行う
+	*/
 	void DrawShadowMap() override;
 
 private:

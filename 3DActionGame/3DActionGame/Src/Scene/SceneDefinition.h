@@ -1,25 +1,29 @@
 ﻿#ifndef SCENEDEFINITION_H_
 #define SCENEDEFINITION_H_
 
-
+/**
+* @brief シーンID
+*/
 enum class SceneID
 {
-	Tilte,
-	Game,
-	Clear,
-	Gameover,
-	Debug,
-	Control,
+	Tilte,		//! タイトル
+	Game,		//! ゲーム
+	Clear,		//! クリア
+	Gameover,	//! ゲームオーバー
+	Debug,		//! デバッグ
+	Control,	//! 操作説明
 
-	MaxSceneID,
+	MaxSceneID,	//! IDの数
 };
 
+/**
+* @brief シーンの状態
+*/
 enum class SceneState
 {
-	Init,
-	Load,
-	Main,
-	End,
+	Init,	//! 初期
+	Load,	//! 読み込み
+	Main,	//! メイン
 };
 
 #endif // !SCENEDEFINITION_H_

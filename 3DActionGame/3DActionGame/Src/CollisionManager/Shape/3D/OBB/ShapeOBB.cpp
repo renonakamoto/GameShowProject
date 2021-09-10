@@ -2,12 +2,14 @@
 #include "../../../../Utility/Calculation.h"
 #include "../../../../Engine/Engine.h"
 
-bool ShapeOBB::HitTest(Shape3D& shape_)
+bool ShapeOBB::HitTest(const Shape3D& shape_) const
 {
+	ShapeOBB s = *this;
+
 	return shape_.HitTest(*this);
 }
 
-bool ShapeOBB::HitTest(ShapeOBB& shape_)
+bool ShapeOBB::HitTest(const ShapeOBB& shape_) const
 {
 	DirectX::XMFLOAT3 nae1 = m_NormalDirect[0], ae1 = Calculation::Mul(nae1, m_Length[0]);
 	DirectX::XMFLOAT3 nae2 = m_NormalDirect[1], ae2 = Calculation::Mul(nae2, m_Length[1]);
@@ -152,7 +154,7 @@ bool ShapeOBB::HitTest(ShapeOBB& shape_)
 	return true;
 }
 
-float ShapeOBB::LenSegOnSeparateAxis(DirectX::XMFLOAT3& spe_, DirectX::XMFLOAT3& e1_, DirectX::XMFLOAT3& e2_, DirectX::XMFLOAT3* e3_)
+float ShapeOBB::LenSegOnSeparateAxis(DirectX::XMFLOAT3& spe_, DirectX::XMFLOAT3& e1_, DirectX::XMFLOAT3& e2_, DirectX::XMFLOAT3* e3_) const
 {
 	float r1 = fabsf(Calculation::Dot(spe_, e1_));
 	float r2 = fabsf(Calculation::Dot(spe_, e2_));

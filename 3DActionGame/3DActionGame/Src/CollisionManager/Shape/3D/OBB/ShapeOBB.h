@@ -29,12 +29,11 @@ public:
 	ShapeOBB(DirectX::XMFLOAT3 pos_, float lengthX_, float lengthY_, float lengthZ_) :
 		m_OBB(nullptr),
 		m_Pos(pos_),
-		m_Length{ lengthX_ , lengthY_ , lengthZ_ }
+		m_Length{ lengthX_ , lengthY_ , lengthZ_ },
+		m_NormalDirect{ DirectX::XMFLOAT3(1.f, 0.0f, 0.0f), 
+					    DirectX::XMFLOAT3(0.f, 1.0f, 0.0f), 
+						DirectX::XMFLOAT3(0.f, 0.0f, 1.0f) }
 	{
-		m_NormalDirect[0] = DirectX::XMFLOAT3(1.f, 0.0f, 0.0);
-		m_NormalDirect[1] = DirectX::XMFLOAT3(0.f, 1.0f, 0.0);
-		m_NormalDirect[2] = DirectX::XMFLOAT3(0.f, 0.0f, 1.0);
-
 		m_OBB = ObjFileStrage::GetInstance()->GetModel("Cube");
 	}
 
@@ -52,7 +51,7 @@ public:
 	* @return bool 当たっているかどうかを真偽で返す
 	* @details ダブルディスパッチで形状を特定して、当たり判定を行う
 	*/
-	bool HitTest(Shape3D& shape_)override;
+	bool HitTest(const Shape3D& shape_) const override;
 
 	/**
 	* @fn bool HitTest(ShapeOBB& shape_)
@@ -60,7 +59,7 @@ public:
 	* @param[in] shape_ OBB
 	* @return bool 当たっているかどうかを真偽で返す
 	*/
-	bool HitTest(ShapeOBB& shape_)override;
+	bool HitTest(const ShapeOBB& shape_)const override;
 
 public:
 	/**
@@ -78,14 +77,17 @@ public:
 private:
 	/**
 	* @fn float LenSegOnSeparateAxis(DirectX::XMFLOAT3& spe_, DirectX::XMFLOAT3& e1_, DirectX::XMFLOAT3& e2_, DirectX::XMFLOAT3* e3_)
-	* @brief OBB同士の当たり判定を行う関数
-	* @param[in] shape_ OBB
-	* @return bool 当たっているかどうかを真偽で返す
+	* @brief 分離軸に投影された軸成分から投影線分の長さを算出する関数
+	* @param[in] spe_ 分離軸 (標準化しておく必要がある)
+	* @param[in] e1_ 軸1
+	* @param[in] e2_ 軸2
+	* @param[in] e3_ 軸3
+	* @return float 長さ
 	*/
-	float LenSegOnSeparateAxis(DirectX::XMFLOAT3& spe_, DirectX::XMFLOAT3& e1_, DirectX::XMFLOAT3& e2_, DirectX::XMFLOAT3* e3_ = nullptr);
+	float LenSegOnSeparateAxis(DirectX::XMFLOAT3& spe_, DirectX::XMFLOAT3& e1_, DirectX::XMFLOAT3& e2_, DirectX::XMFLOAT3* e3_ = nullptr) const;
 
 private:
-	ObjModel* m_OBB;
+	ObjModel* m_OBB;	//! モデル
 	
 };
 

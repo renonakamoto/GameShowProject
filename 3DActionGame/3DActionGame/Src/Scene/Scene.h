@@ -8,6 +8,9 @@
 
 class SceneChanger;
 
+/**
+* @brief 各シーンの基底クラス
+*/
 class Scene
 {
 public:
@@ -28,14 +31,18 @@ public:
 	virtual ~Scene() {	}
 
 	/**
-	* @biref 更新関数
+	* @fn void Update()
+	* @brief 更新関数
+	* @details シーンの更新を行う
 	*/
 	virtual void Update() = 0;
 
 	/**
-	* @biref 描画関数
+	* @fn void Draw()
+	* @brief 描画関数
+	* @details シーンの描画を行う
 	*/
-	virtual void Draw() {	};
+	virtual void Draw() = 0;
 	
 protected:
 
@@ -50,10 +57,10 @@ protected:
 	virtual void Load() = 0;
 
 protected:
-	SceneChanger* m_SceneChanger;		//!< シーン変更のためのインターフェイスを保持するポインタ
-	SceneState m_CurrentState;			//!< 現在のシーンの状態
-	HANDLE m_ThreadHandle;				//!< マルチスレッド用のハンドル保存変数
-	DWORD m_dwThreadID;					//!< マルチスレッド用のスレッドID
+	SceneChanger* m_SceneChanger;		//! シーン変更のためのインターフェイスを保持するポインタ
+	SceneState m_CurrentState;			//! 現在のシーンの状態
+	HANDLE m_ThreadHandle;				//! マルチスレッド用のハンドル保存変数
+	DWORD m_dwThreadID;					//! マルチスレッド用のスレッドID
 };
 
 #endif // !SCENE_H_

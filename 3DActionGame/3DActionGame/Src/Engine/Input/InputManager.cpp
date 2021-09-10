@@ -685,9 +685,9 @@ POINT InputManager::GetMousePos() const
 	return pos;
 }
 
-void InputManager::SetMousePos(int x, int y)
+void InputManager::SetMousePos(int x_, int y_)
 {
-	SetCursorPos(x, y);
+	SetCursorPos(x_, y_);
 }
 
 void InputManager::SetInputMode(InputMode mode)
@@ -754,9 +754,4 @@ bool InputManager::GetButtonUp(XInput_Button btn_) const
 		return true;
 	}
 	return false;
-}
-
-int InputManager::GetInputState(InputInfo id_) const
-{
-	return m_InputState[static_cast<int>(id_)];
 }

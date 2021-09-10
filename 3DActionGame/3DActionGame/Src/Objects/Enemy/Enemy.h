@@ -41,7 +41,7 @@ public:
 	/**
 	* @brief デストラクタ
 	*/
-	~Enemy() final
+	~Enemy()
 	{
 		Release();
 	}

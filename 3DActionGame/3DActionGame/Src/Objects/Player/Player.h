@@ -66,7 +66,7 @@ public:
 	/**
 	* @brief デストラクタ
 	*/
-	~Player() final
+	~Player()
 	{
 		Release();
 	}

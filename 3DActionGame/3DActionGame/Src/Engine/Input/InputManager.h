@@ -1,9 +1,4 @@
-﻿/*
-
-*/
-
-
-#ifndef INPUT_M
+﻿#ifndef INPUT_M
 #define INPUT_M
 
 #include <dinput.h>
@@ -11,73 +6,85 @@
 #include <vector>
 #include <Windows.h>
 
-#define MAX_CONTROLLERS 4	//!< XInputの取得可能な最大コントローラー数
+#define MAX_CONTROLLERS 4	//! XInputの取得可能な最大コントローラー数
 
+/**
+* @brief マウスの状態
+*/
 enum class InputState
 {
-	Not_Push,
-	Release,
-	PushDown,
-	Push,
+	Not_Push,	//! 押されていない
+	Release,	//! 離した瞬間
+	PushDown,	//! 押した瞬間
+	Push,		//! 押したいる
 };
 
+/**
+* @brief マウスのボタンの種類
+*/
 enum class MouseButton
 {
-	Left,
-	Right,
-	Center,
-	Max_Mouse_Btn
+	Left,			//! 左クリック
+	Right,			//! 右クリック
+	Center,			//! ホイールボタン
+	Max_Mouse_Btn	//! 種類の数
 };
 
+/**
+* @brief キーボードのキーの種類
+*/
 enum class KeyInfo
 {
-	Key_A,
-	Key_B,
-	Key_C,
-	Key_D,
-	Key_E,
-	Key_F,
-	Key_G,
-	Key_H,
-	Key_I,
-	Key_J,
-	Key_K,
-	Key_L,
-	Key_M,
-	Key_N,
-	Key_O,
-	Key_P,
-	Key_Q,
-	Key_R,
-	Key_S,
-	Key_T,
-	Key_U,
-	Key_V,
-	Key_W,
-	Key_X,
-	Key_Y,
-	Key_Z,
-	Key_Up,
-	Key_Down,
-	Key_Right,
-	Key_Left,
-	Key_Return,
-	Key_ESC,
-	Key_Space,
-	Key_1,
-	Key_2,
-	Key_3,
-	Key_4,
-	Key_5,
-	Key_6,
-	Key_7,
-	Key_8,
-	Key_9,
-	Key_0,
+	Key_A,		//! Aキー
+	Key_B,		//! Bキー
+	Key_C,		//! Cキー
+	Key_D,		//! Dキー
+	Key_E,		//! Eキー
+	Key_F,		//! Fキー
+	Key_G,		//! Gキー
+	Key_H,		//! Hキー
+	Key_I,		//! Iキー
+	Key_J,		//! Jキー
+	Key_K,		//! Kキー
+	Key_L,		//! Lキー
+	Key_M,		//! Mキー
+	Key_N,		//! Nキー
+	Key_O,		//! Oキー
+	Key_P,		//! Pキー
+	Key_Q,		//! Qキー
+	Key_R,		//! Rキー
+	Key_S,		//! Sキー
+	Key_T,		//! Tキー
+	Key_U,		//! Uキー
+	Key_V,		//! Vキー
+	Key_W,		//! Wキー
+	Key_X,		//! Xキー
+	Key_Y,		//! Yキー
+	Key_Z,		//! Zキー
+	Key_Up,		//! 上キー
+	Key_Down,	//! 下キー
+	Key_Right,	//! 右キー
+	Key_Left,	//! 左キー
+	Key_Return,	//! リターンキー(エンターキー)
+	Key_ESC,	//! エスケープキー
+	Key_Space,	//! スペースキー
+	Key_1,		//! 1キー
+	Key_2,		//! 2キー
+	Key_3,		//! 3キー
+	Key_4,		//! 4キー
+	Key_5,		//! 5キー
+	Key_6,		//! 6キー
+	Key_7,		//! 7キー
+	Key_8,		//! 8キー
+	Key_9,		//! 9キー
+	Key_0,		//! 0キー
 
-	Max_Key_Info
+	Max_Key_Info	//! キーの数
 };
 
+/**
+* @brief パッドのボタンの種類
+*/
 enum class XInput_Button
 {
 	DPad_Up,
@@ -172,12 +179,18 @@ enum class InputInfo
 	Max_ID,
 };
 
+/**
+* @brief 入力モード
+*/
 enum class InputMode
 {
-	MODE_GAME,
-	MODE_UI,
+	MODE_GAME,	//! ゲームモード
+	MODE_UI,	//! UIモード
 };
 
+/**
+* @brief 入力系の管理クラス
+*/
 class InputManager
 {
 public:
@@ -192,6 +205,7 @@ public:
 	~InputManager() { }
 
 	/**
+	* @fn bool Init(HINSTANCE hInstance_, HWND hWindow_)
 	* @brief Input機能の初期化関数
 	* デバイスの入力取得に必要な初期化を行います
 	* @return 初期化結果、成功の場合はtrue
@@ -201,95 +215,136 @@ public:
 	bool Init(HINSTANCE hInstance_, HWND hWindow_);
 
 	/**
+	* @fn void Release()
 	* @brief Input機能の終了関数
 	* Input機能を終了させます
 	*/
 	void Release();
 
 	/**
+	* @fn void Update()
 	* @biref 入力情報の更新
 	* マウス、キーボード、ゲームパッドの入力情報の更新を行います
 	*/
 	void Update();
 
-
-//!< 以下マウス関連の関数
 	/***
+	* @fn bool GetMouse(MouseButton button_)const
 	* @biref マウスが押されているかの情報取得関数
 	* @param[in] button_ マウスのボタンの種類
 	*/
 	bool GetMouse(MouseButton button_)const;
 
 	/***
+	* @fn bool GetMouseDown(MouseButton button_)const
 	* @biref マウスが押された瞬間かの情報取得関数
 	* @param[in] button_ マウスのボタンの種類
 	*/
 	bool GetMouseDown(MouseButton button_)const;
 
 	/***
+	* @fn bool GetMouseUp(MouseButton button_)const
 	* @biref マウスが離された瞬間かの情報取得関数
 	* @param[in] button_ マウスのボタンの種類
 	*/
 	bool GetMouseUp(MouseButton button_)const;
 
 	/***
+	* @fn POINT GetMousePos()const
 	* @biref マウス座標の取得関数
 	*/
 	POINT GetMousePos()const;
 
-//!< 以下キーボード関連の関数
 	/***
+	* @fn bool GetKey(KeyInfo key_)const
 	* @biref キーが押されているかの情報取得関数
-	* @param[in] button_ キーの種類
+	* @param[in] key_ キーの種類
 	*/
 	bool GetKey(KeyInfo key_)const;
 
 	/***
+	* @fn bool GetKeyDown(KeyInfo key_)const
 	* @biref キーが押された瞬間かの情報取得関数
-	* @param[in] button_ キーの種類
+	* @param[in] key_ キーの種類
 	*/
 	bool GetKeyDown(KeyInfo key_)const;
 
 	/***
+	* @fn bool GetKeyUp(KeyInfo key_)const
 	* @biref キーが離された瞬間かの情報取得関数
-	* @param[in] button_ キーの種類
+	* @param[in] key_ キーの種類
 	*/
 	bool GetKeyUp(KeyInfo key_)const;
 
-//!< 以下ゲームパッド関連の関数
 	/**
+	* @fn bool GetButton(XInput_Button btn_)const
 	* @brief ボタンが押されているかの情報取得関数
-	* @param[in] num_ コントローラーの番号
 	* @param[in] btn_ ボタンの種類
 	*/
 	bool GetButton(XInput_Button btn_)const;
 
 	/**
+	* @fn bool GetButtonDown(XInput_Button btn_)const
 	* @brief ボタンが押されてた瞬間かの情報取得関数
-	* @param[in] num_ コントローラーの番号
 	* @param[in] btn_ ボタンの種類
 	*/
 	bool GetButtonDown(XInput_Button btn_)const;
 
 	/**
+	* @fn bool GetButtonUp(XInput_Button btn_)const
 	* @brief ボタンが離された瞬間かの情報取得関数
-	* @param[in] num_ コントローラーの番号
 	* @param[in] btn_ ボタンの種類
 	*/
 	bool GetButtonUp(XInput_Button btn_)const;
 
-//!< 以下仮想コントローラー用
-	int GetInputState(InputInfo id_)const;
+	/**
+	* @fn void SetMousePos(int x, int y)
+	* @brief マウスの座標をセットする関数
+	* @param[in] x_ x軸
+	* @param[in] y_ y軸
+	*/
+	void SetMousePos(int x_, int y_);
 
-	void SetMousePos(int x, int y);
-
+	/**
+	* @fn void SetInputMode(InputMode mode)
+	* @brief 入力モード変更関数
+	* @param[in] mode 入力モード
+	*/
 	void SetInputMode(InputMode mode);
+
+	/**
+	* @fn InputMode GetInputMode()
+	* @brief 入力モード取得関
+	* @return bool 入力モード
+	*/
 	InputMode GetInputMode() { return m_InputMode; };
 
+	/**
+	* @fn float GetMouseMovementX()
+	* @brief マウスの横軸移動速度の取得関数
+	* @return float 横軸移動速度
+	*/
 	float GetMouseMovementX() { return m_MovementX * m_MouseSensitivity; }
+
+	/**
+	* @fn float GetMouseMovementY()
+	* @brief マウスの縦軸移動速度の取得関数
+	* @return float 縦軸移動速度
+	*/
 	float GetMouseMovementY() { return m_MovementY * m_MouseSensitivity; }
 
-	void SetMousemSensitivity(float sensitivity) { m_MouseSensitivity = sensitivity; }
+	/**
+	* @fn void SetMousemSensitivity(float sensitivity_)
+	* @brief マウスの速度をセットする関数
+	* @param[in] sensitivity_ 速度
+	*/
+	void SetMousemSensitivity(float sensitivity_) { m_MouseSensitivity = sensitivity_; }
+
+	/**
+	* @fn float GetMousemSensitivity()
+	* @brief マウスの速度の取得関数
+	* @return float マウス速度
+	*/
 	float GetMousemSensitivity() { return m_MouseSensitivity; }
 
 private:
@@ -357,12 +412,12 @@ private:
 	static const int m_Unresponsive_Range = 200;
 
 
-	static LPDIRECTINPUT8 m_Interface;		//!< DirectInput8のインターフェイス
-	LPDIRECTINPUTDEVICE8 m_KeyDevice;		//!< キーボード用デバイス
-	LPDIRECTINPUTDEVICE8 m_MouseDevice;		//!< マウス用のデバイス
-	LPDIRECTINPUTDEVICE8 m_GamePadDevice;	//!< ゲームパッド用のデバイス
+	static LPDIRECTINPUT8 m_Interface;		//! DirectInput8のインターフェイス
+	LPDIRECTINPUTDEVICE8 m_KeyDevice;		//! キーボード用デバイス
+	LPDIRECTINPUTDEVICE8 m_MouseDevice;		//! マウス用のデバイス
+	LPDIRECTINPUTDEVICE8 m_GamePadDevice;	//! ゲームパッド用のデバイス
 
-	InputState m_KeyState[static_cast<int>(KeyInfo::Max_Key_Info)];			//!< キーボード入力情報
+	InputState m_KeyState[static_cast<int>(KeyInfo::Max_Key_Info)];			//! キーボード入力情報
 	int m_KeyInfo[static_cast<int>(KeyInfo::Max_Key_Info)] =
 	{
 	DIK_A,
@@ -408,18 +463,18 @@ private:
 	DIK_8,
 	DIK_9,
 	DIK_0,
-	};																		//!< キーボード割り当て情報
+	};																		//! キーボード割り当て情報
 
-	InputState m_MouseState[3];		//!< マウス入力情報
-	InputState m_GamePadState[static_cast<int>(XInput_Button::MAX_INFO)];		//!< ゲームパッド入力情報
+	InputState m_MouseState[3];												//! マウス入力情報
+	InputState m_GamePadState[static_cast<int>(XInput_Button::MAX_INFO)];	//! ゲームパッド入力情報
 
-	int m_InputState[static_cast<int>(InputInfo::Max_ID)];				//!< 入力情報
+	int m_InputState[static_cast<int>(InputInfo::Max_ID)];					//! 入力情報
 
-	InputMode m_InputMode;
+	InputMode m_InputMode;		//! 入力モードを保存しておく変数
 
-	int m_MovementX;
-	int m_MovementY;
-	float m_MouseSensitivity;
+	int m_MovementX;			//! マウスの横軸の移動速度
+	int m_MovementY;			//! マウスの縦軸の移動速度
+	float m_MouseSensitivity;	//! マウス感度
 
 };
 

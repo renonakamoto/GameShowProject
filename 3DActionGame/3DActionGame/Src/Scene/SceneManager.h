@@ -7,9 +7,17 @@
 #include "Scene.h"
 #include "SceneChanger.h"
 
+/**
+* @brief シーン管理クラス
+*/
 class SceneManager : public SceneChanger
 {
 public:
+	/**
+	* @fn static SceneManager* GetInstance()
+	* @brief インスタンスを返す関数
+	* @return SceneManager* インスタンスのポインタ
+	*/
 	static SceneManager* GetInstance()
 	{
 		static SceneManager instance;
@@ -27,17 +35,22 @@ public:
 	void Draw();
 
 	/**
-	* @biref シーン変更関数
+	* @fn void ChangeScene(SceneID id_)
+	* @brief シーン変更関数
+	* @param[in] id_ シーンID
 	*/
 	void ChangeScene(SceneID id_) override;
 
 	/**
-	* @biref シーン追加関数
+	* @fn void PushScene(SceneID id_)
+	* @brief シーン追加関数
+	* @param[in] id_ シーンID
 	*/
 	void PushScene(SceneID id_) override;
 
 	/**
-	* @biref シーン削除関数
+	* @fn void PopScene()
+	* @brief シーン削除関数
 	*/
 	void PopScene() override;
 
@@ -52,7 +65,7 @@ private:
 	*/
 	~SceneManager();
 
-	std::stack<std::shared_ptr<Scene>> m_SceneStack;		//!< シーン保持変数
+	std::stack<std::shared_ptr<Scene>> m_SceneStack;		//! シーン保持変数
 };
 
 #endif // !SCENEMANAGER_H_

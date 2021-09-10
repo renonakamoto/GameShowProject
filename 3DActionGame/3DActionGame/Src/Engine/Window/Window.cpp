@@ -31,7 +31,7 @@ LRESULT Window::WindowProc(HWND windowHandle_, UINT messageId_, WPARAM wparam_, 
 	return 0;
 }
 
-bool Window::Create(int windowWidth_, int windowHeight, const char* titleName_)
+bool Window::Create(int windowWidth_, int windowHeight_, const char* titleName_)
 {
 	if (EntryWindowClass() == false)
 	{
@@ -44,7 +44,7 @@ bool Window::Create(int windowWidth_, int windowHeight, const char* titleName_)
 	rect.left   = 0;
 	rect.top    = 0;
 	rect.right  = static_cast<LONG>(windowWidth_);
-	rect.bottom = static_cast<LONG>(windowHeight);
+	rect.bottom = static_cast<LONG>(windowHeight_);
 
 	// ウィンドウのスタイルに合わせたサイズを取得
 	AdjustWindowRect(&rect, dw_style, false);
@@ -69,7 +69,7 @@ bool Window::Create(int windowWidth_, int windowHeight, const char* titleName_)
 	}
 
 	m_ClientWidth = windowWidth_;
-	m_ClientHeight = windowHeight;
+	m_ClientHeight = windowHeight_;
 
 	// Windowを真ん中に持ってくる
 	SetCenterWindow(m_WindowHandle);

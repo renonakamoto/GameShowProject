@@ -195,9 +195,17 @@ public:
 	* @param[in] t_ 時間(0.0f ～ 1.0fの範囲)
 	* @return DirectX::XMFLOAT3 補間された結果
 	*/
-	static DirectX::XMFLOAT3 Lerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, float t);
+	static DirectX::XMFLOAT3 Lerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, float t_);
 
-	static DirectX::XMFLOAT3 SLerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, float t);
+	/**
+	* @fn DirectX::XMFLOAT3 SLerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, float t)
+	* @brief ベクトルAからベクトルBへの球面線形補間を行う関数
+	* @param[in] a_ ベクトルA
+	* @param[in] b_ ベクトルB
+	* @param[in] t_ 時間(0.0f ～ 1.0fの範囲)
+	* @return DirectX::XMFLOAT3 補間された結果
+	*/
+	static DirectX::XMFLOAT3 SLerp(DirectX::XMFLOAT3 a_, DirectX::XMFLOAT3 b_, float t_);
 
 	/**
 	* @fn bool HitRectAndPoint(Rect rect_, float x_, float y_)

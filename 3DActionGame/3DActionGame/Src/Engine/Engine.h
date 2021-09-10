@@ -25,8 +25,12 @@ public:
 	}
 
 	/**
-	* @fn bool Init()
+	* @fn bool Init(int windowWidth_, int windowHeight_, const char* titleName_, HINSTANCE hInstance_)
 	* @brief エンジンの初期化関数
+	* @param[in] windowWidth_	ウィンドウの横幅
+	* @param[in] windowHeight_	ウィンドウの縦幅
+	* @param[in] titleName_		ウィンドウ名
+	* @param[in] hInstance_		インスタンスハンドル
 	* @return bool 成功したかどうかを真偽で返す
 	* @details プログラム開始時に一度だけ呼び出す
 	*/

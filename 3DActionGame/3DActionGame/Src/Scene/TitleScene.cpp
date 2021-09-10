@@ -35,7 +35,7 @@ void TitleScene::Load()
     {
         // オブジェクトの登録
         ObjectManager::GetInstance()->Register(new Background("bg", DirectX::XMFLOAT3(0.f, 0.f, 1.f)));
-        ObjectManager::GetInstance()->Register(new Button<TitleScene>("start_ui_normal", "start_ui_hover", DirectX::XMFLOAT3(200.f, 400.f, 0.f), this, &TitleScene::NextScene));
+        ObjectManager::GetInstance()->Register(new Button<TitleScene>("start_ui_normal", "start_ui_hover", DirectX::XMFLOAT3(200.f, 400.f, 0.f), this, &TitleScene::ChangeGameScene));
         ObjectManager::GetInstance()->Register(new Button<GameManager>("quit_ui_normal", "quit_ui_hover", DirectX::XMFLOAT3(800.f, 400.f, 0.f), GameManager::GetInstance(), &GameManager::QuitGame));
         
        ObjectManager::GetInstance()->Register(new Button<TitleScene>("control_ui_normal", "control_ui_hover", DirectX::XMFLOAT3(500.f, 500.f, 0.f), this, &TitleScene::ChangeControlScene));
@@ -49,7 +49,7 @@ void TitleScene::Load()
     }
 }
 
-void TitleScene::NextScene()
+void TitleScene::ChangeGameScene()
 {
     m_SceneChanger->ChangeScene(SceneID::Game);
 }
