@@ -113,9 +113,9 @@ bool Sprite::CreateIndexBuffer(TextureData& data_, ID3D11Device* device_)
 	//頂点バッファ作成
 	D3D11_BUFFER_DESC buffer_desc;
 	ZeroMemory(&buffer_desc, sizeof(buffer_desc));
-	buffer_desc.ByteWidth = sizeof(DWORD) * 6;	// バッファのサイズ
-	buffer_desc.Usage = D3D11_USAGE_DEFAULT;				// 使用方法
-	buffer_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;			// BIND設定
+	buffer_desc.ByteWidth	   = sizeof(DWORD) * 6;	// バッファのサイズ
+	buffer_desc.Usage		   = D3D11_USAGE_DEFAULT;				// 使用方法
+	buffer_desc.BindFlags	   = D3D11_BIND_INDEX_BUFFER;			// BIND設定
 	buffer_desc.CPUAccessFlags = 0;								// リソースへのCPUのアクセス権限についての設定
 
 	D3D11_SUBRESOURCE_DATA init_data;

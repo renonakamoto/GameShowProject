@@ -5,8 +5,8 @@ void EnemyManager::Init()
 {
 	// エネミー生成
 	m_Enemies.push_back(new Enemy(DirectX::XMFLOAT3(0.f, 0.f, 0.f)));
-	m_Enemies.push_back(new Enemy(DirectX::XMFLOAT3(15.f, 0.f, 0.f)));
-	m_Enemies.push_back(new Enemy(DirectX::XMFLOAT3(-15.f, 0.f, 0.f)));
+	//m_Enemies.push_back(new Enemy(DirectX::XMFLOAT3(15.f, 0.f, 0.f)));
+	//m_Enemies.push_back(new Enemy(DirectX::XMFLOAT3(-15.f, 0.f, 0.f)));
 	//m_Enemies.push_back(new Enemy(DirectX::XMFLOAT3(260.f, 0.f, -119.f)));
 	//m_Enemies.push_back(new Enemy(DirectX::XMFLOAT3(-325.f, 0.f, 112.f)));
 

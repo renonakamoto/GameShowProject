@@ -16,9 +16,6 @@
     <Filter Include="Src\Model">
       <UniqueIdentifier>{99845381-0a1c-42c0-bba7-09a699e6488c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\ObjectManager">
-      <UniqueIdentifier>{b7615539-7465-40f9-89ef-3c2bd1f8bc98}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Engine\Texure">
       <UniqueIdentifier>{a8ffd892-c2dc-48c4-9e3d-83e69492933e}</UniqueIdentifier>
     </Filter>
@@ -94,6 +91,9 @@
     <Filter Include="Src\Objects\Sprite">
       <UniqueIdentifier>{6910a26d-07bb-40dd-b4b8-2b0a42708840}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Model\ObjectManager">
+      <UniqueIdentifier>{b7615539-7465-40f9-89ef-3c2bd1f8bc98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -121,19 +121,19 @@
       <Filter>Src\Model</Filter>
     </ClCompile>
     <ClCompile Include="Src\ObjectManager\Object2D.cpp">
-      <Filter>Src\ObjectManager</Filter>
+      <Filter>Src\Model\ObjectManager</Filter>
     </ClCompile>
     <ClCompile Include="Src\ObjectManager\Object3D.cpp">
-      <Filter>Src\ObjectManager</Filter>
+      <Filter>Src\Model\ObjectManager</Filter>
     </ClCompile>
     <ClCompile Include="Src\ObjectManager\GameObject.cpp">
-      <Filter>Src\ObjectManager</Filter>
+      <Filter>Src\Model\ObjectManager</Filter>
     </ClCompile>
     <ClCompile Include="Src\Objects\Player\Player.cpp">
       <Filter>Src\Objects\Player</Filter>
     </ClCompile>
     <ClCompile Include="Src\ObjectManager\ObjectManager.cpp">
-      <Filter>Src\ObjectManager</Filter>
+      <Filter>Src\Model\ObjectManager</Filter>
     </ClCompile>
     <ClCompile Include="Src\Utility\Calculation.cpp">
       <Filter>Src\Utility</Filter>
@@ -167,9 +167,6 @@
     </ClCompile>
     <ClCompile Include="Src\Model\SkeletalModel.cpp">
       <Filter>Src\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\CollisionManager\Shape\2D\Rect\Rect.cpp">
-      <Filter>Src\CollisionManager\Shape\2D\Rect</Filter>
     </ClCompile>
     <ClCompile Include="Src\CollisionManager\Shape\3D\OBB\ShapeOBB.cpp">
       <Filter>Src\CollisionManager\Shape\3D\OBB</Filter>
@@ -241,7 +238,7 @@
       <Filter>Src\Objects\Player\PlayerState</Filter>
     </ClCompile>
     <ClCompile Include="Src\ObjectManager\ShadowMapObject.cpp">
-      <Filter>Src\ObjectManager</Filter>
+      <Filter>Src\Model\ObjectManager</Filter>
     </ClCompile>
     <ClCompile Include="Src\Scene\ControlScene.cpp">
       <Filter>Src\Scene</Filter>
@@ -291,22 +288,22 @@
       <Filter>Src\Model</Filter>
     </ClInclude>
     <ClInclude Include="Src\ObjectManager\ObjectBase.h">
-      <Filter>Src\ObjectManager</Filter>
+      <Filter>Src\Model\ObjectManager</Filter>
     </ClInclude>
     <ClInclude Include="Src\ObjectManager\Object2D.h">
-      <Filter>Src\ObjectManager</Filter>
+      <Filter>Src\Model\ObjectManager</Filter>
     </ClInclude>
     <ClInclude Include="Src\ObjectManager\Object3D.h">
-      <Filter>Src\ObjectManager</Filter>
+      <Filter>Src\Model\ObjectManager</Filter>
     </ClInclude>
     <ClInclude Include="Src\ObjectManager\GameObject.h">
-      <Filter>Src\ObjectManager</Filter>
+      <Filter>Src\Model\ObjectManager</Filter>
     </ClInclude>
     <ClInclude Include="Src\Objects\Player\Player.h">
       <Filter>Src\Objects\Player</Filter>
     </ClInclude>
     <ClInclude Include="Src\ObjectManager\ObjectManager.h">
-      <Filter>Src\ObjectManager</Filter>
+      <Filter>Src\Model\ObjectManager</Filter>
     </ClInclude>
     <ClInclude Include="Src\Utility\Calculation.h">
       <Filter>Src\Utility</Filter>
@@ -423,7 +420,7 @@
       <Filter>Src\Objects\Player\PlayerState</Filter>
     </ClInclude>
     <ClInclude Include="Src\ObjectManager\ShadowMapObject.h">
-      <Filter>Src\ObjectManager</Filter>
+      <Filter>Src\Model\ObjectManager</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\ControlScene.h">
       <Filter>Src\Scene</Filter>

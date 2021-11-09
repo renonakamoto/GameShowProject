@@ -42,15 +42,16 @@ void GameScene::Load()
 {
     if (WaitForSingleObject(m_ThreadHandle, 0) == WAIT_OBJECT_0)
     {
-        // リソースの読み込みが終了したら、各オブジェクトのインスタンスを作成
-        ObjectManager::GetInstance()->ResisterShadowMap(new Player(DirectX::XMFLOAT3(0.f, 0.f, 0.f)));
-        ObjectManager::GetInstance()->ResisterShadowMap(new EnemyManager());
+        auto obj_manager_instance = ObjectManager::GetInstance();
 
-        ObjectManager::GetInstance()->ResisterShadowMap(new Stage());
-        ObjectManager::GetInstance()->Register(new FollowCamera());
+        // リソースの読み込みが終了したら、各オブジェクトのインスタンスを作成
+        obj_manager_instance->ResisterShadowMap(new Player(DirectX::XMFLOAT3(0.f, 0.f, 0.f)));
+        obj_manager_instance->ResisterShadowMap(new EnemyManager());
+        obj_manager_instance->ResisterShadowMap(new Stage());
+        obj_manager_instance->Register(new FollowCamera());
         
         // 各オブジェクトの生成後、各オブジェクトのInitを行う
-        ObjectManager::GetInstance()->Init();
+        obj_manager_instance->Init();
         
         m_OffScreenSprite.Init(
             GRAPHICS->GetRenderTarget(KindRT::RT_OFF_SCREEM)->GetTexture(),

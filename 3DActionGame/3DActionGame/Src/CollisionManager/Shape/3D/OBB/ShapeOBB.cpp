@@ -4,16 +4,14 @@
 
 bool ShapeOBB::HitTest(const Shape3D& shape_) const
 {
-	ShapeOBB s = *this;
-
 	return shape_.HitTest(*this);
 }
 
 bool ShapeOBB::HitTest(const ShapeOBB& shape_) const
 {
-	DirectX::XMFLOAT3 nae1 = m_NormalDirect[0], ae1 = Calculation::Mul(nae1, m_Length[0]);
-	DirectX::XMFLOAT3 nae2 = m_NormalDirect[1], ae2 = Calculation::Mul(nae2, m_Length[1]);
-	DirectX::XMFLOAT3 nae3 = m_NormalDirect[2], ae3 = Calculation::Mul(nae3, m_Length[2]);
+	DirectX::XMFLOAT3 nae1 = m_NormalDirect[0],		   ae1 = Calculation::Mul(nae1, m_Length[0]);
+	DirectX::XMFLOAT3 nae2 = m_NormalDirect[1],		   ae2 = Calculation::Mul(nae2, m_Length[1]);
+	DirectX::XMFLOAT3 nae3 = m_NormalDirect[2],		   ae3 = Calculation::Mul(nae3, m_Length[2]);
 	DirectX::XMFLOAT3 nbe1 = shape_.m_NormalDirect[0], be1 = Calculation::Mul(nbe1, shape_.m_Length[0]);
 	DirectX::XMFLOAT3 nbe2 = shape_.m_NormalDirect[1], be2 = Calculation::Mul(nbe2, shape_.m_Length[1]);
 	DirectX::XMFLOAT3 nbe3 = shape_.m_NormalDirect[2], be3 = Calculation::Mul(nbe3, shape_.m_Length[2]);
